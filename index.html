@@ -64,7 +64,7 @@ document.body.classList.add('dark');
 function openChat(){document.getElementById('home').style.display='none';document.getElementById('chat').style.display='flex'}
 function closeChat(){document.getElementById('chat').style.display='none';document.getElementById('home').style.display='block'}
 function cmd(c){document.execCommand(c,false,null);if(currentEditor)currentEditor.focus()}
-function send(){let input=document.getElementById('input');let html=input.innerHTML.trim();if(!html)return;let b=document.createElement('div');b.className='bubble mine';b.tabIndex=0;b.innerHTML='<div contenteditable="true">'+html+'</div><div class="tools"><button onclick="editFocus(this)">✎</button><button onclick="this.closest(\\'.bubble\\').remove()">🗑</button></div>';document.getElementById('messages').appendChild(b);input.innerHTML='';document.getElementById('messages').scrollTop=999999}
+function send(){let input=document.getElementById('input');let html=input.innerHTML.trim();if(!html)return;let b=document.createElement('div');b.className='bubble mine';b.tabIndex=0;b.innerHTML='<div contenteditable="true">'+html+'</div><div class="tools"><button onclick="editFocus(this)">✎</button><button onclick="this.closest('.bubble').remove()">🗑</button></div>';document.getElementById('messages').appendChild(b);input.innerHTML='';document.getElementById('messages').scrollTop=999999}
 function editFocus(btn){let e=btn.closest('.bubble').querySelector('[contenteditable]');e.focus()}
 function showNote(t){document.getElementById('simpleText').textContent=t;document.getElementById('simpleModal').style.display='flex'}
 function newNote(){document.getElementById('noteText').value='';document.getElementById('noteModal').style.display='flex'}
@@ -75,34 +75,18 @@ document.addEventListener('click',e=>{if(e.target.matches('.modal'))e.target.sty
 
 <script>
 (function(){
-  const KEY='mofakkarati_demo_messages_v1';
+  const KEY='mofakkarati_demo_messages_v2';
   const messages=document.getElementById('messages');
   if(!messages) return;
-
-  function save(){
-    localStorage.setItem(KEY, messages.innerHTML);
-  }
-  function restore(){
-    const saved=localStorage.getItem(KEY);
-    if(saved) messages.innerHTML=saved;
-  }
+  function save(){ localStorage.setItem(KEY,messages.innerHTML); }
+  function restore(){ const x=localStorage.getItem(KEY); if(x) messages.innerHTML=x; }
   restore();
-
+  messages.addEventListener('input',save);
+  window.addEventListener('beforeunload',save);
   const oldSend=window.send;
-  window.send=function(){
-    oldSend();
-    save();
-  };
-
-  messages.addEventListener('input', save);
-  messages.addEventListener('click', function(e){
-    if(e.target.closest('button')) setTimeout(save,50);
-  });
-
-  // Save whenever the page is left.
-  window.addEventListener('beforeunload', save);
+  window.send=function(){ oldSend(); save(); };
 })();
 </script>
-
 </body>
-</html>
+  </html>
+  
