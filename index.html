@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
+<title>مفكرتي</title>
+<style>
+:root{--bg:#f5f6fa;--panel:#fff;--text:#202124;--muted:#737781;--accent:#7653e6;--bubble:#fff;--bubble2:#e8ffd9;--line:#e2e3e8;--input:#fff}
+body.dark{--bg:#111318;--panel:#181a20;--text:#f1f1f4;--muted:#a4a7b0;--accent:#9b7cff;--bubble:#20232b;--bubble2:#263b27;--line:#30333c;--input:#20232b}
+*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,"Noto Sans Arabic",sans-serif}
+.app{max-width:520px;margin:auto;height:100vh;display:flex;flex-direction:column;background:var(--panel);box-shadow:0 0 30px #0001}
+.top{height:62px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 14px}
+.icon{border:0;background:none;color:var(--text);font-size:22px;cursor:pointer}.title{font-weight:700;font-size:18px;flex:1}.sub{font-size:11px;color:var(--muted);margin-top:3px}
+.search{margin:10px 12px;background:var(--bg);border-radius:20px;padding:10px 14px;color:var(--muted)}
+.list{padding:4px 10px;overflow:auto;flex:1}.item{display:flex;align-items:center;gap:12px;padding:12px;border-bottom:1px solid var(--line);cursor:pointer}.avatar{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;background:#eee6ff;font-size:25px}.item b{display:block}.item small{color:var(--muted)}
+.fab{position:absolute;right:calc(50% - 220px);bottom:74px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:#fff;border:0;font-size:28px;box-shadow:0 6px 20px #0003}
+.chat{display:none;flex:1;flex-direction:column;background:var(--bg);min-height:0}.messages{flex:1;overflow:auto;padding:16px 12px}.bubble{position:relative;max-width:88%;background:var(--bubble);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin:8px 0;box-shadow:0 1px 2px #0001}.bubble.mine{margin-right:auto;background:var(--bubble2)}.bubble .tools{display:none;position:absolute;top:-18px;left:8px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:3px}.bubble:hover .tools,.bubble:focus-within .tools{display:flex}.tools button{border:0;background:none;color:var(--text);cursor:pointer}.note-dot{position:absolute;left:-14px;top:50%;transform:translateY(-50%);width:25px;height:25px;border-radius:50%;border:1px solid #e4c53d;background:#fff7b5;cursor:pointer}.composer{border-top:1px solid var(--line);padding:8px;display:flex;gap:7px;align-items:end;background:var(--panel)}.input{flex:1;min-height:42px;max-height:120px;overflow:auto;background:var(--input);border:1px solid var(--line);border-radius:20px;padding:10px 13px;outline:none}.send{width:44px;height:44px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:18px}.format{display:none;position:absolute;bottom:63px;left:8px;right:8px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:7px;gap:5px;flex-wrap:wrap}.format button{border:1px solid var(--line);background:var(--input);color:var(--text);border-radius:8px;padding:7px 10px;font-weight:600}.format.show{display:flex}
+.modal{display:none;position:fixed;inset:0;background:#0007;align-items:center;justify-content:center;padding:18px}.card{width:min(480px,100%);background:var(--panel);border-radius:18px;padding:18px}.card h3{margin-top:0}.textarea{width:100%;min-height:110px;background:var(--input);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:10px;font:inherit}.row{display:flex;gap:8px;margin-top:10px}.primary{flex:1;background:var(--accent);color:#fff;border:0;border-radius:10px;padding:10px}.secondary{flex:1;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px}
+.mind{height:250px;background:radial-gradient(#9994 1px,transparent 1px);background-size:18px 18px;border:1px solid var(--line);border-radius:14px;position:relative;overflow:hidden}.node{position:absolute;background:var(--panel);border:2px solid var(--accent);border-radius:12px;padding:8px 12px;white-space:nowrap}.line{position:absolute;height:2px;background:var(--accent);transform-origin:right center}
+.bottom{height:58px;border-top:1px solid var(--line);display:flex;justify-content:space-around;align-items:center}.bottom button{border:0;background:none;color:var(--muted);font-size:12px}.bottom .active{color:var(--accent);font-weight:bold}
+</style>
+</head>
+<body class="dark">
+<div class="app">
+  <div id="home">
+    <div class="top"><button class="icon">☰</button><div class="title">مفكرتي</div><button class="icon">⌕</button><button class="icon" onclick="toggleDark()">⋮</button></div>
+    <div class="search">🔎 بحث في المفكرات</div>
+    <div class="list">
+      <div class="item" onclick="openChat()"><div class="avatar">📚</div><div><b>مذاكرة النحو</b><small>آخر تعديل: الآن</small></div></div>
+      <div class="item"><div class="avatar">💡</div><div><b>أفكار</b><small>آخر تعديل: أمس</small></div></div>
+      <div class="item"><div class="avatar">📝</div><div><b>ملاحظات عامة</b><small>آخر تعديل: منذ يومين</small></div></div>
+    </div>
+    <button class="fab" onclick="openChat()">✎</button>
+  </div>
+
+  <div id="chat" class="chat">
+    <div class="top"><button class="icon" onclick="closeChat()">‹</button><div class="title">📚 مذاكرة النحو<div class="sub">مفكرة شخصية</div></div><button class="icon" onclick="openMind()">🧠</button><button class="icon" onclick="toggleDark()">☾</button></div>
+    <div id="messages" class="messages">
+      <div class="bubble" tabindex="0"><button class="note-dot" onclick="showNote('ملاحظة: انتبهي أن المفعول به يأتي منصوبًا.')">💡</button><div contenteditable="true"><b>المفعول به</b><br>هو اسم منصوب يقع عليه فعل الفاعل.<br><br><b>مثال:</b> قرأتُ <span style="color:#e05b5b">الكتابَ</span>.</div><div class="tools"><button onclick="editFocus(this)">✎</button><button onclick="this.closest('.bubble').remove()">🗑</button></div></div>
+      <div class="bubble" tabindex="0"><div contenteditable="true"><b>علامات نصب المفعول به</b><br>• الفتحة (مفرد)<br>• الألف (الأسماء الخمسة)<br>• الياء (مثنى وجمع مذكر سالم)<br>• الكسرة (جمع المؤنث السالم)</div><div class="tools"><button onclick="editFocus(this)">✎</button><button onclick="this.closest('.bubble').remove()">🗑</button></div></div>
+      <div class="bubble mine" tabindex="0"><div contenteditable="true"><b>أمثلة</b><br>1. قرأتُ الكتابَ.<br>2. أكرمتُ الطالبَ.<br>3. رأيتُ الصديقَ.</div><div class="tools"><button onclick="editFocus(this)">✎</button><button onclick="this.closest('.bubble').remove()">🗑</button></div></div>
+    </div>
+    <div id="format" class="format">
+      <button onclick="cmd('bold')">B</button><button onclick="cmd('italic')"><i>I</i></button><button onclick="cmd('underline')"><u>U</u></button>
+      <button onclick="cmd('insertUnorderedList')">• قائمة</button><button onclick="cmd('insertOrderedList')">1. قائمة</button>
+      <button onclick="cmd('justifyRight')">يمين</button><button onclick="cmd('justifyCenter')">وسط</button>
+      <button onclick="cmd('undo')">↶</button><button onclick="cmd('redo')">↷</button>
+      <button onclick="openMind()">🧠 خريطة</button><button onclick="newNote()">💡 ملاحظة</button>
+    </div>
+    <div class="composer"><button class="icon" onclick="document.getElementById('format').classList.toggle('show')">＋</button><div id="input" class="input" contenteditable="true" onfocus="currentEditor=this"></div><button class="send" onclick="send()">➤</button></div>
+  </div>
+
+  <div class="bottom"><button class="active">📒<br>المفكرات</button><button>☆<br>المفضلة</button><button>⌕<br>بحث</button><button>⚙<br>الإعدادات</button></div>
+</div>
+
+<div id="noteModal" class="modal"><div class="card"><h3>💡 الملاحظة الجانبية</h3><textarea id="noteText" class="textarea"></textarea><div class="row"><button class="primary" onclick="closeModal('noteModal')">حفظ</button><button class="secondary" onclick="closeModal('noteModal')">إلغاء</button></div></div></div>
+<div id="mindModal" class="modal"><div class="card"><h3>🧠 خريطة ذهنية بسيطة</h3><div class="mind"><div class="node" style="right:40%;top:42%">المفعول به</div><div class="node" style="right:7%;top:15%">تعريفه</div><div class="node" style="right:7%;top:68%">علاماته</div><div class="node" style="left:7%;top:15%">أمثلة</div><div class="line" style="right:48%;top:49%;width:145px;transform:rotate(-22deg)"></div><div class="line" style="right:48%;top:54%;width:145px;transform:rotate(22deg)"></div><div class="line" style="left:48%;top:49%;width:145px;transform:rotate(22deg)"></div></div><div class="row"><button class="primary" onclick="closeModal('mindModal')">تم</button></div></div></div>
+<div id="simpleModal" class="modal"><div class="card"><h3>💡 ملاحظة جانبية</h3><p id="simpleText"></p><div class="row"><button class="primary" onclick="closeModal('simpleModal')">إغلاق</button></div></div></div>
+
+<script>
+let currentEditor=null;
+function toggleDark(){document.body.classList.toggle('dark');localStorage.dark=document.body.classList.contains('dark')}
+document.body.classList.add('dark');
+function openChat(){document.getElementById('home').style.display='none';document.getElementById('chat').style.display='flex'}
+function closeChat(){document.getElementById('chat').style.display='none';document.getElementById('home').style.display='block'}
+function cmd(c){document.execCommand(c,false,null);if(currentEditor)currentEditor.focus()}
+function send(){let input=document.getElementById('input');let html=input.innerHTML.trim();if(!html)return;let b=document.createElement('div');b.className='bubble mine';b.tabIndex=0;b.innerHTML='<div contenteditable="true">'+html+'</div><div class="tools"><button onclick="editFocus(this)">✎</button><button onclick="this.closest(\\'.bubble\\').remove()">🗑</button></div>';document.getElementById('messages').appendChild(b);input.innerHTML='';document.getElementById('messages').scrollTop=999999}
+function editFocus(btn){let e=btn.closest('.bubble').querySelector('[contenteditable]');e.focus()}
+function showNote(t){document.getElementById('simpleText').textContent=t;document.getElementById('simpleModal').style.display='flex'}
+function newNote(){document.getElementById('noteText').value='';document.getElementById('noteModal').style.display='flex'}
+function openMind(){document.getElementById('mindModal').style.display='flex'}
+function closeModal(id){document.getElementById(id).style.display='none'}
+document.addEventListener('click',e=>{if(e.target.matches('.modal'))e.target.style.display='none'})
+</script>
+
+<script>
+(function(){
+  const KEY='mofakkarati_demo_messages_v1';
+  const messages=document.getElementById('messages');
+  if(!messages) return;
+
+  function save(){
+    localStorage.setItem(KEY, messages.innerHTML);
+  }
+  function restore(){
+    const saved=localStorage.getItem(KEY);
+    if(saved) messages.innerHTML=saved;
+  }
+  restore();
+
+  const oldSend=window.send;
+  window.send=function(){
+    oldSend();
+    save();
+  };
+
+  messages.addEventListener('input', save);
+  messages.addEventListener('click', function(e){
+    if(e.target.closest('button')) setTimeout(save,50);
+  });
+
+  // Save whenever the page is left.
+  window.addEventListener('beforeunload', save);
+})();
+</script>
+
+</body>
+</html>
