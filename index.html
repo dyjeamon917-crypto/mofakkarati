@@ -1,92 +1,1106 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=no">
-<title>مفكرتي</title>
-<style>
-:root{--bg:#f5f6fa;--panel:#fff;--text:#202124;--muted:#737781;--accent:#7653e6;--bubble:#fff;--bubble2:#e8ffd9;--line:#e2e3e8;--input:#fff}
-body.dark{--bg:#111318;--panel:#181a20;--text:#f1f1f4;--muted:#a4a7b0;--accent:#9b7cff;--bubble:#20232b;--bubble2:#263b27;--line:#30333c;--input:#20232b}
-*{box-sizing:border-box} body{margin:0;background:var(--bg);color:var(--text);font-family:Arial,"Noto Sans Arabic",sans-serif}
-.app{max-width:520px;margin:auto;height:100vh;display:flex;flex-direction:column;background:var(--panel);box-shadow:0 0 30px #0001}
-.top{height:62px;border-bottom:1px solid var(--line);display:flex;align-items:center;gap:12px;padding:0 14px}
-.icon{border:0;background:none;color:var(--text);font-size:22px;cursor:pointer}.title{font-weight:700;font-size:18px;flex:1}.sub{font-size:11px;color:var(--muted);margin-top:3px}
-.search{margin:10px 12px;background:var(--bg);border-radius:20px;padding:10px 14px;color:var(--muted)}
-.list{padding:4px 10px;overflow:auto;flex:1}.item{display:flex;align-items:center;gap:12px;padding:12px;border-bottom:1px solid var(--line);cursor:pointer}.avatar{width:48px;height:48px;border-radius:15px;display:grid;place-items:center;background:#eee6ff;font-size:25px}.item b{display:block}.item small{color:var(--muted)}
-.fab{position:absolute;right:calc(50% - 220px);bottom:74px;width:56px;height:56px;border-radius:50%;background:var(--accent);color:#fff;border:0;font-size:28px;box-shadow:0 6px 20px #0003}
-.chat{display:none;flex:1;flex-direction:column;background:var(--bg);min-height:0}.messages{flex:1;overflow:auto;padding:16px 12px}.bubble{position:relative;max-width:88%;background:var(--bubble);border:1px solid var(--line);border-radius:16px;padding:12px 14px;margin:8px 0;box-shadow:0 1px 2px #0001}.bubble.mine{margin-right:auto;background:var(--bubble2)}.bubble .tools{display:none;position:absolute;top:-18px;left:8px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:3px}.bubble:hover .tools,.bubble:focus-within .tools{display:flex}.tools button{border:0;background:none;color:var(--text);cursor:pointer}.note-dot{position:absolute;left:-14px;top:50%;transform:translateY(-50%);width:25px;height:25px;border-radius:50%;border:1px solid #e4c53d;background:#fff7b5;cursor:pointer}.composer{border-top:1px solid var(--line);padding:8px;display:flex;gap:7px;align-items:end;background:var(--panel)}.input{flex:1;min-height:42px;max-height:120px;overflow:auto;background:var(--input);border:1px solid var(--line);border-radius:20px;padding:10px 13px;outline:none}.send{width:44px;height:44px;border-radius:50%;border:0;background:var(--accent);color:#fff;font-size:18px}.format{display:none;position:absolute;bottom:63px;left:8px;right:8px;background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:7px;gap:5px;flex-wrap:wrap}.format button{border:1px solid var(--line);background:var(--input);color:var(--text);border-radius:8px;padding:7px 10px;font-weight:600}.format.show{display:flex}
-.modal{display:none;position:fixed;inset:0;background:#0007;align-items:center;justify-content:center;padding:18px}.card{width:min(480px,100%);background:var(--panel);border-radius:18px;padding:18px}.card h3{margin-top:0}.textarea{width:100%;min-height:110px;background:var(--input);color:var(--text);border:1px solid var(--line);border-radius:12px;padding:10px;font:inherit}.row{display:flex;gap:8px;margin-top:10px}.primary{flex:1;background:var(--accent);color:#fff;border:0;border-radius:10px;padding:10px}.secondary{flex:1;background:var(--bg);color:var(--text);border:1px solid var(--line);border-radius:10px;padding:10px}
-.mind{height:250px;background:radial-gradient(#9994 1px,transparent 1px);background-size:18px 18px;border:1px solid var(--line);border-radius:14px;position:relative;overflow:hidden}.node{position:absolute;background:var(--panel);border:2px solid var(--accent);border-radius:12px;padding:8px 12px;white-space:nowrap}.line{position:absolute;height:2px;background:var(--accent);transform-origin:right center}
-.bottom{height:58px;border-top:1px solid var(--line);display:flex;justify-content:space-around;align-items:center}.bottom button{border:0;background:none;color:var(--muted);font-size:12px}.bottom .active{color:var(--accent);font-weight:bold}
-</style>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width,
+                 initial-scale=1,
+                 maximum-scale=1,
+                 user-scalable=no"
+    >
+
+    <title>مفكرتي</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        html,
+        body {
+            margin: 0;
+            padding: 0;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+            background: #101114;
+            color: #ffffff;
+            font-family: Arial, sans-serif;
+        }
+
+        button,
+        input,
+        textarea {
+            font-family: inherit;
+        }
+
+        button {
+            touch-action: manipulation;
+        }
+
+        /* الصفحة الرئيسية */
+
+        #home {
+            width: 100%;
+            height: 100%;
+        }
+
+        .topBar {
+            height: 56px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 0 12px;
+            border-bottom: 1px solid #30323a;
+            background: #181a20;
+        }
+
+        .topTitle {
+            font-size: 18px;
+            font-weight: bold;
+        }
+
+        .iconButton {
+            width: 42px;
+            height: 42px;
+            border: 0;
+            border-radius: 50%;
+            background: transparent;
+            color: white;
+            font-size: 22px;
+        }
+
+        .notebook {
+            padding: 18px;
+            border-bottom: 1px solid #30323a;
+            font-size: 17px;
+        }
+
+        /* صفحة المحادثة */
+
+        #chat {
+            display: none;
+            width: 100%;
+            height: 100%;
+            flex-direction: column;
+        }
+
+        #messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 10px 8px 230px;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .empty {
+            text-align: center;
+            color: #777;
+            margin-top: 30vh;
+        }
+
+        .messageRow {
+            display: flex;
+            align-items: flex-end;
+            gap: 4px;
+            margin: 7px 0;
+        }
+
+        .message {
+            flex: 1;
+            min-width: 0;
+            padding: 10px 12px;
+            border-radius: 13px;
+            background: #1d2028;
+            overflow-wrap: anywhere;
+        }
+
+        .messageMenu {
+            width: 34px;
+            height: 34px;
+            border: 0;
+            background: transparent;
+            color: #aaa;
+            font-size: 22px;
+        }
+
+        /* المحرر الموحد */
+
+        #editor {
+            position: fixed;
+            z-index: 50;
+            left: 0;
+            right: 0;
+            bottom: 0;
+
+            padding:
+                6px
+                7px
+                calc(7px + env(safe-area-inset-bottom));
+
+            background: #181a20;
+            border-top: 1px solid #383b45;
+            box-shadow: 0 -4px 18px rgba(0, 0, 0, .45);
+        }
+
+        .editorHeader {
+            height: 26px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            color: #aaa;
+            font-size: 12px;
+        }
+
+        /*
+            مهم:
+            زر X هنا لا يحذف منطقة الكتابة.
+            وظيفته فقط إلغاء وضع التعديل.
+        */
+
+        #cancelEdit {
+            width: 34px;
+            height: 28px;
+            border: 0;
+            background: transparent;
+            color: #aaa;
+            font-size: 20px;
+        }
+
+        .toolbar {
+            display: flex;
+            gap: 5px;
+            overflow-x: auto;
+            padding: 5px 0;
+
+            scrollbar-width: none;
+            -webkit-overflow-scrolling: touch;
+        }
+
+        .toolbar::-webkit-scrollbar {
+            display: none;
+        }
+
+        .tool {
+            flex: 0 0 auto;
+
+            min-width: 36px;
+            height: 36px;
+
+            border: 1px solid #3b3e48;
+            border-radius: 9px;
+
+            background: #242730;
+            color: white;
+
+            font-size: 16px;
+        }
+
+        .tool:active {
+            transform: scale(.95);
+        }
+
+        /* B */
+
+        #boldButton {
+            font-size: 19px;
+        }
+
+        /* منطقة الكتابة */
+
+        .writeArea {
+            display: flex;
+            align-items: flex-end;
+            gap: 6px;
+        }
+
+        #textEditor {
+            flex: 1;
+
+            min-height: 48px;
+            max-height: 180px;
+
+            overflow-y: auto;
+
+            padding: 9px 10px;
+
+            border: 1px solid #3b3e48;
+            border-radius: 10px;
+
+            background: #0f1014;
+
+            color: white;
+
+            outline: none;
+
+            text-align: right;
+
+            white-space: pre-wrap;
+            overflow-wrap: anywhere;
+
+            -webkit-user-select: text;
+            user-select: text;
+        }
+
+        #textEditor:empty::before {
+            content: "اكتب هنا...";
+            color: #666;
+            pointer-events: none;
+        }
+
+        #sendButton {
+            flex: 0 0 auto;
+
+            width: 46px;
+            height: 46px;
+
+            border: 0;
+            border-radius: 50%;
+
+            background: #2b6cff;
+            color: white;
+
+            font-size: 20px;
+        }
+
+        /* البحث */
+
+        #searchBox {
+            display: none;
+            padding: 7px;
+            background: #181a20;
+        }
+
+        #searchInput {
+            width: 100%;
+            padding: 9px 12px;
+
+            border: 1px solid #444;
+            border-radius: 18px;
+
+            background: #101114;
+            color: white;
+
+            outline: none;
+        }
+
+        /* القوائم المنبثقة */
+
+        .popup {
+            display: none;
+
+            position: fixed;
+            z-index: 100;
+
+            left: 50%;
+            top: 50%;
+
+            transform: translate(-50%, -50%);
+
+            min-width: 180px;
+            max-width: 90vw;
+
+            padding: 10px;
+
+            border: 1px solid #444;
+            border-radius: 12px;
+
+            background: #20232b;
+            box-shadow: 0 10px 30px rgba(0,0,0,.5);
+        }
+
+        .popup button {
+            width: 100%;
+            min-height: 38px;
+            margin: 3px 0;
+
+            border: 1px solid #3b3e48;
+            border-radius: 8px;
+
+            background: #292c35;
+            color: white;
+        }
+
+        /* قائمة الرسالة */
+
+        #messageMenu {
+            display: none;
+
+            position: fixed;
+            z-index: 200;
+
+            padding: 5px;
+
+            border: 1px solid #444;
+            border-radius: 10px;
+
+            background: #20232b;
+        }
+
+        #messageMenu button {
+            display: block;
+
+            min-width: 100px;
+            min-height: 38px;
+
+            border: 0;
+            border-radius: 7px;
+
+            background: transparent;
+            color: white;
+
+            text-align: right;
+        }
+
+        #messageMenu button:active {
+            background: #30333d;
+        }
+    </style>
 </head>
-<body class="dark">
-<div class="app">
-  <div id="home">
-    <div class="top"><button class="icon">☰</button><div class="title">مفكرتي</div><button class="icon">⌕</button><button class="icon" onclick="toggleDark()">⋮</button></div>
-    <div class="search">🔎 بحث في المفكرات</div>
-    <div class="list">
-      <div class="item" onclick="openChat()"><div class="avatar">📚</div><div><b>مذاكرة النحو</b><small>آخر تعديل: الآن</small></div></div>
-      <div class="item"><div class="avatar">💡</div><div><b>أفكار</b><small>آخر تعديل: أمس</small></div></div>
-      <div class="item"><div class="avatar">📝</div><div><b>ملاحظات عامة</b><small>آخر تعديل: منذ يومين</small></div></div>
-    </div>
-    <button class="fab" onclick="openChat()">✎</button>
-  </div>
 
-  <div id="chat" class="chat">
-    <div class="top"><button class="icon" onclick="closeChat()">‹</button><div class="title">📚 مذاكرة النحو<div class="sub">مفكرة شخصية</div></div><button class="icon" onclick="openMind()">🧠</button><button class="icon" onclick="toggleDark()">☾</button></div>
-    <div id="messages" class="messages">
-      <div class="bubble" tabindex="0"><button class="note-dot" onclick="showNote('ملاحظة: انتبهي أن المفعول به يأتي منصوبًا.')">💡</button><div contenteditable="true"><b>المفعول به</b><br>هو اسم منصوب يقع عليه فعل الفاعل.<br><br><b>مثال:</b> قرأتُ <span style="color:#e05b5b">الكتابَ</span>.</div><div class="tools"><button onclick="editFocus(this)">✎</button><button onclick="this.closest('.bubble').remove()">🗑</button></div></div>
-      <div class="bubble" tabindex="0"><div contenteditable="true"><b>علامات نصب المفعول به</b><br>• الفتحة (مفرد)<br>• الألف (الأسماء الخمسة)<br>• الياء (مثنى وجمع مذكر سالم)<br>• الكسرة (جمع المؤنث السالم)</div><div class="tools"><button onclick="editFocus(this)">✎</button><button onclick="this.closest('.bubble').remove()">🗑</button></div></div>
-      <div class="bubble mine" tabindex="0"><div contenteditable="true"><b>أمثلة</b><br>1. قرأتُ الكتابَ.<br>2. أكرمتُ الطالبَ.<br>3. رأيتُ الصديقَ.</div><div class="tools"><button onclick="editFocus(this)">✎</button><button onclick="this.closest('.bubble').remove()">🗑</button></div></div>
-    </div>
-    <div id="format" class="format">
-      <button onclick="cmd('bold')">B</button><button onclick="cmd('italic')"><i>I</i></button><button onclick="cmd('underline')"><u>U</u></button>
-      <button onclick="cmd('insertUnorderedList')">• قائمة</button><button onclick="cmd('insertOrderedList')">1. قائمة</button>
-      <button onclick="cmd('justifyRight')">يمين</button><button onclick="cmd('justifyCenter')">وسط</button>
-      <button onclick="cmd('undo')">↶</button><button onclick="cmd('redo')">↷</button>
-      <button onclick="openMind()">🧠 خريطة</button><button onclick="newNote()">💡 ملاحظة</button>
-    </div>
-    <div class="composer"><button class="icon" onclick="document.getElementById('format').classList.toggle('show')">＋</button><div id="input" class="input" contenteditable="true" onfocus="currentEditor=this"></div><button class="send" onclick="send()">➤</button></div>
-  </div>
+<body>
 
-  <div class="bottom"><button class="active">📒<br>المفكرات</button><button>☆<br>المفضلة</button><button>⌕<br>بحث</button><button>⚙<br>الإعدادات</button></div>
+<!-- =========================
+     الصفحة الرئيسية
+========================= -->
+
+<section id="home">
+
+    <div class="topBar">
+
+        <button
+            class="iconButton"
+            id="homeMenu"
+            type="button"
+        >
+            ☰
+        </button>
+
+        <div class="topTitle">
+            مفكرتي
+        </div>
+
+        <button
+            class="iconButton"
+            id="homeSearch"
+            type="button"
+        >
+            ⌕
+        </button>
+
+    </div>
+
+    <div
+        class="notebook"
+        id="openNotebook"
+    >
+        <b>مذاكرة النحو</b>
+    </div>
+
+</section>
+
+
+<!-- =========================
+     المحادثة
+========================= -->
+
+<section id="chat">
+
+    <div class="topBar">
+
+        <button
+            class="iconButton"
+            id="backButton"
+            type="button"
+        >
+            ‹
+        </button>
+
+        <div class="topTitle">
+            مذاكرة النحو
+        </div>
+
+        <button
+            class="iconButton"
+            id="chatSearch"
+            type="button"
+        >
+            ⌕
+        </button>
+
+    </div>
+
+
+    <div id="searchBox">
+
+        <input
+            id="searchInput"
+            type="search"
+            placeholder="بحث"
+        >
+
+    </div>
+
+
+    <div id="messages"></div>
+
+
+    <!-- =========================
+         المحرر الواحد
+    ========================== -->
+
+    <div id="editor">
+
+        <div class="editorHeader">
+
+            <span id="editorStatus">
+                ＋ رسالة جديدة
+            </span>
+
+            <button
+                id="cancelEdit"
+                type="button"
+                aria-label="إلغاء"
+            >
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="toolbar">
+
+            <!-- B -->
+
+            <button
+                class="tool"
+                id="boldButton"
+                type="button"
+            >
+                <b>B</b>
+            </button>
+
+
+            <!-- مائل -->
+
+            <button
+                class="tool"
+                id="italicButton"
+                type="button"
+            >
+                <i>I</i>
+            </button>
+
+
+            <!-- تسطير -->
+
+            <button
+                class="tool"
+                id="underlineButton"
+                type="button"
+            >
+                <u>U</u>
+            </button>
+
+
+            <!-- لون الخط -->
+
+            <button
+                class="tool"
+                id="textColorButton"
+                type="button"
+            >
+                ●
+            </button>
+
+
+            <!-- تمييز -->
+
+            <button
+                class="tool"
+                id="highlightButton"
+                type="button"
+            >
+                🖍
+            </button>
+
+
+            <!-- حجم الخط -->
+
+            <button
+                class="tool"
+                id="fontSizeButton"
+                type="button"
+            >
+                A↕
+            </button>
+
+
+            <!-- التنقيط / الترقيم -->
+
+            <button
+                class="tool"
+                id="listButton"
+                type="button"
+            >
+                ☷
+            </button>
+
+
+            <!-- المحاذاة -->
+
+            <button
+                class="tool"
+                data-command="justifyRight"
+                type="button"
+            >
+                →
+            </button>
+
+            <button
+                class="tool"
+                data-command="justifyCenter"
+                type="button"
+            >
+                ↔
+            </button>
+
+            <button
+                class="tool"
+                data-command="justifyLeft"
+                type="button"
+            >
+                ←
+            </button>
+
+
+            <!-- جدول -->
+
+            <button
+                class="tool"
+                id="tableButton"
+                type="button"
+            >
+                ▦
+            </button>
+
+
+            <!-- خريطة ذهنية -->
+
+            <button
+                class="tool"
+                id="mindButton"
+                type="button"
+            >
+                ⌘
+            </button>
+
+
+            <!-- صف / عمود -->
+
+            <button
+                class="tool"
+                id="addRow"
+                type="button"
+            >
+                ⬇️
+            </button>
+
+            <button
+                class="tool"
+                id="addColumn"
+                type="button"
+            >
+                ⬅️
+            </button>
+
+            <button
+                class="tool"
+                id="deleteRow"
+                type="button"
+            >
+                ✕
+            </button>
+
+            <button
+                class="tool"
+                id="deleteColumn"
+                type="button"
+            >
+                ✕
+            </button>
+
+        </div>
+
+
+        <!-- منطقة الكتابة -->
+
+        <div class="writeArea">
+
+            <div
+                id="textEditor"
+                contenteditable="true"
+                spellcheck="true"
+            ></div>
+
+            <button
+                id="sendButton"
+                type="button"
+            >
+                ➤
+            </button>
+
+        </div>
+
+    </div>
+
+</section>
+
+
+<!-- =========================
+     قائمة الرسالة
+========================= -->
+
+<div id="messageMenu">
+
+    <button
+        id="editMessage"
+        type="button"
+    >
+        تعديل
+    </button>
+
+    <button
+        id="noteMessage"
+        type="button"
+    >
+        ?
+    </button>
+
+    <button
+        id="deleteMessage"
+        type="button"
+    >
+        حذف
+    </button>
+
 </div>
 
-<div id="noteModal" class="modal"><div class="card"><h3>💡 الملاحظة الجانبية</h3><textarea id="noteText" class="textarea"></textarea><div class="row"><button class="primary" onclick="closeModal('noteModal')">حفظ</button><button class="secondary" onclick="closeModal('noteModal')">إلغاء</button></div></div></div>
-<div id="mindModal" class="modal"><div class="card"><h3>🧠 خريطة ذهنية بسيطة</h3><div class="mind"><div class="node" style="right:40%;top:42%">المفعول به</div><div class="node" style="right:7%;top:15%">تعريفه</div><div class="node" style="right:7%;top:68%">علاماته</div><div class="node" style="left:7%;top:15%">أمثلة</div><div class="line" style="right:48%;top:49%;width:145px;transform:rotate(-22deg)"></div><div class="line" style="right:48%;top:54%;width:145px;transform:rotate(22deg)"></div><div class="line" style="left:48%;top:49%;width:145px;transform:rotate(22deg)"></div></div><div class="row"><button class="primary" onclick="closeModal('mindModal')">تم</button></div></div></div>
-<div id="simpleModal" class="modal"><div class="card"><h3>💡 ملاحظة جانبية</h3><p id="simpleText"></p><div class="row"><button class="primary" onclick="closeModal('simpleModal')">إغلاق</button></div></div></div>
+
+<!-- =========================
+     نوافذ الأدوات
+========================= -->
+
+<div
+    class="popup"
+    id="colorPopup"
+>
+    <b>لون الخط</b>
+    <p>سنضع عجلة الألوان هنا في الملف التالي.</p>
+
+    <button
+        id="closeColor"
+        type="button"
+    >
+        ✓
+    </button>
+</div>
+
+
+<div
+    class="popup"
+    id="highlightPopup"
+>
+    <b>تمييز النص</b>
+    <p>سنضع اختيار التمييز هنا في الملف التالي.</p>
+
+    <button
+        id="closeHighlight"
+        type="button"
+    >
+        ✓
+    </button>
+</div>
+
+
+<div
+    class="popup"
+    id="fontSizePopup"
+>
+    <b>حجم الخط</b>
+
+    <div id="fontSizes"></div>
+
+    <button
+        id="closeFontSize"
+        type="button"
+    >
+        ✓
+    </button>
+</div>
+
+
+<div
+    class="popup"
+    id="listPopup"
+>
+    <button
+        id="bulletList"
+        type="button"
+    >
+        • تنقيط
+    </button>
+
+    <button
+        id="numberList"
+        type="button"
+    >
+        ١. ترقيم
+    </button>
+
+</div>
+
 
 <script>
-let currentEditor=null;
-function toggleDark(){document.body.classList.toggle('dark');localStorage.dark=document.body.classList.contains('dark')}
-document.body.classList.add('dark');
-function openChat(){document.getElementById('home').style.display='none';document.getElementById('chat').style.display='flex'}
-function closeChat(){document.getElementById('chat').style.display='none';document.getElementById('home').style.display='block'}
-function cmd(c){document.execCommand(c,false,null);if(currentEditor)currentEditor.focus()}
-function send(){let input=document.getElementById('input');let html=input.innerHTML.trim();if(!html)return;let b=document.createElement('div');b.className='bubble mine';b.tabIndex=0;b.innerHTML='<div contenteditable="true">'+html+'</div><div class="tools"><button onclick="editFocus(this)">✎</button><button onclick="this.closest('.bubble').remove()">🗑</button></div>';document.getElementById('messages').appendChild(b);input.innerHTML='';document.getElementById('messages').scrollTop=999999}
-function editFocus(btn){let e=btn.closest('.bubble').querySelector('[contenteditable]');e.focus()}
-function showNote(t){document.getElementById('simpleText').textContent=t;document.getElementById('simpleModal').style.display='flex'}
-function newNote(){document.getElementById('noteText').value='';document.getElementById('noteModal').style.display='flex'}
-function openMind(){document.getElementById('mindModal').style.display='flex'}
-function closeModal(id){document.getElementById(id).style.display='none'}
-document.addEventListener('click',e=>{if(e.target.matches('.modal'))e.target.style.display='none'})
-</script>
 
-<script>
-(function(){
-  const KEY='mofakkarati_demo_messages_v2';
-  const messages=document.getElementById('messages');
-  if(!messages) return;
-  function save(){ localStorage.setItem(KEY,messages.innerHTML); }
-  function restore(){ const x=localStorage.getItem(KEY); if(x) messages.innerHTML=x; }
-  restore();
-  messages.addEventListener('input',save);
-  window.addEventListener('beforeunload',save);
-  const oldSend=window.send;
-  window.send=function(){ oldSend(); save(); };
-})();
-</script>
-</body>
-  </html>
-  
+    /*
+        المرحلة الأولى فقط:
+
+        - محرر واحد.
+        - إرسال وتعديل من نفس المكان.
+        - زر × لا يخفي منطقة الكتابة.
+        - حفظ الرسائل في localStorage.
+        - تنسيق B / I / U.
+        - المحاذاة.
+        - البحث.
+        
+        الألوان والجدول والخريطة الذهنية
+        سنبنيها في ملفات منفصلة بعد اختبار
+        هذه المرحلة.
+    */
+
+
+    const home = document.getElementById("home");
+    const chat = document.getElementById("chat");
+
+    const openNotebook =
+        document.getElementById("openNotebook");
+
+    const backButton =
+        document.getElementById("backButton");
+
+    const textEditor =
+        document.getElementById("textEditor");
+
+    const sendButton =
+        document.getElementById("sendButton");
+
+    const messagesBox =
+        document.getElementById("messages");
+
+    const editorStatus =
+        document.getElementById("editorStatus");
+
+    const cancelEdit =
+        document.getElementById("cancelEdit");
+
+    const messageMenu =
+        document.getElementById("messageMenu");
+
+
+    let messages =
+        JSON.parse(
+            localStorage.getItem("myNotesClean") || "[]"
+        );
+
+
+    let editingIndex = -1;
+
+    let selectedMessage = -1;
+
+    let savedSelection = null;
+
+
+    /* =========================
+       تحديد النص
+    ========================== */
+
+    function saveSelection() {
+
+        const selection =
+            window.getSelection();
+
+        if (
+            selection &&
+            selection.rangeCount
+        ) {
+
+            savedSelection =
+                selection
+                .getRangeAt(0)
+                .cloneRange();
+        }
+    }
+
+
+    function restoreSelection() {
+
+        if (!savedSelection) {
+            return;
+        }
+
+        const selection =
+            window.getSelection();
+
+        selection.removeAllRanges();
+
+        selection.addRange(
+            savedSelection
+        );
+    }
+
+
+    textEditor.addEventListener(
+        "mouseup",
+        saveSelection
+    );
+
+
+    textEditor.addEventListener(
+        "keyup",
+        saveSelection
+    );
+
+
+    textEditor.addEventListener(
+        "touchend",
+        function () {
+
+            setTimeout(
+                saveSelection,
+                0
+            );
+
+        }
+    );
+
+
+    /* =========================
+       فتح المفكرة
+    ========================== */
+
+    openNotebook.onclick =
+        function () {
+
+            home.style.display =
+                "none";
+
+            chat.style.display =
+                "flex";
+
+            renderMessages();
+
+            openNewEditor();
+
+        };
+
+
+    /* =========================
+       العودة
+    ========================== */
+
+    backButton.onclick =
+        function () {
+
+            chat.style.display =
+                "none";
+
+            home.style.display =
+                "block";
+
+        };
+
+
+    /* =========================
+       محرر جديد
+    ========================== */
+
+    function openNewEditor() {
+
+        editingIndex = -1;
+
+        editorStatus.textContent =
+            "＋ رسالة جديدة";
+
+        textEditor.innerHTML = "";
+
+        textEditor.focus();
+
+    }
+
+
+    /* =========================
+       تعديل رسالة
+    ========================== */
+
+    function editMessage(index) {
+
+        editingIndex = index;
+
+        editorStatus.textContent =
+            "✎ تعديل";
+
+        textEditor.innerHTML =
+            messages[index].html;
+
+        textEditor.focus();
+
+        messageMenu.style.display =
+            "none";
+
+    }
+
+
+    /* =========================
+       زر X
+       
+       مهم جدًا:
+       لا يخفي المحرر.
+       فقط يخرج من وضع التعديل.
+    ========================== */
+
+    cancelEdit.onclick =
+        function () {
+
+            editingIndex = -1;
+
+            editorStatus.textContent =
+                "＋ رسالة جديدة";
+
+            textEditor.innerHTML =
+                "";
+
+            textEditor.focus();
+
+        };
+
+
+    /* =========================
+       إرسال / حفظ التعديل
+    ========================== */
+
+    sendButton.onclick =
+        function () {
+
+            const html =
+                textEditor.innerHTML.trim();
+
+            if (!html) {
+                return;
+            }
+
+
+            if (editingIndex >= 0) {
+
+                messages[
+                    editingIndex
+                ].html = html;
+
+            } else {
+
+                messages.push({
+
+                    html: html,
+
+                    note: ""
+
+                });
+
+            }
+
+
+            localStorage.setItem(
+                "myNotesClean",
+                JSON.stringify(messages)
+            );
+
+
+            renderMessages();
+
+            openNewEditor();
+
+        };
+
+
+    /* =========================
+       عرض الرسائل
+    ========================== */
+
+    function renderMessages() {
+
+        messagesBox.innerHTML =
+            "";
+
+
+        if (!messages.length) {
+
+            messagesBox.innerHTML =
+                '<div class="empty">المفكرة فارغة</div>';
+
+            return;
+
+        }
+
+
+        messages.forEach(
+            function (message, index) {
+
+                const row =
+                    document.createElement(
+                        "div"
+                    );
+
+                row.className =
+                    "messageRow";
+
+
+                const content =
+                    document.createElement(
+                        "div"
+                    );
+
+                content.className =
+                    "message";
+
+                content.innerHTML =
+                    message.html;
+
+
+                const menuButton =
+                    document.createElement(
+                        "button"
+                    );
+
+                menuButton.className =
+                    "messageMenu";
+
+                menuButton.textContent =
+                    "⋮";
+
+
+                menuButton.onclick =
+                    function (event) {
+
+                        selectedMessage =
+                            index;
+
+
+                        messageMenu.style.display =
+                            "block";
+
+
+                        messageMenu.style.left =
+                            Math.max(
+                                5,
+                                event.clientX - 
