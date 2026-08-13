@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -150,6 +149,8 @@ button{
 
 .tool.active{
   background:#315fae;
+  border-color:#5f8fe8;
+  box-shadow:0 0 0 2px rgba(52,113,246,.25);
 }
 
 .bold{
@@ -160,155 +161,6 @@ button{
   text-decoration:underline;
   text-decoration-thickness:2px;
   text-underline-offset:7px;
-}
-
-/* ==========================
-   شريط المحاذاة
-========================== */
-
-.align-bar{
-  display:none;
-  align-items:center;
-  gap:5px;
-  overflow-x:auto;
-  padding:2px 0 6px;
-  scrollbar-width:none;
-}
-
-.align-bar::-webkit-scrollbar{
-  display:none;
-}
-
-/* ==========================
-   شريط حجم الخط
-========================== */
-
-.size-bar{
-  display:none;
-  align-items:center;
-  gap:5px;
-  overflow-x:auto;
-  padding:2px 0 6px;
-  scrollbar-width:none;
-  direction:ltr;
-}
-
-.size-bar::-webkit-scrollbar{
-  display:none;
-}
-
-.size-item{
-  flex:0 0 34px;
-  width:34px;
-  height:32px;
-  border:1px solid #444955;
-  border-radius:8px;
-  background:#2a2f39;
-  color:#fff;
-  font-size:13px;
-  padding:0;
-}
-
-.size-item.active{
-  background:#315fae;
-  border-color:#5d8fff;
-}
-
-/* ==========================
-   شريط القوائم
-========================== */
-
-.list-bar{
-  display:none;
-  align-items:center;
-  gap:5px;
-  padding:2px 0 6px;
-}
-
-.mini-tool{
-  flex:0 0 39px;
-  width:39px;
-  height:34px;
-  border:1px solid #444955;
-  border-radius:9px;
-  background:#292e39;
-  color:#fff;
-  font-size:18px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
-}
-
-.mini-tool:active{
-  background:#315fae;
-}
-
-/* ==========================
-   رموز المحاذاة
-========================== */
-
-.align-button{
-  position:relative;
-}
-
-.align-icon{
-  width:22px;
-  height:17px;
-  display:flex;
-  flex-direction:column;
-  justify-content:space-between;
-}
-
-.align-icon span{
-  display:block;
-  height:2px;
-  background:#fff;
-  border-radius:2px;
-}
-
-.align-icon.right span:nth-child(1){
-  width:22px;
-  margin-left:auto;
-}
-
-.align-icon.right span:nth-child(2){
-  width:15px;
-  margin-left:auto;
-}
-
-.align-icon.right span:nth-child(3){
-  width:19px;
-  margin-left:auto;
-}
-
-.align-icon.center span:nth-child(1){
-  width:22px;
-  margin:auto;
-}
-
-.align-icon.center span:nth-child(2){
-  width:15px;
-  margin:auto;
-}
-
-.align-icon.center span:nth-child(3){
-  width:19px;
-  margin:auto;
-}
-
-.align-icon.left span:nth-child(1){
-  width:22px;
-  margin-right:auto;
-}
-
-.align-icon.left span:nth-child(2){
-  width:15px;
-  margin-right:auto;
-}
-
-.align-icon.left span:nth-child(3){
-  width:19px;
-  margin-right:auto;
 }
 
 .write-row{
@@ -330,7 +182,6 @@ button{
   background:#0e1015;
   color:#fff;
   line-height:1.7;
-  font-size:18px;
   overflow-wrap:anywhere;
   user-select:text;
   -webkit-user-select:text;
@@ -358,8 +209,41 @@ button{
 }
 
 /* ==========================
-   النوافذ
+   شريط أحجام الخط
 ========================== */
+
+.font-size-bar{
+  display:none;
+  align-items:center;
+  gap:5px;
+  overflow-x:auto;
+  scrollbar-width:none;
+  padding:3px 0 7px;
+  direction:ltr;
+}
+
+.font-size-bar::-webkit-scrollbar{
+  display:none;
+}
+
+.font-size-item{
+  flex:0 0 34px;
+  width:34px;
+  height:32px;
+  border:1px solid #444955;
+  border-radius:8px;
+  background:#292e39;
+  color:#fff;
+  font-size:13px;
+  padding:0;
+}
+
+.font-size-item.active{
+  background:#315fae;
+  border-color:#6b98ef;
+}
+
+/* النوافذ */
 
 .overlay{
   display:none;
@@ -389,9 +273,7 @@ button{
   margin-bottom:12px;
 }
 
-/* ==========================
-   عجلة اللون
-========================== */
+/* عجلة اللون */
 
 .wheel-box{
   width:250px;
@@ -417,20 +299,23 @@ button{
       magenta,
       red
     );
+  touch-action:none;
 }
 
 .wheel::after{
   content:"";
   position:absolute;
-  inset:20%;
+  inset:0;
   border-radius:50%;
   background:
     radial-gradient(
       circle,
-      white 0%,
-      rgba(255,255,255,.7) 35%,
-      rgba(255,255,255,0) 75%
+      rgba(255,255,255,1) 0%,
+      rgba(255,255,255,.88) 20%,
+      rgba(255,255,255,.45) 48%,
+      rgba(255,255,255,0) 72%
     );
+  pointer-events:none;
 }
 
 .marker{
@@ -442,6 +327,7 @@ button{
   box-shadow:0 0 0 2px #000;
   transform:translate(-50%,-50%);
   pointer-events:none;
+  z-index:5;
 }
 
 .range-title{
@@ -465,13 +351,27 @@ button{
   margin-top:10px;
 }
 
-/* ==========================
-   الجدول
-========================== */
+/* القوائم */
+
+.list-choice{
+  display:flex;
+  gap:7px;
+}
+
+.list-choice button{
+  flex:1;
+  min-height:48px;
+  border:1px solid #444955;
+  border-radius:10px;
+  background:#2a2f39;
+  color:#fff;
+}
+
+/* الجدول */
 
 .editor table,
 .note table{
-  width:100%;
+  width:max-content;
   max-width:100%;
   border-collapse:collapse;
   table-layout:auto;
@@ -497,12 +397,11 @@ button{
   outline:1px solid #3471f6;
 }
 
-/* ==========================
-   الخريطة الذهنية
-========================== */
+/* الخريطة الذهنية */
 
 .mind-map{
-  width:100%;
+  width:max-content;
+  max-width:100%;
   display:flex;
   flex-direction:column;
   align-items:center;
@@ -523,15 +422,18 @@ button{
 }
 
 .mind-branches{
-  width:100%;
-  display:grid;
-  grid-template-columns:
-    repeat(auto-fit,minmax(120px,1fr));
+  width:max-content;
+  max-width:100%;
+  display:flex;
+  flex-wrap:wrap;
+  justify-content:center;
   gap:9px;
 }
 
 .mind-branch{
-  min-width:0;
+  width:max-content;
+  max-width:100%;
+  min-width:80px;
   padding:8px 10px;
   border:1px solid #555d6d;
   border-radius:10px;
@@ -540,6 +442,8 @@ button{
   overflow-wrap:anywhere;
   word-break:break-word;
 }
+
+/* مدخلات الخريطة */
 
 .mind-input{
   width:100%;
@@ -557,9 +461,7 @@ button{
   border-color:#3471f6;
 }
 
-/* ==========================
-   قائمة الرسالة
-========================== */
+/* قائمة الرسالة */
 
 .menu{
   display:none;
@@ -585,9 +487,7 @@ button{
   padding:0 10px;
 }
 
-/* ==========================
-   البحث
-========================== */
+/* البحث */
 
 .search-input{
   width:100%;
@@ -624,11 +524,9 @@ button{
     height:220px;
   }
 
-  .mind-branches{
-    grid-template-columns:
-      repeat(auto-fit,minmax(105px,1fr));
+  .mind-branch{
+    min-width:70px;
   }
-
 }
 </style>
 </head>
@@ -713,19 +611,6 @@ id="listButton"
 type="button">☷</button>
 
 <button
-class="tool align-button"
-id="alignButton"
-type="button">
-
-<div class="align-icon center">
-<span></span>
-<span></span>
-<span></span>
-</div>
-
-</button>
-
-<button
 class="tool"
 id="tableButton"
 type="button">▦</button>
@@ -737,87 +622,12 @@ type="button">🧠</button>
 
 </div>
 
-
-<!-- ==========================
-     شريط المحاذاة
-========================== -->
+<!-- شريط الأحجام يظهر فوق خانة الكتابة مباشرة -->
 
 <div
-class="align-bar"
-id="alignBar">
-
-<button
-class="mini-tool"
-id="alignRightButton"
-type="button">
-
-<div class="align-icon right">
-<span></span>
-<span></span>
-<span></span>
+class="font-size-bar"
+id="fontSizeBar">
 </div>
-
-</button>
-
-<button
-class="mini-tool"
-id="alignCenterButton"
-type="button">
-
-<div class="align-icon center">
-<span></span>
-<span></span>
-<span></span>
-</div>
-
-</button>
-
-<button
-class="mini-tool"
-id="alignLeftButton"
-type="button">
-
-<div class="align-icon left">
-<span></span>
-<span></span>
-<span></span>
-</div>
-
-</button>
-
-</div>
-
-
-<!-- ==========================
-     شريط حجم الخط
-========================== -->
-
-<div
-class="size-bar"
-id="sizeBar">
-</div>
-
-
-<!-- ==========================
-     شريط القوائم
-========================== -->
-
-<div
-class="list-bar"
-id="listBar">
-
-<button
-class="mini-tool"
-id="bulletButton"
-type="button">•☷</button>
-
-<button
-class="mini-tool"
-id="numberButton"
-type="button">1.</button>
-
-</div>
-
 
 <div class="write-row">
 
@@ -840,9 +650,7 @@ type="button">➤</button>
 </div>
 
 
-<!-- ==========================
-     لون الخط
-========================== -->
+<!-- لون الخط -->
 
 <div
 class="overlay"
@@ -864,7 +672,7 @@ id="colorWheel">
 <div
 class="marker"
 id="colorMarker"
-style="left:125px;top:125px">
+style="left:50%;top:50%">
 </div>
 
 </div>
@@ -880,9 +688,7 @@ type="button">
 </div>
 
 
-<!-- ==========================
-     التمييز
-========================== -->
+<!-- التمييز -->
 
 <div
 class="overlay"
@@ -904,7 +710,7 @@ id="highlightWheel">
 <div
 class="marker"
 id="highlightMarker"
-style="left:125px;top:125px">
+style="left:50%;top:50%">
 </div>
 
 </div>
@@ -932,9 +738,39 @@ type="button">
 </div>
 
 
-<!-- ==========================
-     الجدول
-========================== -->
+<!-- التنقيط والترقيم -->
+
+<div
+class="overlay"
+id="listOverlay">
+
+<div class="panel">
+
+<div class="panel-title">
+اختيار القائمة
+</div>
+
+<div class="list-choice">
+
+<button
+id="bulletButton"
+type="button">
+• تنقيط
+</button>
+
+<button
+id="numberButton"
+type="button">
+١. ترقيم
+</button>
+
+</div>
+
+</div>
+</div>
+
+
+<!-- الجدول -->
 
 <div
 class="overlay"
@@ -997,9 +833,7 @@ type="button">
 </div>
 
 
-<!-- ==========================
-     الخريطة الذهنية
-========================== -->
+<!-- الخريطة الذهنية -->
 
 <div
 class="overlay"
@@ -1038,9 +872,7 @@ type="button">
 </div>
 
 
-<!-- ==========================
-     البحث
-========================== -->
+<!-- البحث -->
 
 <div
 class="overlay"
@@ -1074,9 +906,7 @@ type="button">
 </div>
 
 
-<!-- ==========================
-     قائمة تعديل الرسالة
-========================== -->
+<!-- قائمة تعديل الرسالة -->
 
 <div
 class="menu"
@@ -1116,6 +946,9 @@ let editingIndex = -1;
 let selectedIndex = -1;
 let savedRange = null;
 
+/* حجم الكتابة الجديدة */
+let currentFontSize = 18;
+
 
 /* ==========================
    العناصر
@@ -1133,21 +966,8 @@ document.getElementById("state");
 const messageMenu =
 document.getElementById("messageMenu");
 
-const sizeBar =
-document.getElementById("sizeBar");
-
-const listBar =
-document.getElementById("listBar");
-
-const alignBar =
-document.getElementById("alignBar");
-
-
-/* ==========================
-   حجم الكتابة الحالي
-========================== */
-
-let currentFontSize = 18;
+const fontSizeBar =
+document.getElementById("fontSizeBar");
 
 
 /* ==========================
@@ -1277,7 +1097,7 @@ messageMenu.style.display =
 
 
 /* ==========================
-   حفظ واسترجاع التحديد
+   حفظ التحديد
 ========================== */
 
 function selectionIsInsideEditor(range){
@@ -1358,6 +1178,49 @@ restoreSelection();
 
 
 /* ==========================
+   تحديث حالة الأزرار
+========================== */
+
+function updateToolbarState(){
+
+if(document.activeElement !== editor){
+return;
+}
+
+const bold =
+document.queryCommandState("bold");
+
+const italic =
+document.queryCommandState("italic");
+
+const underline =
+document.queryCommandState("underline");
+
+document
+.getElementById("boldButton")
+.classList.toggle(
+"active",
+bold
+);
+
+document
+.getElementById("italicButton")
+.classList.toggle(
+"active",
+italic
+);
+
+document
+.getElementById("underlineButton")
+.classList.toggle(
+"active",
+underline
+);
+
+}
+
+
+/* ==========================
    تنفيذ أمر
 ========================== */
 
@@ -1376,23 +1239,7 @@ value
 
 saveSelection();
 
-}
-
-
-/* ==========================
-   إغلاق أشرطة الاختيار
-========================== */
-
-function closeChoiceBars(){
-
-sizeBar.style.display =
-"none";
-
-listBar.style.display =
-"none";
-
-alignBar.style.display =
-"none";
+updateToolbarState();
 
 }
 
@@ -1411,6 +1258,10 @@ saveSelection();
 
 command("bold");
 
+editor.focus();
+
+updateToolbarState();
+
 });
 
 
@@ -1427,6 +1278,10 @@ function(){
 saveSelection();
 
 command("italic");
+
+editor.focus();
+
+updateToolbarState();
 
 });
 
@@ -1445,29 +1300,48 @@ saveSelection();
 
 command("underline");
 
+editor.focus();
+
+updateToolbarState();
+
 });
 
 
 /* ==========================
-   حفظ التحديد
+   متابعة التحديد
 ========================== */
 
 editor.addEventListener(
 "mouseup",
-saveSelection
-);
+function(){
+
+saveSelection();
+
+updateToolbarState();
+
+});
 
 editor.addEventListener(
 "keyup",
-saveSelection
-);
+function(){
+
+saveSelection();
+
+updateToolbarState();
+
+});
 
 editor.addEventListener(
 "touchend",
 function(){
 
 setTimeout(
-saveSelection,
+function(){
+
+saveSelection();
+updateToolbarState();
+
+},
 120
 );
 
@@ -1478,15 +1352,41 @@ editor.addEventListener(
 function(){
 
 setTimeout(
-saveSelection,
+function(){
+
+saveSelection();
+updateToolbarState();
+
+},
 0
 );
 
 });
 
+document.addEventListener(
+"selectionchange",
+function(){
+
+if(
+selectionIsInsideEditor(
+window.getSelection().rangeCount
+?
+window.getSelection().getRangeAt(0)
+:
+null
+)
+){
+
+saveSelection();
+updateToolbarState();
+
+}
+
+});
+
 
 /* ==========================
-   عجلة اللون
+   عجلة اللون - إصلاح المؤشر
 ========================== */
 
 function getWheelColor(
@@ -1497,6 +1397,12 @@ event
 
 const rect =
 wheel.getBoundingClientRect();
+
+const radius =
+Math.min(
+rect.width,
+rect.height
+) / 2;
 
 const cx =
 rect.left + rect.width / 2;
@@ -1509,9 +1415,6 @@ event.clientX - cx;
 
 let dy =
 event.clientY - cy;
-
-const radius =
-rect.width / 2;
 
 let distance =
 Math.sqrt(
@@ -1526,35 +1429,121 @@ dx / distance * radius;
 dy =
 dy / distance * radius;
 
+distance =
+radius;
+
 }
 
-let angle =
+const angle =
+(
 Math.atan2(dy,dx) *
 180 /
-Math.PI;
-
-angle =
-(angle + 360) % 360;
+Math.PI +
+360
+) % 360;
 
 const saturation =
 Math.max(
-45,
+0,
 Math.min(
 100,
-distance / radius * 100
+(distance / radius) * 100
 )
 );
 
 const color =
-`hsl(${angle},${saturation}%,50%)`;
+`hsl(${angle}, ${saturation}%, 50%)`;
 
 marker.style.left =
-(radius + dx) + "px";
+(
+((dx + radius) / (radius * 2)) * 100
+) + "%";
 
 marker.style.top =
-(radius + dy) + "px";
+(
+((dy + radius) / (radius * 2)) * 100
+) + "%";
+
+marker.style.background =
+color;
 
 return color;
+
+}
+
+
+function setupColorWheel(
+wheel,
+marker,
+callback
+){
+
+let dragging = false;
+
+function pick(event){
+
+const color =
+getWheelColor(
+wheel,
+marker,
+event
+);
+
+callback(color);
+
+}
+
+wheel.addEventListener(
+"pointerdown",
+function(event){
+
+dragging = true;
+
+wheel.setPointerCapture(
+event.pointerId
+);
+
+pick(event);
+
+event.preventDefault();
+
+});
+
+wheel.addEventListener(
+"pointermove",
+function(event){
+
+if(!dragging){
+return;
+}
+
+pick(event);
+
+event.preventDefault();
+
+});
+
+wheel.addEventListener(
+"pointerup",
+function(event){
+
+dragging = false;
+
+try{
+wheel.releasePointerCapture(
+event.pointerId
+);
+}catch(e){}
+
+});
+
+wheel.addEventListener(
+"pointercancel",
+function(){
+
+dragging = false;
+
+});
 
 }
 
@@ -1581,45 +1570,17 @@ document.getElementById(
 let chosenTextColor =
 "rgb(255,255,255)";
 
-function applyTextColor(event){
-
-chosenTextColor =
-getWheelColor(
+setupColorWheel(
 colorWheel,
 colorMarker,
-event
-);
+function(color){
+
+chosenTextColor =
+color;
 
 }
-
-colorWheel.addEventListener(
-"pointerdown",
-function(event){
-
-colorWheel.setPointerCapture(
-event.pointerId
 );
 
-applyTextColor(event);
-
-event.preventDefault();
-
-});
-
-colorWheel.addEventListener(
-"pointermove",
-function(event){
-
-if(
-event.buttons ||
-event.pressure > 0
-){
-
-applyTextColor(event);
-
-}
-
-});
 
 document
 .getElementById("colorButton")
@@ -1629,12 +1590,11 @@ function(){
 
 saveSelection();
 
-closeChoiceBars();
-
 colorOverlay.style.display =
 "flex";
 
 });
+
 
 document
 .getElementById("colorDone")
@@ -1698,6 +1658,7 @@ let chosenHighlightColor =
 let highlightOpacity =
 0.60;
 
+
 function hexWithOpacity(
 color,
 opacity
@@ -1732,44 +1693,18 @@ ${opacity}
 
 }
 
-highlightWheel.addEventListener(
-"pointerdown",
-function(event){
 
-highlightWheel.setPointerCapture(
-event.pointerId
-);
-
-chosenHighlightColor =
-getWheelColor(
+setupColorWheel(
 highlightWheel,
 highlightMarker,
-event
-);
-
-event.preventDefault();
-
-});
-
-highlightWheel.addEventListener(
-"pointermove",
-function(event){
-
-if(
-event.buttons ||
-event.pressure > 0
-){
+function(color){
 
 chosenHighlightColor =
-getWheelColor(
-highlightWheel,
-highlightMarker,
-event
-);
+color;
 
 }
+);
 
-});
 
 document
 .getElementById("opacityRange")
@@ -1782,6 +1717,7 @@ Number(event.target.value) / 100;
 
 });
 
+
 document
 .getElementById("highlightButton")
 .addEventListener(
@@ -1790,12 +1726,11 @@ function(){
 
 saveSelection();
 
-closeChoiceBars();
-
 highlightOverlay.style.display =
 "flex";
 
 });
+
 
 document
 .getElementById("highlightDone")
@@ -1841,8 +1776,13 @@ editor.focus();
 
 
 /* ==========================
-   حجم الخط 1 - 20
+   حجم الخط
 ========================== */
+
+/*
+   الشريط أفقي من 1 إلى 20.
+   18 هو الحجم الافتراضي.
+*/
 
 for(
 let size = 1;
@@ -1854,10 +1794,7 @@ const button =
 document.createElement("button");
 
 button.className =
-"size-item";
-
-button.type =
-"button";
+"font-size-item";
 
 button.textContent =
 size;
@@ -1868,28 +1805,29 @@ function(){
 
 applyFontSize(size);
 
-sizeBar.style.display =
-"none";
-
 });
 
-sizeBar.appendChild(
+fontSizeBar.appendChild(
 button
 );
 
 }
 
 
-function updateSizeButtons(){
+function updateFontSizeButtons(){
 
-document
-.querySelectorAll(".size-item")
-.forEach(
+const buttons =
+fontSizeBar.querySelectorAll(
+".font-size-item"
+);
+
+buttons.forEach(
 button=>{
 
 button.classList.toggle(
 "active",
-Number(button.textContent) === currentFontSize
+Number(button.textContent) ===
+currentFontSize
 );
 
 });
@@ -1902,10 +1840,6 @@ function applyFontSize(size){
 currentFontSize =
 size;
 
-updateSizeButtons();
-
-editor.focus();
-
 restoreSelection();
 
 const selection =
@@ -1913,26 +1847,15 @@ window.getSelection();
 
 if(
 selection &&
-selection.rangeCount > 0
+selection.rangeCount > 0 &&
+!selection.isCollapsed &&
+selectionIsInsideEditor(
+selection.getRangeAt(0)
+)
 ){
-
-const range =
-selection.getRangeAt(0);
-
-if(
-selectionIsInsideEditor(range)
-){
-
-selection.removeAllRanges();
-
-selection.addRange(
-range
-);
 
 /*
-  تغيير النص المحدد.
-  7 قيمة مؤقتة ثم نحولها
-  إلى px.
+   تغيير النص المحدد
 */
 
 document.execCommand(
@@ -1956,42 +1879,14 @@ size + "px";
 
 });
 
-saveSelection();
-
-}
-
-}
+}else{
 
 /*
-  الحجم المختار يصبح حجم
-  الكتابة الجديدة أيضًا.
+   لا يوجد تحديد:
+   الحجم يصبح حجم الكتابة الجديدة
 */
 
-editor.style.fontSize =
-size + "px";
-
-/*
-  إذا كان المؤشر موجودًا بدون
-  تحديد، نحاول تطبيق الحجم
-  على موضع الكتابة نفسه حتى
-  يستمر الحجم أثناء الكتابة.
-*/
-
-const currentSelection =
-window.getSelection();
-
-if(
-currentSelection &&
-currentSelection.rangeCount > 0
-){
-
-const currentRange =
-currentSelection.getRangeAt(0);
-
-if(
-selectionIsInsideEditor(currentRange) &&
-currentRange.collapsed
-){
+editor.focus();
 
 document.execCommand(
 "fontSize",
@@ -2014,20 +1909,27 @@ size + "px";
 
 });
 
+}
+
 saveSelection();
 
-}
+updateFontSizeButtons();
 
-}
+/*
+   إخفاء الشريط فورًا
+*/
+
+fontSizeBar.style.display =
+"none";
 
 editor.focus();
 
 }
 
 
-/* ==========================
-   زر حجم الخط
-========================== */
+/*
+   فتح شريط الأحجام
+*/
 
 document
 .getElementById("sizeButton")
@@ -2037,108 +1939,31 @@ function(){
 
 saveSelection();
 
-const isOpen =
-sizeBar.style.display === "flex";
+updateFontSizeButtons();
 
-closeChoiceBars();
-
-if(!isOpen){
-
-updateSizeButtons();
-
-sizeBar.style.display =
+fontSizeBar.style.display =
 "flex";
 
-}
+setTimeout(
+function(){
 
-});
-
-
-/* ==========================
-   المحاذاة
-========================== */
-
-function applyAlignment(
-commandName
-){
-
-editor.focus();
-
-restoreSelection();
-
-document.execCommand(
-commandName,
-false,
-null
+const active =
+fontSizeBar.querySelector(
+".font-size-item.active"
 );
 
-saveSelection();
+if(active){
 
-alignBar.style.display =
-"none";
-
-editor.focus();
+active.scrollIntoView({
+behavior:"smooth",
+block:"nearest",
+inline:"center"
+});
 
 }
 
-
-document
-.getElementById("alignButton")
-.addEventListener(
-"click",
-function(){
-
-saveSelection();
-
-const isOpen =
-alignBar.style.display === "flex";
-
-closeChoiceBars();
-
-if(!isOpen){
-
-alignBar.style.display =
-"flex";
-
-}
-
-});
-
-
-document
-.getElementById("alignRightButton")
-.addEventListener(
-"click",
-function(){
-
-applyAlignment(
-"justifyRight"
-);
-
-});
-
-
-document
-.getElementById("alignCenterButton")
-.addEventListener(
-"click",
-function(){
-
-applyAlignment(
-"justifyCenter"
-);
-
-});
-
-
-document
-.getElementById("alignLeftButton")
-.addEventListener(
-"click",
-function(){
-
-applyAlignment(
-"justifyLeft"
+},
+20
 );
 
 });
@@ -2148,6 +1973,11 @@ applyAlignment(
    التنقيط والترقيم
 ========================== */
 
+const listOverlay =
+document.getElementById(
+"listOverlay"
+);
+
 document
 .getElementById("listButton")
 .addEventListener(
@@ -2156,17 +1986,8 @@ function(){
 
 saveSelection();
 
-const isOpen =
-listBar.style.display === "flex";
-
-closeChoiceBars();
-
-if(!isOpen){
-
-listBar.style.display =
+listOverlay.style.display =
 "flex";
-
-}
 
 });
 
@@ -2181,8 +2002,10 @@ command(
 "insertUnorderedList"
 );
 
-listBar.style.display =
+listOverlay.style.display =
 "none";
+
+editor.focus();
 
 });
 
@@ -2197,8 +2020,10 @@ command(
 "insertOrderedList"
 );
 
-listBar.style.display =
+listOverlay.style.display =
 "none";
+
+editor.focus();
 
 });
 
@@ -2220,12 +2045,14 @@ document.getElementById(
 let tableRows = 3;
 let tableCols = 3;
 
+
 function updateTableInfo(){
 
 tableInfo.textContent =
 tableRows + " × " + tableCols;
 
 }
+
 
 function createTable(
 rows,
@@ -2276,6 +2103,7 @@ return table;
 
 }
 
+
 document
 .getElementById("tableButton")
 .addEventListener(
@@ -2283,8 +2111,6 @@ document
 function(){
 
 saveSelection();
-
-closeChoiceBars();
 
 tableRows = 3;
 tableCols = 3;
@@ -2295,6 +2121,7 @@ tableOverlay.style.display =
 "flex";
 
 });
+
 
 document
 .getElementById("tableRowsPlus")
@@ -2312,6 +2139,7 @@ updateTableInfo();
 
 });
 
+
 document
 .getElementById("tableRowsMinus")
 .addEventListener(
@@ -2327,6 +2155,7 @@ tableRows - 1
 updateTableInfo();
 
 });
+
 
 document
 .getElementById("tableColsPlus")
@@ -2344,6 +2173,7 @@ updateTableInfo();
 
 });
 
+
 document
 .getElementById("tableColsMinus")
 .addEventListener(
@@ -2359,6 +2189,7 @@ tableCols - 1
 updateTableInfo();
 
 });
+
 
 document
 .getElementById("tableDone")
@@ -2430,6 +2261,7 @@ document.getElementById(
 "mindBranches"
 );
 
+
 function addMindBranch(){
 
 const input =
@@ -2449,6 +2281,7 @@ input
 
 }
 
+
 document
 .getElementById("mindMapButton")
 .addEventListener(
@@ -2456,8 +2289,6 @@ document
 function(){
 
 saveSelection();
-
-closeChoiceBars();
 
 mindCenterInput.value =
 "";
@@ -2482,6 +2313,7 @@ mindCenterInput.focus();
 
 });
 
+
 document
 .getElementById("mindAdd")
 .addEventListener(
@@ -2497,6 +2329,7 @@ addMindBranch();
 }
 
 });
+
 
 document
 .getElementById("mindDone")
@@ -2630,13 +2463,12 @@ document.getElementById(
 "searchResult"
 );
 
+
 document
 .getElementById("searchButton")
 .addEventListener(
 "click",
 function(){
-
-closeChoiceBars();
 
 searchInput.value =
 "";
@@ -2657,6 +2489,7 @@ searchInput.focus();
 );
 
 });
+
 
 function performSearch(){
 
@@ -2734,10 +2567,12 @@ searchResult.textContent =
 
 }
 
+
 searchInput.addEventListener(
 "input",
 performSearch
 );
+
 
 document
 .getElementById("searchDone")
@@ -2800,19 +2635,27 @@ editingIndex = -1;
 
 editor.innerHTML = "";
 
-currentFontSize = 18;
-
-editor.style.fontSize =
-"18px";
-
-updateSizeButtons();
-
 state.textContent =
 "رسالة جديدة";
 
 savedRange = null;
 
-closeChoiceBars();
+currentFontSize = 18;
+
+fontSizeBar.style.display =
+"none";
+
+document
+.getElementById("boldButton")
+.classList.remove("active");
+
+document
+.getElementById("italicButton")
+.classList.remove("active");
+
+document
+.getElementById("underlineButton")
+.classList.remove("active");
 
 setTimeout(
 function(){
@@ -2862,6 +2705,8 @@ editor.scrollIntoView({
 behavior:"smooth",
 block:"end"
 });
+
+updateToolbarState();
 
 },
 100
@@ -2917,17 +2762,23 @@ editor.innerHTML = "";
 
 savedRange = null;
 
-currentFontSize = 18;
-
-editor.style.fontSize =
-"18px";
-
-updateSizeButtons();
-
 state.textContent =
 "رسالة جديدة";
 
-closeChoiceBars();
+fontSizeBar.style.display =
+"none";
+
+document
+.getElementById("boldButton")
+.classList.remove("active");
+
+document
+.getElementById("italicButton")
+.classList.remove("active");
+
+document
+.getElementById("underlineButton")
+.classList.remove("active");
 
 editor.focus();
 
@@ -2950,17 +2801,25 @@ editor.innerHTML = "";
 
 savedRange = null;
 
-currentFontSize = 18;
-
-editor.style.fontSize =
-"18px";
-
-updateSizeButtons();
-
 state.textContent =
 "رسالة جديدة";
 
-closeChoiceBars();
+fontSizeBar.style.display =
+"none";
+
+document
+.getElementById("boldButton")
+.classList.remove("active");
+
+document
+.getElementById("italicButton")
+.classList.remove("active");
+
+document
+.getElementById("underlineButton")
+.classList.remove("active");
+
+currentFontSize = 18;
 
 editor.focus();
 
@@ -2998,15 +2857,11 @@ overlay.style.display =
    التشغيل
 ========================== */
 
-editor.style.fontSize =
-"18px";
-
-updateSizeButtons();
-
 render();
+
+updateFontSizeButtons();
 
 </script>
 
 </body>
 </html>
-```
