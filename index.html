@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -35,7 +34,6 @@ button{
   flex-direction:column;
 }
 
-/* الرأس */
 .header{
   height:56px;
   flex-shrink:0;
@@ -64,7 +62,6 @@ button{
   font-size:20px;
 }
 
-/* الرسائل */
 .messages{
   flex:1;
   min-height:0;
@@ -99,7 +96,6 @@ button{
   font-size:20px;
 }
 
-/* المحرر */
 .editor-area{
   flex-shrink:0;
   background:#191c24;
@@ -125,7 +121,6 @@ button{
   font-size:21px;
 }
 
-/* الأدوات */
 .toolbar{
   display:flex;
   gap:5px;
@@ -162,10 +157,10 @@ button{
 
 .underline{
   text-decoration:underline;
-  text-underline-offset:5px;
+  text-decoration-thickness:2px;
+  text-underline-offset:7px;
 }
 
-/* الكتابة */
 .write-row{
   display:flex;
   align-items:flex-end;
@@ -195,6 +190,11 @@ button{
   color:#666;
 }
 
+.editor u{
+  text-underline-offset:7px;
+  text-decoration-thickness:2px;
+}
+
 .send{
   flex:0 0 47px;
   width:47px;
@@ -207,6 +207,7 @@ button{
 }
 
 /* النوافذ */
+
 .overlay{
   display:none;
   position:fixed;
@@ -236,6 +237,7 @@ button{
 }
 
 /* عجلة اللون */
+
 .wheel-box{
   width:250px;
   height:250px;
@@ -309,6 +311,7 @@ button{
 }
 
 /* حجم الخط */
+
 .size-list{
   max-height:55vh;
   overflow-y:auto;
@@ -325,7 +328,8 @@ button{
   color:#fff;
 }
 
-/* قائمة */
+/* القوائم */
+
 .list-choice{
   display:flex;
   gap:7px;
@@ -340,7 +344,98 @@ button{
   color:#fff;
 }
 
-/* القائمة المنبثقة */
+/* الجدول */
+
+.editor table,
+.note table{
+  width:100%;
+  max-width:100%;
+  border-collapse:collapse;
+  table-layout:auto;
+  margin:8px 0;
+}
+
+.editor td,
+.editor th,
+.note td,
+.note th{
+  border:1px solid #666d7b;
+  padding:7px 9px;
+  min-width:45px;
+  min-height:34px;
+  vertical-align:top;
+  white-space:pre-wrap;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+.editor td:focus,
+.editor th:focus{
+  outline:1px solid #3471f6;
+}
+
+/* الخريطة الذهنية */
+
+.mind-map{
+  width:100%;
+  display:flex;
+  flex-direction:column;
+  align-items:center;
+  gap:12px;
+  margin:10px 0;
+}
+
+.mind-center{
+  width:fit-content;
+  max-width:100%;
+  padding:9px 15px;
+  border:1px solid #5579bd;
+  border-radius:12px;
+  background:#263657;
+  text-align:center;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+.mind-branches{
+  width:100%;
+  display:grid;
+  grid-template-columns:
+    repeat(auto-fit,minmax(120px,1fr));
+  gap:9px;
+}
+
+.mind-branch{
+  min-width:0;
+  padding:8px 10px;
+  border:1px solid #555d6d;
+  border-radius:10px;
+  background:#292e39;
+  text-align:center;
+  overflow-wrap:anywhere;
+  word-break:break-word;
+}
+
+/* مدخلات الخريطة */
+
+.mind-input{
+  width:100%;
+  height:43px;
+  border:1px solid #464b57;
+  border-radius:10px;
+  background:#0e1015;
+  color:#fff;
+  padding:8px 10px;
+  outline:none;
+  margin-bottom:7px;
+}
+
+.mind-input:focus{
+  border-color:#3471f6;
+}
+
+/* قائمة الرسالة */
+
 .menu{
   display:none;
   position:fixed;
@@ -364,6 +459,49 @@ button{
   text-align:right;
   padding:0 10px;
 }
+
+/* البحث */
+
+.search-input{
+  width:100%;
+  height:45px;
+  border:1px solid #464b57;
+  border-radius:10px;
+  background:#0e1015;
+  color:#fff;
+  padding:8px 10px;
+  outline:none;
+  font-size:16px;
+}
+
+.search-result{
+  margin-top:10px;
+  color:#aaa;
+  text-align:center;
+  font-size:13px;
+}
+
+.search-highlight{
+  outline:2px solid #3471f6;
+  outline-offset:2px;
+}
+
+@media(max-width:420px){
+
+  .panel{
+    width:94vw;
+  }
+
+  .wheel-box{
+    width:220px;
+    height:220px;
+  }
+
+  .mind-branches{
+    grid-template-columns:
+      repeat(auto-fit,minmax(105px,1fr));
+  }
+}
 </style>
 </head>
 
@@ -371,279 +509,422 @@ button{
 
 <div class="app">
 
-  <header class="header">
+<header class="header">
 
-    <button
-      class="icon"
-      id="searchButton"
-      type="button">⌕</button>
+<button
+class="icon"
+id="searchButton"
+type="button">⌕</button>
 
-    <div class="title">ملاحظاتي</div>
+<div class="title">ملاحظاتي</div>
 
-    <button
-      class="icon"
-      id="newButton"
-      type="button">＋</button>
+<button
+class="icon"
+id="newButton"
+type="button">＋</button>
 
-  </header>
+</header>
 
+<main
+class="messages"
+id="messages">
+</main>
 
-  <main
-    class="messages"
-    id="messages">
-  </main>
+<section class="editor-area">
 
+<div class="edit-state">
 
-  <section class="editor-area">
+<span id="state">
+رسالة جديدة
+</span>
 
-    <div class="edit-state">
+<button
+class="cancel"
+id="cancelButton"
+type="button">×</button>
 
-      <span id="state">
-        رسالة جديدة
-      </span>
+</div>
 
-      <button
-        class="cancel"
-        id="cancelButton"
-        type="button">×</button>
+<div class="toolbar">
 
-    </div>
+<button
+class="tool bold"
+id="boldButton"
+type="button">B</button>
 
+<button
+class="tool"
+id="italicButton"
+type="button">
+<i>I</i>
+</button>
 
-    <div class="toolbar">
+<button
+class="tool underline"
+id="underlineButton"
+type="button">U</button>
 
-      <button
-        class="tool bold"
-        id="boldButton"
-        type="button">B</button>
+<button
+class="tool"
+id="colorButton"
+type="button">●</button>
 
-      <button
-        class="tool"
-        id="italicButton"
-        type="button">
-        <i>I</i>
-      </button>
+<button
+class="tool"
+id="highlightButton"
+type="button">▰</button>
 
-      <button
-        class="tool underline"
-        id="underlineButton"
-        type="button">U</button>
+<button
+class="tool"
+id="sizeButton"
+type="button">A↕</button>
 
-      <button
-        class="tool"
-        id="colorButton"
-        type="button">●</button>
+<button
+class="tool"
+id="listButton"
+type="button">☷</button>
 
-      <button
-        class="tool"
-        id="highlightButton"
-        type="button">▰</button>
+<button
+class="tool"
+id="tableButton"
+type="button">▦</button>
 
-      <button
-        class="tool"
-        id="sizeButton"
-        type="button">A↕</button>
+<button
+class="tool"
+id="mindMapButton"
+type="button">🧠</button>
 
-      <button
-        class="tool"
-        id="listButton"
-        type="button">☷</button>
+</div>
 
-    </div>
+<div class="write-row">
 
+<div
+class="editor"
+id="editor"
+contenteditable="true"
+spellcheck="true">
+</div>
 
-    <div class="write-row">
+<button
+class="send"
+id="sendButton"
+type="button">➤</button>
 
-      <div
-        class="editor"
-        id="editor"
-        contenteditable="true"
-        spellcheck="true">
-      </div>
+</div>
 
-      <button
-        class="send"
-        id="sendButton"
-        type="button">➤</button>
-
-    </div>
-
-  </section>
+</section>
 
 </div>
 
 
 <!-- لون الخط -->
+
 <div
-  class="overlay"
-  id="colorOverlay">
+class="overlay"
+id="colorOverlay">
 
-  <div class="panel">
+<div class="panel">
 
-    <div class="panel-title">
-      لون الخط
-    </div>
+<div class="panel-title">
+لون الخط
+</div>
 
-    <div class="wheel-box">
+<div class="wheel-box">
 
-      <div
-        class="wheel"
-        id="colorWheel">
-      </div>
+<div
+class="wheel"
+id="colorWheel">
+</div>
 
-      <div
-        class="marker"
-        id="colorMarker"
-        style="left:125px;top:125px">
-      </div>
+<div
+class="marker"
+id="colorMarker"
+style="left:125px;top:125px">
+</div>
 
-    </div>
+</div>
 
-    <button
-      class="panel-button"
-      id="colorDone"
-      type="button">
-      تم
-    </button>
+<button
+class="panel-button"
+id="colorDone"
+type="button">
+تم
+</button>
 
-  </div>
-
+</div>
 </div>
 
 
 <!-- التمييز -->
+
 <div
-  class="overlay"
-  id="highlightOverlay">
+class="overlay"
+id="highlightOverlay">
 
-  <div class="panel">
+<div class="panel">
 
-    <div class="panel-title">
-      تمييز النص
-    </div>
+<div class="panel-title">
+تمييز النص
+</div>
 
-    <div class="wheel-box">
+<div class="wheel-box">
 
-      <div
-        class="wheel"
-        id="highlightWheel">
-      </div>
+<div
+class="wheel"
+id="highlightWheel">
+</div>
 
-      <div
-        class="marker"
-        id="highlightMarker"
-        style="left:125px;top:125px">
-      </div>
+<div
+class="marker"
+id="highlightMarker"
+style="left:125px;top:125px">
+</div>
 
-    </div>
+</div>
 
-    <div class="range-title">
-      شدة التمييز
-    </div>
+<div class="range-title">
+شدة التمييز
+</div>
 
-    <input
-      class="range"
-      id="opacityRange"
-      type="range"
-      min="10"
-      max="100"
-      value="60">
+<input
+class="range"
+id="opacityRange"
+type="range"
+min="10"
+max="100"
+value="60">
 
-    <button
-      class="panel-button"
-      id="highlightDone"
-      type="button">
-      تم
-    </button>
+<button
+class="panel-button"
+id="highlightDone"
+type="button">
+تم
+</button>
 
-  </div>
-
+</div>
 </div>
 
 
 <!-- حجم الخط -->
+
 <div
-  class="overlay"
-  id="sizeOverlay">
+class="overlay"
+id="sizeOverlay">
 
-  <div class="panel">
+<div class="panel">
 
-    <div class="panel-title">
-      حجم الخط
-    </div>
+<div class="panel-title">
+حجم الخط
+</div>
 
-    <div
-      class="size-list"
-      id="sizeList">
-    </div>
+<div
+class="size-list"
+id="sizeList">
+</div>
 
-    <button
-      class="panel-button"
-      id="sizeDone"
-      type="button">
-      تم
-    </button>
+<button
+class="panel-button"
+id="sizeDone"
+type="button">
+تم
+</button>
 
-  </div>
-
+</div>
 </div>
 
 
 <!-- التنقيط والترقيم -->
+
 <div
-  class="overlay"
-  id="listOverlay">
+class="overlay"
+id="listOverlay">
 
-  <div class="panel">
+<div class="panel">
 
-    <div class="panel-title">
-      اختيار القائمة
-    </div>
+<div class="panel-title">
+اختيار القائمة
+</div>
 
-    <div class="list-choice">
+<div class="list-choice">
 
-      <button
-        id="bulletButton"
-        type="button">
-        • تنقيط
-      </button>
+<button
+id="bulletButton"
+type="button">
+• تنقيط
+</button>
 
-      <button
-        id="numberButton"
-        type="button">
-        ١. ترقيم
-      </button>
+<button
+id="numberButton"
+type="button">
+١. ترقيم
+</button>
 
-    </div>
+</div>
 
-    <button
-      class="panel-button"
-      id="listDone"
-      type="button">
-      تم
-    </button>
+<button
+class="panel-button"
+id="listDone"
+type="button">
+تم
+</button>
 
-  </div>
+</div>
+</div>
 
+
+<!-- الجدول -->
+
+<div
+class="overlay"
+id="tableOverlay">
+
+<div class="panel">
+
+<div class="panel-title">
+إدراج جدول
+</div>
+
+<div class="list-choice">
+
+<button
+id="tableRowsMinus"
+type="button">
+− الصفوف
+</button>
+
+<button
+id="tableRowsPlus"
+type="button">
+＋ الصفوف
+</button>
+
+</div>
+
+<div
+class="list-choice"
+style="margin-top:7px">
+
+<button
+id="tableColsMinus"
+type="button">
+− الأعمدة
+</button>
+
+<button
+id="tableColsPlus"
+type="button">
+＋ الأعمدة
+</button>
+
+</div>
+
+<div
+id="tableInfo"
+style="text-align:center;margin-top:10px;color:#ccc">
+3 × 3
+</div>
+
+<button
+class="panel-button"
+id="tableDone"
+type="button">
+إدراج
+</button>
+
+</div>
+</div>
+
+
+<!-- الخريطة الذهنية -->
+
+<div
+class="overlay"
+id="mindMapOverlay">
+
+<div class="panel">
+
+<div class="panel-title">
+خريطة ذهنية
+</div>
+
+<input
+class="mind-input"
+id="mindCenterInput"
+placeholder="الفكرة الرئيسية">
+
+<div
+id="mindBranches">
+</div>
+
+<button
+class="panel-button"
+id="mindAdd"
+type="button">
+＋ إضافة فرع
+</button>
+
+<button
+class="panel-button"
+id="mindDone"
+type="button">
+إدراج
+</button>
+
+</div>
+</div>
+
+
+<!-- البحث -->
+
+<div
+class="overlay"
+id="searchOverlay">
+
+<div class="panel">
+
+<div class="panel-title">
+بحث
+</div>
+
+<input
+class="search-input"
+id="searchInput"
+type="search"
+placeholder="اكتبي النص الذي تريدين البحث عنه">
+
+<div
+class="search-result"
+id="searchResult">
+</div>
+
+<button
+class="panel-button"
+id="searchDone"
+type="button">
+تم
+</button>
+
+</div>
 </div>
 
 
 <!-- قائمة تعديل الرسالة -->
+
 <div
-  class="menu"
-  id="messageMenu">
+class="menu"
+id="messageMenu">
 
-  <button
-    id="editButton"
-    type="button">
-    ✎ تعديل
-  </button>
+<button
+id="editButton"
+type="button">
+✎ تعديل
+</button>
 
-  <button
-    id="deleteButton"
-    type="button">
-    🗑 حذف
-  </button>
+<button
+id="deleteButton"
+type="button">
+🗑 حذف
+</button>
 
 </div>
 
@@ -656,12 +937,12 @@ button{
 ========================== */
 
 const STORAGE =
-  "notes_clean_editor_v1";
+"notes_clean_editor_v2";
 
 let notes =
-  JSON.parse(
-    localStorage.getItem(STORAGE) || "[]"
-  );
+JSON.parse(
+localStorage.getItem(STORAGE) || "[]"
+);
 
 let editingIndex = -1;
 let selectedIndex = -1;
@@ -673,16 +954,16 @@ let savedRange = null;
 ========================== */
 
 const editor =
-  document.getElementById("editor");
+document.getElementById("editor");
 
 const messages =
-  document.getElementById("messages");
+document.getElementById("messages");
 
 const state =
-  document.getElementById("state");
+document.getElementById("state");
 
 const messageMenu =
-  document.getElementById("messageMenu");
+document.getElementById("messageMenu");
 
 
 /* ==========================
@@ -691,10 +972,10 @@ const messageMenu =
 
 function saveNotes(){
 
-  localStorage.setItem(
-    STORAGE,
-    JSON.stringify(notes)
-  );
+localStorage.setItem(
+STORAGE,
+JSON.stringify(notes)
+);
 
 }
 
@@ -705,62 +986,58 @@ function saveNotes(){
 
 function render(){
 
-  messages.innerHTML = "";
+messages.innerHTML = "";
 
-  if(notes.length === 0){
+if(notes.length === 0){
 
-    messages.innerHTML =
-      '<div class="empty">لا توجد ملاحظات بعد</div>';
+messages.innerHTML =
+'<div class="empty">لا توجد ملاحظات بعد</div>';
 
-    return;
-  }
+return;
 
+}
 
-  notes.forEach((note,index)=>{
+notes.forEach((note,index)=>{
 
-    const box =
-      document.createElement("div");
+const box =
+document.createElement("div");
 
-    box.className = "note";
+box.className = "note";
 
+const menu =
+document.createElement("button");
 
-    const menu =
-      document.createElement("button");
+menu.className = "note-menu";
+menu.textContent = "⋮";
 
-    menu.className = "note-menu";
-    menu.textContent = "⋮";
+menu.addEventListener(
+"click",
+function(event){
 
+event.stopPropagation();
 
-    menu.addEventListener(
-      "click",
-      function(event){
+selectedIndex = index;
 
-        event.stopPropagation();
+openMessageMenu(
+event.clientX,
+event.clientY
+);
 
-        selectedIndex = index;
+});
 
-        openMessageMenu(
-          event.clientX,
-          event.clientY
-        );
+box.appendChild(menu);
 
-      }
-    );
+const content =
+document.createElement("div");
 
+content.innerHTML =
+note.html;
 
-    box.appendChild(menu);
+box.appendChild(content);
 
-    const content =
-      document.createElement("div");
+messages.appendChild(box);
 
-    content.innerHTML =
-      note.html;
-
-    box.appendChild(content);
-
-    messages.appendChild(box);
-
-  });
+});
 
 }
 
@@ -771,123 +1048,149 @@ function render(){
 
 function openMessageMenu(x,y){
 
-  messageMenu.style.display =
-    "block";
+messageMenu.style.display =
+"block";
 
-  let left = x - 140;
-  let top = y;
+let left = x - 140;
+let top = y;
 
+if(left < 5){
+left = 5;
+}
 
-  if(left < 5){
-    left = 5;
-  }
+if(left + 140 > window.innerWidth){
+left = window.innerWidth - 145;
+}
 
-  if(left + 140 > window.innerWidth){
-    left = window.innerWidth - 145;
-  }
+if(top + 100 > window.innerHeight){
+top = window.innerHeight - 110;
+}
 
-  if(top + 100 > window.innerHeight){
-    top = window.innerHeight - 110;
-  }
+messageMenu.style.left =
+left + "px";
 
+messageMenu.style.top =
+top + "px";
 
-  messageMenu.style.left =
-    left + "px";
-
-  messageMenu.style.top =
-    top + "px";
 }
 
 
 document.addEventListener(
-  "click",
-  function(event){
+"click",
+function(event){
 
-    if(
-      !event.target.closest(".menu") &&
-      !event.target.closest(".note-menu")
-    ){
+if(
+!event.target.closest(".menu") &&
+!event.target.closest(".note-menu")
+){
 
-      messageMenu.style.display =
-        "none";
-    }
+messageMenu.style.display =
+"none";
 
-  }
-);
+}
+
+});
 
 
 /* ==========================
-   حفظ تحديد النص
+   حفظ واسترجاع التحديد
 ========================== */
+
+function selectionIsInsideEditor(range){
+
+if(!range){
+return false;
+}
+
+return (
+editor.contains(range.startContainer) &&
+editor.contains(range.endContainer)
+);
+
+}
+
 
 function saveSelection(){
 
-  const selection =
-    window.getSelection();
+const selection =
+window.getSelection();
 
-  if(
-    selection &&
-    selection.rangeCount > 0
-  ){
+if(
+selection &&
+selection.rangeCount > 0
+){
 
-    savedRange =
-      selection
-        .getRangeAt(0)
-        .cloneRange();
-  }
+const range =
+selection.getRangeAt(0);
+
+if(selectionIsInsideEditor(range)){
+
+savedRange =
+range.cloneRange();
+
+}
+
+}
 
 }
 
 
 function restoreSelection(){
 
-  if(!savedRange){
-    return;
-  }
+if(
+!savedRange ||
+!selectionIsInsideEditor(savedRange)
+){
 
-  const selection =
-    window.getSelection();
+return false;
 
-  selection.removeAllRanges();
+}
 
-  selection.addRange(
-    savedRange
-  );
+const selection =
+window.getSelection();
+
+selection.removeAllRanges();
+
+selection.addRange(
+savedRange
+);
+
+return true;
 
 }
 
 
 /* ==========================
-   التركيز على المحرر
+   التركيز
 ========================== */
 
 function focusEditor(){
 
-  editor.focus();
+editor.focus();
 
-  restoreSelection();
+restoreSelection();
 
 }
 
 
 /* ==========================
-   التنسيق
+   تنفيذ أمر
 ========================== */
 
 function command(
-  name,
-  value = null
+name,
+value = null
 ){
 
-  focusEditor();
+focusEditor();
 
-  document.execCommand(
-    name,
-    false,
-    value
-  );
+document.execCommand(
+name,
+false,
+value
+);
 
-  saveSelection();
+saveSelection();
 
 }
 
@@ -899,13 +1202,14 @@ function command(
 document
 .getElementById("boldButton")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    command("bold");
+saveSelection();
 
-  }
-);
+command("bold");
+
+});
 
 
 /* ==========================
@@ -915,13 +1219,14 @@ document
 document
 .getElementById("italicButton")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    command("italic");
+saveSelection();
 
-  }
-);
+command("italic");
+
+});
 
 
 /* ==========================
@@ -931,127 +1236,125 @@ document
 document
 .getElementById("underlineButton")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    command("underline");
+saveSelection();
 
-  }
-);
+command("underline");
+
+});
 
 
 /* ==========================
-   حفظ التحديد أثناء الكتابة
+   حفظ التحديد
 ========================== */
 
 editor.addEventListener(
-  "mouseup",
-  saveSelection
+"mouseup",
+saveSelection
 );
 
 editor.addEventListener(
-  "keyup",
-  saveSelection
+"keyup",
+saveSelection
 );
 
 editor.addEventListener(
-  "touchend",
-  function(){
+"touchend",
+function(){
 
-    setTimeout(
-      saveSelection,
-      50
-    );
-
-  }
+setTimeout(
+saveSelection,
+120
 );
+
+});
+
+
+editor.addEventListener(
+"input",
+function(){
+
+setTimeout(
+saveSelection,
+0
+);
+
+});
 
 
 /* ==========================
-   عجلة الألوان
+   عجلة اللون
 ========================== */
 
 function getWheelColor(
-  wheel,
-  marker,
-  event
+wheel,
+marker,
+event
 ){
 
-  const rect =
-    wheel.getBoundingClientRect();
+const rect =
+wheel.getBoundingClientRect();
 
-  const cx =
-    rect.left +
-    rect.width / 2;
+const cx =
+rect.left + rect.width / 2;
 
-  const cy =
-    rect.top +
-    rect.height / 2;
+const cy =
+rect.top + rect.height / 2;
 
-  let dx =
-    event.clientX - cx;
+let dx =
+event.clientX - cx;
 
-  let dy =
-    event.clientY - cy;
+let dy =
+event.clientY - cy;
 
-  const radius =
-    rect.width / 2;
+const radius =
+rect.width / 2;
 
-  let distance =
-    Math.sqrt(
-      dx * dx +
-      dy * dy
-    );
+let distance =
+Math.sqrt(
+dx * dx + dy * dy
+);
 
+if(distance > radius){
 
-  if(distance > radius){
+dx =
+dx / distance * radius;
 
-    dx =
-      dx / distance *
-      radius;
+dy =
+dy / distance * radius;
 
-    dy =
-      dy / distance *
-      radius;
+}
 
-    distance =
-      radius;
-  }
+let angle =
+Math.atan2(dy,dx) *
+180 /
+Math.PI;
 
+angle =
+(angle + 360) % 360;
 
-  let angle =
-    Math.atan2(dy,dx) *
-    180 /
-    Math.PI;
+const saturation =
+Math.max(
+45,
+Math.min(
+100,
+distance / radius * 100
+)
+);
 
-  angle =
-    (angle + 360) % 360;
+const color =
+`hsl(${angle},${saturation}%,50%)`;
 
+marker.style.left =
+(radius + dx) + "px";
 
-  const saturation =
-    Math.max(
-      45,
-      Math.min(
-        100,
-        distance /
-        radius *
-        100
-      )
-    );
+marker.style.top =
+(radius + dy) + "px";
 
+return color;
 
-  const color =
-    `hsl(${angle},${saturation}%,50%)`;
-
-
-  marker.style.left =
-    (radius + dx) + "px";
-
-  marker.style.top =
-    (radius + dy) + "px";
-
-
-  return color;
 }
 
 
@@ -1060,123 +1363,111 @@ function getWheelColor(
 ========================== */
 
 const colorOverlay =
-  document.getElementById(
-    "colorOverlay"
-  );
+document.getElementById(
+"colorOverlay"
+);
 
 const colorWheel =
-  document.getElementById(
-    "colorWheel"
-  );
+document.getElementById(
+"colorWheel"
+);
 
 const colorMarker =
-  document.getElementById(
-    "colorMarker"
-  );
+document.getElementById(
+"colorMarker"
+);
 
-
-let colorDragging = false;
-
+let chosenTextColor =
+"rgb(255,255,255)";
 
 function applyTextColor(event){
 
-  const color =
-    getWheelColor(
-      colorWheel,
-      colorMarker,
-      event
-    );
+chosenTextColor =
+getWheelColor(
+colorWheel,
+colorMarker,
+event
+);
 
-  focusEditor();
-
-  document.execCommand(
-    "foreColor",
-    false,
-    color
-  );
-
-  saveSelection();
 }
 
-
 colorWheel.addEventListener(
-  "pointerdown",
-  function(event){
+"pointerdown",
+function(event){
 
-    colorDragging = true;
-
-    colorWheel.setPointerCapture(
-      event.pointerId
-    );
-
-    applyTextColor(event);
-
-    event.preventDefault();
-
-  }
+colorWheel.setPointerCapture(
+event.pointerId
 );
 
+applyTextColor(event);
+
+event.preventDefault();
+
+});
 
 colorWheel.addEventListener(
-  "pointermove",
-  function(event){
+"pointermove",
+function(event){
 
-    if(colorDragging){
+if(
+event.buttons ||
+event.pressure > 0
+){
 
-      applyTextColor(event);
+applyTextColor(event);
 
-    }
+}
 
-  }
-);
-
-
-colorWheel.addEventListener(
-  "pointerup",
-  function(){
-
-    colorDragging = false;
-
-  }
-);
-
-
-colorWheel.addEventListener(
-  "pointercancel",
-  function(){
-
-    colorDragging = false;
-
-  }
-);
-
+});
 
 document
 .getElementById("colorButton")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    saveSelection();
+saveSelection();
 
-    colorOverlay.style.display =
-      "flex";
+colorOverlay.style.display =
+"flex";
 
-  }
-);
-
+});
 
 document
 .getElementById("colorDone")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    colorOverlay.style.display =
-      "none";
+restoreSelection();
 
-  }
+if(savedRange){
+
+const selection =
+window.getSelection();
+
+selection.removeAllRanges();
+
+selection.addRange(
+savedRange
 );
+
+document.execCommand(
+"foreColor",
+false,
+chosenTextColor
+);
+
+saveSelection();
+
+}
+
+colorOverlay.style.display =
+"none";
+
+editor.focus();
+
+});
 
 
 /* ==========================
@@ -1184,142 +1475,164 @@ document
 ========================== */
 
 const highlightOverlay =
-  document.getElementById(
-    "highlightOverlay"
-  );
+document.getElementById(
+"highlightOverlay"
+);
 
 const highlightWheel =
-  document.getElementById(
-    "highlightWheel"
-  );
+document.getElementById(
+"highlightWheel"
+);
 
 const highlightMarker =
-  document.getElementById(
-    "highlightMarker"
-  );
+document.getElementById(
+"highlightMarker"
+);
 
+let chosenHighlightColor =
+"rgb(255,255,0)";
 
-let highlightDragging = false;
+let highlightOpacity =
+0.60;
 
+function hexWithOpacity(
+color,
+opacity
+){
 
-function applyHighlight(event){
+const temp =
+document.createElement("span");
 
-  const color =
-    getWheelColor(
-      highlightWheel,
-      highlightMarker,
-      event
-    );
+temp.style.color =
+color;
 
-  focusEditor();
+document.body.appendChild(temp);
 
-  document.execCommand(
-    "hiliteColor",
-    false,
-    color
-  );
+const rgb =
+getComputedStyle(temp).color;
 
-  saveSelection();
+temp.remove();
+
+const match =
+rgb.match(/\d+/g);
+
+if(!match){
+return color;
 }
 
+return `rgba(
+${match[0]},
+${match[1]},
+${match[2]},
+${opacity}
+)`;
+
+}
 
 highlightWheel.addEventListener(
-  "pointerdown",
-  function(event){
+"pointerdown",
+function(event){
 
-    highlightDragging = true;
-
-    highlightWheel.setPointerCapture(
-      event.pointerId
-    );
-
-    applyHighlight(event);
-
-    event.preventDefault();
-
-  }
+highlightWheel.setPointerCapture(
+event.pointerId
 );
 
+chosenHighlightColor =
+getWheelColor(
+highlightWheel,
+highlightMarker,
+event
+);
+
+event.preventDefault();
+
+});
 
 highlightWheel.addEventListener(
-  "pointermove",
-  function(event){
+"pointermove",
+function(event){
 
-    if(highlightDragging){
+if(
+event.buttons ||
+event.pressure > 0
+){
 
-      applyHighlight(event);
-
-    }
-
-  }
+chosenHighlightColor =
+getWheelColor(
+highlightWheel,
+highlightMarker,
+event
 );
 
+}
 
-highlightWheel.addEventListener(
-  "pointerup",
-  function(){
+});
 
-    highlightDragging = false;
+document
+.getElementById("opacityRange")
+.addEventListener(
+"input",
+function(event){
 
-  }
-);
+highlightOpacity =
+Number(event.target.value) / 100;
 
-
-highlightWheel.addEventListener(
-  "pointercancel",
-  function(){
-
-    highlightDragging = false;
-
-  }
-);
-
+});
 
 document
 .getElementById("highlightButton")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    saveSelection();
+saveSelection();
 
-    highlightOverlay.style.display =
-      "flex";
+highlightOverlay.style.display =
+"flex";
 
-  }
-);
-
-
-/*
-   شدة التمييز:
-   تغيير شفافية الخلفية بعد الاختيار.
-*/
-document
-.getElementById("opacityRange")
-.addEventListener(
-  "input",
-  function(){
-
-    /*
-      لا نغلق النافذة ولا نفقد التحديد.
-      التغيير سيطبق عند اختيار اللون التالي.
-    */
-
-  }
-);
-
+});
 
 document
 .getElementById("highlightDone")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    highlightOverlay.style.display =
-      "none";
+restoreSelection();
 
-  }
+if(savedRange){
+
+const selection =
+window.getSelection();
+
+selection.removeAllRanges();
+
+selection.addRange(
+savedRange
 );
+
+const color =
+hexWithOpacity(
+chosenHighlightColor,
+highlightOpacity
+);
+
+document.execCommand(
+"hiliteColor",
+false,
+color
+);
+
+saveSelection();
+
+}
+
+highlightOverlay.style.display =
+"none";
+
+editor.focus();
+
+});
 
 
 /* ==========================
@@ -1327,152 +1640,135 @@ document
 ========================== */
 
 const sizeList =
-  document.getElementById(
-    "sizeList"
-  );
-
+document.getElementById(
+"sizeList"
+);
 
 for(
-  let size = 1;
-  size <= 20;
-  size++
+let size = 1;
+size <= 20;
+size++
 ){
 
-  const button =
-    document.createElement("button");
+const button =
+document.createElement("button");
 
-  button.className =
-    "size-item";
+button.className =
+"size-item";
 
-  button.textContent =
-    size;
+button.textContent =
+size;
 
-  button.style.fontSize =
-    Math.max(14,size) + "px";
+button.style.fontSize =
+Math.max(14,size) + "px";
 
+button.addEventListener(
+"click",
+function(){
 
-  button.addEventListener(
-    "click",
-    function(){
+restoreSelection();
 
-      focusEditor();
+const selection =
+window.getSelection();
 
-      /*
-        execCommand fontSize يستخدم
-        قيمًا محدودة، لذلك نستخدم
-        span مباشرة للنص المحدد.
-      */
+if(
+selection &&
+selection.rangeCount > 0 &&
+!selection.isCollapsed
+){
 
-      const selection =
-        window.getSelection();
+const range =
+selection.getRangeAt(0);
 
+const span =
+document.createElement("span");
 
-      if(
-        selection &&
-        selection.rangeCount > 0 &&
-        !selection.isCollapsed
-      ){
+span.style.fontSize =
+size + "px";
 
-        const range =
-          selection.getRangeAt(0);
+try{
 
-        const span =
-          document.createElement("span");
+range.surroundContents(
+span
+);
 
-        span.style.fontSize =
-          size + "px";
+}catch(error){
 
+document.execCommand(
+"fontSize",
+false,
+"7"
+);
 
-        try{
+const fonts =
+editor.querySelectorAll(
+'font[size="7"]'
+);
 
-          range.surroundContents(
-            span
-          );
+fonts.forEach(
+font=>{
 
-        }catch(error){
+font.removeAttribute("size");
 
-          document.execCommand(
-            "fontSize",
-            false,
-            "7"
-          );
+font.style.fontSize =
+size + "px";
 
-          const fonts =
-            editor.querySelectorAll(
-              'font[size="7"]'
-            );
-
-          fonts.forEach(
-            font=>{
-
-              font.removeAttribute(
-                "size"
-              );
-
-              font.style.fontSize =
-                size + "px";
-
-            }
-          );
-
-        }
-
-      }
-
-      saveSelection();
-
-      document
-        .getElementById(
-          "sizeOverlay"
-        )
-        .style.display =
-        "none";
-
-    }
-  );
-
-
-  sizeList.appendChild(
-    button
-  );
+});
 
 }
 
+saveSelection();
+
+}
+
+document
+.getElementById(
+"sizeOverlay"
+)
+.style.display =
+"none";
+
+editor.focus();
+
+});
+
+sizeList.appendChild(
+button
+);
+
+}
 
 document
 .getElementById("sizeButton")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    saveSelection();
+saveSelection();
 
-    document
-      .getElementById(
-        "sizeOverlay"
-      )
-      .style.display =
-      "flex";
+document
+.getElementById(
+"sizeOverlay"
+)
+.style.display =
+"flex";
 
-  }
-);
-
+});
 
 document
 .getElementById("sizeDone")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    document
-      .getElementById(
-        "sizeOverlay"
-      )
-      .style.display =
-      "none";
+document
+.getElementById(
+"sizeOverlay"
+)
+.style.display =
+"none";
 
-  }
-);
+});
 
 
 /* ==========================
@@ -1480,65 +1776,610 @@ document
 ========================== */
 
 const listOverlay =
-  document.getElementById(
-    "listOverlay"
-  );
-
+document.getElementById(
+"listOverlay"
+);
 
 document
 .getElementById("listButton")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    saveSelection();
+saveSelection();
 
-    listOverlay.style.display =
-      "flex";
+listOverlay.style.display =
+"flex";
 
-  }
-);
-
+});
 
 document
 .getElementById("bulletButton")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    command(
-      "insertUnorderedList"
-    );
-
-  }
+command(
+"insertUnorderedList"
 );
 
+});
 
 document
 .getElementById("numberButton")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    command(
-      "insertOrderedList"
-    );
-
-  }
+command(
+"insertOrderedList"
 );
 
+});
 
 document
 .getElementById("listDone")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    listOverlay.style.display =
-      "none";
+listOverlay.style.display =
+"none";
 
-  }
+});
+
+
+/* ==========================
+   الجدول
+========================== */
+
+const tableOverlay =
+document.getElementById(
+"tableOverlay"
 );
+
+const tableInfo =
+document.getElementById(
+"tableInfo"
+);
+
+let tableRows = 3;
+let tableCols = 3;
+
+function updateTableInfo(){
+
+tableInfo.textContent =
+tableRows + " × " + tableCols;
+
+}
+
+function createTable(
+rows,
+cols
+){
+
+const table =
+document.createElement("table");
+
+const tbody =
+document.createElement("tbody");
+
+for(
+let r = 0;
+r < rows;
+r++
+){
+
+const tr =
+document.createElement("tr");
+
+for(
+let c = 0;
+c < cols;
+c++
+){
+
+const td =
+document.createElement("td");
+
+td.contentEditable =
+"true";
+
+td.innerHTML =
+"<br>";
+
+tr.appendChild(td);
+
+}
+
+tbody.appendChild(tr);
+
+}
+
+table.appendChild(tbody);
+
+return table;
+
+}
+
+document
+.getElementById("tableButton")
+.addEventListener(
+"click",
+function(){
+
+saveSelection();
+
+tableRows = 3;
+tableCols = 3;
+
+updateTableInfo();
+
+tableOverlay.style.display =
+"flex";
+
+});
+
+document
+.getElementById("tableRowsPlus")
+.addEventListener(
+"click",
+function(){
+
+tableRows =
+Math.min(
+20,
+tableRows + 1
+);
+
+updateTableInfo();
+
+});
+
+document
+.getElementById("tableRowsMinus")
+.addEventListener(
+"click",
+function(){
+
+tableRows =
+Math.max(
+1,
+tableRows - 1
+);
+
+updateTableInfo();
+
+});
+
+document
+.getElementById("tableColsPlus")
+.addEventListener(
+"click",
+function(){
+
+tableCols =
+Math.min(
+10,
+tableCols + 1
+);
+
+updateTableInfo();
+
+});
+
+document
+.getElementById("tableColsMinus")
+.addEventListener(
+"click",
+function(){
+
+tableCols =
+Math.max(
+1,
+tableCols - 1
+);
+
+updateTableInfo();
+
+});
+
+document
+.getElementById("tableDone")
+.addEventListener(
+"click",
+function(){
+
+restoreSelection();
+
+const table =
+createTable(
+tableRows,
+tableCols
+);
+
+if(savedRange){
+
+const range =
+savedRange.cloneRange();
+
+range.collapse(false);
+
+range.insertNode(table);
+
+range.setStartAfter(table);
+
+range.collapse(true);
+
+const selection =
+window.getSelection();
+
+selection.removeAllRanges();
+
+selection.addRange(range);
+
+savedRange =
+range.cloneRange();
+
+}else{
+
+editor.appendChild(table);
+
+}
+
+tableOverlay.style.display =
+"none";
+
+editor.focus();
+
+});
+
+
+/* ==========================
+   الخريطة الذهنية
+========================== */
+
+const mindMapOverlay =
+document.getElementById(
+"mindMapOverlay"
+);
+
+const mindCenterInput =
+document.getElementById(
+"mindCenterInput"
+);
+
+const mindBranches =
+document.getElementById(
+"mindBranches"
+);
+
+function addMindBranch(){
+
+const input =
+document.createElement("input");
+
+input.type = "text";
+
+input.className =
+"mind-input";
+
+input.placeholder =
+"فرع";
+
+mindBranches.appendChild(
+input
+);
+
+}
+
+document
+.getElementById("mindMapButton")
+.addEventListener(
+"click",
+function(){
+
+saveSelection();
+
+mindCenterInput.value =
+"";
+
+mindBranches.innerHTML =
+"";
+
+addMindBranch();
+addMindBranch();
+
+mindMapOverlay.style.display =
+"flex";
+
+setTimeout(
+function(){
+
+mindCenterInput.focus();
+
+},
+50
+);
+
+});
+
+document
+.getElementById("mindAdd")
+.addEventListener(
+"click",
+function(){
+
+if(
+mindBranches.children.length < 12
+){
+
+addMindBranch();
+
+}
+
+});
+
+document
+.getElementById("mindDone")
+.addEventListener(
+"click",
+function(){
+
+const center =
+mindCenterInput.value.trim()
+|| "الفكرة الرئيسية";
+
+const values =
+[
+...mindBranches.querySelectorAll(
+".mind-input"
+)
+]
+.map(
+input=>input.value.trim()
+)
+.filter(Boolean);
+
+const wrap =
+document.createElement("div");
+
+wrap.className =
+"mind-map";
+
+const centerBox =
+document.createElement("div");
+
+centerBox.className =
+"mind-center";
+
+centerBox.textContent =
+center;
+
+wrap.appendChild(
+centerBox
+);
+
+if(values.length){
+
+const branches =
+document.createElement("div");
+
+branches.className =
+"mind-branches";
+
+values.forEach(
+value=>{
+
+const branch =
+document.createElement("div");
+
+branch.className =
+"mind-branch";
+
+branch.textContent =
+value;
+
+branches.appendChild(
+branch
+);
+
+});
+
+wrap.appendChild(
+branches
+);
+
+}
+
+restoreSelection();
+
+if(savedRange){
+
+const range =
+savedRange.cloneRange();
+
+range.collapse(false);
+
+range.insertNode(wrap);
+
+range.setStartAfter(wrap);
+
+range.collapse(true);
+
+const selection =
+window.getSelection();
+
+selection.removeAllRanges();
+
+selection.addRange(range);
+
+savedRange =
+range.cloneRange();
+
+}else{
+
+editor.appendChild(
+wrap
+);
+
+}
+
+mindMapOverlay.style.display =
+"none";
+
+editor.focus();
+
+});
+
+
+/* ==========================
+   البحث
+========================== */
+
+const searchOverlay =
+document.getElementById(
+"searchOverlay"
+);
+
+const searchInput =
+document.getElementById(
+"searchInput"
+);
+
+const searchResult =
+document.getElementById(
+"searchResult"
+);
+
+document
+.getElementById("searchButton")
+.addEventListener(
+"click",
+function(){
+
+searchInput.value =
+"";
+
+searchResult.textContent =
+"";
+
+searchOverlay.style.display =
+"flex";
+
+setTimeout(
+function(){
+
+searchInput.focus();
+
+},
+50
+);
+
+});
+
+function performSearch(){
+
+const query =
+searchInput.value
+.trim()
+.toLowerCase();
+
+document
+.querySelectorAll(".search-highlight")
+.forEach(
+element=>{
+
+element.classList.remove(
+"search-highlight"
+);
+
+});
+
+if(!query){
+
+searchResult.textContent =
+"";
+
+return;
+
+}
+
+let count = 0;
+let first = null;
+
+document
+.querySelectorAll(".note")
+.forEach(
+note=>{
+
+if(
+note.textContent
+.toLowerCase()
+.includes(query)
+){
+
+count++;
+
+if(!first){
+first = note;
+}
+
+}
+
+});
+
+if(first){
+
+first.classList.add(
+"search-highlight"
+);
+
+first.scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+
+searchResult.textContent =
+"تم العثور على " +
+count +
+" ملاحظة";
+
+}else{
+
+searchResult.textContent =
+"لم يتم العثور على النص";
+
+}
+
+}
+
+searchInput.addEventListener(
+"input",
+performSearch
+);
+
+document
+.getElementById("searchDone")
+.addEventListener(
+"click",
+function(){
+
+searchOverlay.style.display =
+"none";
+
+document
+.querySelectorAll(".search-highlight")
+.forEach(
+element=>{
+
+element.classList.remove(
+"search-highlight"
+);
+
+});
+
+});
 
 
 /* ==========================
@@ -1548,59 +2389,53 @@ document
 document
 .getElementById("sendButton")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    const html =
-      editor.innerHTML.trim();
+const html =
+editor.innerHTML.trim();
 
+if(!html){
+return;
+}
 
-    if(!html){
-      return;
-    }
+if(editingIndex >= 0){
 
+notes[editingIndex].html =
+html;
 
-    if(editingIndex >= 0){
+}else{
 
-      notes[editingIndex].html =
-        html;
+notes.push({
+html:html
+});
 
-    }else{
+}
 
-      notes.push({
-        html:html
-      });
+saveNotes();
 
-    }
+render();
 
+editingIndex = -1;
 
-    saveNotes();
+editor.innerHTML = "";
 
-    render();
+state.textContent =
+"رسالة جديدة";
 
+savedRange = null;
 
-    editingIndex =
-      -1;
+setTimeout(
+function(){
 
-    editor.innerHTML =
-      "";
+messages.scrollTop =
+messages.scrollHeight;
 
-    state.textContent =
-      "رسالة جديدة";
-
-
-    setTimeout(
-      function(){
-
-        messages.scrollTop =
-          messages.scrollHeight;
-
-      },
-      50
-    );
-
-  }
+},
+50
 );
+
+});
 
 
 /* ==========================
@@ -1610,47 +2445,40 @@ document
 document
 .getElementById("editButton")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    if(selectedIndex < 0){
-      return;
-    }
+if(selectedIndex < 0){
+return;
+}
 
+editingIndex =
+selectedIndex;
 
-    editingIndex =
-      selectedIndex;
+editor.innerHTML =
+notes[selectedIndex].html;
 
+state.textContent =
+"✎ تعديل الملاحظة";
 
-    editor.innerHTML =
-      notes[selectedIndex].html;
+messageMenu.style.display =
+"none";
 
+editor.focus();
 
-    state.textContent =
-      "✎ تعديل الملاحظة";
+setTimeout(
+function(){
 
+editor.scrollIntoView({
+behavior:"smooth",
+block:"end"
+});
 
-    messageMenu.style.display =
-      "none";
-
-
-    editor.focus();
-
-
-    setTimeout(
-      function(){
-
-        editor.scrollIntoView({
-          behavior:"smooth",
-          block:"end"
-        });
-
-      },
-      100
-    );
-
-  }
+},
+100
 );
+
+});
 
 
 /* ==========================
@@ -1660,33 +2488,28 @@ document
 document
 .getElementById("deleteButton")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    if(selectedIndex < 0){
-      return;
-    }
+if(selectedIndex < 0){
+return;
+}
 
-
-    notes.splice(
-      selectedIndex,
-      1
-    );
-
-
-    selectedIndex =
-      -1;
-
-
-    saveNotes();
-
-    render();
-
-    messageMenu.style.display =
-      "none";
-
-  }
+notes.splice(
+selectedIndex,
+1
 );
+
+selectedIndex = -1;
+
+saveNotes();
+
+render();
+
+messageMenu.style.display =
+"none";
+
+});
 
 
 /* ==========================
@@ -1696,26 +2519,26 @@ document
 document
 .getElementById("cancelButton")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    editingIndex =
-      -1;
+editingIndex = -1;
 
-    editor.innerHTML =
-      "";
+editor.innerHTML = "";
 
-    state.textContent =
-      "رسالة جديدة";
+savedRange = null;
 
-    /*
-      مهم:
-      الزر × لا يخفي المحرر.
-      فقط يلغي وضع التعديل.
-    */
+state.textContent =
+"رسالة جديدة";
 
-  }
-);
+/*
+  × يلغي التعديل فقط
+  ولا يحذف المحرر.
+*/
+
+editor.focus();
+
+});
 
 
 /* ==========================
@@ -1725,56 +2548,52 @@ document
 document
 .getElementById("newButton")
 .addEventListener(
-  "click",
-  function(){
+"click",
+function(){
 
-    editingIndex =
-      -1;
+editingIndex = -1;
 
-    editor.innerHTML =
-      "";
+editor.innerHTML = "";
 
-    state.textContent =
-      "رسالة جديدة";
+savedRange = null;
 
-    editor.focus();
+state.textContent =
+"رسالة جديدة";
 
-  }
-);
+editor.focus();
+
+});
 
 
 /* ==========================
-   إغلاق النوافذ بالضغط
-   خارجها
+   إغلاق النوافذ
 ========================== */
 
 document
 .querySelectorAll(".overlay")
 .forEach(
-  function(overlay){
+function(overlay){
 
-    overlay.addEventListener(
-      "click",
-      function(event){
+overlay.addEventListener(
+"click",
+function(event){
 
-        if(
-          event.target === overlay
-        ){
+if(
+event.target === overlay
+){
 
-          overlay.style.display =
-            "none";
+overlay.style.display =
+"none";
 
-        }
+}
 
-      }
-    );
+});
 
-  }
-);
+});
 
 
 /* ==========================
-   التشغيل الأول
+   التشغيل
 ========================== */
 
 render();
@@ -1783,4 +2602,3 @@ render();
 
 </body>
 </html>
-```
