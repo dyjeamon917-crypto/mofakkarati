@@ -3355,6 +3355,91 @@ element.classList.remove(
 
 });
 
+   /* ==========================
+   Enter = سطر جديد داخل نفس الرسالة
+========================== */
+
+editor.addEventListener(
+"keydown",
+function(event){
+
+if(event.key !== "Enter"){
+return;
+}
+
+/*
+   منع المتصفح من إنشاء div أو عنصر جديد
+   عند الضغط على Enter.
+*/
+
+event.preventDefault();
+
+const selection =
+window.getSelection();
+
+if(
+!selection ||
+selection.rangeCount === 0
+){
+return;
+}
+
+const range =
+selection.getRangeAt(0);
+
+if(!selectionIsInsideEditor(range)){
+return;
+}
+
+/* حذف أي تحديد موجود أولًا */
+
+if(!range.collapsed){
+range.deleteContents();
+}
+
+/* إنشاء سطر جديد */
+
+const br =
+document.createElement("br");
+
+range.insertNode(br);
+
+/*
+   وضع المؤشر بعد السطر الجديد
+   مع حرف غير مرئي حتى يظل المؤشر
+   في نفس منطقة الكتابة.
+*/
+
+const space =
+document.createTextNode("\u200B");
+
+br.parentNode.insertBefore(
+space,
+br.nextSibling
+);
+
+const newRange =
+document.createRange();
+
+newRange.setStart(
+space,
+1
+);
+
+newRange.collapse(true);
+
+selection.removeAllRanges();
+
+selection.addRange(
+newRange
+);
+
+savedRange =
+newRange.cloneRange();
+
+updateToolbarState();
+
+});
 
 /* ==========================
    حفظ الرسالة
