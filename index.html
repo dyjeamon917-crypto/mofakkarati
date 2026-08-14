@@ -832,10 +832,6 @@ type="button">➤</button>
 </div>
 
 
-<!-- ==========================
-     لون الخط
-========================== -->
-
 <div
 class="overlay"
 id="colorOverlay">
@@ -908,10 +904,6 @@ type="button">
 
 </div>
 
-
-<!-- ==========================
-     التمييز
-========================== -->
 
 <div
 class="overlay"
@@ -991,10 +983,6 @@ type="button">
 </div>
 
 
-<!-- ==========================
-     الجدول
-========================== -->
-
 <div
 class="overlay"
 id="tableOverlay">
@@ -1057,10 +1045,6 @@ type="button">
 </div>
 
 
-<!-- ==========================
-     الخريطة الذهنية
-========================== -->
-
 <div
 class="overlay"
 id="mindMapOverlay">
@@ -1101,10 +1085,6 @@ type="button">
 </div>
 
 
-<!-- ==========================
-     البحث
-========================== -->
-
 <div
 class="overlay"
 id="searchOverlay">
@@ -1137,10 +1117,6 @@ type="button">
 
 </div>
 
-
-<!-- ==========================
-     قائمة الرسالة
-========================== -->
 
 <div
 class="menu"
@@ -2994,6 +2970,26 @@ input.placeholder =
 
 input.rows = 2;
 
+
+/* ==========================
+   التعديل الوحيد:
+   Enter ينزل سطرًا جديدًا
+   داخل نفس الفرع
+========================== */
+
+input.addEventListener(
+"keydown",
+function(event){
+
+if(event.key === "Enter"){
+
+event.stopPropagation();
+
+}
+
+});
+
+
 mindBranches.appendChild(
 input
 );
@@ -3120,12 +3116,6 @@ document.createElement("div");
 
 branch.className =
 "mind-branch";
-
-/*
-   textContent يحتفظ بأسطر النص،
-   وwhite-space:pre-wrap في CSS
-   يجعل كل Enter يظهر كسطر جديد.
-*/
 
 branch.textContent =
 value;
