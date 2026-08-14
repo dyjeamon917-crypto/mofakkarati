@@ -1,10 +1,15 @@
-
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=yes,viewport-fit=cover">
+
+<meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=yes,viewport-fit=cover"
+>
+
 <meta name="theme-color" content="#10131a">
+
 <title>ملاحظاتي</title>
 
 <style>
@@ -13,14 +18,17 @@
     -webkit-tap-highlight-color:transparent;
 }
 
-html,body{
+html,
+body{
     width:100%;
     height:100%;
     margin:0;
     padding:0;
 }
 
-html{color-scheme:dark}
+html{
+    color-scheme:dark;
+}
 
 body{
     overflow:hidden;
@@ -30,12 +38,18 @@ body{
     -webkit-text-size-adjust:100%;
 }
 
-button,input,textarea{font:inherit}
+button,
+input,
+textarea{
+    font:inherit;
+}
 
 button{
     border:0;
     cursor:pointer;
     touch-action:manipulation;
+    -webkit-user-select:none;
+    user-select:none;
 }
 
 button:disabled{
@@ -58,9 +72,17 @@ textarea:focus-visible,
     display:flex;
     flex-direction:column;
     background:
-        radial-gradient(circle at 50% -20%,rgba(64,100,170,.12),transparent 45%),
+        radial-gradient(
+            circle at 50% -20%,
+            rgba(64,100,170,.12),
+            transparent 45%
+        ),
         #10131a;
 }
+
+/* =========================================================
+   HEADER
+========================================================= */
 
 .header{
     flex:0 0 58px;
@@ -96,7 +118,13 @@ textarea:focus-visible,
     font-size:20px;
 }
 
-.icon:active{transform:scale(.93)}
+.icon:active{
+    transform:scale(.93);
+}
+
+/* =========================================================
+   MESSAGES
+========================================================= */
 
 .messages{
     flex:1;
@@ -120,7 +148,11 @@ textarea:focus-visible,
     padding:12px 14px;
     border:1px solid rgba(255,255,255,.055);
     border-radius:16px;
-    background:linear-gradient(145deg,#222731,#1e222b);
+    background:linear-gradient(
+        145deg,
+        #222731,
+        #1e222b
+    );
     box-shadow:0 4px 18px rgba(0,0,0,.12);
     line-height:1.75;
     overflow-wrap:anywhere;
@@ -155,9 +187,12 @@ textarea:focus-visible,
     font-size:21px;
 }
 
-.note-menu:active{transform:scale(.92)}
+.note-menu:active{
+    transform:scale(.92);
+}
 
-.note ul,.note ol{
+.note ul,
+.note ol{
     margin:7px 0;
     padding-right:27px;
 }
@@ -171,7 +206,8 @@ textarea:focus-visible,
     border-collapse:collapse;
 }
 
-.note td,.note th{
+.note td,
+.note th{
     min-width:48px;
     min-height:35px;
     padding:7px 9px;
@@ -183,9 +219,16 @@ textarea:focus-visible,
     line-height:1.55;
 }
 
+/* =========================================================
+   EDITOR AREA
+========================================================= */
+
 .editor-area{
     flex-shrink:0;
-    padding:5px 8px calc(8px + env(safe-area-inset-bottom));
+    padding:
+        5px
+        8px
+        calc(8px + env(safe-area-inset-bottom));
     background:rgba(25,29,38,.98);
     border-top:1px solid rgba(255,255,255,.08);
     box-shadow:0 -4px 20px rgba(0,0,0,.12);
@@ -213,6 +256,10 @@ textarea:focus-visible,
     font-size:21px;
     border-radius:7px;
 }
+
+/* =========================================================
+   TOOLBAR
+========================================================= */
 
 .toolbar{
     display:flex;
@@ -244,20 +291,28 @@ textarea:focus-visible,
     -webkit-user-select:none;
 }
 
-.tool:active{transform:scale(.94)}
+.tool:active{
+    transform:scale(.94);
+}
 
 .tool.active{
     background:#315fae;
     border-color:#6b9bf0;
 }
 
-.bold{font-weight:900}
+.bold{
+    font-weight:900;
+}
 
 .underline{
     text-decoration:underline;
     text-decoration-thickness:2px;
     text-underline-offset:5px;
 }
+
+/* =========================================================
+   SUB TOOLBARS
+========================================================= */
 
 .sub-toolbar{
     display:none;
@@ -268,11 +323,20 @@ textarea:focus-visible,
     scrollbar-width:none;
 }
 
-.font-size-bar{direction:ltr}
-.list-bar{direction:rtl}
-.alignment-bar{direction:rtl}
+.font-size-bar{
+    direction:ltr;
+}
 
-.font-size-item,.align-item{
+.list-bar{
+    direction:rtl;
+}
+
+.alignment-bar{
+    direction:rtl;
+}
+
+.font-size-item,
+.align-item{
     flex:0 0 auto;
     height:34px;
     border:1px solid #444b58;
@@ -296,6 +360,10 @@ textarea:focus-visible,
     background:#315fae;
     border-color:#6b9bf0;
 }
+
+/* =========================================================
+   WRITE ROW
+========================================================= */
 
 .write-row{
     display:flex;
@@ -342,7 +410,8 @@ textarea:focus-visible,
     height:auto;
 }
 
-.editor ul,.editor ol{
+.editor ul,
+.editor ol{
     margin:7px 0;
     padding-right:27px;
 }
@@ -354,7 +423,8 @@ textarea:focus-visible,
     margin:8px 0;
 }
 
-.editor td,.editor th{
+.editor td,
+.editor th{
     min-width:48px;
     min-height:35px;
     padding:7px 9px;
@@ -368,6 +438,12 @@ textarea:focus-visible,
     line-height:1.55;
 }
 
+.editor td:focus,
+.editor th:focus{
+    outline:2px solid rgba(77,127,216,.7);
+    outline-offset:-2px;
+}
+
 .send{
     width:48px;
     height:48px;
@@ -376,10 +452,22 @@ textarea:focus-visible,
     align-items:center;
     justify-content:center;
     border-radius:50%;
-    background:linear-gradient(145deg,#4280fa,#2c65d8);
+    background:linear-gradient(
+        145deg,
+        #4280fa,
+        #2c65d8
+    );
     color:#fff;
     font-size:21px;
 }
+
+.send:active{
+    transform:scale(.93);
+}
+
+/* =========================================================
+   OVERLAYS
+========================================================= */
 
 .overlay{
     display:none;
@@ -401,7 +489,11 @@ textarea:focus-visible,
     padding:16px;
     border:1px solid #454c59;
     border-radius:18px;
-    background:linear-gradient(145deg,#222731,#1d2129);
+    background:linear-gradient(
+        145deg,
+        #222731,
+        #1d2129
+    );
     box-shadow:0 20px 60px rgba(0,0,0,.55);
 }
 
@@ -420,6 +512,14 @@ textarea:focus-visible,
     background:#303642;
     color:#fff;
 }
+
+.panel-button:active{
+    transform:scale(.98);
+}
+
+/* =========================================================
+   COLOR PICKER
+========================================================= */
 
 .color-picker{
     width:270px;
@@ -444,8 +544,13 @@ textarea:focus-visible,
     inset:0;
     border-radius:50%;
     background:conic-gradient(
-        #ff0000,#ffff00,#00ff00,#00ffff,
-        #0000ff,#ff00ff,#ff0000
+        #ff0000,
+        #ffff00,
+        #00ff00,
+        #00ffff,
+        #0000ff,
+        #ff00ff,
+        #ff0000
     );
 }
 
@@ -454,22 +559,35 @@ textarea:focus-visible,
     inset:13%;
     border-radius:50%;
     overflow:hidden;
-    background:hsl(var(--hue),100%,50%);
+    background:hsl(
+        var(--hue),
+        100%,
+        50%
+    );
 }
 
 .sv-white{
     position:absolute;
     inset:0;
-    background:linear-gradient(to right,#fff,rgba(255,255,255,0));
+    background:linear-gradient(
+        to right,
+        #fff,
+        rgba(255,255,255,0)
+    );
 }
 
 .sv-black{
     position:absolute;
     inset:0;
-    background:linear-gradient(to bottom,rgba(0,0,0,0),#000);
+    background:linear-gradient(
+        to bottom,
+        rgba(0,0,0,0),
+        #000
+    );
 }
 
-.color-marker,.hue-marker{
+.color-marker,
+.hue-marker{
     position:absolute;
     pointer-events:none;
     transform:translate(-50%,-50%);
@@ -480,7 +598,9 @@ textarea:focus-visible,
     width:21px;
     height:21px;
     border:3px solid #fff;
-    box-shadow:0 0 0 2px #000,0 0 5px #000;
+    box-shadow:
+        0 0 0 2px #000,
+        0 0 5px #000;
 }
 
 .hue-marker{
@@ -504,8 +624,17 @@ textarea:focus-visible,
     border-radius:50%;
 }
 
-.black-preset{background:#000}
-.white-preset{background:#fff}
+.black-preset{
+    background:#000;
+}
+
+.white-preset{
+    background:#fff;
+}
+
+/* =========================================================
+   RANGE
+========================================================= */
 
 .range-title{
     text-align:center;
@@ -524,7 +653,13 @@ textarea:focus-visible,
     gap:7px;
 }
 
-.highlight-actions .panel-button{flex:1}
+.highlight-actions .panel-button{
+    flex:1;
+}
+
+/* =========================================================
+   TABLE / MIND MAP
+========================================================= */
 
 .list-choice{
     display:flex;
@@ -584,7 +719,8 @@ textarea:focus-visible,
     white-space:pre-wrap;
 }
 
-.mind-input,.search-input{
+.mind-input,
+.search-input{
     width:100%;
     padding:8px 11px;
     border:1px solid #464d5a;
@@ -605,7 +741,9 @@ textarea:focus-visible,
     resize:vertical;
 }
 
-.search-input{height:46px}
+.search-input{
+    height:46px;
+}
 
 .search-result{
     min-height:20px;
@@ -614,6 +752,10 @@ textarea:focus-visible,
     text-align:center;
     font-size:13px;
 }
+
+/* =========================================================
+   SEARCH
+========================================================= */
 
 .search-highlight{
     outline:2px solid #3471f6;
@@ -625,6 +767,10 @@ textarea:focus-visible,
     border-radius:3px;
     background:rgba(255,214,0,.45);
 }
+
+/* =========================================================
+   MENU
+========================================================= */
 
 .menu{
     display:none;
@@ -649,7 +795,16 @@ textarea:focus-visible,
     text-align:right;
 }
 
+.menu button:active{
+    background:#303642;
+}
+
+/* =========================================================
+   RESPONSIVE
+========================================================= */
+
 @media(max-width:420px){
+
     .header{
         height:55px;
         flex-basis:55px;
@@ -675,7 +830,9 @@ textarea:focus-visible,
         height:220px;
     }
 
-    .editor{max-height:155px}
+    .editor{
+        max-height:155px;
+    }
 
     .tool{
         width:38px;
@@ -691,13 +848,25 @@ textarea:focus-visible,
 }
 
 @media(max-height:650px){
-    .panel{max-height:93vh}
-    .editor{max-height:125px}
-    .messages{padding-top:7px}
+
+    .panel{
+        max-height:93vh;
+    }
+
+    .editor{
+        max-height:125px;
+    }
+
+    .messages{
+        padding-top:7px;
+    }
 }
 
 @media(prefers-reduced-motion:reduce){
-    *,*::before,*::after{
+
+    *,
+    *::before,
+    *::after{
         animation-duration:.001ms!important;
         animation-iteration-count:1!important;
         scroll-behavior:auto!important;
@@ -712,43 +881,146 @@ textarea:focus-visible,
 <div class="app">
 
 <header class="header">
-    <button class="icon" id="searchButton" type="button" aria-label="بحث">⌕</button>
+
+    <button
+        class="icon"
+        id="searchButton"
+        type="button"
+        aria-label="بحث"
+    >⌕</button>
+
     <div class="title">ملاحظاتي</div>
-    <button class="icon" id="newButton" type="button" aria-label="ملاحظة جديدة">＋</button>
+
+    <button
+        class="icon"
+        id="newButton"
+        type="button"
+        aria-label="ملاحظة جديدة"
+    >＋</button>
+
 </header>
 
-<main class="messages" id="messages"></main>
+<main
+    class="messages"
+    id="messages"
+></main>
 
 <section class="editor-area">
 
     <div class="edit-state">
-        <span id="state">رسالة جديدة</span>
-        <button class="cancel" id="cancelButton" type="button" aria-label="إلغاء">×</button>
-    </div>
 
-    <div class="toolbar" id="mainToolbar">
+        <span id="state">
+            رسالة جديدة
+        </span>
 
-        <button class="tool bold" id="boldButton" type="button">B</button>
-        <button class="tool" id="italicButton" type="button"><i>I</i></button>
-        <button class="tool underline" id="underlineButton" type="button">U</button>
-        <button class="tool" id="colorButton" type="button">●</button>
-        <button class="tool" id="highlightButton" type="button">▰</button>
-        <button class="tool" id="sizeButton" type="button">A↕</button>
-        <button class="tool" id="listButton" type="button">☷</button>
-        <button class="tool" id="alignmentButton" type="button">☰</button>
-        <button class="tool" id="tableButton" type="button">▦</button>
-        <button class="tool" id="mindMapButton" type="button">🧠</button>
+        <button
+            class="cancel"
+            id="cancelButton"
+            type="button"
+            aria-label="إلغاء"
+        >×</button>
 
     </div>
 
-    <div class="sub-toolbar font-size-bar" id="fontSizeBar"></div>
-    <div class="sub-toolbar list-bar" id="listBar"></div>
+    <div
+        class="toolbar"
+        id="mainToolbar"
+    >
 
-    <div class="sub-toolbar alignment-bar" id="alignmentBar">
+        <button
+            class="tool bold"
+            id="boldButton"
+            type="button"
+        >B</button>
 
-        <button class="align-item" data-align="right" type="button">≡</button>
-        <button class="align-item" data-align="center" type="button">≣</button>
-        <button class="align-item" data-align="left" type="button">≡</button>
+        <button
+            class="tool"
+            id="italicButton"
+            type="button"
+        ><i>I</i></button>
+
+        <button
+            class="tool underline"
+            id="underlineButton"
+            type="button"
+        >U</button>
+
+        <button
+            class="tool"
+            id="colorButton"
+            type="button"
+        >●</button>
+
+        <button
+            class="tool"
+            id="highlightButton"
+            type="button"
+        >▰</button>
+
+        <button
+            class="tool"
+            id="sizeButton"
+            type="button"
+        >A↕</button>
+
+        <button
+            class="tool"
+            id="listButton"
+            type="button"
+        >☷</button>
+
+        <button
+            class="tool"
+            id="alignmentButton"
+            type="button"
+        >☰</button>
+
+        <button
+            class="tool"
+            id="tableButton"
+            type="button"
+        >▦</button>
+
+        <button
+            class="tool"
+            id="mindMapButton"
+            type="button"
+        >🧠</button>
+
+    </div>
+
+    <div
+        class="sub-toolbar font-size-bar"
+        id="fontSizeBar"
+    ></div>
+
+    <div
+        class="sub-toolbar list-bar"
+        id="listBar"
+    ></div>
+
+    <div
+        class="sub-toolbar alignment-bar"
+        id="alignmentBar"
+    >
+
+        <button
+            class="align-item"
+            data-align="right"
+            type="button"
+        >≡</button>
+
+        <button
+            class="align-item"
+            data-align="center"
+            type="button"
+        >≣</button>
+
+        <button
+            class="align-item"
+            data-align="left"
+            type="button"
+        >≡</button>
 
     </div>
 
@@ -763,139 +1035,296 @@ textarea:focus-visible,
             aria-multiline="true"
         ></div>
 
-        <button class="send" id="sendButton" type="button" aria-label="حفظ">➤</button>
+        <button
+            class="send"
+            id="sendButton"
+            type="button"
+            aria-label="حفظ"
+        >➤</button>
 
     </div>
 
 </section>
+
 </div>
 
 
-<!-- COLOR -->
+<!-- =====================================================
+     COLOR OVERLAY
+===================================================== -->
 
-<div class="overlay" id="colorOverlay">
+<div
+    class="overlay"
+    id="colorOverlay"
+>
+
     <div class="panel">
 
-        <div class="panel-title">لون الخط</div>
+        <div class="panel-title">
+            لون الخط
+        </div>
 
         <div class="color-picker">
 
-            <div class="color-wheel" id="textColorWheel" style="--hue:0">
+            <div
+                class="color-wheel"
+                id="textColorWheel"
+                style="--hue:0"
+            >
 
                 <div class="hue-ring"></div>
 
                 <div class="sv-area">
+
                     <div class="sv-white"></div>
                     <div class="sv-black"></div>
+
                 </div>
 
-                <div class="hue-marker" id="textHueMarker"></div>
-                <div class="color-marker" id="textColorMarker"></div>
+                <div
+                    class="hue-marker"
+                    id="textHueMarker"
+                ></div>
+
+                <div
+                    class="color-marker"
+                    id="textColorMarker"
+                ></div>
 
             </div>
 
             <div class="color-presets">
 
-                <button class="color-preset black-preset" id="blackText" type="button"></button>
-                <button class="color-preset white-preset" id="whiteText" type="button"></button>
+                <button
+                    class="color-preset black-preset"
+                    id="blackText"
+                    type="button"
+                    aria-label="أسود"
+                ></button>
+
+                <button
+                    class="color-preset white-preset"
+                    id="whiteText"
+                    type="button"
+                    aria-label="أبيض"
+                ></button>
 
             </div>
 
         </div>
 
-        <button class="panel-button" id="colorDone" type="button">تم</button>
+        <button
+            class="panel-button"
+            id="colorDone"
+            type="button"
+        >تم</button>
 
     </div>
+
 </div>
 
 
-<!-- HIGHLIGHT -->
+<!-- =====================================================
+     HIGHLIGHT OVERLAY
+===================================================== -->
 
-<div class="overlay" id="highlightOverlay">
+<div
+    class="overlay"
+    id="highlightOverlay"
+>
+
     <div class="panel">
 
-        <div class="panel-title">تمييز النص</div>
+        <div class="panel-title">
+            تمييز النص
+        </div>
 
         <div class="color-picker">
 
-            <div class="color-wheel" id="highlightColorWheel" style="--hue:60">
+            <div
+                class="color-wheel"
+                id="highlightColorWheel"
+                style="--hue:60"
+            >
 
                 <div class="hue-ring"></div>
 
                 <div class="sv-area">
+
                     <div class="sv-white"></div>
                     <div class="sv-black"></div>
+
                 </div>
 
-                <div class="hue-marker" id="highlightHueMarker"></div>
-                <div class="color-marker" id="highlightColorMarker"></div>
+                <div
+                    class="hue-marker"
+                    id="highlightHueMarker"
+                ></div>
+
+                <div
+                    class="color-marker"
+                    id="highlightColorMarker"
+                ></div>
 
             </div>
 
         </div>
 
-        <div class="range-title">شدة التمييز</div>
+        <div class="range-title">
+            شدة التمييز
+        </div>
 
-        <input class="range" id="opacityRange" type="range" min="10" max="100" value="60">
+        <input
+            class="range"
+            id="opacityRange"
+            type="range"
+            min="10"
+            max="100"
+            value="60"
+        >
 
         <div class="highlight-actions">
-            <button class="panel-button" id="removeHighlight" type="button">بدون تمييز</button>
-            <button class="panel-button" id="highlightDone" type="button">تم</button>
+
+            <button
+                class="panel-button"
+                id="removeHighlight"
+                type="button"
+            >بدون تمييز</button>
+
+            <button
+                class="panel-button"
+                id="highlightDone"
+                type="button"
+            >تم</button>
+
         </div>
 
     </div>
+
 </div>
 
 
-<!-- TABLE -->
+<!-- =====================================================
+     TABLE OVERLAY
+===================================================== -->
 
-<div class="overlay" id="tableOverlay">
+<div
+    class="overlay"
+    id="tableOverlay"
+>
+
     <div class="panel">
 
-        <div class="panel-title">إدراج جدول</div>
+        <div class="panel-title">
+            إدراج جدول
+        </div>
 
         <div class="list-choice">
-            <button id="tableRowsMinus" type="button">− الصفوف</button>
-            <button id="tableRowsPlus" type="button">＋ الصفوف</button>
+
+            <button
+                id="tableRowsMinus"
+                type="button"
+            >− الصفوف</button>
+
+            <button
+                id="tableRowsPlus"
+                type="button"
+            >＋ الصفوف</button>
+
         </div>
 
-        <div class="list-choice" style="margin-top:7px">
-            <button id="tableColsMinus" type="button">− الأعمدة</button>
-            <button id="tableColsPlus" type="button">＋ الأعمدة</button>
+        <div
+            class="list-choice"
+            style="margin-top:7px"
+        >
+
+            <button
+                id="tableColsMinus"
+                type="button"
+            >− الأعمدة</button>
+
+            <button
+                id="tableColsPlus"
+                type="button"
+            >＋ الأعمدة</button>
+
         </div>
 
-        <div id="tableInfo" style="text-align:center;margin-top:10px;color:#ccc">3 × 3</div>
+        <div
+            id="tableInfo"
+            style="
+                text-align:center;
+                margin-top:10px;
+                color:#ccc
+            "
+        >3 × 3</div>
 
-        <button class="panel-button" id="tableDone" type="button">إدراج</button>
+        <button
+            class="panel-button"
+            id="tableDone"
+            type="button"
+        >إدراج</button>
 
     </div>
+
 </div>
 
 
-<!-- MIND MAP -->
+<!-- =====================================================
+     MIND MAP
+===================================================== -->
 
-<div class="overlay" id="mindMapOverlay">
+<div
+    class="overlay"
+    id="mindMapOverlay"
+>
+
     <div class="panel">
 
-        <div class="panel-title">خريطة ذهنية</div>
+        <div class="panel-title">
+            خريطة ذهنية
+        </div>
 
-        <textarea class="mind-input" id="mindCenterInput" placeholder="الفكرة الرئيسية" rows="2"></textarea>
+        <textarea
+            class="mind-input"
+            id="mindCenterInput"
+            placeholder="الفكرة الرئيسية"
+            rows="2"
+        ></textarea>
 
         <div id="mindBranches"></div>
 
-        <button class="panel-button" id="mindAdd" type="button">＋ إضافة فرع</button>
-        <button class="panel-button" id="mindDone" type="button">إدراج</button>
+        <button
+            class="panel-button"
+            id="mindAdd"
+            type="button"
+        >＋ إضافة فرع</button>
+
+        <button
+            class="panel-button"
+            id="mindDone"
+            type="button"
+        >إدراج</button>
 
     </div>
+
 </div>
 
 
-<!-- SEARCH -->
+<!-- =====================================================
+     SEARCH
+===================================================== -->
 
-<div class="overlay" id="searchOverlay">
+<div
+    class="overlay"
+    id="searchOverlay"
+>
+
     <div class="panel">
 
-        <div class="panel-title">بحث</div>
+        <div class="panel-title">
+            بحث
+        </div>
 
         <input
             class="search-input"
@@ -905,20 +1334,40 @@ textarea:focus-visible,
             autocomplete="off"
         >
 
-        <div class="search-result" id="searchResult"></div>
+        <div
+            class="search-result"
+            id="searchResult"
+        ></div>
 
-        <button class="panel-button" id="searchDone" type="button">تم</button>
+        <button
+            class="panel-button"
+            id="searchDone"
+            type="button"
+        >تم</button>
 
     </div>
+
 </div>
 
 
-<!-- MENU -->
+<!-- =====================================================
+     NOTE MENU
+===================================================== -->
 
-<div class="menu" id="messageMenu">
+<div
+    class="menu"
+    id="messageMenu"
+>
 
-    <button id="editButton" type="button">✎ تعديل</button>
-    <button id="deleteButton" type="button">🗑 حذف</button>
+    <button
+        id="editButton"
+        type="button"
+    >✎ تعديل</button>
+
+    <button
+        id="deleteButton"
+        type="button"
+    >🗑 حذف</button>
 
 </div>
 
@@ -930,7 +1379,8 @@ textarea:focus-visible,
    CONFIG
 ========================================================= */
 
-const STORAGE_KEY = "notes_modern_editor_v8";
+const STORAGE_KEY =
+    "notes_modern_editor_v9";
 
 const FONT_SIZES = [
     8,9,10,11,12,14,16,18,20,22,
@@ -943,17 +1393,29 @@ const FONT_SIZES = [
 ========================================================= */
 
 const AppState = {
+
     notes: [],
+
     editingIndex: -1,
+
     selectedIndex: -1,
+
     savedRange: null,
+
     fontSize: 16,
+
     alignment: "right",
+
     tableRows: 3,
+
     tableCols: 3,
+
     textColor: "rgb(255,255,255)",
+
     highlightColor: "rgb(255,255,0)",
+
     highlightOpacity: .60
+
 };
 
 
@@ -961,25 +1423,50 @@ const AppState = {
    DOM
 ========================================================= */
 
-const $ = id => document.getElementById(id);
+const $ =
+    id => document.getElementById(id);
 
-const editor = $("editor");
-const messages = $("messages");
-const state = $("state");
-const messageMenu = $("messageMenu");
+const editor =
+    $("editor");
 
-const fontSizeBar = $("fontSizeBar");
-const listBar = $("listBar");
-const alignmentBar = $("alignmentBar");
+const messages =
+    $("messages");
 
-const colorOverlay = $("colorOverlay");
-const highlightOverlay = $("highlightOverlay");
-const tableOverlay = $("tableOverlay");
-const mindMapOverlay = $("mindMapOverlay");
-const searchOverlay = $("searchOverlay");
+const state =
+    $("state");
 
-const searchInput = $("searchInput");
-const searchResult = $("searchResult");
+const messageMenu =
+    $("messageMenu");
+
+const fontSizeBar =
+    $("fontSizeBar");
+
+const listBar =
+    $("listBar");
+
+const alignmentBar =
+    $("alignmentBar");
+
+const colorOverlay =
+    $("colorOverlay");
+
+const highlightOverlay =
+    $("highlightOverlay");
+
+const tableOverlay =
+    $("tableOverlay");
+
+const mindMapOverlay =
+    $("mindMapOverlay");
+
+const searchOverlay =
+    $("searchOverlay");
+
+const searchInput =
+    $("searchInput");
+
+const searchResult =
+    $("searchResult");
 
 
 /* =========================================================
@@ -990,14 +1477,50 @@ function loadNotes(){
 
     try{
 
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw =
+            localStorage.getItem(
+                STORAGE_KEY
+            );
+
+        /*
+         * توافق مع النسخة القديمة.
+         */
 
         if(!raw){
+
+            const old =
+                localStorage.getItem(
+                    "notes_modern_editor_v8"
+                );
+
+            if(old){
+
+                const oldData =
+                    JSON.parse(old);
+
+                if(Array.isArray(oldData)){
+
+                    AppState.notes =
+                        oldData.filter(
+                            note =>
+                                note &&
+                                typeof note === "object" &&
+                                typeof note.html === "string"
+                        );
+
+                    saveNotes();
+
+                    return;
+                }
+            }
+
             AppState.notes = [];
+
             return;
         }
 
-        const data = JSON.parse(raw);
+        const data =
+            JSON.parse(raw);
 
         AppState.notes =
             Array.isArray(data)
@@ -1011,7 +1534,11 @@ function loadNotes(){
 
     }catch(error){
 
-        console.error(error);
+        console.error(
+            "loadNotes:",
+            error
+        );
+
         AppState.notes = [];
     }
 }
@@ -1023,15 +1550,23 @@ function saveNotes(){
 
         localStorage.setItem(
             STORAGE_KEY,
-            JSON.stringify(AppState.notes)
+            JSON.stringify(
+                AppState.notes
+            )
         );
 
         return true;
 
     }catch(error){
 
-        alert("تعذر حفظ الملاحظات في الجهاز.");
-        console.error(error);
+        console.error(
+            "saveNotes:",
+            error
+        );
+
+        alert(
+            "تعذر حفظ الملاحظات في الجهاز."
+        );
 
         return false;
     }
@@ -1053,10 +1588,15 @@ function cleanHtml(html){
 
 function hasRealContent(){
 
-    const clone = editor.cloneNode(true);
+    const clone =
+        editor.cloneNode(true);
 
-    clone.querySelectorAll("br")
-        .forEach(br => br.replaceWith(" "));
+    clone
+        .querySelectorAll("br")
+        .forEach(
+            br =>
+                br.replaceWith(" ")
+        );
 
     const text =
         (clone.textContent || "")
@@ -1080,11 +1620,17 @@ function hasRealContent(){
 
 function getSelection(){
 
-    const selection = window.getSelection();
+    const selection =
+        window.getSelection();
 
-    return selection && selection.rangeCount
-        ? selection
-        : null;
+    if(
+        !selection ||
+        !selection.rangeCount
+    ){
+        return null;
+    }
+
+    return selection;
 }
 
 
@@ -1095,27 +1641,36 @@ function rangeInsideEditor(range){
     }
 
     return (
-        editor.contains(range.startContainer) &&
-        editor.contains(range.endContainer)
+        editor.contains(
+            range.startContainer
+        ) &&
+        editor.contains(
+            range.endContainer
+        )
     );
 }
 
 
 function saveSelection(){
 
-    const selection = getSelection();
+    const selection =
+        getSelection();
 
     if(!selection){
         return false;
     }
 
-    const range = selection.getRangeAt(0);
+    const range =
+        selection.getRangeAt(0);
 
-    if(!rangeInsideEditor(range)){
+    if(
+        !rangeInsideEditor(range)
+    ){
         return false;
     }
 
-    AppState.savedRange = range.cloneRange();
+    AppState.savedRange =
+        range.cloneRange();
 
     return true;
 }
@@ -1123,24 +1678,39 @@ function saveSelection(){
 
 function restoreSelection(){
 
-    const range = AppState.savedRange;
+    const range =
+        AppState.savedRange;
 
-    if(!range || !rangeInsideEditor(range)){
+    if(
+        !range ||
+        !rangeInsideEditor(range)
+    ){
         return false;
     }
 
     try{
 
-        const selection = window.getSelection();
+        const selection =
+            window.getSelection();
 
         selection.removeAllRanges();
-        selection.addRange(range);
+
+        selection.addRange(
+            range
+        );
 
         return true;
 
     }catch(error){
 
-        AppState.savedRange = null;
+        console.error(
+            "restoreSelection:",
+            error
+        );
+
+        AppState.savedRange =
+            null;
+
         return false;
     }
 }
@@ -1150,100 +1720,160 @@ function focusEditorEnd(){
 
     editor.focus();
 
-    const range = document.createRange();
+    const range =
+        document.createRange();
 
-    range.selectNodeContents(editor);
+    range.selectNodeContents(
+        editor
+    );
+
     range.collapse(false);
 
-    const selection = window.getSelection();
+    const selection =
+        window.getSelection();
 
     selection.removeAllRanges();
-    selection.addRange(range);
 
-    AppState.savedRange = range.cloneRange();
+    selection.addRange(
+        range
+    );
+
+    AppState.savedRange =
+        range.cloneRange();
+}
+
+
+/*
+ * هذه الوظيفة مهمة جدًا مع Android.
+ * بعض المتصفحات تفقد selection بمجرد الضغط
+ * على زر خارج contenteditable.
+ */
+
+function prepareEditorSelection(){
+
+    if(
+        restoreSelection()
+    ){
+        editor.focus();
+        return true;
+    }
+
+    editor.focus();
+
+    return saveSelection();
 }
 
 
 /* =========================================================
-   SAFE BUTTON EVENTS
+   SAFE TOOL BUTTONS
 ========================================================= */
-
-/*
- * مهم:
- * لا نستخدم preventDefault() على pointerdown.
- * هذا كان يمنع click في بعض متصفحات Android.
- */
 
 function protectSelection(button){
 
     button.addEventListener(
         "pointerdown",
         () => {
+
             saveSelection();
+
         },
-        {passive:true}
+        {
+            passive:true
+        }
+    );
+
+    button.addEventListener(
+        "mousedown",
+        () => {
+
+            saveSelection();
+
+        }
     );
 }
 
 
 document
     .querySelectorAll(
-        ".toolbar button,.sub-toolbar button"
+        "#mainToolbar button," +
+        "#fontSizeBar button," +
+        "#listBar button," +
+        "#alignmentBar button"
     )
-    .forEach(protectSelection);
+    .forEach(
+        protectSelection
+    );
 
 
 /* =========================================================
-   EXEC COMMAND
+   COMMAND
 ========================================================= */
 
-function execCommand(command,value=null){
+function execCommand(
+    command,
+    value = null
+){
 
-    if(!restoreSelection()){
-        focusEditorEnd();
+    if(
+        !prepareEditorSelection()
+    ){
+        return false;
     }
-
-    editor.focus();
 
     try{
 
-        document.execCommand(
-            command,
-            false,
-            value
-        );
+        const result =
+            document.execCommand(
+                command,
+                false,
+                value
+            );
+
+        saveSelection();
+
+        updateToolbar();
+
+        return result !== false;
 
     }catch(error){
 
         console.error(
+            "execCommand:",
             command,
             error
         );
-    }
 
-    saveSelection();
-    updateToolbar();
+        return false;
+    }
 }
 
 
 /* =========================================================
-   TOOLBAR
+   BASIC FORMAT
 ========================================================= */
 
-$("boldButton").addEventListener(
-    "click",
-    () => execCommand("bold")
-);
+$("boldButton")
+    .addEventListener(
+        "click",
+        () =>
+            execCommand("bold")
+    );
 
-$("italicButton").addEventListener(
-    "click",
-    () => execCommand("italic")
-);
 
-$("underlineButton").addEventListener(
-    "click",
-    () => execCommand("underline")
-);
+$("italicButton")
+    .addEventListener(
+        "click",
+        () =>
+            execCommand("italic")
+    );
+
+
+$("underlineButton")
+    .addEventListener(
+        "click",
+        () =>
+            execCommand("underline")
+    );
 
 
 /* =========================================================
@@ -1254,24 +1884,40 @@ function updateToolbar(){
 
     try{
 
-        $("boldButton").classList.toggle(
-            "active",
-            document.queryCommandState("bold")
-        );
+        $("boldButton")
+            .classList.toggle(
+                "active",
+                document.queryCommandState(
+                    "bold"
+                )
+            );
 
-        $("italicButton").classList.toggle(
-            "active",
-            document.queryCommandState("italic")
-        );
+        $("italicButton")
+            .classList.toggle(
+                "active",
+                document.queryCommandState(
+                    "italic"
+                )
+            );
 
-        $("underlineButton").classList.toggle(
-            "active",
-            document.queryCommandState("underline")
-        );
+        $("underlineButton")
+            .classList.toggle(
+                "active",
+                document.queryCommandState(
+                    "underline"
+                )
+            );
 
-    }catch(error){}
+    }catch(error){
+
+        /*
+         * بعض المتصفحات لا تدعم
+         * queryCommandState بشكل كامل.
+         */
+    }
 
     updateFontSizeButtons();
+
     updateAlignmentButtons();
 }
 
@@ -1282,13 +1928,18 @@ function updateToolbar(){
 
 function updateSelection(){
 
-    setTimeout(() => {
+    setTimeout(
+        () => {
 
-        if(saveSelection()){
-            updateToolbar();
-        }
+            if(
+                saveSelection()
+            ){
+                updateToolbar();
+            }
 
-    },0);
+        },
+        0
+    );
 }
 
 
@@ -1297,37 +1948,63 @@ editor.addEventListener(
     updateSelection
 );
 
+
 editor.addEventListener(
     "keyup",
     updateSelection
 );
 
+
 editor.addEventListener(
     "touchend",
-    () => setTimeout(updateSelection,100)
+    () => {
+
+        setTimeout(
+            updateSelection,
+            80
+        );
+
+    }
 );
+
 
 editor.addEventListener(
     "input",
-    () => setTimeout(updateSelection,0)
+    () => {
+
+        setTimeout(
+            updateSelection,
+            0
+        );
+
+    }
 );
+
 
 document.addEventListener(
     "selectionchange",
     () => {
 
-        const selection = getSelection();
+        const selection =
+            getSelection();
 
         if(!selection){
             return;
         }
 
-        const range = selection.getRangeAt(0);
+        const range =
+            selection.getRangeAt(0);
 
-        if(rangeInsideEditor(range)){
-            AppState.savedRange = range.cloneRange();
+        if(
+            rangeInsideEditor(range)
+        ){
+
+            AppState.savedRange =
+                range.cloneRange();
+
             updateToolbar();
         }
+
     }
 );
 
@@ -1340,46 +2017,69 @@ editor.addEventListener(
     "keydown",
     event => {
 
-        if(event.key !== "Enter"){
+        if(
+            event.key !== "Enter"
+        ){
             return;
         }
 
+        const target =
+            event.target;
+
         if(
-            event.target.closest &&
-            event.target.closest("td,th")
+            target &&
+            target.closest &&
+            target.closest("td,th")
+        ){
+            return;
+        }
+
+        const selection =
+            getSelection();
+
+        if(!selection){
+            return;
+        }
+
+        const range =
+            selection.getRangeAt(0);
+
+        if(
+            !rangeInsideEditor(range)
         ){
             return;
         }
 
         event.preventDefault();
 
-        const selection = getSelection();
-
-        if(!selection){
-            return;
-        }
-
-        const range = selection.getRangeAt(0);
-
-        if(!rangeInsideEditor(range)){
-            return;
-        }
-
-        if(!range.collapsed){
+        if(
+            !range.collapsed
+        ){
             range.deleteContents();
         }
 
-        const br = document.createElement("br");
-        const marker = document.createTextNode("\u200B");
+        const br =
+            document.createElement(
+                "br"
+            );
+
+        const marker =
+            document.createTextNode(
+                "\u200B"
+            );
 
         range.insertNode(br);
 
-        br.parentNode.insertBefore(
-            marker,
-            br.nextSibling
-        );
+        if(br.parentNode){
 
-        const newRange = document.createRange();
+            br.parentNode.insertBefore(
+                marker,
+                br.nextSibling
+            );
+        }
+
+        const newRange =
+            document.createRange();
 
         newRange.setStart(
             marker,
@@ -1389,7 +2089,10 @@ editor.addEventListener(
         newRange.collapse(true);
 
         selection.removeAllRanges();
-        selection.addRange(newRange);
+
+        selection.addRange(
+            newRange
+        );
 
         AppState.savedRange =
             newRange.cloneRange();
@@ -1401,61 +2104,96 @@ editor.addEventListener(
    FONT SIZE
 ========================================================= */
 
-FONT_SIZES.forEach(size => {
+FONT_SIZES.forEach(
+    size => {
 
-    const button = document.createElement("button");
+        const button =
+            document.createElement(
+                "button"
+            );
 
-    button.className = "font-size-item";
-    button.type = "button";
-    button.textContent = size;
+        button.className =
+            "font-size-item";
 
-    fontSizeBar.appendChild(button);
+        button.type =
+            "button";
 
-    protectSelection(button);
+        button.textContent =
+            size;
 
-    button.addEventListener(
-        "click",
-        () => applyFontSize(size)
-    );
-});
+        button.setAttribute(
+            "aria-label",
+            "حجم " + size
+        );
+
+        fontSizeBar.appendChild(
+            button
+        );
+
+        protectSelection(
+            button
+        );
+
+        button.addEventListener(
+            "click",
+            () =>
+                applyFontSize(size)
+        );
+    }
+);
 
 
 function updateFontSizeButtons(){
 
     fontSizeBar
-        .querySelectorAll(".font-size-item")
-        .forEach(button => {
+        .querySelectorAll(
+            ".font-size-item"
+        )
+        .forEach(
+            button => {
 
-            button.classList.toggle(
-                "active",
-                Number(button.textContent) ===
-                AppState.fontSize
-            );
-        });
+                button.classList.toggle(
+                    "active",
+                    Number(
+                        button.textContent
+                    ) ===
+                    AppState.fontSize
+                );
+
+            }
+        );
 }
 
 
 function applyFontSize(size){
 
-    if(!restoreSelection()){
-        focusEditorEnd();
+    if(
+        !prepareEditorSelection()
+    ){
+        return;
     }
 
-    const selection = getSelection();
+    const selection =
+        getSelection();
 
     if(!selection){
         return;
     }
 
-    const range = selection.getRangeAt(0);
+    const range =
+        selection.getRangeAt(0);
 
-    if(!rangeInsideEditor(range)){
+    if(
+        !rangeInsideEditor(range)
+    ){
         return;
     }
 
     editor.focus();
 
-    if(!range.collapsed){
+    if(
+        !range.collapsed
+    ){
 
         try{
 
@@ -1469,39 +2207,68 @@ function applyFontSize(size){
                 .querySelectorAll(
                     'font[size="7"]'
                 )
-                .forEach(font => {
+                .forEach(
+                    font => {
 
-                    const span =
-                        document.createElement("span");
+                        const span =
+                            document.createElement(
+                                "span"
+                            );
 
-                    span.style.fontSize =
-                        size + "px";
+                        span.style.fontSize =
+                            size + "px";
 
-                    while(font.firstChild){
-                        span.appendChild(font.firstChild);
+                        while(
+                            font.firstChild
+                        ){
+
+                            span.appendChild(
+                                font.firstChild
+                            );
+                        }
+
+                        font.replaceWith(
+                            span
+                        );
                     }
-
-                    font.replaceWith(span);
-                });
+                );
 
         }catch(error){
-            console.error(error);
+
+            console.error(
+                "font size:",
+                error
+            );
         }
 
     }else{
 
+        /*
+         * لا نضع span فارغًا فقط،
+         * بل نضع marker داخله ليستمر
+         * حجم الخط عند الكتابة.
+         */
+
         const span =
-            document.createElement("span");
+            document.createElement(
+                "span"
+            );
 
         span.style.fontSize =
             size + "px";
 
         const marker =
-            document.createTextNode("\u200B");
+            document.createTextNode(
+                "\u200B"
+            );
 
-        span.appendChild(marker);
+        span.appendChild(
+            marker
+        );
 
-        range.insertNode(span);
+        range.insertNode(
+            span
+        );
 
         const newRange =
             document.createRange();
@@ -1514,32 +2281,45 @@ function applyFontSize(size){
         newRange.collapse(true);
 
         selection.removeAllRanges();
-        selection.addRange(newRange);
+
+        selection.addRange(
+            newRange
+        );
     }
 
-    AppState.fontSize = size;
+    AppState.fontSize =
+        size;
 
     saveSelection();
 
-    fontSizeBar.style.display = "none";
+    fontSizeBar.style.display =
+        "none";
 
     updateToolbar();
+
+    editor.focus();
 }
 
 
-$("sizeButton").addEventListener(
-    "click",
-    () => {
+$("sizeButton")
+    .addEventListener(
+        "click",
+        () => {
 
-        saveSelection();
+            saveSelection();
 
-        fontSizeBar.style.display = "flex";
-        listBar.style.display = "none";
-        alignmentBar.style.display = "none";
+            fontSizeBar.style.display =
+                "flex";
 
-        updateFontSizeButtons();
-    }
-);
+            listBar.style.display =
+                "none";
+
+            alignmentBar.style.display =
+                "none";
+
+            updateFontSizeButtons();
+        }
+    );
 
 
 /* =========================================================
@@ -1547,7 +2327,9 @@ $("sizeButton").addEventListener(
 ========================================================= */
 
 const bulletButton =
-    document.createElement("button");
+    document.createElement(
+        "button"
+    );
 
 bulletButton.className =
     "font-size-item";
@@ -1563,7 +2345,9 @@ bulletButton.title =
 
 
 const numberButton =
-    document.createElement("button");
+    document.createElement(
+        "button"
+    );
 
 numberButton.className =
     "font-size-item";
@@ -1578,20 +2362,33 @@ numberButton.title =
     "قائمة مرقمة";
 
 
-listBar.appendChild(bulletButton);
-listBar.appendChild(numberButton);
+listBar.appendChild(
+    bulletButton
+);
 
-protectSelection(bulletButton);
-protectSelection(numberButton);
+listBar.appendChild(
+    numberButton
+);
+
+protectSelection(
+    bulletButton
+);
+
+protectSelection(
+    numberButton
+);
 
 
 bulletButton.addEventListener(
     "click",
     () => {
 
-        execCommand("insertUnorderedList");
+        execCommand(
+            "insertUnorderedList"
+        );
 
-        listBar.style.display = "none";
+        listBar.style.display =
+            "none";
 
         editor.focus();
     }
@@ -1602,26 +2399,35 @@ numberButton.addEventListener(
     "click",
     () => {
 
-        execCommand("insertOrderedList");
+        execCommand(
+            "insertOrderedList"
+        );
 
-        listBar.style.display = "none";
+        listBar.style.display =
+            "none";
 
         editor.focus();
     }
 );
 
 
-$("listButton").addEventListener(
-    "click",
-    () => {
+$("listButton")
+    .addEventListener(
+        "click",
+        () => {
 
-        saveSelection();
+            saveSelection();
 
-        fontSizeBar.style.display = "none";
-        alignmentBar.style.display = "none";
-        listBar.style.display = "flex";
-    }
-);
+            fontSizeBar.style.display =
+                "none";
+
+            alignmentBar.style.display =
+                "none";
+
+            listBar.style.display =
+                "flex";
+        }
+    );
 
 
 /* =========================================================
@@ -1631,103 +2437,176 @@ $("listButton").addEventListener(
 function updateAlignmentButtons(){
 
     alignmentBar
-        .querySelectorAll(".align-item")
-        .forEach(button => {
+        .querySelectorAll(
+            ".align-item"
+        )
+        .forEach(
+            button => {
 
-            button.classList.toggle(
-                "active",
-                button.dataset.align ===
-                AppState.alignment
-            );
-        });
+                button.classList.toggle(
+                    "active",
+                    button.dataset.align ===
+                    AppState.alignment
+                );
+            }
+        );
 }
 
 
-$("alignmentButton").addEventListener(
-    "click",
-    () => {
+$("alignmentButton")
+    .addEventListener(
+        "click",
+        () => {
 
-        saveSelection();
+            saveSelection();
 
-        fontSizeBar.style.display = "none";
-        listBar.style.display = "none";
-        alignmentBar.style.display = "flex";
+            fontSizeBar.style.display =
+                "none";
 
-        updateAlignmentButtons();
-    }
-);
+            listBar.style.display =
+                "none";
+
+            alignmentBar.style.display =
+                "flex";
+
+            updateAlignmentButtons();
+        }
+    );
 
 
 alignmentBar
-    .querySelectorAll(".align-item")
-    .forEach(button => {
+    .querySelectorAll(
+        ".align-item"
+    )
+    .forEach(
+        button => {
 
-        protectSelection(button);
+            protectSelection(
+                button
+            );
 
-        button.addEventListener(
-            "click",
-            () => {
+            button.addEventListener(
+                "click",
+                () => {
 
-                const align =
-                    button.dataset.align;
+                    const align =
+                        button.dataset.align;
 
-                AppState.alignment =
-                    align;
+                    AppState.alignment =
+                        align;
 
-                const command =
-                    align === "right"
-                        ? "justifyRight"
-                        : align === "left"
-                            ? "justifyLeft"
-                            : "justifyCenter";
+                    const command =
+                        align === "right"
+                            ? "justifyRight"
+                            : align === "left"
+                                ? "justifyLeft"
+                                : "justifyCenter";
 
-                execCommand(command);
+                    execCommand(
+                        command
+                    );
 
-                alignmentBar.style.display =
-                    "none";
-            }
-        );
-    });
+                    alignmentBar.style.display =
+                        "none";
+
+                    editor.focus();
+                }
+            );
+        }
+    );
 
 
 /* =========================================================
-   COLOR
+   COLOR UTILITIES
 ========================================================= */
 
-function hsvToRgb(h,s,v){
+function hsvToRgb(
+    h,
+    s,
+    v
+){
 
     s /= 100;
     v /= 100;
 
-    const c = v*s;
-    const x = c * (
-        1-Math.abs(((h/60)%2)-1)
-    );
+    const c =
+        v * s;
 
-    const m = v-c;
+    const x =
+        c *
+        (
+            1 -
+            Math.abs(
+                ((h / 60) % 2) - 1
+            )
+        );
 
-    let r=0,g=0,b=0;
+    const m =
+        v - c;
 
-    if(h<60){r=c;g=x}
-    else if(h<120){r=x;g=c}
-    else if(h<180){g=c;b=x}
-    else if(h<240){g=x;b=c}
-    else if(h<300){r=x;b=c}
-    else {r=c;b=x}
+    let r = 0;
+    let g = 0;
+    let b = 0;
+
+    if(h < 60){
+
+        r = c;
+        g = x;
+
+    }else if(h < 120){
+
+        r = x;
+        g = c;
+
+    }else if(h < 180){
+
+        g = c;
+        b = x;
+
+    }else if(h < 240){
+
+        g = x;
+        b = c;
+
+    }else if(h < 300){
+
+        r = x;
+        b = c;
+
+    }else{
+
+        r = c;
+        b = x;
+    }
 
     return {
-        r:Math.round((r+m)*255),
-        g:Math.round((g+m)*255),
-        b:Math.round((b+m)*255)
+
+        r:Math.round(
+            (r + m) * 255
+        ),
+
+        g:Math.round(
+            (g + m) * 255
+        ),
+
+        b:Math.round(
+            (b + m) * 255
+        )
     };
 }
 
 
 function rgbString(rgb){
 
-    return `rgb(${rgb.r},${rgb.g},${rgb.b})`;
+    return (
+        `rgb(${rgb.r},${rgb.g},${rgb.b})`
+    );
 }
 
+
+/* =========================================================
+   COLOR WHEEL
+========================================================= */
 
 function setupColorWheel(
     wheel,
@@ -1737,11 +2616,18 @@ function setupColorWheel(
     callback
 ){
 
-    let hue = initialHue;
-    let saturation = 100;
-    let value = 100;
+    let hue =
+        initialHue;
 
-    let mode = null;
+    let saturation =
+        100;
+
+    let value =
+        100;
+
+    let mode =
+        null;
+
 
     function update(){
 
@@ -1765,105 +2651,183 @@ function setupColorWheel(
         const rect =
             wheel.getBoundingClientRect();
 
-        const width = rect.width;
-        const height = rect.height;
+        const width =
+            rect.width;
 
-        const cx = width/2;
-        const cy = height/2;
+        const height =
+            rect.height;
+
+        const cx =
+            width / 2;
+
+        const cy =
+            height / 2;
 
         const radius =
-            Math.min(width,height)/2;
+            Math.min(
+                width,
+                height
+            ) / 2;
 
         const ringRadius =
-            radius*.88;
+            radius * .88;
 
         const angle =
-            hue*Math.PI/180;
+            hue *
+            Math.PI /
+            180;
 
         hueMarker.style.left =
-            `${(
-                cx+Math.sin(angle)*ringRadius
-            )/width*100}%`;
+            `${
+                (
+                    cx +
+                    Math.sin(angle) *
+                    ringRadius
+                ) /
+                width *
+                100
+            }%`;
 
         hueMarker.style.top =
-            `${(
-                cy-Math.cos(angle)*ringRadius
-            )/height*100}%`;
+            `${
+                (
+                    cy -
+                    Math.cos(angle) *
+                    ringRadius
+                ) /
+                height *
+                100
+            }%`;
 
-        const left = width*.13;
-        const top = height*.13;
+        const left =
+            width * .13;
 
-        const innerWidth = width*.74;
-        const innerHeight = height*.74;
+        const top =
+            height * .13;
+
+        const innerWidth =
+            width * .74;
+
+        const innerHeight =
+            height * .74;
 
         colorMarker.style.left =
-            `${(
-                left+
-                saturation/100*innerWidth
-            )/width*100}%`;
+            `${
+                (
+                    left +
+                    saturation / 100 *
+                    innerWidth
+                ) /
+                width *
+                100
+            }%`;
 
         colorMarker.style.top =
-            `${(
-                top+
-                (1-value/100)*innerHeight
-            )/height*100}%`;
+            `${
+                (
+                    top +
+                    (1 - value / 100) *
+                    innerHeight
+                ) /
+                height *
+                100
+            }%`;
 
         callback(color);
     }
 
 
-    function hueFromEvent(event){
+    function hueFromEvent(
+        event
+    ){
 
         const rect =
             wheel.getBoundingClientRect();
 
         const cx =
-            rect.left+rect.width/2;
+            rect.left +
+            rect.width / 2;
 
         const cy =
-            rect.top+rect.height/2;
+            rect.top +
+            rect.height / 2;
 
         let angle =
             Math.atan2(
-                event.clientX-cx,
-                -(event.clientY-cy)
-            )*180/Math.PI;
+                event.clientX - cx,
+                -(event.clientY - cy)
+            ) *
+            180 /
+            Math.PI;
 
-        if(angle<0){
-            angle+=360;
+        if(angle < 0){
+            angle += 360;
         }
 
-        hue=angle;
+        hue =
+            angle;
+
         update();
     }
 
 
-    function svFromEvent(event){
+    function svFromEvent(
+        event
+    ){
 
         const rect =
             wheel.getBoundingClientRect();
 
-        const left=rect.width*.13;
-        const top=rect.height*.13;
+        const left =
+            rect.width * .13;
 
-        const width=rect.width*.74;
-        const height=rect.height*.74;
+        const top =
+            rect.height * .13;
+
+        const width =
+            rect.width * .74;
+
+        const height =
+            rect.height * .74;
 
         let x =
-            event.clientX-
-            rect.left-
+            event.clientX -
+            rect.left -
             left;
 
         let y =
-            event.clientY-
-            rect.top-
+            event.clientY -
+            rect.top -
             top;
 
-        x=Math.max(0,Math.min(width,x));
-        y=Math.max(0,Math.min(height,y));
+        x =
+            Math.max(
+                0,
+                Math.min(
+                    width,
+                    x
+                )
+            );
 
-        saturation=x/width*100;
-        value=100-y/height*100;
+        y =
+            Math.max(
+                0,
+                Math.min(
+                    height,
+                    y
+                )
+            );
+
+        saturation =
+            x /
+            width *
+            100;
+
+        value =
+            100 -
+            y /
+            height *
+            100;
 
         update();
     }
@@ -1877,38 +2841,50 @@ function setupColorWheel(
                 wheel.getBoundingClientRect();
 
             const cx =
-                rect.left+rect.width/2;
+                rect.left +
+                rect.width / 2;
 
             const cy =
-                rect.top+rect.height/2;
+                rect.top +
+                rect.height / 2;
 
             const distance =
                 Math.hypot(
-                    event.clientX-cx,
-                    event.clientY-cy
+                    event.clientX - cx,
+                    event.clientY - cy
                 );
 
             const radius =
                 Math.min(
                     rect.width,
                     rect.height
-                )/2;
+                ) / 2;
 
             mode =
-                distance > radius*.76
+                distance >
+                radius * .76
                     ? "hue"
                     : "sv";
 
-            if(mode==="hue"){
-                hueFromEvent(event);
+            if(mode === "hue"){
+
+                hueFromEvent(
+                    event
+                );
+
             }else{
-                svFromEvent(event);
+
+                svFromEvent(
+                    event
+                );
             }
 
             try{
+
                 wheel.setPointerCapture(
                     event.pointerId
                 );
+
             }catch(error){}
 
             event.preventDefault();
@@ -1920,12 +2896,18 @@ function setupColorWheel(
         "pointermove",
         event => {
 
-            if(mode==="hue"){
-                hueFromEvent(event);
+            if(mode === "hue"){
+
+                hueFromEvent(
+                    event
+                );
             }
 
-            if(mode==="sv"){
-                svFromEvent(event);
+            if(mode === "sv"){
+
+                svFromEvent(
+                    event
+                );
             }
         }
     );
@@ -1935,12 +2917,14 @@ function setupColorWheel(
         "pointerup",
         event => {
 
-            mode=null;
+            mode = null;
 
             try{
+
                 wheel.releasePointerCapture(
                     event.pointerId
                 );
+
             }catch(error){}
         }
     );
@@ -1949,7 +2933,9 @@ function setupColorWheel(
     wheel.addEventListener(
         "pointercancel",
         () => {
-            mode=null;
+
+            mode = null;
+
         }
     );
 
@@ -1964,7 +2950,9 @@ setupColorWheel(
     $("textColorMarker"),
     0,
     color => {
-        AppState.textColor=color;
+
+        AppState.textColor =
+            color;
     }
 );
 
@@ -1975,157 +2963,218 @@ setupColorWheel(
     $("highlightColorMarker"),
     60,
     color => {
-        AppState.highlightColor=color;
+
+        AppState.highlightColor =
+            color;
     }
 );
 
 
-$("colorButton").addEventListener(
-    "click",
-    () => {
+/* =========================================================
+   TEXT COLOR
+========================================================= */
 
-        saveSelection();
+$("colorButton")
+    .addEventListener(
+        "click",
+        () => {
 
-        colorOverlay.style.display="flex";
-    }
-);
+            saveSelection();
 
-
-$("blackText").addEventListener(
-    "click",
-    () => {
-
-        AppState.textColor="rgb(0,0,0)";
-
-        $("textColorMarker").style.background="#000";
-    }
-);
-
-
-$("whiteText").addEventListener(
-    "click",
-    () => {
-
-        AppState.textColor="rgb(255,255,255)";
-
-        $("textColorMarker").style.background="#fff";
-    }
-);
-
-
-$("colorDone").addEventListener(
-    "click",
-    () => {
-
-        if(!restoreSelection()){
-            focusEditorEnd();
+            colorOverlay.style.display =
+                "flex";
         }
+    );
 
-        execCommand(
-            "foreColor",
-            AppState.textColor
-        );
 
-        colorOverlay.style.display="none";
-    }
-);
+$("blackText")
+    .addEventListener(
+        "click",
+        () => {
+
+            AppState.textColor =
+                "rgb(0,0,0)";
+
+            $("textColorMarker")
+                .style.background =
+                "#000";
+        }
+    );
+
+
+$("whiteText")
+    .addEventListener(
+        "click",
+        () => {
+
+            AppState.textColor =
+                "rgb(255,255,255)";
+
+            $("textColorMarker")
+                .style.background =
+                "#fff";
+        }
+    );
+
+
+$("colorDone")
+    .addEventListener(
+        "click",
+        () => {
+
+            if(
+                !prepareEditorSelection()
+            ){
+                return;
+            }
+
+            execCommand(
+                "foreColor",
+                AppState.textColor
+            );
+
+            colorOverlay.style.display =
+                "none";
+
+            editor.focus();
+        }
+    );
 
 
 /* =========================================================
    HIGHLIGHT
 ========================================================= */
 
-$("opacityRange").addEventListener(
-    "input",
-    event => {
+$("opacityRange")
+    .addEventListener(
+        "input",
+        event => {
 
-        AppState.highlightOpacity =
-            Number(event.target.value)/100;
-    }
-);
+            AppState.highlightOpacity =
+                Number(
+                    event.target.value
+                ) / 100;
+        }
+    );
 
 
-function colorToRgba(color,opacity){
+function colorToRgba(
+    color,
+    opacity
+){
 
     const temp =
-        document.createElement("span");
+        document.createElement(
+            "span"
+        );
 
-    temp.style.color=color;
+    temp.style.color =
+        color;
 
-    document.body.appendChild(temp);
+    document.body.appendChild(
+        temp
+    );
 
     const computed =
-        getComputedStyle(temp).color;
+        getComputedStyle(
+            temp
+        ).color;
 
     temp.remove();
 
     const values =
-        computed.match(/\d+/g);
+        computed.match(
+            /\d+/g
+        );
 
-    if(!values || values.length<3){
+    if(
+        !values ||
+        values.length < 3
+    ){
         return color;
     }
 
-    return `rgba(${values[0]},${values[1]},${values[2]},${opacity})`;
+    return (
+        `rgba(${values[0]},${values[1]},${values[2]},${opacity})`
+    );
 }
 
 
-$("highlightButton").addEventListener(
-    "click",
-    () => {
+$("highlightButton")
+    .addEventListener(
+        "click",
+        () => {
 
-        saveSelection();
+            saveSelection();
 
-        highlightOverlay.style.display="flex";
-    }
-);
-
-
-$("highlightDone").addEventListener(
-    "click",
-    () => {
-
-        if(!restoreSelection()){
-            focusEditorEnd();
+            highlightOverlay.style.display =
+                "flex";
         }
+    );
 
-        const color =
-            colorToRgba(
-                AppState.highlightColor,
-                AppState.highlightOpacity
+
+$("highlightDone")
+    .addEventListener(
+        "click",
+        () => {
+
+            if(
+                !prepareEditorSelection()
+            ){
+                return;
+            }
+
+            const color =
+                colorToRgba(
+                    AppState.highlightColor,
+                    AppState.highlightOpacity
+                );
+
+            execCommand(
+                "hiliteColor",
+                color
             );
 
-        execCommand(
-            "hiliteColor",
-            color
-        );
+            highlightOverlay.style.display =
+                "none";
 
-        highlightOverlay.style.display="none";
-    }
-);
-
-
-$("removeHighlight").addEventListener(
-    "click",
-    () => {
-
-        if(!restoreSelection()){
-            focusEditorEnd();
+            editor.focus();
         }
+    );
 
-        execCommand(
-            "hiliteColor",
-            "transparent"
-        );
 
-        execCommand(
-            "backColor",
-            "transparent"
-        );
+$("removeHighlight")
+    .addEventListener(
+        "click",
+        () => {
 
-        highlightOverlay.style.display="none";
-    }
-);
+            if(
+                !prepareEditorSelection()
+            ){
+                return;
+            }
+
+            /*
+             * محاولة إزالة التمييز
+             * من المتصفحات المختلفة.
+             */
+
+            execCommand(
+                "hiliteColor",
+                "transparent"
+            );
+
+            execCommand(
+                "backColor",
+                "transparent"
+            );
+
+            highlightOverlay.style.display =
+                "none";
+
+            editor.focus();
+        }
+    );
 
 
 /* =========================================================
@@ -2134,189 +3183,285 @@ $("removeHighlight").addEventListener(
 
 function updateTableInfo(){
 
-    $("tableInfo").textContent =
+    $("tableInfo")
+        .textContent =
         `${AppState.tableRows} × ${AppState.tableCols}`;
 }
 
 
-function createTable(rows,cols){
+function createTable(
+    rows,
+    cols
+){
 
     const table =
-        document.createElement("table");
+        document.createElement(
+            "table"
+        );
 
     const tbody =
-        document.createElement("tbody");
+        document.createElement(
+            "tbody"
+        );
 
-    for(let r=0;r<rows;r++){
+    for(
+        let r = 0;
+        r < rows;
+        r++
+    ){
 
         const tr =
-            document.createElement("tr");
+            document.createElement(
+                "tr"
+            );
 
-        for(let c=0;c<cols;c++){
+        for(
+            let c = 0;
+            c < cols;
+            c++
+        ){
 
             const td =
-                document.createElement("td");
+                document.createElement(
+                    "td"
+                );
 
-            td.contentEditable="true";
-            td.innerHTML="<br>";
+            td.contentEditable =
+                "true";
 
-            tr.appendChild(td);
+            td.innerHTML =
+                "<br>";
+
+            tr.appendChild(
+                td
+            );
         }
 
-        tbody.appendChild(tr);
+        tbody.appendChild(
+            tr
+        );
     }
 
-    table.appendChild(tbody);
+    table.appendChild(
+        tbody
+    );
 
     return table;
 }
 
 
-function insertElement(element){
+function placeCaretAfterNode(
+    node
+){
 
-    if(!restoreSelection()){
-        focusEditorEnd();
+    const marker =
+        document.createTextNode(
+            "\u200B"
+        );
+
+    if(node.parentNode){
+
+        node.parentNode.insertBefore(
+            marker,
+            node.nextSibling
+        );
+    }
+
+    const range =
+        document.createRange();
+
+    range.setStart(
+        marker,
+        marker.length
+    );
+
+    range.collapse(true);
+
+    const selection =
+        window.getSelection();
+
+    selection.removeAllRanges();
+
+    selection.addRange(
+        range
+    );
+
+    AppState.savedRange =
+        range.cloneRange();
+}
+
+
+function insertElement(
+    element
+){
+
+    if(
+        !prepareEditorSelection()
+    ){
+
+        editor.appendChild(
+            element
+        );
+
+        placeCaretAfterNode(
+            element
+        );
+
+        return;
     }
 
     const selection =
         getSelection();
 
     if(!selection){
-        editor.appendChild(element);
-        focusEditorEnd();
+
+        editor.appendChild(
+            element
+        );
+
+        placeCaretAfterNode(
+            element
+        );
+
         return;
     }
 
     const range =
         selection.getRangeAt(0);
 
-    if(!rangeInsideEditor(range)){
-        editor.appendChild(element);
-        focusEditorEnd();
+    if(
+        !rangeInsideEditor(range)
+    ){
+
+        editor.appendChild(
+            element
+        );
+
+        placeCaretAfterNode(
+            element
+        );
+
         return;
     }
 
     range.deleteContents();
-    range.insertNode(element);
 
-    const marker =
-        document.createTextNode("\u200B");
-
-    element.parentNode.insertBefore(
-        marker,
-        element.nextSibling
+    range.insertNode(
+        element
     );
 
-    const newRange =
-        document.createRange();
-
-    newRange.setStart(
-        marker,
-        marker.length
+    placeCaretAfterNode(
+        element
     );
-
-    newRange.collapse(true);
-
-    selection.removeAllRanges();
-    selection.addRange(newRange);
-
-    AppState.savedRange =
-        newRange.cloneRange();
 }
 
 
-$("tableButton").addEventListener(
-    "click",
-    () => {
+$("tableButton")
+    .addEventListener(
+        "click",
+        () => {
 
-        saveSelection();
+            saveSelection();
 
-        AppState.tableRows=3;
-        AppState.tableCols=3;
+            AppState.tableRows =
+                3;
 
-        updateTableInfo();
+            AppState.tableCols =
+                3;
 
-        tableOverlay.style.display="flex";
-    }
-);
+            updateTableInfo();
+
+            tableOverlay.style.display =
+                "flex";
+        }
+    );
 
 
-$("tableRowsPlus").addEventListener(
-    "click",
-    () => {
+$("tableRowsPlus")
+    .addEventListener(
+        "click",
+        () => {
 
-        AppState.tableRows =
-            Math.min(
-                20,
-                AppState.tableRows+1
+            AppState.tableRows =
+                Math.min(
+                    20,
+                    AppState.tableRows + 1
+                );
+
+            updateTableInfo();
+        }
+    );
+
+
+$("tableRowsMinus")
+    .addEventListener(
+        "click",
+        () => {
+
+            AppState.tableRows =
+                Math.max(
+                    1,
+                    AppState.tableRows - 1
+                );
+
+            updateTableInfo();
+        }
+    );
+
+
+$("tableColsPlus")
+    .addEventListener(
+        "click",
+        () => {
+
+            AppState.tableCols =
+                Math.min(
+                    10,
+                    AppState.tableCols + 1
+                );
+
+            updateTableInfo();
+        }
+    );
+
+
+$("tableColsMinus")
+    .addEventListener(
+        "click",
+        () => {
+
+            AppState.tableCols =
+                Math.max(
+                    1,
+                    AppState.tableCols - 1
+                );
+
+            updateTableInfo();
+        }
+    );
+
+
+$("tableDone")
+    .addEventListener(
+        "click",
+        () => {
+
+            const table =
+                createTable(
+                    AppState.tableRows,
+                    AppState.tableCols
+                );
+
+            insertElement(
+                table
             );
 
-        updateTableInfo();
-    }
-);
+            tableOverlay.style.display =
+                "none";
 
-
-$("tableRowsMinus").addEventListener(
-    "click",
-    () => {
-
-        AppState.tableRows =
-            Math.max(
-                1,
-                AppState.tableRows-1
-            );
-
-        updateTableInfo();
-    }
-);
-
-
-$("tableColsPlus").addEventListener(
-    "click",
-    () => {
-
-        AppState.tableCols =
-            Math.min(
-                10,
-                AppState.tableCols+1
-            );
-
-        updateTableInfo();
-    }
-);
-
-
-$("tableColsMinus").addEventListener(
-    "click",
-    () => {
-
-        AppState.tableCols =
-            Math.max(
-                1,
-                AppState.tableCols-1
-            );
-
-        updateTableInfo();
-    }
-);
-
-
-$("tableDone").addEventListener(
-    "click",
-    () => {
-
-        insertElement(
-            createTable(
-                AppState.tableRows,
-                AppState.tableCols
-            )
-        );
-
-        tableOverlay.style.display="none";
-
-        editor.focus();
-    }
-);
+            editor.focus();
+        }
+    );
 
 
 /* =========================================================
@@ -2328,109 +3473,162 @@ function addMindBranch(){
     const container =
         $("mindBranches");
 
-    if(container.children.length>=12){
+    if(
+        container.children.length >= 12
+    ){
         return;
     }
 
     const input =
-        document.createElement("textarea");
+        document.createElement(
+            "textarea"
+        );
 
-    input.className="mind-input";
-    input.placeholder="فرع";
-    input.rows=2;
+    input.className =
+        "mind-input";
 
-    container.appendChild(input);
+    input.placeholder =
+        "فرع";
+
+    input.rows =
+        2;
+
+    container.appendChild(
+        input
+    );
 }
 
 
-$("mindMapButton").addEventListener(
-    "click",
-    () => {
+$("mindMapButton")
+    .addEventListener(
+        "click",
+        () => {
 
-        saveSelection();
+            saveSelection();
 
-        $("mindCenterInput").value="";
-        $("mindBranches").innerHTML="";
-
-        addMindBranch();
-        addMindBranch();
-
-        mindMapOverlay.style.display="flex";
-
-        setTimeout(
-            () => $("mindCenterInput").focus(),
-            50
-        );
-    }
-);
-
-
-$("mindAdd").addEventListener(
-    "click",
-    addMindBranch
-);
-
-
-$("mindDone").addEventListener(
-    "click",
-    () => {
-
-        const center =
             $("mindCenterInput")
-                .value
-                .trim() ||
-            "الفكرة الرئيسية";
+                .value = "";
 
-        const values =
-            Array.from(
-                document.querySelectorAll(
-                    "#mindBranches .mind-input"
-                )
-            )
-            .map(input => input.value.trim())
-            .filter(Boolean);
+            $("mindBranches")
+                .innerHTML = "";
 
-        const wrap =
-            document.createElement("div");
+            addMindBranch();
 
-        wrap.className="mind-map";
+            addMindBranch();
 
-        const centerBox =
-            document.createElement("div");
+            mindMapOverlay.style.display =
+                "flex";
 
-        centerBox.className="mind-center";
-        centerBox.textContent=center;
-
-        wrap.appendChild(centerBox);
-
-        if(values.length){
-
-            const branches =
-                document.createElement("div");
-
-            branches.className="mind-branches";
-
-            values.forEach(value => {
-
-                const branch =
-                    document.createElement("div");
-
-                branch.className="mind-branch";
-                branch.textContent=value;
-
-                branches.appendChild(branch);
-            });
-
-            wrap.appendChild(branches);
+            setTimeout(
+                () =>
+                    $("mindCenterInput")
+                        .focus(),
+                50
+            );
         }
+    );
 
-        insertElement(wrap);
 
-        mindMapOverlay.style.display="none";
+$("mindAdd")
+    .addEventListener(
+        "click",
+        addMindBranch
+    );
 
-        editor.focus();
-    }
-);
+
+$("mindDone")
+    .addEventListener(
+        "click",
+        () => {
+
+            const center =
+                $("mindCenterInput")
+                    .value
+                    .trim() ||
+                "الفكرة الرئيسية";
+
+            const values =
+                Array.from(
+                    document.querySelectorAll(
+                        "#mindBranches .mind-input"
+                    )
+                )
+                .map(
+                    input =>
+                        input.value.trim()
+                )
+                .filter(
+                    Boolean
+                );
+
+            const wrap =
+                document.createElement(
+                    "div"
+                );
+
+            wrap.className =
+                "mind-map";
+
+            const centerBox =
+                document.createElement(
+                    "div"
+                );
+
+            centerBox.className =
+                "mind-center";
+
+            centerBox.textContent =
+                center;
+
+            wrap.appendChild(
+                centerBox
+            );
+
+            if(values.length){
+
+                const branches =
+                    document.createElement(
+                        "div"
+                    );
+
+                branches.className =
+                    "mind-branches";
+
+                values.forEach(
+                    value => {
+
+                        const branch =
+                            document.createElement(
+                                "div"
+                            );
+
+                        branch.className =
+                            "mind-branch";
+
+                        branch.textContent =
+                            value;
+
+                        branches.appendChild(
+                            branch
+                        );
+                    }
+                );
+
+                wrap.appendChild(
+                    branches
+                );
+            }
+
+            insertElement(
+                wrap
+            );
+
+            mindMapOverlay.style.display =
+                "none";
+
+            editor.focus();
+        }
+    );
 
 
 /* =========================================================
@@ -2440,83 +3638,121 @@ $("mindDone").addEventListener(
 function clearSearchHighlights(){
 
     document
-        .querySelectorAll(".search-word")
-        .forEach(span => {
+        .querySelectorAll(
+            ".search-word"
+        )
+        .forEach(
+            span => {
 
-            const parent=span.parentNode;
+                const parent =
+                    span.parentNode;
 
-            if(!parent){
-                return;
+                if(!parent){
+                    return;
+                }
+
+                while(
+                    span.firstChild
+                ){
+
+                    parent.insertBefore(
+                        span.firstChild,
+                        span
+                    );
+                }
+
+                span.remove();
             }
-
-            while(span.firstChild){
-                parent.insertBefore(
-                    span.firstChild,
-                    span
-                );
-            }
-
-            span.remove();
-        });
+        );
 
     document
-        .querySelectorAll(".search-highlight")
-        .forEach(element =>
-            element.classList.remove(
-                "search-highlight"
-            )
+        .querySelectorAll(
+            ".search-highlight"
+        )
+        .forEach(
+            element =>
+                element.classList.remove(
+                    "search-highlight"
+                )
         );
 }
 
 
-function highlightTextNode(node,query){
+function highlightTextNode(
+    node,
+    query
+){
 
-    const text=node.nodeValue;
+    const text =
+        node.nodeValue;
 
-    if(!text || !query){
+    if(
+        !text ||
+        !query
+    ){
         return 0;
     }
 
-    const lower=text.toLocaleLowerCase();
-    const q=query.toLocaleLowerCase();
+    const lower =
+        text.toLocaleLowerCase();
 
-    let index=lower.indexOf(q);
+    const q =
+        query.toLocaleLowerCase();
 
-    if(index===-1){
+    let index =
+        lower.indexOf(q);
+
+    if(index === -1){
         return 0;
     }
 
-    const fragment=
+    const fragment =
         document.createDocumentFragment();
 
-    let last=0;
-    let count=0;
+    let last = 0;
 
-    while(index!==-1){
+    let count = 0;
+
+    while(index !== -1){
 
         fragment.appendChild(
             document.createTextNode(
-                text.slice(last,index)
+                text.slice(
+                    last,
+                    index
+                )
             )
         );
 
-        const mark=
-            document.createElement("span");
-
-        mark.className="search-word";
-        mark.textContent=
-            text.slice(
-                index,
-                index+query.length
+        const mark =
+            document.createElement(
+                "span"
             );
 
-        fragment.appendChild(mark);
+        mark.className =
+            "search-word";
+
+        mark.textContent =
+            text.slice(
+                index,
+                index + query.length
+            );
+
+        fragment.appendChild(
+            mark
+        );
 
         count++;
 
-        last=index+query.length;
+        last =
+            index +
+            query.length;
 
-        index=lower.indexOf(q,last);
+        index =
+            lower.indexOf(
+                q,
+                last
+            );
     }
 
     fragment.appendChild(
@@ -2534,21 +3770,26 @@ function highlightTextNode(node,query){
 }
 
 
-function highlightNote(content,query){
+function highlightNote(
+    content,
+    query
+){
 
-    let count=0;
+    let count = 0;
 
-    const walker=
+    const walker =
         document.createTreeWalker(
             content,
             NodeFilter.SHOW_TEXT
         );
 
-    const nodes=[];
+    const nodes = [];
 
     let node;
 
-    while(node=walker.nextNode()){
+    while(
+        (node = walker.nextNode())
+    ){
 
         if(
             node.parentElement &&
@@ -2566,18 +3807,23 @@ function highlightNote(content,query){
                     query.toLocaleLowerCase()
                 )
         ){
-            nodes.push(node);
+
+            nodes.push(
+                node
+            );
         }
     }
 
-    nodes.forEach(textNode => {
+    nodes.forEach(
+        textNode => {
 
-        count +=
-            highlightTextNode(
-                textNode,
-                query
-            );
-    });
+            count +=
+                highlightTextNode(
+                    textNode,
+                    query
+                );
+        }
+    );
 
     return count;
 }
@@ -2587,118 +3833,148 @@ function performSearch(){
 
     clearSearchHighlights();
 
-    const query=
+    const query =
         searchInput.value.trim();
 
     if(!query){
 
-        searchResult.textContent="";
+        searchResult.textContent =
+            "";
+
         return;
     }
 
-    const notes=
-        messages.querySelectorAll(".note");
+    const notes =
+        messages.querySelectorAll(
+            ".note"
+        );
 
-    let noteCount=0;
-    let matchCount=0;
-    let first=null;
+    let noteCount = 0;
 
-    notes.forEach(note => {
+    let matchCount = 0;
 
-        const content=
-            note.querySelector(".note-content");
+    let first = null;
 
-        if(!content){
-            return;
-        }
+    notes.forEach(
+        note => {
 
-        if(
-            content.textContent
-                .toLocaleLowerCase()
-                .includes(
-                    query.toLocaleLowerCase()
-                )
-        ){
+            const content =
+                note.querySelector(
+                    ".note-content"
+                );
 
-            noteCount++;
+            if(!content){
+                return;
+            }
 
-            if(!first){
-                first=note;
+            if(
+                content.textContent
+                    .toLocaleLowerCase()
+                    .includes(
+                        query.toLocaleLowerCase()
+                    )
+            ){
+
+                noteCount++;
+
+                if(!first){
+                    first = note;
+                }
             }
         }
-    });
+    );
 
     if(!first){
 
-        searchResult.textContent=
+        searchResult.textContent =
             "لم يتم العثور على النص";
 
         return;
     }
 
-    notes.forEach(note => {
+    notes.forEach(
+        note => {
 
-        const content=
-            note.querySelector(".note-content");
-
-        if(content){
-
-            matchCount +=
-                highlightNote(
-                    content,
-                    query
+            const content =
+                note.querySelector(
+                    ".note-content"
                 );
+
+            if(content){
+
+                matchCount +=
+                    highlightNote(
+                        content,
+                        query
+                    );
+            }
         }
-    });
+    );
 
     first.classList.add(
         "search-highlight"
     );
 
-    first.scrollIntoView({
-        behavior:"smooth",
-        block:"center"
-    });
+    try{
 
-    searchResult.textContent=
+        first.scrollIntoView({
+            behavior:"smooth",
+            block:"center"
+        });
+
+    }catch(error){
+
+        first.scrollIntoView();
+    }
+
+    searchResult.textContent =
         `تم العثور على ${matchCount} نتيجة في ${noteCount} ملاحظة`;
 }
 
 
-$("searchButton").addEventListener(
-    "click",
-    () => {
+$("searchButton")
+    .addEventListener(
+        "click",
+        () => {
 
-        searchInput.value="";
-        searchResult.textContent="";
+            searchInput.value =
+                "";
 
-        clearSearchHighlights();
+            searchResult.textContent =
+                "";
 
-        searchOverlay.style.display="flex";
+            clearSearchHighlights();
 
-        setTimeout(
-            () => searchInput.focus(),
-            50
-        );
-    }
-);
+            searchOverlay.style.display =
+                "flex";
 
-
-searchInput.addEventListener(
-    "input",
-    performSearch
-);
+            setTimeout(
+                () =>
+                    searchInput.focus(),
+                50
+            );
+        }
+    );
 
 
-$("searchDone").addEventListener(
-    "click",
-    () => {
+searchInput
+    .addEventListener(
+        "input",
+        performSearch
+    );
 
-        clearSearchHighlights();
 
-        searchOverlay.style.display="none";
-    }
-);
+$("searchDone")
+    .addEventListener(
+        "click",
+        () => {
+
+            clearSearchHighlights();
+
+            searchOverlay.style.display =
+                "none";
+        }
+    );
 
 
 /* =========================================================
@@ -2709,11 +3985,14 @@ function renderNotes(){
 
     clearSearchHighlights();
 
-    messages.innerHTML="";
+    messages.innerHTML =
+        "";
 
-    if(!AppState.notes.length){
+    if(
+        !AppState.notes.length
+    ){
 
-        messages.innerHTML=
+        messages.innerHTML =
             `<div class="empty">لا توجد ملاحظات بعد</div>`;
 
         return;
@@ -2722,17 +4001,32 @@ function renderNotes(){
     AppState.notes.forEach(
         (note,index) => {
 
-            const box=
-                document.createElement("article");
+            const box =
+                document.createElement(
+                    "article"
+                );
 
-            box.className="note";
+            box.className =
+                "note";
 
-            const menuButton=
-                document.createElement("button");
+            const menuButton =
+                document.createElement(
+                    "button"
+                );
 
-            menuButton.className="note-menu";
-            menuButton.type="button";
-            menuButton.textContent="⋮";
+            menuButton.className =
+                "note-menu";
+
+            menuButton.type =
+                "button";
+
+            menuButton.textContent =
+                "⋮";
+
+            menuButton.setAttribute(
+                "aria-label",
+                "خيارات الملاحظة"
+            );
 
             menuButton.addEventListener(
                 "click",
@@ -2740,7 +4034,8 @@ function renderNotes(){
 
                     event.stopPropagation();
 
-                    AppState.selectedIndex=index;
+                    AppState.selectedIndex =
+                        index;
 
                     openMessageMenu(
                         event.clientX,
@@ -2749,16 +4044,28 @@ function renderNotes(){
                 }
             );
 
-            const content=
-                document.createElement("div");
+            const content =
+                document.createElement(
+                    "div"
+                );
 
-            content.className="note-content";
-            content.innerHTML=note.html || "";
+            content.className =
+                "note-content";
 
-            box.appendChild(menuButton);
-            box.appendChild(content);
+            content.innerHTML =
+                note.html || "";
 
-            messages.appendChild(box);
+            box.appendChild(
+                menuButton
+            );
+
+            box.appendChild(
+                content
+            );
+
+            messages.appendChild(
+                box
+            );
         }
     );
 }
@@ -2768,39 +4075,55 @@ function renderNotes(){
    MENU
 ========================================================= */
 
-function openMessageMenu(x,y){
+function openMessageMenu(
+    x,
+    y
+){
 
-    messageMenu.style.display="block";
+    messageMenu.style.display =
+        "block";
 
-    const width=
-        messageMenu.offsetWidth || 145;
+    const width =
+        messageMenu.offsetWidth ||
+        145;
 
-    const height=
-        messageMenu.offsetHeight || 95;
+    const height =
+        messageMenu.offsetHeight ||
+        95;
 
-    let left=x-width;
-    let top=y;
+    let left =
+        x - width;
 
-    left=
+    let top =
+        y;
+
+    left =
         Math.max(
             5,
             Math.min(
                 left,
-                window.innerWidth-width-5
+                window.innerWidth -
+                width -
+                5
             )
         );
 
-    top=
+    top =
         Math.max(
             5,
             Math.min(
                 top,
-                window.innerHeight-height-5
+                window.innerHeight -
+                height -
+                5
             )
         );
 
-    messageMenu.style.left=left+"px";
-    messageMenu.style.top=top+"px";
+    messageMenu.style.left =
+        left + "px";
+
+    messageMenu.style.top =
+        top + "px";
 }
 
 
@@ -2809,10 +4132,16 @@ document.addEventListener(
     event => {
 
         if(
-            !event.target.closest(".menu") &&
-            !event.target.closest(".note-menu")
+            !event.target.closest(
+                ".menu"
+            ) &&
+            !event.target.closest(
+                ".note-menu"
+            )
         ){
-            messageMenu.style.display="none";
+
+            messageMenu.style.display =
+                "none";
         }
     }
 );
@@ -2824,203 +4153,256 @@ document.addEventListener(
 
 function resetEditor(){
 
-    AppState.editingIndex=-1;
-    AppState.savedRange=null;
+    AppState.editingIndex =
+        -1;
 
-    editor.innerHTML="";
+    AppState.savedRange =
+        null;
 
-    state.textContent="رسالة جديدة";
+    editor.innerHTML =
+        "";
 
-    AppState.fontSize=16;
-    AppState.alignment="right";
+    state.textContent =
+        "رسالة جديدة";
 
-    fontSizeBar.style.display="none";
-    listBar.style.display="none";
-    alignmentBar.style.display="none";
+    AppState.fontSize =
+        16;
+
+    AppState.alignment =
+        "right";
+
+    fontSizeBar.style.display =
+        "none";
+
+    listBar.style.display =
+        "none";
+
+    alignmentBar.style.display =
+        "none";
 
     document
-        .querySelectorAll(".tool")
-        .forEach(button =>
-            button.classList.remove("active")
+        .querySelectorAll(
+            ".tool"
+        )
+        .forEach(
+            button =>
+                button.classList.remove(
+                    "active"
+                )
         );
 
     updateFontSizeButtons();
+
     updateAlignmentButtons();
 }
 
 
 /* =========================================================
-   SAVE
+   SAVE NOTE
 ========================================================= */
 
-$("sendButton").addEventListener(
-    "click",
-    () => {
+$("sendButton")
+    .addEventListener(
+        "click",
+        () => {
 
-        if(!hasRealContent()){
-            return;
-        }
+            if(
+                !hasRealContent()
+            ){
+                editor.focus();
+                return;
+            }
 
-        const html=
-            cleanHtml(
-                editor.innerHTML
+            const html =
+                cleanHtml(
+                    editor.innerHTML
+                );
+
+            if(!html){
+                return;
+            }
+
+            const index =
+                AppState.editingIndex;
+
+            if(
+                index >= 0 &&
+                index < AppState.notes.length
+            ){
+
+                AppState.notes[index].html =
+                    html;
+
+            }else{
+
+                AppState.notes.push({
+                    html:html
+                });
+            }
+
+            if(
+                !saveNotes()
+            ){
+                return;
+            }
+
+            renderNotes();
+
+            resetEditor();
+
+            AppState.selectedIndex =
+                -1;
+
+            setTimeout(
+                () => {
+
+                    messages.scrollTop =
+                        messages.scrollHeight;
+
+                },
+                30
             );
-
-        if(!html){
-            return;
         }
-
-        const index=
-            AppState.editingIndex;
-
-        if(
-            index>=0 &&
-            index<AppState.notes.length
-        ){
-
-            AppState.notes[index].html=html;
-
-        }else{
-
-            AppState.notes.push({
-                html
-            });
-        }
-
-        if(!saveNotes()){
-            return;
-        }
-
-        renderNotes();
-        resetEditor();
-
-        AppState.selectedIndex=-1;
-
-        setTimeout(
-            () => {
-                messages.scrollTop=
-                    messages.scrollHeight;
-            },
-            30
-        );
-    }
-);
+    );
 
 
 /* =========================================================
    EDIT
 ========================================================= */
 
-$("editButton").addEventListener(
-    "click",
-    () => {
+$("editButton")
+    .addEventListener(
+        "click",
+        () => {
 
-        const index=
-            AppState.selectedIndex;
+            const index =
+                AppState.selectedIndex;
 
-        if(
-            index<0 ||
-            index>=AppState.notes.length
-        ){
-            return;
+            if(
+                index < 0 ||
+                index >= AppState.notes.length
+            ){
+                return;
+            }
+
+            AppState.editingIndex =
+                index;
+
+            editor.innerHTML =
+                AppState.notes[index].html ||
+                "";
+
+            state.textContent =
+                "✎ تعديل الملاحظة";
+
+            messageMenu.style.display =
+                "none";
+
+            setTimeout(
+                () => {
+
+                    focusEditorEnd();
+
+                    updateToolbar();
+
+                },
+                50
+            );
         }
-
-        AppState.editingIndex=index;
-
-        editor.innerHTML=
-            AppState.notes[index].html || "";
-
-        state.textContent=
-            "✎ تعديل الملاحظة";
-
-        messageMenu.style.display="none";
-
-        editor.focus();
-
-        setTimeout(() => {
-
-            focusEditorEnd();
-            updateToolbar();
-
-        },50);
-    }
-);
+    );
 
 
 /* =========================================================
    DELETE
 ========================================================= */
 
-$("deleteButton").addEventListener(
-    "click",
-    () => {
+$("deleteButton")
+    .addEventListener(
+        "click",
+        () => {
 
-        const index=
-            AppState.selectedIndex;
+            const index =
+                AppState.selectedIndex;
 
-        if(
-            index<0 ||
-            index>=AppState.notes.length
-        ){
-            return;
+            if(
+                index < 0 ||
+                index >= AppState.notes.length
+            ){
+                return;
+            }
+
+            const confirmed =
+                window.confirm(
+                    "هل تريدين حذف هذه الملاحظة؟"
+                );
+
+            if(!confirmed){
+
+                messageMenu.style.display =
+                    "none";
+
+                return;
+            }
+
+            AppState.notes.splice(
+                index,
+                1
+            );
+
+            if(
+                AppState.editingIndex ===
+                index
+            ){
+
+                resetEditor();
+
+            }else if(
+                AppState.editingIndex >
+                index
+            ){
+
+                AppState.editingIndex--;
+            }
+
+            AppState.selectedIndex =
+                -1;
+
+            saveNotes();
+
+            renderNotes();
+
+            messageMenu.style.display =
+                "none";
         }
-
-        if(
-            !window.confirm(
-                "هل تريدين حذف هذه الملاحظة؟"
-            )
-        ){
-
-            messageMenu.style.display="none";
-            return;
-        }
-
-        AppState.notes.splice(
-            index,
-            1
-        );
-
-        if(
-            AppState.editingIndex===index
-        ){
-
-            resetEditor();
-
-        }else if(
-            AppState.editingIndex>index
-        ){
-
-            AppState.editingIndex--;
-        }
-
-        AppState.selectedIndex=-1;
-
-        saveNotes();
-        renderNotes();
-
-        messageMenu.style.display="none";
-    }
-);
+    );
 
 
 /* =========================================================
    NEW / CANCEL
 ========================================================= */
 
-$("cancelButton").addEventListener(
-    "click",
-    resetEditor
-);
+$("cancelButton")
+    .addEventListener(
+        "click",
+        () => {
+
+            resetEditor();
+
+            editor.focus();
+        }
+    );
 
 
-$("newButton").addEventListener(
-    "click",
-    () => {
+$("newButton")
+    .addEventListener(
+        "click",
+        () => {
 
-        resetEditor();
-        editor.focus();
-    }
-);
+            resetEditor();
+
+            editor.focus();
+        }
+    );
 
 
 /* =========================================================
@@ -3028,38 +4410,57 @@ $("newButton").addEventListener(
 ========================================================= */
 
 document
-    .querySelectorAll(".overlay")
-    .forEach(overlay => {
+    .querySelectorAll(
+        ".overlay"
+    )
+    .forEach(
+        overlay => {
 
-        overlay.addEventListener(
-            "click",
-            event => {
+            overlay.addEventListener(
+                "click",
+                event => {
 
-                if(event.target===overlay){
+                    if(
+                        event.target ===
+                        overlay
+                    ){
 
-                    overlay.style.display="none";
+                        overlay.style.display =
+                            "none";
+
+                        /*
+                         * لا نفقد selection
+                         * المحفوظ في AppState.
+                         */
+                    }
                 }
-            }
-        );
-    });
+            );
+        }
+    );
 
 
 document.addEventListener(
     "keydown",
     event => {
 
-        if(event.key!=="Escape"){
+        if(
+            event.key !== "Escape"
+        ){
             return;
         }
 
         document
-            .querySelectorAll(".overlay")
+            .querySelectorAll(
+                ".overlay"
+            )
             .forEach(
                 overlay =>
-                    overlay.style.display="none"
+                    overlay.style.display =
+                        "none"
             );
 
-        messageMenu.style.display="none";
+        messageMenu.style.display =
+            "none";
     }
 );
 
@@ -3074,7 +4475,7 @@ editor.addEventListener(
 
         event.preventDefault();
 
-        const clipboard=
+        const clipboard =
             event.clipboardData ||
             window.clipboardData;
 
@@ -3082,123 +4483,177 @@ editor.addEventListener(
             return;
         }
 
-        const text=
-            clipboard.getData("text/plain");
+        const text =
+            clipboard.getData(
+                "text/plain"
+            );
 
-        if(!text){
+        if(
+            !text
+        ){
             return;
         }
 
-        if(!restoreSelection()){
-            focusEditorEnd();
+        if(
+            !prepareEditorSelection()
+        ){
+            return;
         }
 
-        const selection=getSelection();
+        const selection =
+            getSelection();
 
         if(!selection){
             return;
         }
 
-        const range=
+        const range =
             selection.getRangeAt(0);
 
-        if(!rangeInsideEditor(range)){
+        if(
+            !rangeInsideEditor(range)
+        ){
             return;
         }
 
         range.deleteContents();
 
-        const fragment=
+        const fragment =
             document.createDocumentFragment();
 
-        const lines=
+        const lines =
             text
-                .replace(/\r\n/g,"\n")
-                .replace(/\r/g,"\n")
+                .replace(
+                    /\r\n/g,
+                    "\n"
+                )
+                .replace(
+                    /\r/g,
+                    "\n"
+                )
                 .split("\n");
 
         lines.forEach(
             (line,index) => {
 
-                if(index>0){
+                if(index > 0){
 
                     fragment.appendChild(
-                        document.createElement("br")
+                        document.createElement(
+                            "br"
+                        )
                     );
                 }
 
                 fragment.appendChild(
-                    document.createTextNode(line)
+                    document.createTextNode(
+                        line
+                    )
                 );
             }
         );
 
-        range.insertNode(fragment);
-        range.collapse(false);
+        range.insertNode(
+            fragment
+        );
+
+        range.collapse(
+            false
+        );
 
         selection.removeAllRanges();
-        selection.addRange(range);
 
-        AppState.savedRange=
+        selection.addRange(
+            range
+        );
+
+        AppState.savedRange =
             range.cloneRange();
     }
 );
 
 
 /* =========================================================
-   TABLE TAB
+   TABLE TAB NAVIGATION
 ========================================================= */
 
 editor.addEventListener(
     "keydown",
     event => {
 
-        const cell=
+        const cell =
+            event.target &&
             event.target.closest &&
-            event.target.closest("td,th");
+            event.target.closest(
+                "td,th"
+            );
 
         if(!cell){
             return;
         }
 
-        if(event.key==="Tab"){
+        if(
+            event.key === "Tab"
+        ){
 
             event.preventDefault();
 
-            const cells=
+            const table =
+                cell.closest(
+                    "table"
+                );
+
+            if(!table){
+                return;
+            }
+
+            const cells =
                 Array.from(
-                    editor.querySelectorAll(
-                        "table td,table th"
+                    table.querySelectorAll(
+                        "td,th"
                     )
                 );
 
-            const index=cells.indexOf(cell);
+            const index =
+                cells.indexOf(
+                    cell
+                );
 
-            const next=
-                cells[
-                    event.shiftKey
-                        ? index-1
-                        : index+1
-                ];
+            const nextIndex =
+                event.shiftKey
+                    ? index - 1
+                    : index + 1;
+
+            const next =
+                cells[nextIndex];
 
             if(next){
 
                 next.focus();
 
-                const range=
+                const range =
                     document.createRange();
 
-                range.selectNodeContents(next);
-                range.collapse(false);
+                range.selectNodeContents(
+                    next
+                );
 
-                const selection=
+                range.collapse(
+                    false
+                );
+
+                const selection =
                     window.getSelection();
 
                 selection.removeAllRanges();
-                selection.addRange(range);
 
-                AppState.savedRange=
+                selection.addRange(
+                    range
+                );
+
+                AppState.savedRange =
                     range.cloneRange();
+
             }
         }
     }
@@ -3206,18 +4661,69 @@ editor.addEventListener(
 
 
 /* =========================================================
-   INIT
+   TABLE CELL SELECTION
+========================================================= */
+
+editor.addEventListener(
+    "focusin",
+    event => {
+
+        if(
+            event.target.closest &&
+            event.target.closest(
+                "td,th"
+            )
+        ){
+
+            setTimeout(
+                saveSelection,
+                0
+            );
+        }
+    }
+);
+
+
+/* =========================================================
+   WINDOW RESIZE
+========================================================= */
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        /*
+         * إعادة حساب موضع قوائم
+         * الأدوات عند تدوير الهاتف.
+         */
+
+        if(
+            messageMenu.style.display ===
+            "block"
+        ){
+
+            messageMenu.style.display =
+                "none";
+        }
+    }
+);
+
+
+/* =========================================================
+   INITIALIZATION
 ========================================================= */
 
 loadNotes();
+
 renderNotes();
 
 updateFontSizeButtons();
+
 updateAlignmentButtons();
+
 updateTableInfo();
 
 </script>
 
 </body>
 </html>
-```
