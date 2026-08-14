@@ -239,9 +239,9 @@ display:none;
 }
 
 .font-size-item{
-flex:0 0 38px;
-width:38px;
-height:34px;
+flex:0 0 34px;
+width:34px;
+height:32px;
 border:1px solid #444955;
 border-radius:8px;
 background:#292e39;
@@ -510,10 +510,10 @@ color:#fff;
 
 .editor table,
 .note table{
-width:100%;
+width:max-content;
 max-width:100%;
 border-collapse:collapse;
-table-layout:fixed;
+table-layout:auto;
 margin:8px 0;
 }
 
@@ -1169,7 +1169,7 @@ let selectedIndex = -1;
 
 let savedRange = null;
 
-let currentFontSize = 18;
+let currentFontSize = 8;
 
 let currentAlignment = "right";
 
@@ -2376,19 +2376,23 @@ function applyFontSize(size){
 currentFontSize =
 size;
 
-restoreSelection();
+const range =
+savedRange;
+
+if(
+range &&
+!range.collapsed &&
+selectionIsInsideEditor(range)
+){
 
 const selection =
 window.getSelection();
 
-if(
-selection &&
-selection.rangeCount > 0 &&
-!selection.isCollapsed &&
-selectionIsInsideEditor(
-selection.getRangeAt(0)
-)
-){
+selection.removeAllRanges();
+
+selection.addRange(
+range.cloneRange()
+);
 
 document.execCommand(
 "fontSize",
@@ -2402,7 +2406,7 @@ editor.querySelectorAll(
 );
 
 fonts.forEach(
-font=>{
+function(font){
 
 font.removeAttribute("size");
 
@@ -2411,6 +2415,67 @@ size + "px";
 
 });
 
+saveSelection();
+
+}else{
+
+editor.focus();
+restoreSelection();
+
+const selection =
+window.getSelection();
+
+if(
+selection &&
+selection.rangeCount > 0
+){
+
+const range =
+selection.getRangeAt(0);
+
+if(
+selectionIsInsideEditor(range) &&
+range.collapsed
+){
+
+const span =
+document.createElement("span");
+
+span.style.fontSize =
+size + "px";
+
+const textNode =
+document.createTextNode(
+"\u200B"
+);
+
+span.appendChild(textNode);
+
+range.insertNode(span);
+
+const newRange =
+document.createRange();
+
+newRange.setStart(
+textNode,
+textNode.length
+);
+
+newRange.collapse(true);
+
+selection.removeAllRanges();
+
+selection.addRange(
+newRange
+);
+
+savedRange =
+newRange.cloneRange();
+
+}
+
+}
+
 }
 
 fontSizeBar.style.display =
@@ -2418,7 +2483,7 @@ fontSizeBar.style.display =
 
 editor.focus();
 
-saveSelection();
+updateToolbarState();
 
 updateFontSizeButtons();
 
@@ -3285,7 +3350,7 @@ state.textContent =
 
 savedRange = null;
 
-currentFontSize = 18;
+currentFontSize = 8;
 
 currentAlignment =
 "right";
@@ -3485,7 +3550,7 @@ document
 .getElementById("underlineButton")
 .classList.remove("active");
 
-currentFontSize = 18;
+currentFontSize = 8;
 
 currentAlignment =
 "right";
