@@ -209,6 +209,10 @@ let savedRange=null;
 let currentFontSize=8;
 let currentAlignment="right";
 
+/* حالة التمييز */
+let highlightEnabled=false;
+let highlightColorForTyping="rgba(255,255,0,.60)";
+
 const editor=document.getElementById("editor");
 const messages=document.getElementById("messages");
 const state=document.getElementById("state");
@@ -303,15 +307,24 @@ updateToolbarState();
 }
 
 document.getElementById("boldButton").addEventListener("click",function(){
-saveSelection();command("bold");editor.focus();updateToolbarState();
+saveSelection();
+command("bold");
+editor.focus();
+updateToolbarState();
 });
 
 document.getElementById("italicButton").addEventListener("click",function(){
-saveSelection();command("italic");editor.focus();updateToolbarState();
+saveSelection();
+command("italic");
+editor.focus();
+updateToolbarState();
 });
 
 document.getElementById("underlineButton").addEventListener("click",function(){
-saveSelection();command("underline");editor.focus();updateToolbarState();
+saveSelection();
+command("underline");
+editor.focus();
+updateToolbarState();
 });
 
 /* ==========================
@@ -358,22 +371,26 @@ updateToolbarState();
 });
 
 editor.addEventListener("mouseup",function(){
-saveSelection();updateToolbarState();
+saveSelection();
+updateToolbarState();
 });
 
 editor.addEventListener("keyup",function(){
-saveSelection();updateToolbarState();
+saveSelection();
+updateToolbarState();
 });
 
 editor.addEventListener("touchend",function(){
 setTimeout(function(){
-saveSelection();updateToolbarState();
+saveSelection();
+updateToolbarState();
 },120);
 });
 
 editor.addEventListener("input",function(){
 setTimeout(function(){
-saveSelection();updateToolbarState();
+saveSelection();
+updateToolbarState();
 },0);
 });
 
@@ -389,18 +406,25 @@ updateToolbarState();
 });
 
 function hsvToRgb(h,s,v){
-s/=100;v/=100;
+s/=100;
+v/=100;
 const c=v*s;
 const x=c*(1-Math.abs((h/60)%2-1));
 const m=v-c;
 let r=0,g=0,b=0;
+
 if(h<60){r=c;g=x}
 else if(h<120){r=x;g=c}
 else if(h<180){g=c;b=x}
 else if(h<240){g=x;b=c}
 else if(h<300){r=x;b=c}
 else{r=c;b=x}
-return{r:Math.round((r+m)*255),g:Math.round((g+m)*255),b:Math.round((b+m)*255)};
+
+return{
+r:Math.round((r+m)*255),
+g:Math.round((g+m)*255),
+b:Math.round((b+m)*255)
+};
 }
 
 function rgbString(rgb){
@@ -412,324 +436,555 @@ function setupAdvancedColorWheel(wheel,hueMarker,colorMarker,initialHue,callback
 let hue=initialHue,saturation=100,value=100;
 
 function setColor(){
+
 wheel.style.setProperty("--hue",hue);
+
 const rgb=hsvToRgb(hue,saturation,value);
+
 colorMarker.style.background=rgbString(rgb);
+
 callback(rgbString(rgb));
+
 }
 
 function setHue(event){
+
 const rect=wheel.getBoundingClientRect();
+
 const cx=rect.left+rect.width/2;
 const cy=rect.top+rect.height/2;
+
 let dx=event.clientX-cx;
 let dy=event.clientY-cy;
+
 let angle=Math.atan2(dy,dx)*180/Math.PI;
+
 angle=(angle+90+360)%360;
+
 hue=angle;
+
 const radius=Math.min(rect.width,rect.height)/2;
 const ringRadius=radius*.89;
+
 const x=cx+Math.sin(hue*Math.PI/180)*ringRadius;
 const y=cy-Math.cos(hue*Math.PI/180)*ringRadius;
+
 hueMarker.style.left=((x-rect.left)/rect.width*100)+"%";
 hueMarker.style.top=((y-rect.top)/rect.height*100)+"%";
+
 setColor();
+
 }
 
 function setSV(event){
+
 const rect=wheel.getBoundingClientRect();
+
 const innerLeft=rect.width*.13;
 const innerTop=rect.height*.13;
 const innerWidth=rect.width*.74;
 const innerHeight=rect.height*.74;
+
 let x=event.clientX-rect.left-innerLeft;
 let y=event.clientY-rect.top-innerTop;
+
 x=Math.max(0,Math.min(innerWidth,x));
 y=Math.max(0,Math.min(innerHeight,y));
+
 saturation=x/innerWidth*100;
 value=100-y/innerHeight*100;
+
 const markerX=innerLeft+x;
 const markerY=innerTop+y;
+
 colorMarker.style.left=(markerX/rect.width*100)+"%";
 colorMarker.style.top=(markerY/rect.height*100)+"%";
+
 setColor();
+
 }
 
 let hueDragging=false,svDragging=false;
 
 wheel.addEventListener("pointerdown",function(event){
+
 const rect=wheel.getBoundingClientRect();
+
 const cx=rect.left+rect.width/2;
 const cy=rect.top+rect.height/2;
-const distance=Math.sqrt(Math.pow(event.clientX-cx,2)+Math.pow(event.clientY-cy,2));
+
+const distance=Math.sqrt(
+Math.pow(event.clientX-cx,2)+
+Math.pow(event.clientY-cy,2)
+);
+
 const radius=Math.min(rect.width,rect.height)/2;
-if(distance>radius*.78)hueDragging=true;
-else svDragging=true;
+
+if(distance>radius*.78){
+hueDragging=true;
+}else{
+svDragging=true;
+}
+
 wheel.setPointerCapture(event.pointerId);
+
 if(hueDragging)setHue(event);
 else setSV(event);
+
 event.preventDefault();
+
 });
 
 wheel.addEventListener("pointermove",function(event){
+
 if(hueDragging)setHue(event);
 if(svDragging)setSV(event);
+
 event.preventDefault();
+
 });
 
 wheel.addEventListener("pointerup",function(event){
-hueDragging=false;svDragging=false;
-try{wheel.releasePointerCapture(event.pointerId)}catch(e){}
+
+hueDragging=false;
+svDragging=false;
+
+try{
+wheel.releasePointerCapture(event.pointerId);
+}catch(e){}
+
 });
 
 wheel.addEventListener("pointercancel",function(){
-hueDragging=false;svDragging=false;
+
+hueDragging=false;
+svDragging=false;
+
 });
 
 setColor();
+
 }
 
 const colorOverlay=document.getElementById("colorOverlay");
 const textColorWheel=document.getElementById("textColorWheel");
 const textHueMarker=document.getElementById("textHueMarker");
 const textColorMarker=document.getElementById("textColorMarker");
+
 let chosenTextColor="rgb(255,255,255)";
 
-setupAdvancedColorWheel(textColorWheel,textHueMarker,textColorMarker,0,function(color){
+setupAdvancedColorWheel(
+textColorWheel,
+textHueMarker,
+textColorMarker,
+0,
+function(color){
 chosenTextColor=color;
-});
+}
+);
 
 document.getElementById("blackText").addEventListener("click",function(){
+
 chosenTextColor="rgb(0,0,0)";
 textColorMarker.style.background="#000";
+
 });
 
 document.getElementById("whiteText").addEventListener("click",function(){
+
 chosenTextColor="rgb(255,255,255)";
 textColorMarker.style.background="#fff";
+
 });
 
 document.getElementById("colorButton").addEventListener("click",function(){
+
 saveSelection();
 colorOverlay.style.display="flex";
+
 });
 
 document.getElementById("colorDone").addEventListener("click",function(){
+
 restoreSelection();
+
 if(savedRange){
+
 const selection=window.getSelection();
+
 selection.removeAllRanges();
 selection.addRange(savedRange);
-document.execCommand("foreColor",false,chosenTextColor);
+
+document.execCommand(
+"foreColor",
+false,
+chosenTextColor
+);
+
 saveSelection();
+
 }
+
 colorOverlay.style.display="none";
 editor.focus();
+
 });
+
+/* ==========================
+   تمييز النص
+========================== */
 
 const highlightOverlay=document.getElementById("highlightOverlay");
 const highlightColorWheel=document.getElementById("highlightColorWheel");
 const highlightHueMarker=document.getElementById("highlightHueMarker");
 const highlightColorMarker=document.getElementById("highlightColorMarker");
+const opacityRange=document.getElementById("opacityRange");
+
 let chosenHighlightColor="rgb(255,255,0)";
 let highlightOpacity=.60;
 
 function hexWithOpacity(color,opacity){
+
 const temp=document.createElement("span");
+
 temp.style.color=color;
+
 document.body.appendChild(temp);
+
 const rgb=getComputedStyle(temp).color;
+
 temp.remove();
+
 const match=rgb.match(/\d+/g);
+
 if(!match)return color;
+
 return `rgba(${match[0]},${match[1]},${match[2]},${opacity})`;
+
 }
 
-setupAdvancedColorWheel(highlightColorWheel,highlightHueMarker,highlightColorMarker,60,function(color){
-chosenHighlightColor=color;
-});
+setupAdvancedColorWheel(
+highlightColorWheel,
+highlightHueMarker,
+highlightColorMarker,
+60,
+function(color){
 
-document.getElementById("opacityRange").addEventListener("input",function(event){
+chosenHighlightColor=color;
+
+}
+);
+
+opacityRange.addEventListener("input",function(event){
+
 highlightOpacity=Number(event.target.value)/100;
+
 });
 
 document.getElementById("highlightButton").addEventListener("click",function(){
+
 saveSelection();
+
 highlightOverlay.style.display="flex";
-});
-
-document.getElementById("highlightDone").addEventListener("click",function(){
-restoreSelection();
-if(savedRange){
-const selection=window.getSelection();
-selection.removeAllRanges();
-selection.addRange(savedRange);
-const color=hexWithOpacity(chosenHighlightColor,highlightOpacity);
-document.execCommand("hiliteColor",false,color);
-saveSelection();
-}
-highlightOverlay.style.display="none";
-editor.focus();
-});
-
-/* ==========================
-   بدون تمييز
-========================== */
-
-document.getElementById("removeHighlight").addEventListener("click",function(){
-
-restoreSelection();
-
-if(savedRange){
-
-const range=savedRange.cloneRange();
-
-/* استخراج النص المحدد */
-const fragment=range.extractContents();
-
-/* إزالة لون الخلفية فقط من كل العناصر */
-const elements=fragment.querySelectorAll("*");
-
-elements.forEach(function(element){
-
-element.style.backgroundColor="";
-element.style.background="";
-
-if(!element.getAttribute("style")){
-element.removeAttribute("style");
-}
 
 });
-
-/* إعادة النص بعد إزالة التمييز */
-range.insertNode(fragment);
-
-/* وضع المؤشر بعد النص */
-range.collapse(false);
-
-const selection=window.getSelection();
-selection.removeAllRanges();
-selection.addRange(range);
 
 /*
-   إنشاء مكان كتابة جديد بدون تمييز
-   حتى لا يرث المؤشر لون الخلفية القديم
+   تم:
+   يطبق التمييز على النص المحدد،
+   ويجعل التمييز هو الحالة الحالية
+   للكتابة التالية.
 */
-const cleanSpan=document.createElement("span");
-cleanSpan.style.backgroundColor="transparent";
+document.getElementById("highlightDone").addEventListener("click",function(){
 
-const zero=document.createTextNode("\u200B");
+highlightEnabled=true;
 
-cleanSpan.appendChild(zero);
-range.insertNode(cleanSpan);
+highlightColorForTyping=hexWithOpacity(
+chosenHighlightColor,
+highlightOpacity
+);
 
-const newRange=document.createRange();
-newRange.setStart(zero,1);
-newRange.collapse(true);
+restoreSelection();
+
+if(savedRange){
+
+const selection=window.getSelection();
 
 selection.removeAllRanges();
-selection.addRange(newRange);
+selection.addRange(savedRange);
 
-savedRange=newRange.cloneRange();
+document.execCommand(
+"backColor",
+false,
+highlightColorForTyping
+);
+
+saveSelection();
+
 }
 
-/* إغلاق النافذة */
-highlightOverlay.style.display="none";
+/*
+   لو مفيش تحديد، نضع حالة التمييز
+   عند المؤشر للكتابة الجديدة.
+*/
+if(!savedRange||savedRange.collapsed){
 
-/* التركيز على المحرر */
 editor.focus();
 
-/* التأكد أن التمييز القادم غير موجود */
 try{
-document.execCommand("hiliteColor",false,"transparent");
-document.execCommand("backColor",false,"transparent");
+
+document.execCommand(
+"backColor",
+false,
+highlightColorForTyping
+);
+
+}catch(e){}
+
+}
+
+highlightOverlay.style.display="none";
+
+editor.focus();
+
+});
+
+/*
+   بدون تمييز:
+   1- يشيل التمييز من النص المحدد.
+   2- يقفل التمييز للكتابة الجديدة.
+   3- يضع المؤشر في وضع شفاف.
+*/
+document.getElementById("removeHighlight").addEventListener("click",function(){
+
+highlightEnabled=false;
+
+restoreSelection();
+
+if(savedRange){
+
+const selection=window.getSelection();
+
+selection.removeAllRanges();
+selection.addRange(savedRange);
+
+document.execCommand(
+"backColor",
+false,
+"transparent"
+);
+
+document.execCommand(
+"hiliteColor",
+false,
+"transparent"
+);
+
+saveSelection();
+
+}
+
+/*
+   وضع المؤشر على كتابة بدون تمييز.
+*/
+editor.focus();
+
+const selection=window.getSelection();
+
+if(selection&&selection.rangeCount>0){
+
+const range=selection.getRangeAt(0);
+
+if(selectionIsInsideEditor(range)){
+
+try{
+
+document.execCommand(
+"backColor",
+false,
+"transparent"
+);
+
+}catch(e){}
+
+try{
+
+document.execCommand(
+"hiliteColor",
+false,
+"transparent"
+);
+
 }catch(e){}
 
 saveSelection();
 
+}
+
+}
+
+highlightOverlay.style.display="none";
+
+editor.focus();
+
 });
 
-const fontSizes=[8,9,10,11,12,14,16,18,20,22,24,26,28,32,36,40,48,56,64,72];
+/* ==========================
+   أحجام الخط
+========================== */
+
+const fontSizes=[
+8,9,10,11,12,14,16,18,20,22,24,26,28,32,36,40,48,56,64,72
+];
 
 fontSizes.forEach(function(size){
+
 const button=document.createElement("button");
+
 button.className="font-size-item";
 button.textContent=size;
+
 button.addEventListener("click",function(){
 applyFontSize(size);
 });
+
 fontSizeBar.appendChild(button);
+
 });
 
 function updateFontSizeButtons(){
+
 fontSizeBar.querySelectorAll(".font-size-item").forEach(button=>{
-button.classList.toggle("active",Number(button.textContent)===currentFontSize);
+
+button.classList.toggle(
+"active",
+Number(button.textContent)===currentFontSize
+);
+
 });
+
 }
 
 function applyFontSize(size){
+
 currentFontSize=size;
+
 const range=savedRange;
+
 if(range&&!range.collapsed&&selectionIsInsideEditor(range)){
+
 const selection=window.getSelection();
+
 selection.removeAllRanges();
 selection.addRange(range.cloneRange());
+
 document.execCommand("fontSize",false,"7");
+
 const fonts=editor.querySelectorAll('font[size="7"]');
+
 fonts.forEach(function(font){
+
 font.removeAttribute("size");
 font.style.fontSize=size+"px";
+
 });
+
 saveSelection();
+
 }else{
+
 editor.focus();
 restoreSelection();
+
 const selection=window.getSelection();
+
 if(selection&&selection.rangeCount>0){
+
 const range=selection.getRangeAt(0);
+
 if(selectionIsInsideEditor(range)&&range.collapsed){
+
 const span=document.createElement("span");
+
 span.style.fontSize=size+"px";
+
 const textNode=document.createTextNode("\u200B");
+
 span.appendChild(textNode);
+
 range.insertNode(span);
+
 const newRange=document.createRange();
+
 newRange.setStart(textNode,textNode.length);
 newRange.collapse(true);
+
 selection.removeAllRanges();
 selection.addRange(newRange);
+
 savedRange=newRange.cloneRange();
+
 }
+
 }
+
 }
+
 fontSizeBar.style.display="none";
 editor.focus();
+
 updateToolbarState();
 updateFontSizeButtons();
+
 }
 
 document.getElementById("sizeButton").addEventListener("click",function(){
+
 saveSelection();
+
 updateFontSizeButtons();
+
 fontSizeBar.style.display="flex";
 alignmentBar.style.display="none";
+
 setTimeout(function(){
-const active=fontSizeBar.querySelector(".font-size-item.active");
-if(active)active.scrollIntoView({behavior:"smooth",block:"nearest",inline:"center"});
-},20);
+
+const active=fontSizeBar.querySelector(
+".font-size-item.active"
+);
+
+if(active){
+
+active.scrollIntoView({
+behavior:"smooth",
+block:"nearest",
+inline:"center"
 });
 
+}
+
+},20);
+
+});
+
+/* ==========================
+   القوائم
+========================== */
+
 let listBar=document.createElement("div");
+
 listBar.className="font-size-bar";
 listBar.id="listBar";
 listBar.style.direction="rtl";
 
 const bulletList=document.createElement("button");
+
 bulletList.className="font-size-item";
 bulletList.textContent="•";
 bulletList.title="تنقيط";
 
 const numberList=document.createElement("button");
+
 numberList.className="font-size-item";
 numberList.textContent="١.";
 numberList.title="ترقيم";
@@ -737,237 +992,430 @@ numberList.title="ترقيم";
 listBar.appendChild(bulletList);
 listBar.appendChild(numberList);
 
-document.querySelector(".editor-area").insertBefore(listBar,fontSizeBar);
+document.querySelector(".editor-area").insertBefore(
+listBar,
+fontSizeBar
+);
 
 document.getElementById("listButton").addEventListener("click",function(){
+
 saveSelection();
+
 fontSizeBar.style.display="none";
 alignmentBar.style.display="none";
 listBar.style.display="flex";
+
 });
 
 bulletList.addEventListener("click",function(){
+
 command("insertUnorderedList");
+
 listBar.style.display="none";
+
 editor.focus();
+
 });
 
 numberList.addEventListener("click",function(){
+
 command("insertOrderedList");
+
 listBar.style.display="none";
+
 editor.focus();
+
 });
 
+/* ==========================
+   المحاذاة
+========================== */
+
 document.getElementById("alignmentButton").addEventListener("click",function(){
+
 saveSelection();
+
 fontSizeBar.style.display="none";
 listBar.style.display="none";
 alignmentBar.style.display="flex";
+
 });
 
 alignmentBar.querySelectorAll(".align-item").forEach(button=>{
+
 button.addEventListener("click",function(){
+
 const align=button.dataset.align;
+
 currentAlignment=align;
-command("justify"+(align==="right"?"Right":align==="left"?"Left":"Center"));
-alignmentBar.querySelectorAll(".align-item").forEach(b=>b.classList.remove("active"));
+
+command(
+"justify"+
+(
+align==="right"
+?"Right"
+:
+align==="left"
+?"Left"
+:
+"Center"
+)
+);
+
+alignmentBar.querySelectorAll(".align-item")
+.forEach(b=>b.classList.remove("active"));
+
 button.classList.add("active");
+
 alignmentBar.style.display="none";
+
 editor.focus();
+
 });
+
 });
+
+/* ==========================
+   الجدول
+========================== */
 
 const tableOverlay=document.getElementById("tableOverlay");
 const tableInfo=document.getElementById("tableInfo");
-let tableRows=3,tableCols=3;
+
+let tableRows=3;
+let tableCols=3;
 
 function updateTableInfo(){
-tableInfo.textContent=tableRows+" × "+tableCols;
+
+tableInfo.textContent=
+tableRows+" × "+tableCols;
+
 }
 
 function createTable(rows,cols){
+
 const table=document.createElement("table");
 const tbody=document.createElement("tbody");
+
 for(let r=0;r<rows;r++){
+
 const tr=document.createElement("tr");
+
 for(let c=0;c<cols;c++){
+
 const td=document.createElement("td");
+
 td.contentEditable="true";
 td.innerHTML="<br>";
+
 tr.appendChild(td);
+
 }
+
 tbody.appendChild(tr);
+
 }
+
 table.appendChild(tbody);
+
 return table;
+
 }
 
 document.getElementById("tableButton").addEventListener("click",function(){
+
 saveSelection();
+
 tableRows=3;
 tableCols=3;
+
 updateTableInfo();
+
 tableOverlay.style.display="flex";
+
 });
 
 document.getElementById("tableRowsPlus").addEventListener("click",function(){
+
 tableRows=Math.min(20,tableRows+1);
+
 updateTableInfo();
+
 });
 
 document.getElementById("tableRowsMinus").addEventListener("click",function(){
+
 tableRows=Math.max(1,tableRows-1);
+
 updateTableInfo();
+
 });
 
 document.getElementById("tableColsPlus").addEventListener("click",function(){
+
 tableCols=Math.min(10,tableCols+1);
+
 updateTableInfo();
+
 });
 
 document.getElementById("tableColsMinus").addEventListener("click",function(){
+
 tableCols=Math.max(1,tableCols-1);
+
 updateTableInfo();
+
 });
 
 document.getElementById("tableDone").addEventListener("click",function(){
+
 restoreSelection();
-const table=createTable(tableRows,tableCols);
+
+const table=createTable(
+tableRows,
+tableCols
+);
+
 if(savedRange){
+
 const range=savedRange.cloneRange();
+
 range.collapse(false);
+
 range.insertNode(table);
+
 range.setStartAfter(table);
+
 range.collapse(true);
+
 const selection=window.getSelection();
+
 selection.removeAllRanges();
 selection.addRange(range);
+
 savedRange=range.cloneRange();
+
 }else{
+
 editor.appendChild(table);
+
 }
+
 tableOverlay.style.display="none";
+
 editor.focus();
+
 });
+
+/* ==========================
+   الخريطة الذهنية
+========================== */
 
 const mindMapOverlay=document.getElementById("mindMapOverlay");
 const mindCenterInput=document.getElementById("mindCenterInput");
 const mindBranches=document.getElementById("mindBranches");
 
 function addMindBranch(){
+
 const input=document.createElement("textarea");
+
 input.className="mind-input";
 input.placeholder="فرع";
 input.rows=2;
+
 mindBranches.appendChild(input);
+
 }
 
 document.getElementById("mindMapButton").addEventListener("click",function(){
+
 saveSelection();
+
 mindCenterInput.value="";
 mindBranches.innerHTML="";
+
 addMindBranch();
 addMindBranch();
+
 mindMapOverlay.style.display="flex";
-setTimeout(function(){mindCenterInput.focus()},50);
+
+setTimeout(function(){
+mindCenterInput.focus();
+},50);
+
 });
 
 document.getElementById("mindAdd").addEventListener("click",function(){
-if(mindBranches.children.length<12)addMindBranch();
+
+if(mindBranches.children.length<12){
+addMindBranch();
+}
+
 });
 
 document.getElementById("mindDone").addEventListener("click",function(){
-const center=mindCenterInput.value.trim()||"الفكرة الرئيسية";
-const values=[...mindBranches.querySelectorAll(".mind-input")].map(input=>input.value.trim()).filter(Boolean);
+
+const center=
+mindCenterInput.value.trim()||
+"الفكرة الرئيسية";
+
+const values=[
+...mindBranches.querySelectorAll(".mind-input")
+]
+.map(input=>input.value.trim())
+.filter(Boolean);
 
 const wrap=document.createElement("div");
+
 wrap.className="mind-map";
 
 const centerBox=document.createElement("div");
+
 centerBox.className="mind-center";
 centerBox.textContent=center;
+
 wrap.appendChild(centerBox);
 
 if(values.length){
+
 const branches=document.createElement("div");
+
 branches.className="mind-branches";
+
 values.forEach(value=>{
+
 const branch=document.createElement("div");
+
 branch.className="mind-branch";
 branch.textContent=value;
+
 branches.appendChild(branch);
+
 });
+
 wrap.appendChild(branches);
+
 }
 
 restoreSelection();
 
 if(savedRange){
+
 const range=savedRange.cloneRange();
+
 range.collapse(false);
 range.insertNode(wrap);
+
 range.setStartAfter(wrap);
 range.collapse(true);
+
 const selection=window.getSelection();
+
 selection.removeAllRanges();
 selection.addRange(range);
+
 savedRange=range.cloneRange();
+
 }else{
+
 editor.appendChild(wrap);
+
 }
 
 mindMapOverlay.style.display="none";
+
 editor.focus();
+
 });
+
+/* ==========================
+   البحث
+========================== */
 
 const searchOverlay=document.getElementById("searchOverlay");
 const searchInput=document.getElementById("searchInput");
 const searchResult=document.getElementById("searchResult");
 
 document.getElementById("searchButton").addEventListener("click",function(){
+
 searchInput.value="";
 searchResult.textContent="";
+
 searchOverlay.style.display="flex";
-setTimeout(function(){searchInput.focus()},50);
+
+setTimeout(function(){
+searchInput.focus();
+},50);
+
 });
 
 function performSearch(){
-const query=searchInput.value.trim().toLowerCase();
 
-document.querySelectorAll(".search-highlight").forEach(element=>{
+const query=
+searchInput.value.trim().toLowerCase();
+
+document.querySelectorAll(".search-highlight")
+.forEach(element=>{
 element.classList.remove("search-highlight");
 });
 
 if(!query){
+
 searchResult.textContent="";
 return;
+
 }
 
-let count=0,first=null;
+let count=0;
+let first=null;
 
 document.querySelectorAll(".note").forEach(note=>{
+
 if(note.textContent.toLowerCase().includes(query)){
+
 count++;
+
 if(!first)first=note;
+
 }
+
 });
 
 if(first){
+
 first.classList.add("search-highlight");
-first.scrollIntoView({behavior:"smooth",block:"center"});
-searchResult.textContent="تم العثور على "+count+" ملاحظة";
+
+first.scrollIntoView({
+behavior:"smooth",
+block:"center"
+});
+
+searchResult.textContent=
+"تم العثور على "+count+" ملاحظة";
+
 }else{
-searchResult.textContent="لم يتم العثور على النص";
-}
+
+searchResult.textContent=
+"لم يتم العثور على النص";
+
 }
 
-searchInput.addEventListener("input",performSearch);
+}
+
+searchInput.addEventListener(
+"input",
+performSearch
+);
 
 document.getElementById("searchDone").addEventListener("click",function(){
+
 searchOverlay.style.display="none";
-document.querySelectorAll(".search-highlight").forEach(element=>{
+
+document.querySelectorAll(".search-highlight")
+.forEach(element=>{
 element.classList.remove("search-highlight");
 });
+
 });
 
 /* ==========================
@@ -981,97 +1429,178 @@ const html=editor.innerHTML.trim();
 if(!html)return;
 
 if(editingIndex>=0){
+
 notes[editingIndex].html=html;
+
 }else{
-notes.push({html:html});
+
+notes.push({
+html:html
+});
+
 }
 
 saveNotes();
 render();
 
 editingIndex=-1;
+
 editor.innerHTML="";
+
 state.textContent="رسالة جديدة";
+
 savedRange=null;
+
 currentFontSize=8;
 currentAlignment="right";
+
+/*
+   بعد إرسال الرسالة،
+   نبدأ رسالة جديدة بدون تمييز.
+*/
+highlightEnabled=false;
 
 fontSizeBar.style.display="none";
 alignmentBar.style.display="none";
 listBar.style.display="none";
 
-document.getElementById("boldButton").classList.remove("active");
-document.getElementById("italicButton").classList.remove("active");
-document.getElementById("underlineButton").classList.remove("active");
+document.getElementById("boldButton")
+.classList.remove("active");
+
+document.getElementById("italicButton")
+.classList.remove("active");
+
+document.getElementById("underlineButton")
+.classList.remove("active");
 
 setTimeout(function(){
-messages.scrollTop=messages.scrollHeight;
+
+messages.scrollTop=
+messages.scrollHeight;
+
 },50);
 
 });
+
+/* ==========================
+   تعديل
+========================== */
 
 document.getElementById("editButton").addEventListener("click",function(){
 
 if(selectedIndex<0)return;
 
 editingIndex=selectedIndex;
-editor.innerHTML=notes[selectedIndex].html;
-state.textContent="✎ تعديل الملاحظة";
+
+editor.innerHTML=
+notes[selectedIndex].html;
+
+state.textContent=
+"✎ تعديل الملاحظة";
+
 messageMenu.style.display="none";
+
 editor.focus();
 
 setTimeout(function(){
-editor.scrollIntoView({behavior:"smooth",block:"end"});
+
+editor.scrollIntoView({
+behavior:"smooth",
+block:"end"
+});
+
 updateToolbarState();
+
 },100);
 
 });
+
+/* ==========================
+   حذف
+========================== */
 
 document.getElementById("deleteButton").addEventListener("click",function(){
 
 if(selectedIndex<0)return;
 
 notes.splice(selectedIndex,1);
+
 selectedIndex=-1;
+
 saveNotes();
 render();
+
 messageMenu.style.display="none";
 
 });
 
+/* ==========================
+   إلغاء
+========================== */
+
 document.getElementById("cancelButton").addEventListener("click",function(){
 
 editingIndex=-1;
+
 editor.innerHTML="";
+
 savedRange=null;
+
 state.textContent="رسالة جديدة";
+
+/*
+   إلغاء التمييز للكتابة الجديدة
+*/
+highlightEnabled=false;
 
 fontSizeBar.style.display="none";
 alignmentBar.style.display="none";
 listBar.style.display="none";
 
-document.getElementById("boldButton").classList.remove("active");
-document.getElementById("italicButton").classList.remove("active");
-document.getElementById("underlineButton").classList.remove("active");
+document.getElementById("boldButton")
+.classList.remove("active");
+
+document.getElementById("italicButton")
+.classList.remove("active");
+
+document.getElementById("underlineButton")
+.classList.remove("active");
 
 editor.focus();
 
 });
 
+/* ==========================
+   رسالة جديدة
+========================== */
+
 document.getElementById("newButton").addEventListener("click",function(){
 
 editingIndex=-1;
+
 editor.innerHTML="";
+
 savedRange=null;
+
 state.textContent="رسالة جديدة";
+
+/*
+   الرسالة الجديدة تبدأ بدون تمييز
+*/
+highlightEnabled=false;
 
 fontSizeBar.style.display="none";
 alignmentBar.style.display="none";
 listBar.style.display="none";
 
-document.getElementById("boldButton").classList.remove("active");
-document.getElementById("italicButton").classList.remove("active");
-document.getElementById("underlineButton").classList.remove("active");
+document.getElementById("boldButton")
+.classList.remove("active");
+
+document.getElementById("italicButton")
+.classList.remove("active");
+
+document.getElementById("underlineButton")
+.classList.remove("active");
 
 currentFontSize=8;
 currentAlignment="right";
@@ -1080,12 +1609,18 @@ editor.focus();
 
 });
 
+/* ==========================
+   إغلاق النوافذ
+========================== */
+
 document.querySelectorAll(".overlay").forEach(function(overlay){
 
 overlay.addEventListener("click",function(event){
 
 if(event.target===overlay){
+
 overlay.style.display="none";
+
 }
 
 });
@@ -1093,6 +1628,7 @@ overlay.style.display="none";
 });
 
 render();
+
 updateFontSizeButtons();
 
 </script>
