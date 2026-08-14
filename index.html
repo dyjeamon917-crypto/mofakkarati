@@ -14,7 +14,6 @@
 <title>ملاحظاتي</title>
 
 <style>
-
 *{
     box-sizing:border-box;
     -webkit-tap-highlight-color:transparent;
@@ -275,9 +274,13 @@ textarea:focus-visible,
     line-height:1.55;
 }
 
+.note .mind-map{
+    width:100%;
+}
+
 
 /* =========================
-   EDITOR AREA
+   EDITOR
 ========================= */
 
 .editor-area{
@@ -329,7 +332,7 @@ textarea:focus-visible,
 
 
 /* =========================
-   MAIN TOOLBAR
+   TOOLBAR
 ========================= */
 
 .toolbar{
@@ -346,7 +349,8 @@ textarea:focus-visible,
     touch-action:pan-x;
 }
 
-.toolbar::-webkit-scrollbar{
+.toolbar::-webkit-scrollbar,
+.sub-toolbar::-webkit-scrollbar{
     display:none;
 }
 
@@ -399,12 +403,6 @@ textarea:focus-visible,
 ========================= */
 
 .sub-toolbar{
-
-    /* مهم جدًا:
-       display:none افتراضيًا
-       ويتم تغييره بالـJS إلى flex
-    */
-
     display:none;
 
     align-items:center;
@@ -418,22 +416,14 @@ textarea:focus-visible,
     scrollbar-width:none;
 
     position:relative;
-
     z-index:50;
-}
-
-.sub-toolbar::-webkit-scrollbar{
-    display:none;
 }
 
 .font-size-bar{
     direction:ltr;
 }
 
-.list-bar{
-    direction:rtl;
-}
-
+.list-bar,
 .alignment-bar{
     direction:rtl;
 }
@@ -475,7 +465,7 @@ textarea:focus-visible,
 
 
 /* =========================
-   WRITE ROW
+   WRITE
 ========================= */
 
 .write-row{
@@ -535,8 +525,8 @@ textarea:focus-visible,
 
 .editor:empty::before{
     content:"اكتبي ملاحظتك هنا...";
-
     color:#606774;
+    pointer-events:none;
 }
 
 .editor img{
@@ -581,6 +571,12 @@ textarea:focus-visible,
     line-height:1.55;
 }
 
+.editor td:focus,
+.editor th:focus{
+    outline:2px solid #4d7fd8;
+    outline-offset:-2px;
+}
+
 .send{
     width:48px;
     height:48px;
@@ -603,6 +599,10 @@ textarea:focus-visible,
     color:#fff;
 
     font-size:21px;
+}
+
+.send:active{
+    transform:scale(.94);
 }
 
 
@@ -632,7 +632,7 @@ textarea:focus-visible,
 }
 
 .overlay.open{
-    display:flex !important;
+    display:flex;
 }
 
 .panel{
@@ -690,7 +690,7 @@ textarea:focus-visible,
 
 
 /* =========================
-   COLOR PICKER
+   COLOR
 ========================= */
 
 .color-picker{
@@ -786,8 +786,7 @@ textarea:focus-visible,
 
     pointer-events:none;
 
-    transform:
-        translate(-50%,-50%);
+    transform:translate(-50%,-50%);
 
     border-radius:50%;
 }
@@ -842,7 +841,7 @@ textarea:focus-visible,
 
 
 /* =========================
-   OTHER PANELS
+   OTHER
 ========================= */
 
 .range-title{
@@ -857,13 +856,11 @@ textarea:focus-visible,
 
 .range{
     width:100%;
-
     accent-color:#4c80ff;
 }
 
 .highlight-actions{
     display:flex;
-
     gap:7px;
 }
 
@@ -873,7 +870,6 @@ textarea:focus-visible,
 
 .list-choice{
     display:flex;
-
     gap:7px;
 }
 
@@ -1016,7 +1012,6 @@ textarea:focus-visible,
 
 .search-highlight{
     outline:2px solid #3471f6;
-
     outline-offset:2px;
 }
 
@@ -1156,7 +1151,6 @@ textarea:focus-visible,
         transition-duration:.001ms!important;
     }
 }
-
 </style>
 </head>
 
@@ -1164,11 +1158,6 @@ textarea:focus-visible,
 <body>
 
 <div class="app">
-
-
-<!-- =========================
-     HEADER
-========================= -->
 
 <header class="header">
 
@@ -1179,9 +1168,7 @@ textarea:focus-visible,
         aria-label="بحث"
     >⌕</button>
 
-    <div class="title">
-        ملاحظاتي
-    </div>
+    <div class="title">ملاحظاتي</div>
 
     <button
         class="icon"
@@ -1193,28 +1180,17 @@ textarea:focus-visible,
 </header>
 
 
-<!-- =========================
-     NOTES
-========================= -->
-
 <main
     class="messages"
     id="messages"
 ></main>
 
 
-<!-- =========================
-     EDITOR
-========================= -->
-
 <section class="editor-area">
-
 
     <div class="edit-state">
 
-        <span id="state">
-            رسالة جديدة
-        </span>
+        <span id="state">رسالة جديدة</span>
 
         <button
             class="cancel"
@@ -1225,8 +1201,6 @@ textarea:focus-visible,
 
     </div>
 
-
-    <!-- MAIN TOOLBAR -->
 
     <div
         class="toolbar"
@@ -1296,23 +1270,17 @@ textarea:focus-visible,
     </div>
 
 
-    <!-- FONT SIZE -->
-
     <div
         class="sub-toolbar font-size-bar"
         id="fontSizeBar"
     ></div>
 
 
-    <!-- LIST -->
-
     <div
         class="sub-toolbar list-bar"
         id="listBar"
     ></div>
 
-
-    <!-- ALIGNMENT -->
 
     <div
         class="sub-toolbar alignment-bar"
@@ -1340,8 +1308,6 @@ textarea:focus-visible,
     </div>
 
 
-    <!-- WRITE -->
-
     <div class="write-row">
 
         <div
@@ -1367,9 +1333,7 @@ textarea:focus-visible,
 </div>
 
 
-<!-- =====================================================
-     COLOR OVERLAY
-===================================================== -->
+<!-- COLOR -->
 
 <div
     class="overlay"
@@ -1378,9 +1342,7 @@ textarea:focus-visible,
 
     <div class="panel">
 
-        <div class="panel-title">
-            لون الخط
-        </div>
+        <div class="panel-title">لون الخط</div>
 
         <div class="color-picker">
 
@@ -1393,11 +1355,8 @@ textarea:focus-visible,
                 <div class="hue-ring"></div>
 
                 <div class="sv-area">
-
                     <div class="sv-white"></div>
-
                     <div class="sv-black"></div>
-
                 </div>
 
                 <div
@@ -1412,25 +1371,25 @@ textarea:focus-visible,
 
             </div>
 
-
             <div class="color-presets">
 
                 <button
                     class="color-preset black-preset"
                     id="blackText"
                     type="button"
+                    aria-label="أسود"
                 ></button>
 
                 <button
                     class="color-preset white-preset"
                     id="whiteText"
                     type="button"
+                    aria-label="أبيض"
                 ></button>
 
             </div>
 
         </div>
-
 
         <button
             class="panel-button"
@@ -1443,9 +1402,7 @@ textarea:focus-visible,
 </div>
 
 
-<!-- =====================================================
-     HIGHLIGHT
-===================================================== -->
+<!-- HIGHLIGHT -->
 
 <div
     class="overlay"
@@ -1454,9 +1411,7 @@ textarea:focus-visible,
 
     <div class="panel">
 
-        <div class="panel-title">
-            تمييز النص
-        </div>
+        <div class="panel-title">تمييز النص</div>
 
         <div class="color-picker">
 
@@ -1469,11 +1424,8 @@ textarea:focus-visible,
                 <div class="hue-ring"></div>
 
                 <div class="sv-area">
-
                     <div class="sv-white"></div>
-
                     <div class="sv-black"></div>
-
                 </div>
 
                 <div
@@ -1490,10 +1442,7 @@ textarea:focus-visible,
 
         </div>
 
-
-        <div class="range-title">
-            شدة التمييز
-        </div>
+        <div class="range-title">شدة التمييز</div>
 
         <input
             class="range"
@@ -1503,7 +1452,6 @@ textarea:focus-visible,
             max="100"
             value="60"
         >
-
 
         <div class="highlight-actions">
 
@@ -1526,9 +1474,7 @@ textarea:focus-visible,
 </div>
 
 
-<!-- =====================================================
-     TABLE
-===================================================== -->
+<!-- TABLE -->
 
 <div
     class="overlay"
@@ -1537,10 +1483,7 @@ textarea:focus-visible,
 
     <div class="panel">
 
-        <div class="panel-title">
-            إدراج جدول
-        </div>
-
+        <div class="panel-title">إدراج جدول</div>
 
         <div class="list-choice">
 
@@ -1555,7 +1498,6 @@ textarea:focus-visible,
             >＋ الصفوف</button>
 
         </div>
-
 
         <div
             class="list-choice"
@@ -1574,7 +1516,6 @@ textarea:focus-visible,
 
         </div>
 
-
         <div
             id="tableInfo"
             style="
@@ -1582,10 +1523,7 @@ textarea:focus-visible,
                 margin-top:10px;
                 color:#ccc;
             "
-        >
-            3 × 3
-        </div>
-
+        >3 × 3</div>
 
         <button
             class="panel-button"
@@ -1598,9 +1536,7 @@ textarea:focus-visible,
 </div>
 
 
-<!-- =====================================================
-     MIND MAP
-===================================================== -->
+<!-- MIND MAP -->
 
 <div
     class="overlay"
@@ -1609,10 +1545,7 @@ textarea:focus-visible,
 
     <div class="panel">
 
-        <div class="panel-title">
-            خريطة ذهنية
-        </div>
-
+        <div class="panel-title">خريطة ذهنية</div>
 
         <textarea
             class="mind-input"
@@ -1621,16 +1554,13 @@ textarea:focus-visible,
             rows="2"
         ></textarea>
 
-
         <div id="mindBranches"></div>
-
 
         <button
             class="panel-button"
             id="mindAdd"
             type="button"
         >＋ إضافة فرع</button>
-
 
         <button
             class="panel-button"
@@ -1643,9 +1573,7 @@ textarea:focus-visible,
 </div>
 
 
-<!-- =====================================================
-     SEARCH
-===================================================== -->
+<!-- SEARCH -->
 
 <div
     class="overlay"
@@ -1654,10 +1582,7 @@ textarea:focus-visible,
 
     <div class="panel">
 
-        <div class="panel-title">
-            بحث
-        </div>
-
+        <div class="panel-title">بحث</div>
 
         <input
             class="search-input"
@@ -1667,12 +1592,10 @@ textarea:focus-visible,
             autocomplete="off"
         >
 
-
         <div
             class="search-result"
             id="searchResult"
         ></div>
-
 
         <button
             class="panel-button"
@@ -1685,9 +1608,7 @@ textarea:focus-visible,
 </div>
 
 
-<!-- =====================================================
-     NOTE MENU
-===================================================== -->
+<!-- NOTE MENU -->
 
 <div
     class="menu"
@@ -1708,7 +1629,6 @@ textarea:focus-visible,
 
 
 <script>
-
 "use strict";
 
 
@@ -1716,9 +1636,7 @@ textarea:focus-visible,
    CONFIG
 ===================================================== */
 
-const STORAGE_KEY =
-    "notes_modern_editor_v9";
-
+const STORAGE_KEY = "notes_modern_editor_v10";
 
 const FONT_SIZES = [
     8,9,10,11,12,
@@ -1763,93 +1681,93 @@ const AppState = {
    DOM
 ===================================================== */
 
-const $ =
-    id => document.getElementById(id);
+const $ = id => document.getElementById(id);
 
+const editor = $("editor");
+const messages = $("messages");
+const state = $("state");
 
-const editor =
-    $("editor");
+const messageMenu = $("messageMenu");
 
-const messages =
-    $("messages");
+const fontSizeBar = $("fontSizeBar");
+const listBar = $("listBar");
+const alignmentBar = $("alignmentBar");
 
-const state =
-    $("state");
+const colorOverlay = $("colorOverlay");
+const highlightOverlay = $("highlightOverlay");
+const tableOverlay = $("tableOverlay");
+const mindMapOverlay = $("mindMapOverlay");
+const searchOverlay = $("searchOverlay");
 
-const messageMenu =
-    $("messageMenu");
-
-const fontSizeBar =
-    $("fontSizeBar");
-
-const listBar =
-    $("listBar");
-
-const alignmentBar =
-    $("alignmentBar");
-
-const colorOverlay =
-    $("colorOverlay");
-
-const highlightOverlay =
-    $("highlightOverlay");
-
-const tableOverlay =
-    $("tableOverlay");
-
-const mindMapOverlay =
-    $("mindMapOverlay");
-
-const searchOverlay =
-    $("searchOverlay");
-
-const searchInput =
-    $("searchInput");
-
-const searchResult =
-    $("searchResult");
+const searchInput = $("searchInput");
+const searchResult = $("searchResult");
 
 
 /* =====================================================
-   OVERLAY HELPERS
+   GENERAL HELPERS
 ===================================================== */
+
+function isEditorFocused(){
+
+    return document.activeElement === editor ||
+           editor.contains(document.activeElement);
+
+}
+
+
+function closeAllSubToolbars(){
+
+    fontSizeBar.style.display = "none";
+    listBar.style.display = "none";
+    alignmentBar.style.display = "none";
+
+}
+
+
+function openSubToolbar(bar){
+
+    closeAllSubToolbars();
+
+    bar.style.display = "flex";
+
+}
+
 
 function openOverlay(overlay){
 
+    if(!overlay){
+        return;
+    }
+
     overlay.classList.add("open");
-    overlay.style.display="flex";
 
 }
 
 
 function closeOverlay(overlay){
 
+    if(!overlay){
+        return;
+    }
+
     overlay.classList.remove("open");
-    overlay.style.display="none";
 
 }
 
 
-/* =====================================================
-   SUB TOOLBAR HELPERS
-===================================================== */
+function closeAllOverlays(){
 
-function closeSubToolbars(){
-
-    fontSizeBar.style.display="none";
-
-    listBar.style.display="none";
-
-    alignmentBar.style.display="none";
+    document
+        .querySelectorAll(".overlay.open")
+        .forEach(closeOverlay);
 
 }
 
 
-function openSubToolbar(toolbar){
+function closeMessageMenu(){
 
-    closeSubToolbars();
-
-    toolbar.style.display="flex";
+    messageMenu.classList.remove("open");
+    messageMenu.style.display = "none";
 
 }
 
@@ -1862,41 +1780,37 @@ function loadNotes(){
 
     try{
 
-        const raw =
-            localStorage.getItem(
-                STORAGE_KEY
-            );
+        const raw = localStorage.getItem(STORAGE_KEY);
 
         if(!raw){
 
-            AppState.notes=[];
-
+            AppState.notes = [];
             return;
         }
 
-        const data =
-            JSON.parse(raw);
+        const data = JSON.parse(raw);
 
         if(Array.isArray(data)){
 
-            AppState.notes =
-                data.filter(
-                    note =>
-                        note &&
-                        typeof note==="object" &&
-                        typeof note.html==="string"
-                );
+            AppState.notes = data.filter(
+                note =>
+                    note &&
+                    typeof note === "object" &&
+                    typeof note.html === "string"
+            );
 
         }else{
 
-            AppState.notes=[];
+            AppState.notes = [];
+
         }
 
     }catch(error){
 
-        console.error(error);
+        console.error("loadNotes:",error);
 
-        AppState.notes=[];
+        AppState.notes = [];
+
     }
 
 }
@@ -1908,22 +1822,19 @@ function saveNotes(){
 
         localStorage.setItem(
             STORAGE_KEY,
-            JSON.stringify(
-                AppState.notes
-            )
+            JSON.stringify(AppState.notes)
         );
 
         return true;
 
     }catch(error){
 
-        console.error(error);
+        console.error("saveNotes:",error);
 
-        alert(
-            "تعذر حفظ الملاحظات في الجهاز."
-        );
+        alert("تعذر حفظ الملاحظات في الجهاز.");
 
         return false;
+
     }
 
 }
@@ -1945,22 +1856,17 @@ function cleanHtml(html){
 
 function hasRealContent(){
 
-    const clone =
-        editor.cloneNode(true);
+    const clone = editor.cloneNode(true);
 
     clone
         .querySelectorAll("br")
-        .forEach(
-            br =>
-                br.replaceWith(" ")
-        );
+        .forEach(br => br.replaceWith(" "));
 
-    const text =
-        (clone.textContent || "")
-            .replace(/\u200B/g,"")
-            .replace(/\uFEFF/g,"")
-            .replace(/\u00a0/g," ")
-            .trim();
+    const text = (clone.textContent || "")
+        .replace(/\u200B/g,"")
+        .replace(/\uFEFF/g,"")
+        .replace(/\u00a0/g," ")
+        .trim();
 
     return Boolean(
         text ||
@@ -1976,37 +1882,33 @@ function hasRealContent(){
    SELECTION
 ===================================================== */
 
-function getSelection(){
+function getCurrentSelection(){
 
-    const selection =
-        window.getSelection();
+    const selection = window.getSelection();
 
     if(
         !selection ||
-        selection.rangeCount===0
+        selection.rangeCount === 0
     ){
 
         return null;
+
     }
 
     return selection;
+
 }
 
 
-function rangeInsideEditor(range){
+function isRangeInsideEditor(range){
 
     if(!range){
-
         return false;
     }
 
     return (
-        editor.contains(
-            range.startContainer
-        ) &&
-        editor.contains(
-            range.endContainer
-        )
+        editor.contains(range.startContainer) &&
+        editor.contains(range.endContainer)
     );
 
 }
@@ -2014,24 +1916,23 @@ function rangeInsideEditor(range){
 
 function saveSelection(){
 
-    const selection =
-        getSelection();
+    const selection = getCurrentSelection();
 
     if(!selection){
-
         return false;
     }
 
-    const range =
-        selection.getRangeAt(0);
-
-    if(!rangeInsideEditor(range)){
-
+    if(selection.rangeCount === 0){
         return false;
     }
 
-    AppState.savedRange =
-        range.cloneRange();
+    const range = selection.getRangeAt(0);
+
+    if(!isRangeInsideEditor(range)){
+        return false;
+    }
+
+    AppState.savedRange = range.cloneRange();
 
     return true;
 
@@ -2040,33 +1941,29 @@ function saveSelection(){
 
 function restoreSelection(){
 
-    const range =
-        AppState.savedRange;
+    const range = AppState.savedRange;
 
-    if(
-        !range ||
-        !rangeInsideEditor(range)
-    ){
-
+    if(!range || !isRangeInsideEditor(range)){
         return false;
     }
 
     try{
 
-        const selection =
-            window.getSelection();
+        const selection = window.getSelection();
 
         selection.removeAllRanges();
-
         selection.addRange(range);
 
         return true;
 
     }catch(error){
 
-        AppState.savedRange=null;
+        console.error("restoreSelection:",error);
+
+        AppState.savedRange = null;
 
         return false;
+
     }
 
 }
@@ -2076,38 +1973,45 @@ function focusEditorEnd(){
 
     editor.focus();
 
-    const range =
-        document.createRange();
+    const range = document.createRange();
 
     range.selectNodeContents(editor);
-
     range.collapse(false);
 
-    const selection =
-        window.getSelection();
+    const selection = window.getSelection();
 
     selection.removeAllRanges();
-
     selection.addRange(range);
 
-    AppState.savedRange =
-        range.cloneRange();
+    AppState.savedRange = range.cloneRange();
+
+}
+
+
+/*
+    مهم:
+    هذه الدالة تحافظ على التحديد حتى إذا ضغط المستخدم
+    على زر من أزرار الأدوات على الهاتف.
+*/
+function preserveSelectionFromEditor(){
+
+    if(isEditorFocused()){
+        saveSelection();
+    }
 
 }
 
 
 /* =====================================================
-   TOOLBAR COMMAND
+   COMMAND
 ===================================================== */
 
-function execCommand(
-    command,
-    value=null
-){
+function executeCommand(command,value=null){
 
     if(!restoreSelection()){
 
         focusEditorEnd();
+
     }
 
     editor.focus();
@@ -2123,126 +2027,102 @@ function execCommand(
     }catch(error){
 
         console.error(
+            "execCommand:",
             command,
             error
         );
+
     }
 
     saveSelection();
-
-    updateToolbar();
+    updateToolbarState();
 
 }
 
 
 /* =====================================================
-   BOLD / ITALIC / UNDERLINE
+   BASIC FORMATTING
 ===================================================== */
 
-$("boldButton")
-    .addEventListener(
-        "click",
-        () => {
-
-            execCommand("bold");
-
-        }
-    );
+$("boldButton").addEventListener(
+    "click",
+    () => executeCommand("bold")
+);
 
 
-$("italicButton")
-    .addEventListener(
-        "click",
-        () => {
-
-            execCommand("italic");
-
-        }
-    );
+$("italicButton").addEventListener(
+    "click",
+    () => executeCommand("italic")
+);
 
 
-$("underlineButton")
-    .addEventListener(
-        "click",
-        () => {
-
-            execCommand("underline");
-
-        }
-    );
+$("underlineButton").addEventListener(
+    "click",
+    () => executeCommand("underline")
+);
 
 
 /* =====================================================
    TOOLBAR STATE
 ===================================================== */
 
-function updateToolbar(){
+function safeQueryState(command){
 
     try{
+        return document.queryCommandState(command);
+    }catch(error){
+        return false;
+    }
 
-        $("boldButton")
-            .classList.toggle(
-                "active",
-                document.queryCommandState(
-                    "bold"
-                )
-            );
+}
 
-        $("italicButton")
-            .classList.toggle(
-                "active",
-                document.queryCommandState(
-                    "italic"
-                )
-            );
 
-        $("underlineButton")
-            .classList.toggle(
-                "active",
-                document.queryCommandState(
-                    "underline"
-                )
-            );
+function updateToolbarState(){
 
-    }catch(error){}
+    $("boldButton").classList.toggle(
+        "active",
+        safeQueryState("bold")
+    );
+
+    $("italicButton").classList.toggle(
+        "active",
+        safeQueryState("italic")
+    );
+
+    $("underlineButton").classList.toggle(
+        "active",
+        safeQueryState("underline")
+    );
 
     updateFontSizeButtons();
-
     updateAlignmentButtons();
 
 }
 
 
 /* =====================================================
-   SAVE SELECTION AUTOMATICALLY
+   SELECTION EVENTS
 ===================================================== */
-
-function updateSelection(){
-
-    setTimeout(
-        () => {
-
-            if(saveSelection()){
-
-                updateToolbar();
-            }
-
-        },
-        0
-    );
-
-}
-
 
 editor.addEventListener(
     "mouseup",
-    updateSelection
+    () => {
+
+        saveSelection();
+        updateToolbarState();
+
+    }
 );
 
 
 editor.addEventListener(
     "keyup",
-    updateSelection
+    () => {
+
+        saveSelection();
+        updateToolbarState();
+
+    }
 );
 
 
@@ -2251,11 +2131,17 @@ editor.addEventListener(
     () => {
 
         setTimeout(
-            updateSelection,
-            100
+            () => {
+
+                saveSelection();
+                updateToolbarState();
+
+            },
+            80
         );
 
-    }
+    },
+    {passive:true}
 );
 
 
@@ -2264,7 +2150,12 @@ editor.addEventListener(
     () => {
 
         setTimeout(
-            updateSelection,
+            () => {
+
+                saveSelection();
+                updateToolbarState();
+
+            },
             0
         );
 
@@ -2276,27 +2167,68 @@ document.addEventListener(
     "selectionchange",
     () => {
 
-        const selection =
-            getSelection();
+        const selection = getCurrentSelection();
 
         if(!selection){
-
             return;
         }
 
-        const range =
-            selection.getRangeAt(0);
+        if(selection.rangeCount === 0){
+            return;
+        }
 
-        if(rangeInsideEditor(range)){
+        const range = selection.getRangeAt(0);
 
-            AppState.savedRange =
-                range.cloneRange();
+        if(isRangeInsideEditor(range)){
 
-            updateToolbar();
+            AppState.savedRange = range.cloneRange();
+
+            updateToolbarState();
+
         }
 
     }
 );
+
+
+/*
+    أهم إصلاح:
+    منع أزرار الـ toolbar من سحب التركيز من
+    contenteditable قبل تنفيذ click.
+*/
+document
+    .querySelectorAll(
+        ".toolbar button, .sub-toolbar button"
+    )
+    .forEach(button => {
+
+        button.addEventListener(
+            "mousedown",
+            event => {
+
+                preserveSelectionFromEditor();
+
+                /*
+                    يمنع blur وفقدان selection في
+                    Chrome/Android في كثير من الحالات.
+                    click سيستمر في العمل.
+                */
+                event.preventDefault();
+
+            }
+        );
+
+        button.addEventListener(
+            "touchstart",
+            () => {
+
+                preserveSelectionFromEditor();
+
+            },
+            {passive:true}
+        );
+
+    });
 
 
 /* =====================================================
@@ -2307,52 +2239,51 @@ editor.addEventListener(
     "keydown",
     event => {
 
-        if(event.key!=="Enter"){
-
+        if(event.key !== "Enter"){
             return;
         }
 
+        const active = document.activeElement;
+
         const cell =
-            event.target.closest &&
-            event.target.closest(
-                "td,th"
-            );
+            active &&
+            active.closest &&
+            active.closest("td,th");
 
         if(cell){
-
             return;
         }
 
         event.preventDefault();
 
-        const selection =
-            getSelection();
+        if(!restoreSelection()){
+            focusEditorEnd();
+        }
+
+        const selection = getCurrentSelection();
 
         if(!selection){
-
             return;
         }
 
-        const range =
-            selection.getRangeAt(0);
+        if(selection.rangeCount === 0){
+            return;
+        }
 
-        if(!rangeInsideEditor(range)){
+        const range = selection.getRangeAt(0);
 
+        if(!isRangeInsideEditor(range)){
             return;
         }
 
         if(!range.collapsed){
-
             range.deleteContents();
         }
 
-        const br =
-            document.createElement("br");
+        const br = document.createElement("br");
 
         const marker =
-            document.createTextNode(
-                "\u200B"
-            );
+            document.createTextNode("\u200B");
 
         range.insertNode(br);
 
@@ -2361,8 +2292,7 @@ editor.addEventListener(
             br.nextSibling
         );
 
-        const newRange =
-            document.createRange();
+        const newRange = document.createRange();
 
         newRange.setStart(
             marker,
@@ -2372,10 +2302,7 @@ editor.addEventListener(
         newRange.collapse(true);
 
         selection.removeAllRanges();
-
-        selection.addRange(
-            newRange
-        );
+        selection.addRange(newRange);
 
         AppState.savedRange =
             newRange.cloneRange();
@@ -2388,81 +2315,46 @@ editor.addEventListener(
    FONT SIZE
 ===================================================== */
 
-FONT_SIZES.forEach(
-    size => {
+FONT_SIZES.forEach(size => {
 
-        const button =
-            document.createElement(
-                "button"
-            );
+    const button =
+        document.createElement("button");
 
-        button.className =
-            "font-size-item";
+    button.className =
+        "font-size-item";
 
-        button.type="button";
+    button.type = "button";
 
-        button.textContent =
-            size;
+    button.textContent = size;
 
-        fontSizeBar.appendChild(
-            button
-        );
+    button.setAttribute(
+        "aria-label",
+        "حجم الخط " + size
+    );
 
-        button.addEventListener(
-            "mousedown",
-            event => {
+    fontSizeBar.appendChild(button);
 
-                event.preventDefault();
+    button.addEventListener(
+        "click",
+        () => applyFontSize(size)
+    );
 
-                saveSelection();
-
-            }
-        );
-
-        button.addEventListener(
-            "touchstart",
-            () => {
-
-                saveSelection();
-
-            },
-            {
-                passive:true
-            }
-        );
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                applyFontSize(size);
-
-            }
-        );
-
-    }
-);
+});
 
 
 function updateFontSizeButtons(){
 
     fontSizeBar
-        .querySelectorAll(
-            ".font-size-item"
-        )
-        .forEach(
-            button => {
+        .querySelectorAll(".font-size-item")
+        .forEach(button => {
 
-                button.classList.toggle(
-                    "active",
-                    Number(
-                        button.textContent
-                    ) ===
-                    AppState.fontSize
-                );
+            button.classList.toggle(
+                "active",
+                Number(button.textContent) ===
+                AppState.fontSize
+            );
 
-            }
-        );
+        });
 
 }
 
@@ -2470,31 +2362,26 @@ function updateFontSizeButtons(){
 function applyFontSize(size){
 
     if(!restoreSelection()){
-
         focusEditorEnd();
     }
 
-    const selection =
-        getSelection();
+    const selection = getCurrentSelection();
 
-    if(!selection){
-
+    if(!selection || selection.rangeCount === 0){
         return;
     }
 
-    const range =
-        selection.getRangeAt(0);
+    const range = selection.getRangeAt(0);
 
-    if(!rangeInsideEditor(range)){
-
+    if(!isRangeInsideEditor(range)){
         return;
     }
 
     editor.focus();
 
-    if(!range.collapsed){
+    try{
 
-        try{
+        if(!range.collapsed){
 
             document.execCommand(
                 "fontSize",
@@ -2506,187 +2393,131 @@ function applyFontSize(size){
                 .querySelectorAll(
                     'font[size="7"]'
                 )
-                .forEach(
-                    font => {
+                .forEach(font => {
 
-                        const span =
-                            document.createElement(
-                                "span"
-                            );
+                    const span =
+                        document.createElement("span");
 
-                        span.style.fontSize =
-                            size+"px";
+                    span.style.fontSize =
+                        size + "px";
 
-                        while(
+                    while(font.firstChild){
+
+                        span.appendChild(
                             font.firstChild
-                        ){
-
-                            span.appendChild(
-                                font.firstChild
-                            );
-                        }
-
-                        font.replaceWith(
-                            span
                         );
 
                     }
-                );
 
-        }catch(error){
+                    font.replaceWith(span);
 
-            console.error(error);
+                });
+
+        }else{
+
+            const span =
+                document.createElement("span");
+
+            span.style.fontSize =
+                size + "px";
+
+            const marker =
+                document.createTextNode("\u200B");
+
+            span.appendChild(marker);
+
+            range.insertNode(span);
+
+            const newRange =
+                document.createRange();
+
+            newRange.setStart(
+                marker,
+                marker.length
+            );
+
+            newRange.collapse(true);
+
+            selection.removeAllRanges();
+            selection.addRange(newRange);
+
         }
 
-    }else{
+    }catch(error){
 
-        const span =
-            document.createElement(
-                "span"
-            );
-
-        span.style.fontSize =
-            size+"px";
-
-        const marker =
-            document.createTextNode(
-                "\u200B"
-            );
-
-        span.appendChild(marker);
-
-        range.insertNode(span);
-
-        const newRange =
-            document.createRange();
-
-        newRange.setStart(
-            marker,
-            marker.length
-        );
-
-        newRange.collapse(true);
-
-        selection.removeAllRanges();
-
-        selection.addRange(
-            newRange
+        console.error(
+            "applyFontSize:",
+            error
         );
 
     }
 
-    AppState.fontSize=size;
+    AppState.fontSize = size;
 
     saveSelection();
 
-    closeSubToolbars();
+    closeAllSubToolbars();
 
-    updateToolbar();
+    updateToolbarState();
 
 }
 
 
-/* =====================================================
-   SIZE BUTTON
-===================================================== */
+/* SIZE BUTTON */
 
-$("sizeButton")
-    .addEventListener(
-        "click",
-        event => {
+$("sizeButton").addEventListener(
+    "click",
+    event => {
 
-            event.stopPropagation();
+        event.stopPropagation();
 
-            saveSelection();
+        preserveSelectionFromEditor();
 
-            openSubToolbar(
-                fontSizeBar
-            );
+        openSubToolbar(fontSizeBar);
 
-            updateFontSizeButtons();
+        updateFontSizeButtons();
 
-        }
-    );
+    }
+);
 
 
 /* =====================================================
-   LIST BUTTONS
+   LISTS
 ===================================================== */
 
 const bulletButton =
-    document.createElement(
-        "button"
-    );
+    document.createElement("button");
 
 bulletButton.className =
     "font-size-item";
 
-bulletButton.type="button";
-
-bulletButton.textContent="•";
-
-bulletButton.title =
-    "قائمة نقطية";
-
+bulletButton.type = "button";
+bulletButton.textContent = "•";
+bulletButton.title = "قائمة نقطية";
 
 const numberButton =
-    document.createElement(
-        "button"
-    );
+    document.createElement("button");
 
 numberButton.className =
     "font-size-item";
 
-numberButton.type="button";
+numberButton.type = "button";
+numberButton.textContent = "١.";
+numberButton.title = "قائمة مرقمة";
 
-numberButton.textContent="١.";
-
-numberButton.title =
-    "قائمة مرقمة";
-
-
-listBar.appendChild(
-    bulletButton
-);
-
-listBar.appendChild(
-    numberButton
-);
-
-
-bulletButton.addEventListener(
-    "mousedown",
-    event => {
-
-        event.preventDefault();
-
-        saveSelection();
-
-    }
-);
-
-
-numberButton.addEventListener(
-    "mousedown",
-    event => {
-
-        event.preventDefault();
-
-        saveSelection();
-
-    }
-);
+listBar.appendChild(bulletButton);
+listBar.appendChild(numberButton);
 
 
 bulletButton.addEventListener(
     "click",
     () => {
 
-        execCommand(
+        executeCommand(
             "insertUnorderedList"
         );
 
-        closeSubToolbars();
+        closeAllSubToolbars();
 
         editor.focus();
 
@@ -2698,11 +2529,11 @@ numberButton.addEventListener(
     "click",
     () => {
 
-        execCommand(
+        executeCommand(
             "insertOrderedList"
         );
 
-        closeSubToolbars();
+        closeAllSubToolbars();
 
         editor.focus();
 
@@ -2710,25 +2541,18 @@ numberButton.addEventListener(
 );
 
 
-/* =====================================================
-   LIST MAIN BUTTON
-===================================================== */
+$("listButton").addEventListener(
+    "click",
+    event => {
 
-$("listButton")
-    .addEventListener(
-        "click",
-        event => {
+        event.stopPropagation();
 
-            event.stopPropagation();
+        preserveSelectionFromEditor();
 
-            saveSelection();
+        openSubToolbar(listBar);
 
-            openSubToolbar(
-                listBar
-            );
-
-        }
-    );
+    }
+);
 
 
 /* =====================================================
@@ -2738,181 +2562,132 @@ $("listButton")
 function updateAlignmentButtons(){
 
     alignmentBar
-        .querySelectorAll(
-            ".align-item"
-        )
-        .forEach(
-            button => {
+        .querySelectorAll(".align-item")
+        .forEach(button => {
 
-                button.classList.toggle(
-                    "active",
-                    button.dataset.align ===
-                    AppState.alignment
-                );
+            button.classList.toggle(
+                "active",
+                button.dataset.align ===
+                AppState.alignment
+            );
 
-            }
-        );
+        });
 
 }
 
 
-$("alignmentButton")
-    .addEventListener(
-        "click",
-        event => {
+$("alignmentButton").addEventListener(
+    "click",
+    event => {
 
-            event.stopPropagation();
+        event.stopPropagation();
 
-            saveSelection();
+        preserveSelectionFromEditor();
 
-            openSubToolbar(
-                alignmentBar
-            );
+        openSubToolbar(alignmentBar);
 
-            updateAlignmentButtons();
+        updateAlignmentButtons();
 
-        }
-    );
+    }
+);
 
 
 alignmentBar
-    .querySelectorAll(
-        ".align-item"
-    )
-    .forEach(
-        button => {
+    .querySelectorAll(".align-item")
+    .forEach(button => {
 
-            button.addEventListener(
-                "mousedown",
-                event => {
+        button.addEventListener(
+            "click",
+            () => {
 
-                    event.preventDefault();
+                const align =
+                    button.dataset.align;
 
-                    saveSelection();
+                AppState.alignment = align;
 
+                let command = "justifyRight";
+
+                if(align === "left"){
+                    command = "justifyLeft";
                 }
-            );
 
-            button.addEventListener(
-                "click",
-                () => {
-
-                    const align =
-                        button.dataset.align;
-
-                    AppState.alignment =
-                        align;
-
-                    let command;
-
-                    if(
-                        align==="right"
-                    ){
-
-                        command =
-                            "justifyRight";
-
-                    }else if(
-                        align==="left"
-                    ){
-
-                        command =
-                            "justifyLeft";
-
-                    }else{
-
-                        command =
-                            "justifyCenter";
-                    }
-
-                    execCommand(
-                        command
-                    );
-
-                    closeSubToolbars();
-
+                if(align === "center"){
+                    command = "justifyCenter";
                 }
-            );
 
-        }
-    );
+                executeCommand(command);
+
+                closeAllSubToolbars();
+
+            }
+        );
+
+    });
 
 
 /* =====================================================
-   COLOR
+   COLOR FUNCTIONS
 ===================================================== */
 
-function hsvToRgb(
-    h,
-    s,
-    v
-){
+function hsvToRgb(h,s,v){
 
-    s/=100;
+    s /= 100;
+    v /= 100;
 
-    v/=100;
+    const c = v * s;
 
-    const c=v*s;
-
-    const x=
-        c*
+    const x =
+        c *
         (
-            1-
+            1 -
             Math.abs(
-                ((h/60)%2)-1
+                ((h / 60) % 2) - 1
             )
         );
 
-    const m=v-c;
+    const m = v - c;
 
-    let r=0;
-    let g=0;
-    let b=0;
+    let r = 0;
+    let g = 0;
+    let b = 0;
 
-    if(h<60){
+    if(h < 60){
 
-        r=c;
-        g=x;
+        r = c;
+        g = x;
 
-    }else if(h<120){
+    }else if(h < 120){
 
-        r=x;
-        g=c;
+        r = x;
+        g = c;
 
-    }else if(h<180){
+    }else if(h < 180){
 
-        g=c;
-        b=x;
+        g = c;
+        b = x;
 
-    }else if(h<240){
+    }else if(h < 240){
 
-        g=x;
-        b=c;
+        g = x;
+        b = c;
 
-    }else if(h<300){
+    }else if(h < 300){
 
-        r=x;
-        b=c;
+        r = x;
+        b = c;
 
     }else{
 
-        r=c;
-        b=x;
+        r = c;
+        b = x;
+
     }
 
     return {
 
-        r:Math.round(
-            (r+m)*255
-        ),
-
-        g:Math.round(
-            (g+m)*255
-        ),
-
-        b:Math.round(
-            (b+m)*255
-        )
+        r:Math.round((r+m)*255),
+        g:Math.round((g+m)*255),
+        b:Math.round((b+m)*255)
 
     };
 
@@ -2921,13 +2696,7 @@ function hsvToRgb(
 
 function rgbString(rgb){
 
-    return `
-        rgb(
-            ${rgb.r},
-            ${rgb.g},
-            ${rgb.b}
-        )
-    `.replace(/\s+/g," ");
+    return `rgb(${rgb.r},${rgb.g},${rgb.b})`;
 
 }
 
@@ -2940,13 +2709,11 @@ function setupColorWheel(
     callback
 ){
 
-    let hue=initialHue;
+    let hue = initialHue;
+    let saturation = 100;
+    let value = 100;
 
-    let saturation=100;
-
-    let value=100;
-
-    let mode=null;
+    let mode = null;
 
 
     function update(){
@@ -2965,95 +2732,75 @@ function setupColorWheel(
                 )
             );
 
-        colorMarker.style.background =
-            color;
+        colorMarker.style.background = color;
 
         const rect =
             wheel.getBoundingClientRect();
 
-        const width =
-            rect.width;
+        const width = rect.width;
+        const height = rect.height;
 
-        const height =
-            rect.height;
-
-        const cx =
-            width/2;
-
-        const cy =
-            height/2;
+        const cx = width / 2;
+        const cy = height / 2;
 
         const radius =
-            Math.min(
-                width,
-                height
-            )/2;
+            Math.min(width,height) / 2;
 
         const ringRadius =
-            radius*.88;
+            radius * .88;
 
         const angle =
-            hue*Math.PI/180;
+            hue * Math.PI / 180;
 
         hueMarker.style.left =
             (
                 (
-                    cx+
-                    Math.sin(angle)*
+                    cx +
+                    Math.sin(angle) *
                     ringRadius
-                )/
-                width*
+                ) /
+                width *
                 100
-            )+"%";
+            ) + "%";
 
         hueMarker.style.top =
             (
                 (
-                    cy-
-                    Math.cos(angle)*
+                    cy -
+                    Math.cos(angle) *
                     ringRadius
-                )/
-                height*
+                ) /
+                height *
                 100
-            )+"%";
+            ) + "%";
 
+        const left = width * .13;
+        const top = height * .13;
 
-        const left =
-            width*.13;
-
-        const top =
-            height*.13;
-
-        const innerWidth =
-            width*.74;
-
-        const innerHeight =
-            height*.74;
+        const innerWidth = width * .74;
+        const innerHeight = height * .74;
 
         colorMarker.style.left =
             (
                 (
-                    left+
-                    saturation/100*
+                    left +
+                    saturation / 100 *
                     innerWidth
-                )/
-                width*
+                ) /
+                width *
                 100
-            )+"%";
+            ) + "%";
 
         colorMarker.style.top =
             (
                 (
-                    top+
-                    (
-                        1-
-                        value/100
-                    )*
+                    top +
+                    (1 - value / 100) *
                     innerHeight
-                )/
-                height*
+                ) /
+                height *
                 100
-            )+"%";
+            ) + "%";
 
         callback(color);
 
@@ -3066,27 +2813,26 @@ function setupColorWheel(
             wheel.getBoundingClientRect();
 
         const cx =
-            rect.left+
-            rect.width/2;
+            rect.left +
+            rect.width / 2;
 
         const cy =
-            rect.top+
-            rect.height/2;
+            rect.top +
+            rect.height / 2;
 
         let angle =
             Math.atan2(
-                event.clientX-cx,
-                -(event.clientY-cy)
-            )*
-            180/
+                event.clientX - cx,
+                -(event.clientY - cy)
+            ) *
+            180 /
             Math.PI;
 
-        if(angle<0){
-
-            angle+=360;
+        if(angle < 0){
+            angle += 360;
         }
 
-        hue=angle;
+        hue = angle;
 
         update();
 
@@ -3098,51 +2844,38 @@ function setupColorWheel(
         const rect =
             wheel.getBoundingClientRect();
 
-        const left =
-            rect.width*.13;
+        const left = rect.width * .13;
+        const top = rect.height * .13;
 
-        const top =
-            rect.height*.13;
-
-        const width =
-            rect.width*.74;
-
-        const height =
-            rect.height*.74;
+        const width = rect.width * .74;
+        const height = rect.height * .74;
 
         let x =
-            event.clientX-
-            rect.left-
+            event.clientX -
+            rect.left -
             left;
 
         let y =
-            event.clientY-
-            rect.top-
+            event.clientY -
+            rect.top -
             top;
 
-        x=
-            Math.max(
-                0,
-                Math.min(
-                    width,
-                    x
-                )
-            );
+        x = Math.max(
+            0,
+            Math.min(width,x)
+        );
 
-        y=
-            Math.max(
-                0,
-                Math.min(
-                    height,
-                    y
-                )
-            );
+        y = Math.max(
+            0,
+            Math.min(height,y)
+        );
 
         saturation =
-            x/width*100;
+            x / width * 100;
 
         value =
-            100-y/height*100;
+            100 -
+            y / height * 100;
 
         update();
 
@@ -3157,46 +2890,40 @@ function setupColorWheel(
                 wheel.getBoundingClientRect();
 
             const cx =
-                rect.left+
-                rect.width/2;
+                rect.left +
+                rect.width / 2;
 
             const cy =
-                rect.top+
-                rect.height/2;
+                rect.top +
+                rect.height / 2;
 
             const distance =
                 Math.hypot(
-                    event.clientX-cx,
-                    event.clientY-cy
+                    event.clientX - cx,
+                    event.clientY - cy
                 );
 
             const radius =
                 Math.min(
                     rect.width,
                     rect.height
-                )/2;
+                ) / 2;
 
             mode =
-                distance >
-                radius*.76
+                distance > radius * .76
                     ? "hue"
                     : "sv";
 
-            if(mode==="hue"){
-
+            if(mode === "hue"){
                 hueFromEvent(event);
-
             }else{
-
                 svFromEvent(event);
             }
 
             try{
-
                 wheel.setPointerCapture(
                     event.pointerId
                 );
-
             }catch(error){}
 
             event.preventDefault();
@@ -3209,13 +2936,11 @@ function setupColorWheel(
         "pointermove",
         event => {
 
-            if(mode==="hue"){
-
+            if(mode === "hue"){
                 hueFromEvent(event);
             }
 
-            if(mode==="sv"){
-
+            if(mode === "sv"){
                 svFromEvent(event);
             }
 
@@ -3227,14 +2952,12 @@ function setupColorWheel(
         "pointerup",
         event => {
 
-            mode=null;
+            mode = null;
 
             try{
-
                 wheel.releasePointerCapture(
                     event.pointerId
                 );
-
             }catch(error){}
 
         }
@@ -3244,9 +2967,7 @@ function setupColorWheel(
     wheel.addEventListener(
         "pointercancel",
         () => {
-
-            mode=null;
-
+            mode = null;
         }
     );
 
@@ -3262,9 +2983,7 @@ setupColorWheel(
     $("textColorMarker"),
     0,
     color => {
-
-        AppState.textColor=color;
-
+        AppState.textColor = color;
     }
 );
 
@@ -3275,222 +2994,184 @@ setupColorWheel(
     $("highlightColorMarker"),
     60,
     color => {
+        AppState.highlightColor = color;
+    }
+);
 
-        AppState.highlightColor=color;
+
+/* =====================================================
+   COLOR UI
+===================================================== */
+
+$("colorButton").addEventListener(
+    "click",
+    () => {
+
+        preserveSelectionFromEditor();
+
+        closeAllSubToolbars();
+
+        openOverlay(colorOverlay);
+
+    }
+);
+
+
+$("blackText").addEventListener(
+    "click",
+    () => {
+
+        AppState.textColor = "rgb(0,0,0)";
+
+        $("textColorMarker")
+            .style.background = "#000";
+
+    }
+);
+
+
+$("whiteText").addEventListener(
+    "click",
+    () => {
+
+        AppState.textColor =
+            "rgb(255,255,255)";
+
+        $("textColorMarker")
+            .style.background = "#fff";
+
+    }
+);
+
+
+$("colorDone").addEventListener(
+    "click",
+    () => {
+
+        if(!restoreSelection()){
+            focusEditorEnd();
+        }
+
+        executeCommand(
+            "foreColor",
+            AppState.textColor
+        );
+
+        closeOverlay(colorOverlay);
 
     }
 );
 
 
 /* =====================================================
-   COLOR OPEN
-===================================================== */
-
-$("colorButton")
-    .addEventListener(
-        "click",
-        () => {
-
-            saveSelection();
-
-            closeSubToolbars();
-
-            openOverlay(
-                colorOverlay
-            );
-
-        }
-    );
-
-
-$("blackText")
-    .addEventListener(
-        "click",
-        () => {
-
-            AppState.textColor =
-                "rgb(0,0,0)";
-
-            $("textColorMarker")
-                .style.background="#000";
-
-        }
-    );
-
-
-$("whiteText")
-    .addEventListener(
-        "click",
-        () => {
-
-            AppState.textColor =
-                "rgb(255,255,255)";
-
-            $("textColorMarker")
-                .style.background="#fff";
-
-        }
-    );
-
-
-$("colorDone")
-    .addEventListener(
-        "click",
-        () => {
-
-            if(!restoreSelection()){
-
-                focusEditorEnd();
-            }
-
-            execCommand(
-                "foreColor",
-                AppState.textColor
-            );
-
-            closeOverlay(
-                colorOverlay
-            );
-
-        }
-    );
-
-
-/* =====================================================
    HIGHLIGHT
 ===================================================== */
 
-$("opacityRange")
-    .addEventListener(
-        "input",
-        event => {
+$("opacityRange").addEventListener(
+    "input",
+    event => {
 
-            AppState.highlightOpacity =
-                Number(
-                    event.target.value
-                )/100;
+        AppState.highlightOpacity =
+            Number(event.target.value) / 100;
 
-        }
-    );
+    }
+);
 
 
-function colorToRgba(
-    color,
-    opacity
-){
+function colorToRgba(color,opacity){
 
     const temp =
-        document.createElement(
-            "span"
-        );
+        document.createElement("span");
 
-    temp.style.color=color;
+    temp.style.color = color;
 
-    document.body.appendChild(
-        temp
-    );
+    temp.style.display = "none";
+
+    document.body.appendChild(temp);
 
     const computed =
-        getComputedStyle(temp)
-            .color;
+        getComputedStyle(temp).color;
 
     temp.remove();
 
     const values =
         computed.match(/\d+/g);
 
-    if(
-        !values ||
-        values.length<3
-    ){
-
+    if(!values || values.length < 3){
         return color;
     }
 
-    return `
-        rgba(
-            ${values[0]},
-            ${values[1]},
-            ${values[2]},
-            ${opacity}
-        )
-    `.replace(/\s+/g," ");
+    return `rgba(${values[0]},${values[1]},${values[2]},${opacity})`;
 
 }
 
 
-$("highlightButton")
-    .addEventListener(
-        "click",
-        () => {
+$("highlightButton").addEventListener(
+    "click",
+    () => {
 
-            saveSelection();
+        preserveSelectionFromEditor();
 
-            closeSubToolbars();
+        closeAllSubToolbars();
 
-            openOverlay(
-                highlightOverlay
-            );
+        openOverlay(highlightOverlay);
 
+    }
+);
+
+
+$("highlightDone").addEventListener(
+    "click",
+    () => {
+
+        if(!restoreSelection()){
+            focusEditorEnd();
         }
-    );
 
-
-$("highlightDone")
-    .addEventListener(
-        "click",
-        () => {
-
-            if(!restoreSelection()){
-
-                focusEditorEnd();
-            }
-
-            const color =
-                colorToRgba(
-                    AppState.highlightColor,
-                    AppState.highlightOpacity
-                );
-
-            execCommand(
-                "hiliteColor",
-                color
+        const color =
+            colorToRgba(
+                AppState.highlightColor,
+                AppState.highlightOpacity
             );
 
-            closeOverlay(
-                highlightOverlay
-            );
+        executeCommand(
+            "hiliteColor",
+            color
+        );
 
+        /*
+            Firefox/بعض نسخ Chromium تستخدم backColor.
+            نطبق hiliteColor أولًا ثم نترك المحتوى.
+        */
+
+        closeOverlay(highlightOverlay);
+
+    }
+);
+
+
+$("removeHighlight").addEventListener(
+    "click",
+    () => {
+
+        if(!restoreSelection()){
+            focusEditorEnd();
         }
-    );
 
+        executeCommand(
+            "hiliteColor",
+            "transparent"
+        );
 
-$("removeHighlight")
-    .addEventListener(
-        "click",
-        () => {
+        executeCommand(
+            "backColor",
+            "transparent"
+        );
 
-            if(!restoreSelection()){
+        closeOverlay(highlightOverlay);
 
-                focusEditorEnd();
-            }
-
-            execCommand(
-                "hiliteColor",
-                "transparent"
-            );
-
-            execCommand(
-                "backColor",
-                "transparent"
-            );
-
-            closeOverlay(
-                highlightOverlay
-            );
-
-        }
-    );
+    }
+);
 
 
 /* =====================================================
@@ -3505,46 +3186,27 @@ function updateTableInfo(){
 }
 
 
-function createTable(
-    rows,
-    cols
-){
+function createTable(rows,cols){
 
     const table =
-        document.createElement(
-            "table"
-        );
+        document.createElement("table");
 
     const tbody =
-        document.createElement(
-            "tbody"
-        );
+        document.createElement("tbody");
 
-    for(
-        let r=0;
-        r<rows;
-        r++
-    ){
+    for(let r=0;r<rows;r++){
 
         const tr =
-            document.createElement(
-                "tr"
-            );
+            document.createElement("tr");
 
-        for(
-            let c=0;
-            c<cols;
-            c++
-        ){
+        for(let c=0;c<cols;c++){
 
             const td =
-                document.createElement(
-                    "td"
-                );
+                document.createElement("td");
 
-            td.contentEditable="true";
+            td.contentEditable = "true";
 
-            td.innerHTML="<br>";
+            td.innerHTML = "<br>";
 
             tr.appendChild(td);
 
@@ -3561,58 +3223,64 @@ function createTable(
 }
 
 
-function insertElement(
-    element
-){
+function insertElement(element){
+
+    if(!element){
+        return;
+    }
 
     if(!restoreSelection()){
-
         focusEditorEnd();
     }
 
     const selection =
-        getSelection();
+        getCurrentSelection();
 
-    if(!selection){
+    if(
+        !selection ||
+        selection.rangeCount === 0
+    ){
 
-        editor.appendChild(
-            element
-        );
+        editor.appendChild(element);
 
         focusEditorEnd();
 
         return;
+
     }
 
     const range =
         selection.getRangeAt(0);
 
-    if(!rangeInsideEditor(range)){
+    if(!isRangeInsideEditor(range)){
 
-        editor.appendChild(
-            element
-        );
+        editor.appendChild(element);
 
         focusEditorEnd();
 
         return;
+
     }
 
     range.deleteContents();
 
-    range.insertNode(
-        element
-    );
+    range.insertNode(element);
 
     const marker =
-        document.createTextNode(
-            "\u200B"
+        document.createTextNode("\u200B");
+
+    if(element.parentNode){
+
+        element.parentNode.insertBefore(
+            marker,
+            element.nextSibling
         );
 
-    element.parentNode.insertBefore(
-        marker,
-        element.nextSibling
-    );
+    }else{
+
+        editor.appendChild(marker);
+
+    }
 
     const newRange =
         document.createRange();
@@ -3625,10 +3293,7 @@ function insertElement(
     newRange.collapse(true);
 
     selection.removeAllRanges();
-
-    selection.addRange(
-        newRange
-    );
+    selection.addRange(newRange);
 
     AppState.savedRange =
         newRange.cloneRange();
@@ -3636,119 +3301,187 @@ function insertElement(
 }
 
 
-/* TABLE BUTTON */
+$("tableButton").addEventListener(
+    "click",
+    () => {
 
-$("tableButton")
-    .addEventListener(
-        "click",
-        () => {
+        preserveSelectionFromEditor();
 
-            saveSelection();
+        AppState.tableRows = 3;
+        AppState.tableCols = 3;
 
-            AppState.tableRows=3;
+        updateTableInfo();
 
-            AppState.tableCols=3;
+        closeAllSubToolbars();
 
-            updateTableInfo();
+        openOverlay(tableOverlay);
 
-            closeSubToolbars();
+    }
+);
 
-            openOverlay(
-                tableOverlay
+
+$("tableRowsPlus").addEventListener(
+    "click",
+    () => {
+
+        AppState.tableRows =
+            Math.min(
+                20,
+                AppState.tableRows + 1
             );
 
-        }
-    );
+        updateTableInfo();
+
+    }
+);
 
 
-$("tableRowsPlus")
-    .addEventListener(
-        "click",
-        () => {
+$("tableRowsMinus").addEventListener(
+    "click",
+    () => {
 
-            AppState.tableRows =
-                Math.min(
-                    20,
-                    AppState.tableRows+1
-                );
-
-            updateTableInfo();
-
-        }
-    );
-
-
-$("tableRowsMinus")
-    .addEventListener(
-        "click",
-        () => {
-
-            AppState.tableRows =
-                Math.max(
-                    1,
-                    AppState.tableRows-1
-                );
-
-            updateTableInfo();
-
-        }
-    );
-
-
-$("tableColsPlus")
-    .addEventListener(
-        "click",
-        () => {
-
-            AppState.tableCols =
-                Math.min(
-                    10,
-                    AppState.tableCols+1
-                );
-
-            updateTableInfo();
-
-        }
-    );
-
-
-$("tableColsMinus")
-    .addEventListener(
-        "click",
-        () => {
-
-            AppState.tableCols =
-                Math.max(
-                    1,
-                    AppState.tableCols-1
-                );
-
-            updateTableInfo();
-
-        }
-    );
-
-
-$("tableDone")
-    .addEventListener(
-        "click",
-        () => {
-
-            insertElement(
-                createTable(
-                    AppState.tableRows,
-                    AppState.tableCols
-                )
+        AppState.tableRows =
+            Math.max(
+                1,
+                AppState.tableRows - 1
             );
 
-            closeOverlay(
-                tableOverlay
+        updateTableInfo();
+
+    }
+);
+
+
+$("tableColsPlus").addEventListener(
+    "click",
+    () => {
+
+        AppState.tableCols =
+            Math.min(
+                10,
+                AppState.tableCols + 1
             );
 
-            editor.focus();
+        updateTableInfo();
+
+    }
+);
+
+
+$("tableColsMinus").addEventListener(
+    "click",
+    () => {
+
+        AppState.tableCols =
+            Math.max(
+                1,
+                AppState.tableCols - 1
+            );
+
+        updateTableInfo();
+
+    }
+);
+
+
+$("tableDone").addEventListener(
+    "click",
+    () => {
+
+        const table =
+            createTable(
+                AppState.tableRows,
+                AppState.tableCols
+            );
+
+        insertElement(table);
+
+        closeOverlay(tableOverlay);
+
+        editor.focus();
+
+    }
+);
+
+
+/* =====================================================
+   TABLE KEYBOARD
+===================================================== */
+
+editor.addEventListener(
+    "keydown",
+    event => {
+
+        const active =
+            document.activeElement;
+
+        const cell =
+            active &&
+            active.closest &&
+            active.closest("td,th");
+
+        if(!cell){
+            return;
+        }
+
+        if(event.key === "Tab"){
+
+            event.preventDefault();
+
+            const cells =
+                Array.from(
+                    editor.querySelectorAll(
+                        "table td,table th"
+                    )
+                );
+
+            const index =
+                cells.indexOf(cell);
+
+            let nextIndex =
+                event.shiftKey
+                    ? index - 1
+                    : index + 1;
+
+            /*
+                عند الوصول لآخر خلية:
+                نعود إلى أول خلية بدل الخروج من المحرر.
+            */
+            if(nextIndex >= cells.length){
+                nextIndex = 0;
+            }
+
+            if(nextIndex < 0){
+                nextIndex = cells.length - 1;
+            }
+
+            const next = cells[nextIndex];
+
+            if(next){
+
+                next.focus();
+
+                const range =
+                    document.createRange();
+
+                range.selectNodeContents(next);
+                range.collapse(false);
+
+                const selection =
+                    window.getSelection();
+
+                selection.removeAllRanges();
+                selection.addRange(range);
+
+                AppState.savedRange =
+                    range.cloneRange();
+
+            }
 
         }
-    );
+
+    }
+);
 
 
 /* =====================================================
@@ -3760,169 +3493,122 @@ function addMindBranch(){
     const container =
         $("mindBranches");
 
-    if(
-        container.children.length>=12
-    ){
-
+    if(container.children.length >= 12){
         return;
     }
 
     const input =
-        document.createElement(
-            "textarea"
-        );
+        document.createElement("textarea");
 
-    input.className =
-        "mind-input";
+    input.className = "mind-input";
 
-    input.placeholder =
-        "فرع";
+    input.placeholder = "فرع";
 
-    input.rows=2;
+    input.rows = 2;
 
-    container.appendChild(
-        input
-    );
+    container.appendChild(input);
 
 }
 
 
-$("mindMapButton")
-    .addEventListener(
-        "click",
-        () => {
+$("mindMapButton").addEventListener(
+    "click",
+    () => {
 
-            saveSelection();
+        preserveSelectionFromEditor();
 
+        $("mindCenterInput").value = "";
+
+        $("mindBranches").innerHTML = "";
+
+        addMindBranch();
+        addMindBranch();
+
+        closeAllSubToolbars();
+
+        openOverlay(mindMapOverlay);
+
+        setTimeout(
+            () => $("mindCenterInput").focus(),
+            50
+        );
+
+    }
+);
+
+
+$("mindAdd").addEventListener(
+    "click",
+    addMindBranch
+);
+
+
+$("mindDone").addEventListener(
+    "click",
+    () => {
+
+        const center =
             $("mindCenterInput")
-                .value="";
+                .value
+                .trim() ||
+            "الفكرة الرئيسية";
 
-            $("mindBranches")
-                .innerHTML="";
+        const values =
+            Array.from(
+                $("mindBranches")
+                    .querySelectorAll(".mind-input")
+            )
+            .map(input => input.value.trim())
+            .filter(Boolean);
 
-            addMindBranch();
+        const wrap =
+            document.createElement("div");
 
-            addMindBranch();
+        wrap.className = "mind-map";
 
-            closeSubToolbars();
+        const centerBox =
+            document.createElement("div");
 
-            openOverlay(
-                mindMapOverlay
-            );
+        centerBox.className = "mind-center";
 
-            setTimeout(
-                () =>
-                    $("mindCenterInput")
-                        .focus(),
-                50
-            );
+        centerBox.textContent = center;
 
-        }
-    );
+        wrap.appendChild(centerBox);
 
+        if(values.length){
 
-$("mindAdd")
-    .addEventListener(
-        "click",
-        addMindBranch
-    );
+            const branches =
+                document.createElement("div");
 
+            branches.className =
+                "mind-branches";
 
-$("mindDone")
-    .addEventListener(
-        "click",
-        () => {
+            values.forEach(value => {
 
-            const center =
-                $("mindCenterInput")
-                    .value
-                    .trim() ||
-                "الفكرة الرئيسية";
+                const branch =
+                    document.createElement("div");
 
-            const values =
-                Array.from(
-                    document.querySelectorAll(
-                        "#mindBranches .mind-input"
-                    )
-                )
-                .map(
-                    input =>
-                        input.value.trim()
-                )
-                .filter(Boolean);
+                branch.className =
+                    "mind-branch";
 
-            const wrap =
-                document.createElement(
-                    "div"
-                );
+                branch.textContent = value;
 
-            wrap.className =
-                "mind-map";
+                branches.appendChild(branch);
 
-            const centerBox =
-                document.createElement(
-                    "div"
-                );
+            });
 
-            centerBox.className =
-                "mind-center";
-
-            centerBox.textContent =
-                center;
-
-            wrap.appendChild(
-                centerBox
-            );
-
-            if(values.length){
-
-                const branches =
-                    document.createElement(
-                        "div"
-                    );
-
-                branches.className =
-                    "mind-branches";
-
-                values.forEach(
-                    value => {
-
-                        const branch =
-                            document.createElement(
-                                "div"
-                            );
-
-                        branch.className =
-                            "mind-branch";
-
-                        branch.textContent =
-                            value;
-
-                        branches.appendChild(
-                            branch
-                        );
-
-                    }
-                );
-
-                wrap.appendChild(
-                    branches
-                );
-
-            }
-
-            insertElement(
-                wrap
-            );
-
-            closeOverlay(
-                mindMapOverlay
-            );
-
-            editor.focus();
+            wrap.appendChild(branches);
 
         }
-    );
+
+        insertElement(wrap);
+
+        closeOverlay(mindMapOverlay);
+
+        editor.focus();
+
+    }
+);
 
 
 /* =====================================================
@@ -3931,63 +3617,48 @@ $("mindDone")
 
 function clearSearchHighlights(){
 
-    document
-        .querySelectorAll(
-            ".search-word"
-        )
-        .forEach(
-            span => {
+    messages
+        .querySelectorAll(".search-word")
+        .forEach(span => {
 
-                const parent =
-                    span.parentNode;
+            const parent = span.parentNode;
 
-                if(!parent){
+            if(!parent){
+                return;
+            }
 
-                    return;
-                }
+            while(span.firstChild){
 
-                while(
-                    span.firstChild
-                ){
-
-                    parent.insertBefore(
-                        span.firstChild,
-                        span
-                    );
-                }
-
-                span.remove();
+                parent.insertBefore(
+                    span.firstChild,
+                    span
+                );
 
             }
-        );
 
-    document
-        .querySelectorAll(
-            ".search-highlight"
-        )
-        .forEach(
-            element =>
-                element.classList.remove(
-                    "search-highlight"
-                )
-        );
+            span.remove();
+
+        });
+
+
+    messages
+        .querySelectorAll(".search-highlight")
+        .forEach(element => {
+
+            element.classList.remove(
+                "search-highlight"
+            );
+
+        });
 
 }
 
 
-function highlightTextNode(
-    node,
-    query
-){
+function highlightTextNode(node,query){
 
-    const text =
-        node.nodeValue;
+    const text = node.nodeValue;
 
-    if(
-        !text ||
-        !query
-    ){
-
+    if(!text || !query){
         return 0;
     }
 
@@ -4000,58 +3671,44 @@ function highlightTextNode(
     let index =
         lower.indexOf(q);
 
-    if(index===-1){
-
+    if(index === -1){
         return 0;
     }
 
     const fragment =
         document.createDocumentFragment();
 
-    let last=0;
+    let last = 0;
+    let count = 0;
 
-    let count=0;
-
-    while(index!==-1){
+    while(index !== -1){
 
         fragment.appendChild(
             document.createTextNode(
-                text.slice(
-                    last,
-                    index
-                )
+                text.slice(last,index)
             )
         );
 
         const mark =
-            document.createElement(
-                "span"
-            );
+            document.createElement("span");
 
-        mark.className =
-            "search-word";
+        mark.className = "search-word";
 
         mark.textContent =
             text.slice(
                 index,
-                index+query.length
+                index + query.length
             );
 
-        fragment.appendChild(
-            mark
-        );
+        fragment.appendChild(mark);
 
         count++;
 
         last =
-            index+
-            query.length;
+            index + query.length;
 
         index =
-            lower.indexOf(
-                q,
-                last
-            );
+            lower.indexOf(q,last);
 
     }
 
@@ -4071,12 +3728,9 @@ function highlightTextNode(
 }
 
 
-function highlightNote(
-    content,
-    query
-){
+function highlightNote(content,query){
 
-    let count=0;
+    let count = 0;
 
     const walker =
         document.createTreeWalker(
@@ -4084,21 +3738,16 @@ function highlightNote(
             NodeFilter.SHOW_TEXT
         );
 
-    const nodes=[];
+    const nodes = [];
 
     let node;
 
-    while(
-        node=walker.nextNode()
-    ){
+    while(node = walker.nextNode()){
 
         if(
             node.parentElement &&
-            node.parentElement.closest(
-                ".search-word"
-            )
+            node.parentElement.closest(".search-word")
         ){
-
             continue;
         }
 
@@ -4111,21 +3760,20 @@ function highlightNote(
         ){
 
             nodes.push(node);
+
         }
 
     }
 
-    nodes.forEach(
-        textNode => {
+    nodes.forEach(textNode => {
 
-            count +=
-                highlightTextNode(
-                    textNode,
-                    query
-                );
+        count +=
+            highlightTextNode(
+                textNode,
+                query
+            );
 
-        }
-    );
+    });
 
     return count;
 
@@ -4141,54 +3789,45 @@ function performSearch(){
 
     if(!query){
 
-        searchResult.textContent="";
+        searchResult.textContent = "";
 
         return;
+
     }
 
     const notes =
-        messages.querySelectorAll(
-            ".note"
-        );
+        messages.querySelectorAll(".note");
 
-    let noteCount=0;
+    let noteCount = 0;
+    let matchCount = 0;
+    let first = null;
 
-    let matchCount=0;
+    notes.forEach(note => {
 
-    let first=null;
+        const content =
+            note.querySelector(".note-content");
 
-    notes.forEach(
-        note => {
+        if(!content){
+            return;
+        }
 
-            const content =
-                note.querySelector(
-                    ".note-content"
-                );
+        if(
+            content.textContent
+                .toLocaleLowerCase()
+                .includes(
+                    query.toLocaleLowerCase()
+                )
+        ){
 
-            if(!content){
+            noteCount++;
 
-                return;
-            }
-
-            if(
-                content.textContent
-                    .toLocaleLowerCase()
-                    .includes(
-                        query.toLocaleLowerCase()
-                    )
-            ){
-
-                noteCount++;
-
-                if(!first){
-
-                    first=note;
-                }
-
+            if(!first){
+                first = note;
             }
 
         }
-    );
+
+    });
 
 
     if(!first){
@@ -4197,40 +3836,36 @@ function performSearch(){
             "لم يتم العثور على النص";
 
         return;
+
     }
 
 
-    notes.forEach(
-        note => {
+    notes.forEach(note => {
 
-            const content =
-                note.querySelector(
-                    ".note-content"
+        const content =
+            note.querySelector(".note-content");
+
+        if(content){
+
+            matchCount +=
+                highlightNote(
+                    content,
+                    query
                 );
 
-            if(content){
-
-                matchCount +=
-                    highlightNote(
-                        content,
-                        query
-                    );
-            }
-
         }
-    );
+
+    });
 
 
     first.classList.add(
         "search-highlight"
     );
 
-
     first.scrollIntoView({
         behavior:"smooth",
         block:"center"
     });
-
 
     searchResult.textContent =
         `تم العثور على ${matchCount} نتيجة في ${noteCount} ملاحظة`;
@@ -4238,51 +3873,43 @@ function performSearch(){
 }
 
 
-$("searchButton")
-    .addEventListener(
-        "click",
-        () => {
+$("searchButton").addEventListener(
+    "click",
+    () => {
 
-            searchInput.value="";
+        searchInput.value = "";
 
-            searchResult.textContent="";
+        searchResult.textContent = "";
 
-            clearSearchHighlights();
+        clearSearchHighlights();
 
-            openOverlay(
-                searchOverlay
-            );
+        openOverlay(searchOverlay);
 
-            setTimeout(
-                () =>
-                    searchInput.focus(),
-                50
-            );
+        setTimeout(
+            () => searchInput.focus(),
+            50
+        );
 
-        }
-    );
+    }
+);
 
 
-searchInput
-    .addEventListener(
-        "input",
-        performSearch
-    );
+searchInput.addEventListener(
+    "input",
+    performSearch
+);
 
 
-$("searchDone")
-    .addEventListener(
-        "click",
-        () => {
+$("searchDone").addEventListener(
+    "click",
+    () => {
 
-            clearSearchHighlights();
+        clearSearchHighlights();
 
-            closeOverlay(
-                searchOverlay
-            );
+        closeOverlay(searchOverlay);
 
-        }
-    );
+    }
+);
 
 
 /* =====================================================
@@ -4293,8 +3920,7 @@ function renderNotes(){
 
     clearSearchHighlights();
 
-    messages.innerHTML="";
-
+    messages.innerHTML = "";
 
     if(!AppState.notes.length){
 
@@ -4304,6 +3930,7 @@ function renderNotes(){
             </div>`;
 
         return;
+
     }
 
 
@@ -4311,27 +3938,24 @@ function renderNotes(){
         (note,index) => {
 
             const box =
-                document.createElement(
-                    "article"
-                );
+                document.createElement("article");
 
-            box.className =
-                "note";
+            box.className = "note";
 
 
             const menuButton =
-                document.createElement(
-                    "button"
-                );
+                document.createElement("button");
 
-            menuButton.className =
-                "note-menu";
+            menuButton.className = "note-menu";
 
-            menuButton.type =
-                "button";
+            menuButton.type = "button";
 
-            menuButton.textContent =
-                "⋮";
+            menuButton.textContent = "⋮";
+
+            menuButton.setAttribute(
+                "aria-label",
+                "خيارات الملاحظة"
+            );
 
 
             menuButton.addEventListener(
@@ -4340,8 +3964,7 @@ function renderNotes(){
 
                     event.stopPropagation();
 
-                    AppState.selectedIndex =
-                        index;
+                    AppState.selectedIndex = index;
 
                     openMessageMenu(
                         event.clientX,
@@ -4353,28 +3976,18 @@ function renderNotes(){
 
 
             const content =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
-            content.className =
-                "note-content";
+            content.className = "note-content";
 
             content.innerHTML =
                 note.html || "";
 
 
-            box.appendChild(
-                menuButton
-            );
+            box.appendChild(menuButton);
+            box.appendChild(content);
 
-            box.appendChild(
-                content
-            );
-
-            messages.appendChild(
-                box
-            );
+            messages.appendChild(box);
 
         }
     );
@@ -4383,42 +3996,31 @@ function renderNotes(){
 
 
 /* =====================================================
-   MENU
+   MESSAGE MENU
 ===================================================== */
 
-function openMessageMenu(
-    x,
-    y
-){
+function openMessageMenu(x,y){
 
-    messageMenu.classList.add(
-        "open"
-    );
+    messageMenu.classList.add("open");
 
-    messageMenu.style.display =
-        "block";
+    messageMenu.style.display = "block";
 
     const width =
-        messageMenu.offsetWidth ||
-        145;
+        messageMenu.offsetWidth || 145;
 
     const height =
-        messageMenu.offsetHeight ||
-        95;
+        messageMenu.offsetHeight || 95;
 
-    let left =
-        x-width;
-
-    let top =
-        y;
+    let left = x - width;
+    let top = y;
 
     left =
         Math.max(
             5,
             Math.min(
                 left,
-                window.innerWidth-
-                width-
+                window.innerWidth -
+                width -
                 5
             )
         );
@@ -4428,17 +4030,17 @@ function openMessageMenu(
             5,
             Math.min(
                 top,
-                window.innerHeight-
-                height-
+                window.innerHeight -
+                height -
                 5
             )
         );
 
     messageMenu.style.left =
-        left+"px";
+        left + "px";
 
     messageMenu.style.top =
-        top+"px";
+        top + "px";
 
 }
 
@@ -4448,20 +4050,12 @@ document.addEventListener(
     event => {
 
         if(
-            !event.target.closest(
-                ".menu"
-            ) &&
-            !event.target.closest(
-                ".note-menu"
-            )
+            !event.target.closest(".menu") &&
+            !event.target.closest(".note-menu")
         ){
 
-            messageMenu.classList.remove(
-                "open"
-            );
+            closeMessageMenu();
 
-            messageMenu.style.display =
-                "none";
         }
 
     }
@@ -4474,299 +4068,255 @@ document.addEventListener(
 
 function resetEditor(){
 
-    AppState.editingIndex=-1;
+    AppState.editingIndex = -1;
 
-    AppState.savedRange=null;
+    AppState.savedRange = null;
 
-    editor.innerHTML="";
+    editor.innerHTML = "";
 
-    state.textContent =
-        "رسالة جديدة";
+    state.textContent = "رسالة جديدة";
 
-    AppState.fontSize=16;
+    AppState.fontSize = 16;
 
-    AppState.alignment="right";
+    AppState.alignment = "right";
 
-    closeSubToolbars();
+    closeAllSubToolbars();
 
-    document
-        .querySelectorAll(
-            ".tool"
-        )
-        .forEach(
-            button =>
-                button.classList.remove(
-                    "active"
-                )
-        );
-
-    updateFontSizeButtons();
-
-    updateAlignmentButtons();
+    updateToolbarState();
 
 }
 
 
 /* =====================================================
-   SAVE
+   SAVE NOTE
 ===================================================== */
 
-$("sendButton")
-    .addEventListener(
-        "click",
-        () => {
+$("sendButton").addEventListener(
+    "click",
+    () => {
 
-            if(!hasRealContent()){
+        if(!hasRealContent()){
+            return;
+        }
 
-                return;
-            }
+        const html =
+            cleanHtml(editor.innerHTML);
 
-            const html =
-                cleanHtml(
-                    editor.innerHTML
-                );
+        if(!html){
+            return;
+        }
 
-            if(!html){
-
-                return;
-            }
-
-            const index =
-                AppState.editingIndex;
+        const index =
+            AppState.editingIndex;
 
 
-            if(
-                index>=0 &&
-                index<AppState.notes.length
-            ){
+        if(
+            index >= 0 &&
+            index < AppState.notes.length
+        ){
 
-                AppState.notes[index].html =
-                    html;
+            AppState.notes[index].html = html;
 
-            }else{
+        }else{
 
-                AppState.notes.push({
-                    html:html
-                });
-
-            }
-
-
-            if(!saveNotes()){
-
-                return;
-            }
-
-
-            renderNotes();
-
-            resetEditor();
-
-            AppState.selectedIndex=-1;
-
-
-            setTimeout(
-                () => {
-
-                    messages.scrollTop =
-                        messages.scrollHeight;
-
-                },
-                30
-            );
+            AppState.notes.push({
+                html:html
+            });
 
         }
-    );
+
+
+        if(!saveNotes()){
+            return;
+        }
+
+
+        renderNotes();
+
+        resetEditor();
+
+        AppState.selectedIndex = -1;
+
+
+        setTimeout(
+            () => {
+
+                messages.scrollTop =
+                    messages.scrollHeight;
+
+            },
+            30
+        );
+
+    }
+);
 
 
 /* =====================================================
    EDIT
 ===================================================== */
 
-$("editButton")
-    .addEventListener(
-        "click",
-        () => {
+$("editButton").addEventListener(
+    "click",
+    () => {
 
-            const index =
-                AppState.selectedIndex;
+        const index =
+            AppState.selectedIndex;
 
-            if(
-                index<0 ||
-                index>=AppState.notes.length
-            ){
+        if(
+            index < 0 ||
+            index >= AppState.notes.length
+        ){
 
-                return;
-            }
+            closeMessageMenu();
 
-            AppState.editingIndex =
-                index;
-
-            editor.innerHTML =
-                AppState.notes[index]
-                    .html || "";
-
-            state.textContent =
-                "✎ تعديل الملاحظة";
-
-            messageMenu.classList.remove(
-                "open"
-            );
-
-            messageMenu.style.display =
-                "none";
-
-            closeSubToolbars();
-
-            editor.focus();
-
-
-            setTimeout(
-                () => {
-
-                    focusEditorEnd();
-
-                    updateToolbar();
-
-                },
-                50
-            );
+            return;
 
         }
-    );
+
+        AppState.editingIndex = index;
+
+        editor.innerHTML =
+            AppState.notes[index].html || "";
+
+        state.textContent =
+            "✎ تعديل الملاحظة";
+
+        closeMessageMenu();
+
+        closeAllSubToolbars();
+
+        editor.focus();
+
+        setTimeout(
+            () => {
+
+                focusEditorEnd();
+
+                updateToolbarState();
+
+            },
+            50
+        );
+
+    }
+);
 
 
 /* =====================================================
    DELETE
 ===================================================== */
 
-$("deleteButton")
-    .addEventListener(
-        "click",
-        () => {
+$("deleteButton").addEventListener(
+    "click",
+    () => {
 
-            const index =
-                AppState.selectedIndex;
+        const index =
+            AppState.selectedIndex;
 
-            if(
-                index<0 ||
-                index>=AppState.notes.length
-            ){
+        if(
+            index < 0 ||
+            index >= AppState.notes.length
+        ){
 
-                return;
-            }
+            closeMessageMenu();
 
-
-            if(
-                !window.confirm(
-                    "هل تريدين حذف هذه الملاحظة؟"
-                )
-            ){
-
-                messageMenu.style.display =
-                    "none";
-
-                return;
-            }
-
-
-            AppState.notes.splice(
-                index,
-                1
-            );
-
-
-            if(
-                AppState.editingIndex===
-                index
-            ){
-
-                resetEditor();
-
-            }else if(
-                AppState.editingIndex>
-                index
-            ){
-
-                AppState.editingIndex--;
-            }
-
-
-            AppState.selectedIndex=-1;
-
-            saveNotes();
-
-            renderNotes();
-
-            messageMenu.style.display =
-                "none";
-
-            messageMenu.classList.remove(
-                "open"
-            );
+            return;
 
         }
-    );
+
+
+        if(
+            !window.confirm(
+                "هل تريدين حذف هذه الملاحظة؟"
+            )
+        ){
+
+            closeMessageMenu();
+
+            return;
+
+        }
+
+
+        AppState.notes.splice(index,1);
+
+
+        if(
+            AppState.editingIndex === index
+        ){
+
+            resetEditor();
+
+        }else if(
+            AppState.editingIndex > index
+        ){
+
+            AppState.editingIndex--;
+
+        }
+
+
+        AppState.selectedIndex = -1;
+
+        saveNotes();
+
+        renderNotes();
+
+        closeMessageMenu();
+
+    }
+);
 
 
 /* =====================================================
    NEW / CANCEL
 ===================================================== */
 
-$("cancelButton")
-    .addEventListener(
-        "click",
-        () => {
+$("cancelButton").addEventListener(
+    "click",
+    () => {
 
-            resetEditor();
+        resetEditor();
 
-        }
-    );
+    }
+);
 
 
-$("newButton")
-    .addEventListener(
-        "click",
-        () => {
+$("newButton").addEventListener(
+    "click",
+    () => {
 
-            resetEditor();
+        resetEditor();
 
-            editor.focus();
+        editor.focus();
 
-        }
-    );
+    }
+);
 
 
 /* =====================================================
-   OVERLAYS
+   OVERLAY CLICK
 ===================================================== */
 
 document
-    .querySelectorAll(
-        ".overlay"
-    )
-    .forEach(
-        overlay => {
+    .querySelectorAll(".overlay")
+    .forEach(overlay => {
 
-            overlay.addEventListener(
-                "click",
-                event => {
+        overlay.addEventListener(
+            "click",
+            event => {
 
-                    if(
-                        event.target===
-                        overlay
-                    ){
+                if(event.target === overlay){
 
-                        closeOverlay(
-                            overlay
-                        );
-                    }
+                    closeOverlay(overlay);
 
                 }
-            );
 
-        }
-    );
+            }
+        );
+
+    });
 
 
 /* =====================================================
@@ -4777,32 +4327,15 @@ document.addEventListener(
     "keydown",
     event => {
 
-        if(
-            event.key!=="Escape"
-        ){
-
+        if(event.key !== "Escape"){
             return;
         }
 
-        document
-            .querySelectorAll(
-                ".overlay"
-            )
-            .forEach(
-                overlay =>
-                    closeOverlay(
-                        overlay
-                    )
-            );
+        closeAllOverlays();
 
-        messageMenu.style.display =
-            "none";
+        closeMessageMenu();
 
-        messageMenu.classList.remove(
-            "open"
-        );
-
-        closeSubToolbars();
+        closeAllSubToolbars();
 
     }
 );
@@ -4823,38 +4356,34 @@ editor.addEventListener(
             window.clipboardData;
 
         if(!clipboard){
-
             return;
         }
 
         const text =
-            clipboard.getData(
-                "text/plain"
-            );
+            clipboard.getData("text/plain");
 
         if(!text){
-
             return;
         }
 
         if(!restoreSelection()){
-
             focusEditorEnd();
         }
 
         const selection =
-            getSelection();
+            getCurrentSelection();
 
-        if(!selection){
-
+        if(
+            !selection ||
+            selection.rangeCount === 0
+        ){
             return;
         }
 
         const range =
             selection.getRangeAt(0);
 
-        if(!rangeInsideEditor(range)){
-
+        if(!isRangeInsideEditor(range)){
             return;
         }
 
@@ -4873,37 +4402,28 @@ editor.addEventListener(
         lines.forEach(
             (line,index) => {
 
-                if(index>0){
+                if(index > 0){
 
                     fragment.appendChild(
-                        document.createElement(
-                            "br"
-                        )
+                        document.createElement("br")
                     );
 
                 }
 
                 fragment.appendChild(
-                    document.createTextNode(
-                        line
-                    )
+                    document.createTextNode(line)
                 );
 
             }
         );
 
 
-        range.insertNode(
-            fragment
-        );
+        range.insertNode(fragment);
 
         range.collapse(false);
 
         selection.removeAllRanges();
-
-        selection.addRange(
-            range
-        );
+        selection.addRange(range);
 
         AppState.savedRange =
             range.cloneRange();
@@ -4913,107 +4433,52 @@ editor.addEventListener(
 
 
 /* =====================================================
-   TABLE TAB
+   PREVENT SUB TOOLBAR FROM CLOSING
 ===================================================== */
 
-editor.addEventListener(
-    "keydown",
+[
+    fontSizeBar,
+    listBar,
+    alignmentBar
+].forEach(bar => {
+
+    bar.addEventListener(
+        "click",
+        event => {
+            event.stopPropagation();
+        }
+    );
+
+});
+
+
+/* =====================================================
+   OUTSIDE CLICK
+===================================================== */
+
+document.addEventListener(
+    "click",
     event => {
 
-        const cell =
-            event.target.closest &&
-            event.target.closest(
-                "td,th"
-            );
+        if(
+            !event.target.closest(".toolbar") &&
+            !event.target.closest(".sub-toolbar")
+        ){
 
-        if(!cell){
+            /*
+                لا نغلق الـ toolbar إذا كان المستخدم
+                داخل المحرر؛ نغلق فقط القوائم الفرعية
+                عند الضغط خارجه.
+            */
 
-            return;
-        }
-
-        if(event.key==="Tab"){
-
-            event.preventDefault();
-
-            const cells =
-                Array.from(
-                    editor.querySelectorAll(
-                        "table td,table th"
-                    )
-                );
-
-            const index =
-                cells.indexOf(cell);
-
-            const next =
-                cells[
-                    event.shiftKey
-                        ? index-1
-                        : index+1
-                ];
-
-            if(next){
-
-                next.focus();
-
-                const range =
-                    document.createRange();
-
-                range.selectNodeContents(
-                    next
-                );
-
-                range.collapse(false);
-
-                const selection =
-                    window.getSelection();
-
-                selection.removeAllRanges();
-
-                selection.addRange(
-                    range
-                );
-
-                AppState.savedRange =
-                    range.cloneRange();
-
+            if(!event.target.closest(".editor")){
+                closeAllSubToolbars();
             }
 
         }
 
     }
 );
-
-
-/* =====================================================
-   IMPORTANT:
-   Prevent toolbar from stealing editor selection
-   while keeping CLICK fully functional.
-===================================================== */
-
-document
-    .querySelectorAll(
-        ".toolbar button"
-    )
-    .forEach(
-        button => {
-
-            button.addEventListener(
-                "mousedown",
-                event => {
-
-                    /*
-                     لا نستخدم preventDefault هنا.
-                     نريد أن يعمل click طبيعيًا.
-                    */
-
-                    saveSelection();
-
-                }
-            );
-
-        }
-    );
 
 
 /* =====================================================
@@ -5030,8 +4495,11 @@ updateAlignmentButtons();
 
 updateTableInfo();
 
-closeSubToolbars();
+closeAllSubToolbars();
 
+closeAllOverlays();
+
+closeMessageMenu();
 
 </script>
 
