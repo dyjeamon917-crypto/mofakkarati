@@ -690,63 +690,6 @@ highlightOverlay.style.display="flex";
 });
 
 
-/* ==========================
-   بدون تمييز
-========================== */
-
-document.getElementById("removeHighlight").addEventListener("click",function(){
-
-/*
-   إيقاف التمييز للكتابة الجديدة
-*/
-highlightEnabled=false;
-
-/*
-   أهم خطوة:
-   إزالة التمييز بالكامل من المحرر
-   حتى لو لم يتم تحديد أي نص.
-*/
-removeAllHighlight();
-
-/*
-   إغلاق نافذة التمييز
-*/
-highlightOverlay.style.display="none";
-
-/*
-   تنظيف التحديد المحفوظ حتى لا يعود
-   التحديد القديم عند الضغط على الأدوات.
-*/
-savedRange=null;
-
-/*
-   وضع المؤشر داخل المحرر
-   مع التأكد أن الكتابة الجديدة
-   بدون تمييز.
-*/
-editor.focus();
-
-try{
-
-document.execCommand(
-"backColor",
-false,
-"transparent"
-);
-
-document.execCommand(
-"hiliteColor",
-false,
-"transparent"
-);
-
-}catch(e){}
-
-saveSelection();
-
-});
-
-
 
 /* ==========================
    أحجام الخط
