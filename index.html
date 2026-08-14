@@ -1,3 +1,4 @@
+
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 
@@ -832,6 +833,10 @@ type="button">➤</button>
 </div>
 
 
+<!-- ==========================
+     لون الخط
+========================== -->
+
 <div
 class="overlay"
 id="colorOverlay">
@@ -904,6 +909,10 @@ type="button">
 
 </div>
 
+
+<!-- ==========================
+     التمييز
+========================== -->
 
 <div
 class="overlay"
@@ -983,6 +992,10 @@ type="button">
 </div>
 
 
+<!-- ==========================
+     الجدول
+========================== -->
+
 <div
 class="overlay"
 id="tableOverlay">
@@ -1045,6 +1058,10 @@ type="button">
 </div>
 
 
+<!-- ==========================
+     الخريطة الذهنية
+========================== -->
+
 <div
 class="overlay"
 id="mindMapOverlay">
@@ -1085,6 +1102,10 @@ type="button">
 </div>
 
 
+<!-- ==========================
+     البحث
+========================== -->
+
 <div
 class="overlay"
 id="searchOverlay">
@@ -1117,6 +1138,10 @@ type="button">
 
 </div>
 
+
+<!-- ==========================
+     قائمة الرسالة
+========================== -->
 
 <div
 class="menu"
@@ -2951,12 +2976,6 @@ document.getElementById(
 );
 
 
-/*
-   تم تغيير خانة الفرع من input
-   إلى textarea حتى يسمح Enter
-   بالنزول لسطر جديد داخل نفس الفرع.
-*/
-
 function addMindBranch(){
 
 const input =
@@ -2969,26 +2988,6 @@ input.placeholder =
 "فرع";
 
 input.rows = 2;
-
-
-/* ==========================
-   التعديل الوحيد:
-   Enter ينزل سطرًا جديدًا
-   داخل نفس الفرع
-========================== */
-
-input.addEventListener(
-"keydown",
-function(event){
-
-if(event.key === "Enter"){
-
-event.stopPropagation();
-
-}
-
-});
-
 
 mindBranches.appendChild(
 input
@@ -3117,8 +3116,32 @@ document.createElement("div");
 branch.className =
 "mind-branch";
 
+/* ==========================
+   التعديل المطلوب:
+   الفرع نفسه بعد إدراجه
+   أصبح قابلًا للكتابة والتعديل
+========================== */
+
+branch.contentEditable =
+"true";
+
+branch.spellcheck =
+true;
+
 branch.textContent =
 value;
+
+branch.addEventListener(
+"keydown",
+function(event){
+
+if(event.key === "Enter"){
+
+event.stopPropagation();
+
+}
+
+});
 
 branches.appendChild(
 branch
@@ -3625,3 +3648,4 @@ updateFontSizeButtons();
 
 </body>
 </html>
+```
