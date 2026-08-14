@@ -81,6 +81,11 @@ font-size:20px
 transform:scale(.96)
 }
 
+button:focus-visible{
+outline:2px solid #5f8fe8;
+outline-offset:2px
+}
+
 .messages{
 flex:1;
 min-height:0;
@@ -126,6 +131,11 @@ background:#292e39
 content:"";
 display:block;
 clear:both
+}
+
+.note table{
+display:block;
+overflow-x:auto
 }
 
 .editor-area{
@@ -239,6 +249,10 @@ text-decoration-thickness:2px
 .note img{
 max-width:100%;
 height:auto
+}
+
+.editor img{
+display:inline-block
 }
 
 .send{
@@ -660,15 +674,20 @@ padding:0 2px
 }
 
 @media(max-width:420px){
-.panel{width:94vw}
+.panel{
+width:94vw
+}
+
 .color-wheel{
 width:220px;
 height:220px
 }
+
 .mind-branch{
 min-width:70px;
 max-width:45%
 }
+
 .editor{
 max-height:155px
 }
@@ -678,6 +697,7 @@ max-height:155px
 .panel{
 max-height:92vh
 }
+
 .editor{
 max-height:125px
 }
@@ -831,7 +851,6 @@ style="--hue:0"
 </div>
 
 <div class="hue-marker" id="textHueMarker"></div>
-
 <div class="color-marker" id="textColorMarker"></div>
 
 </div>
@@ -886,7 +905,6 @@ style="--hue:60"
 </div>
 
 <div class="hue-marker" id="highlightHueMarker"></div>
-
 <div class="color-marker" id="highlightColorMarker"></div>
 
 </div>
@@ -1021,6 +1039,7 @@ autocomplete="off"
 </button>
 
 </div>
+
 <script>
 "use strict";
 
@@ -1039,8 +1058,8 @@ try {
     notes = Array.isArray(parsed)
         ? parsed.filter(function(note) {
             return note &&
-                   typeof note === "object" &&
-                   typeof note.html === "string";
+                typeof note === "object" &&
+                typeof note.html === "string";
         })
         : [];
 
@@ -1067,14 +1086,9 @@ const editor = document.getElementById("editor");
 const messages = document.getElementById("messages");
 const state = document.getElementById("state");
 
-const messageMenu =
-    document.getElementById("messageMenu");
-
-const fontSizeBar =
-    document.getElementById("fontSizeBar");
-
-const alignmentBar =
-    document.getElementById("alignmentBar");
+const messageMenu = document.getElementById("messageMenu");
+const fontSizeBar = document.getElementById("fontSizeBar");
+const alignmentBar = document.getElementById("alignmentBar");
 
 
 /* =========================================================
@@ -1083,15 +1097,9 @@ const alignmentBar =
 
 function saveNotes() {
     try {
-        localStorage.setItem(
-            STORAGE,
-            JSON.stringify(notes)
-        );
+        localStorage.setItem(STORAGE, JSON.stringify(notes));
     } catch (error) {
-        console.error(
-            "تعذر حفظ الملاحظات:",
-            error
-        );
+        console.error("تعذر حفظ الملاحظات:", error);
     }
 }
 
@@ -1108,24 +1116,16 @@ function editorHasRealContent() {
         br.replaceWith(" ");
     });
 
-    const text =
-        (clone.textContent || "")
+    const text = (clone.textContent || "")
         .replace(/\u200B/g, "")
         .replace(/\uFEFF/g, "")
         .replace(/\u00A0/g, " ")
         .trim();
 
-    const hasTable =
-        Boolean(clone.querySelector("table"));
+    const hasTable = Boolean(clone.querySelector("table"));
+    const hasMindMap = Boolean(clone.querySelector(".mind-map"));
 
-    const hasMindMap =
-        Boolean(clone.querySelector(".mind-map"));
-
-    return Boolean(
-        text ||
-        hasTable ||
-        hasMindMap
-    );
+    return Boolean(text || hasTable || hasMindMap);
 }
 
 
@@ -1134,7 +1134,6 @@ function editorHasRealContent() {
 ========================================================= */
 
 function cleanEditorHtml(html) {
-
     return String(html || "")
         .replace(/\u200B/g, "")
         .replace(/\uFEFF/g, "")
@@ -1151,22 +1150,17 @@ function render() {
     messages.innerHTML = "";
 
     if (notes.length === 0) {
-
         messages.innerHTML =
             '<div class="empty">لا توجد ملاحظات بعد</div>';
-
         return;
     }
 
     notes.forEach(function(note, index) {
 
-        const box =
-            document.createElement("div");
-
+        const box = document.createElement("div");
         box.className = "note";
 
-        const menu =
-            document.createElement("button");
+        const menu = document.createElement("button");
 
         menu.className = "note-menu";
         menu.textContent = "⋮";
@@ -1177,28 +1171,23 @@ function render() {
             "خيارات الملاحظة"
         );
 
-        menu.addEventListener(
-            "click",
-            function(event) {
+        menu.addEventListener("click", function(event) {
 
-                event.stopPropagation();
+            event.stopPropagation();
 
-                selectedIndex = index;
+            selectedIndex = index;
 
-                openMessageMenu(
-                    event.clientX,
-                    event.clientY
-                );
-            }
-        );
+            openMessageMenu(
+                event.clientX,
+                event.clientY
+            );
+        });
 
         box.appendChild(menu);
 
-        const content =
-            document.createElement("div");
+        const content = document.createElement("div");
 
-        content.innerHTML =
-            note.html || "";
+        content.innerHTML = note.html || "";
 
         box.appendChild(content);
 
@@ -1215,11 +1204,8 @@ function openMessageMenu(x, y) {
 
     messageMenu.style.display = "block";
 
-    const menuWidth =
-        messageMenu.offsetWidth || 145;
-
-    const menuHeight =
-        messageMenu.offsetHeight || 100;
+    const menuWidth = messageMenu.offsetWidth || 145;
+    const menuHeight = messageMenu.offsetHeight || 100;
 
     let left = x - menuWidth;
     let top = y;
@@ -1228,50 +1214,32 @@ function openMessageMenu(x, y) {
         left = 5;
     }
 
-    if (
-        left + menuWidth >
-        window.innerWidth - 5
-    ) {
-        left =
-            window.innerWidth -
-            menuWidth -
-            5;
+    if (left + menuWidth > window.innerWidth - 5) {
+        left = window.innerWidth - menuWidth - 5;
     }
 
-    if (
-        top + menuHeight >
-        window.innerHeight - 5
-    ) {
-        top =
-            window.innerHeight -
-            menuHeight -
-            5;
+    if (top + menuHeight > window.innerHeight - 5) {
+        top = window.innerHeight - menuHeight - 5;
     }
 
     if (top < 5) {
         top = 5;
     }
 
-    messageMenu.style.left =
-        left + "px";
-
-    messageMenu.style.top =
-        top + "px";
+    messageMenu.style.left = left + "px";
+    messageMenu.style.top = top + "px";
 }
 
 
-document.addEventListener(
-    "click",
-    function(event) {
+document.addEventListener("click", function(event) {
 
-        if (
-            !event.target.closest(".menu") &&
-            !event.target.closest(".note-menu")
-        ) {
-            messageMenu.style.display = "none";
-        }
+    if (
+        !event.target.closest(".menu") &&
+        !event.target.closest(".note-menu")
+    ) {
+        messageMenu.style.display = "none";
     }
-);
+});
 
 
 /* =========================================================
@@ -1285,12 +1253,10 @@ function rangeBelongsToEditor(range) {
     }
 
     try {
-
         return (
             editor.contains(range.startContainer) &&
             editor.contains(range.endContainer)
         );
-
     } catch (error) {
         return false;
     }
@@ -1304,8 +1270,7 @@ function selectionIsInsideEditor(range) {
 
 function saveSelection() {
 
-    const selection =
-        window.getSelection();
+    const selection = window.getSelection();
 
     if (
         !selection ||
@@ -1314,31 +1279,28 @@ function saveSelection() {
         return;
     }
 
-    const range =
-        selection.getRangeAt(0);
+    const range = selection.getRangeAt(0);
 
-    if (
-        selectionIsInsideEditor(range)
-    ) {
-        savedRange =
-            range.cloneRange();
+    if (selectionIsInsideEditor(range)) {
+        savedRange = range.cloneRange();
     }
 }
 
 
 function restoreSelection() {
 
-    if (
-        !savedRange ||
-        !selectionIsInsideEditor(savedRange)
-    ) {
+    if (!savedRange) {
+        return false;
+    }
+
+    if (!selectionIsInsideEditor(savedRange)) {
+        savedRange = null;
         return false;
     }
 
     try {
 
-        const selection =
-            window.getSelection();
+        const selection = window.getSelection();
 
         selection.removeAllRanges();
         selection.addRange(savedRange);
@@ -1352,15 +1314,30 @@ function restoreSelection() {
             error
         );
 
+        savedRange = null;
         return false;
     }
 }
 
 
 function focusEditor() {
-
     editor.focus();
     restoreSelection();
+}
+
+
+/* =========================================================
+   إخفاء أشرطة الأدوات
+========================================================= */
+
+function hideToolBars() {
+
+    fontSizeBar.style.display = "none";
+    alignmentBar.style.display = "none";
+
+    if (listBar) {
+        listBar.style.display = "none";
+    }
 }
 
 
@@ -1370,8 +1347,7 @@ function focusEditor() {
 
 function detectCurrentFontSize() {
 
-    const selection =
-        window.getSelection();
+    const selection = window.getSelection();
 
     if (
         !selection ||
@@ -1380,17 +1356,13 @@ function detectCurrentFontSize() {
         return currentFontSize;
     }
 
-    const range =
-        selection.getRangeAt(0);
+    const range = selection.getRangeAt(0);
 
-    if (
-        !selectionIsInsideEditor(range)
-    ) {
+    if (!selectionIsInsideEditor(range)) {
         return currentFontSize;
     }
 
-    let node =
-        selection.anchorNode;
+    let node = selection.anchorNode;
 
     if (
         node &&
@@ -1413,37 +1385,29 @@ function detectCurrentFontSize() {
         element !== editor
     ) {
 
-        const computed =
-            getComputedStyle(element);
-
-        const size =
-            parseFloat(computed.fontSize);
+        const computed = getComputedStyle(element);
+        const size = parseFloat(computed.fontSize);
 
         if (
             Number.isFinite(size) &&
             size > 0
         ) {
-            currentFontSize =
-                Math.round(size);
-
+            currentFontSize = Math.round(size);
             return currentFontSize;
         }
 
-        element =
-            element.parentElement;
+        element = element.parentElement;
     }
 
-    const editorSize =
-        parseFloat(
-            getComputedStyle(editor).fontSize
-        );
+    const editorSize = parseFloat(
+        getComputedStyle(editor).fontSize
+    );
 
     if (
         Number.isFinite(editorSize) &&
         editorSize > 0
     ) {
-        currentFontSize =
-            Math.round(editorSize);
+        currentFontSize = Math.round(editorSize);
     }
 
     return currentFontSize;
@@ -1456,8 +1420,7 @@ function detectCurrentFontSize() {
 
 function detectCurrentAlignment() {
 
-    const selection =
-        window.getSelection();
+    const selection = window.getSelection();
 
     if (
         !selection ||
@@ -1466,17 +1429,13 @@ function detectCurrentAlignment() {
         return currentAlignment;
     }
 
-    const range =
-        selection.getRangeAt(0);
+    const range = selection.getRangeAt(0);
 
-    if (
-        !selectionIsInsideEditor(range)
-    ) {
+    if (!selectionIsInsideEditor(range)) {
         return currentAlignment;
     }
 
-    let node =
-        selection.anchorNode;
+    let node = selection.anchorNode;
 
     if (
         node &&
@@ -1490,8 +1449,7 @@ function detectCurrentAlignment() {
         node !== editor
     ) {
 
-        const style =
-            getComputedStyle(node);
+        const style = getComputedStyle(node);
 
         if (
             style.textAlign === "right" ||
@@ -1499,19 +1457,15 @@ function detectCurrentAlignment() {
             style.textAlign === "left"
         ) {
 
-            currentAlignment =
-                style.textAlign;
-
+            currentAlignment = style.textAlign;
             return currentAlignment;
         }
 
-        node =
-            node.parentElement;
+        node = node.parentElement;
     }
 
     currentAlignment =
-        getComputedStyle(editor).textAlign ||
-        "right";
+        getComputedStyle(editor).textAlign || "right";
 
     return currentAlignment;
 }
@@ -1523,46 +1477,35 @@ function detectCurrentAlignment() {
 
 function updateToolbarState() {
 
-    const selection =
-        window.getSelection();
+    const selection = window.getSelection();
 
     const range =
-        selection &&
-        selection.rangeCount > 0
+        selection && selection.rangeCount > 0
             ? selection.getRangeAt(0)
             : null;
 
-    if (
-        !selectionIsInsideEditor(range)
-    ) {
+    if (!selectionIsInsideEditor(range)) {
         return;
     }
 
     try {
 
-        document
-            .getElementById("boldButton")
-            .classList.toggle(
-                "active",
-                document.queryCommandState("bold")
-            );
+        document.getElementById("boldButton").classList.toggle(
+            "active",
+            document.queryCommandState("bold")
+        );
 
-        document
-            .getElementById("italicButton")
-            .classList.toggle(
-                "active",
-                document.queryCommandState("italic")
-            );
+        document.getElementById("italicButton").classList.toggle(
+            "active",
+            document.queryCommandState("italic")
+        );
 
-        document
-            .getElementById("underlineButton")
-            .classList.toggle(
-                "active",
-                document.queryCommandState("underline")
-            );
+        document.getElementById("underlineButton").classList.toggle(
+            "active",
+            document.queryCommandState("underline")
+        );
 
     } catch (error) {
-
         console.warn(
             "تعذر معرفة حالة التنسيق:",
             error
@@ -1610,226 +1553,174 @@ function command(name, value = null) {
 
 
 /* =========================================================
-   Bold
+   أزرار التنسيق
 ========================================================= */
 
-document
-    .getElementById("boldButton")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("boldButton").addEventListener(
+    "click",
+    function() {
 
-            saveSelection();
-            command("bold");
+        saveSelection();
+        command("bold");
 
-            editor.focus();
-            updateToolbarState();
-        }
-    );
+        editor.focus();
+        updateToolbarState();
+    }
+);
 
 
-/* =========================================================
-   Italic
-========================================================= */
+document.getElementById("italicButton").addEventListener(
+    "click",
+    function() {
 
-document
-    .getElementById("italicButton")
-    .addEventListener(
-        "click",
-        function() {
+        saveSelection();
+        command("italic");
 
-            saveSelection();
-            command("italic");
-
-            editor.focus();
-            updateToolbarState();
-        }
-    );
+        editor.focus();
+        updateToolbarState();
+    }
+);
 
 
-/* =========================================================
-   Underline
-========================================================= */
+document.getElementById("underlineButton").addEventListener(
+    "click",
+    function() {
 
-document
-    .getElementById("underlineButton")
-    .addEventListener(
-        "click",
-        function() {
+        saveSelection();
+        command("underline");
 
-            saveSelection();
-            command("underline");
-
-            editor.focus();
-            updateToolbarState();
-        }
-    );
-
-
-/* =========================================================
-   Enter
-========================================================= */
-
-editor.addEventListener(
-    "keydown",
-    function(event) {
-
-        if (event.key !== "Enter") {
-            return;
-        }
-
-        const target =
-            event.target;
-
-        if (
-            target &&
-            target.closest &&
-            target.closest("td,th")
-        ) {
-            return;
-        }
-
-        event.preventDefault();
-
-        const selection =
-            window.getSelection();
-
-        if (
-            !selection ||
-            selection.rangeCount === 0
-        ) {
-            return;
-        }
-
-        const range =
-            selection.getRangeAt(0);
-
-        if (
-            !selectionIsInsideEditor(range)
-        ) {
-            return;
-        }
-
-        if (!range.collapsed) {
-            range.deleteContents();
-        }
-
-        const br =
-            document.createElement("br");
-
-        range.insertNode(br);
-
-        const space =
-            document.createTextNode("\u200B");
-
-        br.parentNode.insertBefore(
-            space,
-            br.nextSibling
-        );
-
-        const newRange =
-            document.createRange();
-
-        newRange.setStart(
-            space,
-            space.length
-        );
-
-        newRange.collapse(true);
-
-        selection.removeAllRanges();
-        selection.addRange(newRange);
-
-        savedRange =
-            newRange.cloneRange();
-
+        editor.focus();
         updateToolbarState();
     }
 );
 
 
 /* =========================================================
+   Enter
+========================================================= */
+
+editor.addEventListener("keydown", function(event) {
+
+    if (event.key !== "Enter") {
+        return;
+    }
+
+    const target = event.target;
+
+    if (
+        target &&
+        target.closest &&
+        target.closest("td,th")
+    ) {
+        return;
+    }
+
+    event.preventDefault();
+
+    const selection = window.getSelection();
+
+    if (
+        !selection ||
+        selection.rangeCount === 0
+    ) {
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    if (!selectionIsInsideEditor(range)) {
+        return;
+    }
+
+    if (!range.collapsed) {
+        range.deleteContents();
+    }
+
+    const br = document.createElement("br");
+
+    range.insertNode(br);
+
+    const space = document.createTextNode("\u200B");
+
+    br.parentNode.insertBefore(
+        space,
+        br.nextSibling
+    );
+
+    const newRange = document.createRange();
+
+    newRange.setStart(
+        space,
+        space.length
+    );
+
+    newRange.collapse(true);
+
+    selection.removeAllRanges();
+    selection.addRange(newRange);
+
+    savedRange = newRange.cloneRange();
+
+    updateToolbarState();
+});
+
+
+/* =========================================================
    أحداث التحديد
 ========================================================= */
 
-editor.addEventListener(
-    "mouseup",
-    function() {
+function updateSelectionState() {
 
-        setTimeout(function() {
+    setTimeout(function() {
 
-            saveSelection();
-            updateToolbarState();
+        saveSelection();
+        updateToolbarState();
 
-        }, 0);
-    }
-);
+    }, 0);
+}
 
 
-editor.addEventListener(
-    "keyup",
-    function() {
+editor.addEventListener("mouseup", updateSelectionState);
+editor.addEventListener("keyup", updateSelectionState);
 
-        setTimeout(function() {
+editor.addEventListener("touchend", function() {
 
-            saveSelection();
-            updateToolbarState();
+    setTimeout(function() {
 
-        }, 0);
-    }
-);
+        saveSelection();
+        updateToolbarState();
 
-
-editor.addEventListener(
-    "touchend",
-    function() {
-
-        setTimeout(function() {
-
-            saveSelection();
-            updateToolbarState();
-
-        }, 120);
-    }
-);
+    }, 100);
+});
 
 
-editor.addEventListener(
-    "input",
-    function() {
+editor.addEventListener("input", function() {
 
-        setTimeout(function() {
+    setTimeout(function() {
 
-            saveSelection();
-            updateToolbarState();
+        saveSelection();
+        updateToolbarState();
 
-        }, 0);
-    }
-);
+    }, 0);
+});
 
 
 document.addEventListener(
     "selectionchange",
     function() {
 
-        const selection =
-            window.getSelection();
+        const selection = window.getSelection();
 
         if (
             selection &&
             selection.rangeCount > 0
         ) {
 
-            const range =
-                selection.getRangeAt(0);
+            const range = selection.getRangeAt(0);
 
-            if (
-                selectionIsInsideEditor(range)
-            ) {
+            if (selectionIsInsideEditor(range)) {
 
-                savedRange =
-                    range.cloneRange();
-
+                savedRange = range.cloneRange();
                 updateToolbarState();
             }
         }
@@ -1864,32 +1755,21 @@ function hsvToRgb(h, s, v) {
     let b = 0;
 
     if (h < 60) {
-
         r = c;
         g = x;
-
     } else if (h < 120) {
-
         r = x;
         g = c;
-
     } else if (h < 180) {
-
         g = c;
         b = x;
-
     } else if (h < 240) {
-
         g = x;
         b = c;
-
     } else if (h < 300) {
-
         r = x;
         b = c;
-
     } else {
-
         r = c;
         b = x;
     }
@@ -1932,33 +1812,94 @@ function setupAdvancedColorWheel(
     let saturation = 100;
     let value = 100;
 
+    function updateHueMarker() {
+
+        const rect = wheel.getBoundingClientRect();
+
+        const cx = rect.width / 2;
+        const cy = rect.height / 2;
+
+        const radius =
+            Math.min(
+                rect.width,
+                rect.height
+            ) / 2;
+
+        const ringRadius = radius * .89;
+
+        const x =
+            cx +
+            Math.sin(
+                hue * Math.PI / 180
+            ) *
+            ringRadius;
+
+        const y =
+            cy -
+            Math.cos(
+                hue * Math.PI / 180
+            ) *
+            ringRadius;
+
+        hueMarker.style.left =
+            (x / rect.width * 100) + "%";
+
+        hueMarker.style.top =
+            (y / rect.height * 100) + "%";
+    }
+
+
+    function updateColorMarker() {
+
+        const rect = wheel.getBoundingClientRect();
+
+        const innerLeft = rect.width * .13;
+        const innerTop = rect.height * .13;
+
+        const innerWidth = rect.width * .74;
+        const innerHeight = rect.height * .74;
+
+        const x =
+            innerLeft +
+            (saturation / 100) *
+            innerWidth;
+
+        const y =
+            innerTop +
+            (1 - value / 100) *
+            innerHeight;
+
+        colorMarker.style.left =
+            (x / rect.width * 100) + "%";
+
+        colorMarker.style.top =
+            (y / rect.height * 100) + "%";
+    }
+
+
     function setColor() {
 
-        wheel.style.setProperty(
-            "--hue",
-            hue
-        );
+        wheel.style.setProperty("--hue", hue);
 
-        const rgb =
-            hsvToRgb(
-                hue,
-                saturation,
-                value
-            );
+        const rgb = hsvToRgb(
+            hue,
+            saturation,
+            value
+        );
 
         colorMarker.style.background =
             rgbString(rgb);
 
-        callback(
-            rgbString(rgb)
-        );
+        updateHueMarker();
+        updateColorMarker();
+
+        callback(rgbString(rgb));
     }
 
 
     function setHue(event) {
 
-        const rect =
-            wheel.getBoundingClientRect();
+        const rect = wheel.getBoundingClientRect();
 
         const cx =
             rect.left +
@@ -1984,63 +1925,18 @@ function setupAdvancedColorWheel(
 
         hue = angle;
 
-        const radius =
-            Math.min(
-                rect.width,
-                rect.height
-            ) / 2;
-
-        const ringRadius =
-            radius * .89;
-
-        const x =
-            cx +
-            Math.sin(
-                hue * Math.PI / 180
-            ) *
-            ringRadius;
-
-        const y =
-            cy -
-            Math.cos(
-                hue * Math.PI / 180
-            ) *
-            ringRadius;
-
-        hueMarker.style.left =
-            (
-                (x - rect.left) /
-                rect.width *
-                100
-            ) + "%";
-
-        hueMarker.style.top =
-            (
-                (y - rect.top) /
-                rect.height *
-                100
-            ) + "%";
-
         setColor();
     }
 
 
     function setSV(event) {
 
-        const rect =
-            wheel.getBoundingClientRect();
+        const rect = wheel.getBoundingClientRect();
 
-        const innerLeft =
-            rect.width * .13;
-
-        const innerTop =
-            rect.height * .13;
-
-        const innerWidth =
-            rect.width * .74;
-
-        const innerHeight =
-            rect.height * .74;
+        const innerLeft = rect.width * .13;
+        const innerTop = rect.height * .13;
+        const innerWidth = rect.width * .74;
+        const innerHeight = rect.height * .74;
 
         let x =
             event.clientX -
@@ -2052,23 +1948,15 @@ function setupAdvancedColorWheel(
             rect.top -
             innerTop;
 
-        x =
-            Math.max(
-                0,
-                Math.min(
-                    innerWidth,
-                    x
-                )
-            );
+        x = Math.max(
+            0,
+            Math.min(innerWidth, x)
+        );
 
-        y =
-            Math.max(
-                0,
-                Math.min(
-                    innerHeight,
-                    y
-                )
-            );
+        y = Math.max(
+            0,
+            Math.min(innerHeight, y)
+        );
 
         saturation =
             x / innerWidth * 100;
@@ -2076,26 +1964,6 @@ function setupAdvancedColorWheel(
         value =
             100 -
             y / innerHeight * 100;
-
-        const markerX =
-            innerLeft + x;
-
-        const markerY =
-            innerTop + y;
-
-        colorMarker.style.left =
-            (
-                markerX /
-                rect.width *
-                100
-            ) + "%";
-
-        colorMarker.style.top =
-            (
-                markerY /
-                rect.height *
-                100
-            ) + "%";
 
         setColor();
     }
@@ -2138,22 +2006,14 @@ function setupAdvancedColorWheel(
                     rect.height
                 ) / 2;
 
-            if (
-                distance >
-                radius * .78
-            ) {
-
+            if (distance > radius * .78) {
                 hueDragging = true;
-
             } else {
-
                 svDragging = true;
             }
 
             try {
-                wheel.setPointerCapture(
-                    event.pointerId
-                );
+                wheel.setPointerCapture(event.pointerId);
             } catch (error) {}
 
             if (hueDragging) {
@@ -2184,26 +2044,25 @@ function setupAdvancedColorWheel(
     );
 
 
+    function stopDragging(event) {
+
+        hueDragging = false;
+        svDragging = false;
+
+        try {
+            wheel.releasePointerCapture(event.pointerId);
+        } catch (error) {}
+    }
+
+
     wheel.addEventListener(
         "pointerup",
-        function(event) {
-
-            hueDragging = false;
-            svDragging = false;
-
-            try {
-                wheel.releasePointerCapture(
-                    event.pointerId
-                );
-            } catch (error) {}
-        }
+        stopDragging
     );
-
 
     wheel.addEventListener(
         "pointercancel",
         function() {
-
             hueDragging = false;
             svDragging = false;
         }
@@ -2219,24 +2078,16 @@ function setupAdvancedColorWheel(
 ========================================================= */
 
 const colorOverlay =
-    document.getElementById(
-        "colorOverlay"
-    );
+    document.getElementById("colorOverlay");
 
 const textColorWheel =
-    document.getElementById(
-        "textColorWheel"
-    );
+    document.getElementById("textColorWheel");
 
 const textHueMarker =
-    document.getElementById(
-        "textHueMarker"
-    );
+    document.getElementById("textHueMarker");
 
 const textColorMarker =
-    document.getElementById(
-        "textColorMarker"
-    );
+    document.getElementById("textColorMarker");
 
 let chosenTextColor =
     "rgb(255,255,255)";
@@ -2248,91 +2099,73 @@ setupAdvancedColorWheel(
     textColorMarker,
     0,
     function(color) {
-
         chosenTextColor = color;
     }
 );
 
 
-document
-    .getElementById("blackText")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("blackText").addEventListener(
+    "click",
+    function() {
 
-            chosenTextColor =
-                "rgb(0,0,0)";
-
-            textColorMarker.style.background =
-                "#000";
-        }
-    );
+        chosenTextColor = "rgb(0,0,0)";
+        textColorMarker.style.background = "#000";
+    }
+);
 
 
-document
-    .getElementById("whiteText")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("whiteText").addEventListener(
+    "click",
+    function() {
 
-            chosenTextColor =
-                "rgb(255,255,255)";
-
-            textColorMarker.style.background =
-                "#fff";
-        }
-    );
+        chosenTextColor = "rgb(255,255,255)";
+        textColorMarker.style.background = "#fff";
+    }
+);
 
 
-document
-    .getElementById("colorButton")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("colorButton").addEventListener(
+    "click",
+    function() {
 
-            saveSelection();
+        saveSelection();
 
-            colorOverlay.style.display =
-                "flex";
-        }
-    );
+        colorOverlay.style.display = "flex";
+    }
+);
 
 
-document
-    .getElementById("colorDone")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("colorDone").addEventListener(
+    "click",
+    function() {
 
-            if (restoreSelection()) {
+        if (restoreSelection()) {
 
-                try {
+            try {
 
-                    document.execCommand(
-                        "foreColor",
-                        false,
-                        chosenTextColor
-                    );
+                document.execCommand(
+                    "foreColor",
+                    false,
+                    chosenTextColor
+                );
 
-                } catch (error) {
+            } catch (error) {
 
-                    console.error(
-                        "تعذر تطبيق لون الخط:",
-                        error
-                    );
-                }
-
-                saveSelection();
+                console.error(
+                    "تعذر تطبيق لون الخط:",
+                    error
+                );
             }
 
-            colorOverlay.style.display =
-                "none";
-
-            editor.focus();
-
-            updateToolbarState();
+            saveSelection();
         }
-    );
+
+        colorOverlay.style.display = "none";
+
+        editor.focus();
+        updateToolbarState();
+    }
+);
 
 
 /* =========================================================
@@ -2340,24 +2173,16 @@ document
 ========================================================= */
 
 const highlightOverlay =
-    document.getElementById(
-        "highlightOverlay"
-    );
+    document.getElementById("highlightOverlay");
 
 const highlightColorWheel =
-    document.getElementById(
-        "highlightColorWheel"
-    );
+    document.getElementById("highlightColorWheel");
 
 const highlightHueMarker =
-    document.getElementById(
-        "highlightHueMarker"
-    );
+    document.getElementById("highlightHueMarker");
 
 const highlightColorMarker =
-    document.getElementById(
-        "highlightColorMarker"
-    );
+    document.getElementById("highlightColorMarker");
 
 let chosenHighlightColor =
     "rgb(255,255,0)";
@@ -2365,27 +2190,21 @@ let chosenHighlightColor =
 let highlightOpacity = .60;
 
 
-function hexWithOpacity(
-    color,
-    opacity
-) {
+function hexWithOpacity(color, opacity) {
 
-    const temp =
-        document.createElement("span");
+    const temp = document.createElement("span");
 
     temp.style.color = color;
 
     document.body.appendChild(temp);
 
-    const rgb =
-        getComputedStyle(temp).color;
+    const rgb = getComputedStyle(temp).color;
 
     temp.remove();
 
-    const match =
-        rgb.match(/\d+/g);
+    const match = rgb.match(/\d+/g);
 
-    if (!match) {
+    if (!match || match.length < 3) {
         return color;
     }
 
@@ -2406,130 +2225,119 @@ setupAdvancedColorWheel(
     highlightColorMarker,
     60,
     function(color) {
-
         chosenHighlightColor = color;
     }
 );
 
 
-document
-    .getElementById("opacityRange")
-    .addEventListener(
-        "input",
-        function(event) {
+document.getElementById("opacityRange").addEventListener(
+    "input",
+    function(event) {
 
-            highlightOpacity =
-                Number(event.target.value) /
-                100;
-        }
-    );
+        highlightOpacity =
+            Number(event.target.value) / 100;
+    }
+);
 
 
-document
-    .getElementById("highlightButton")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("highlightButton").addEventListener(
+    "click",
+    function() {
 
-            saveSelection();
+        saveSelection();
 
-            highlightOverlay.style.display =
-                "flex";
-        }
-    );
+        highlightOverlay.style.display = "flex";
+    }
+);
 
 
-document
-    .getElementById("highlightDone")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("highlightDone").addEventListener(
+    "click",
+    function() {
 
-            if (restoreSelection()) {
+        if (restoreSelection()) {
 
-                const color =
-                    hexWithOpacity(
-                        chosenHighlightColor,
-                        highlightOpacity
-                    );
+            const color =
+                hexWithOpacity(
+                    chosenHighlightColor,
+                    highlightOpacity
+                );
 
-                try {
+            try {
 
-                    document.execCommand(
-                        "hiliteColor",
-                        false,
-                        color
-                    );
+                document.execCommand(
+                    "hiliteColor",
+                    false,
+                    color
+                );
 
-                } catch (error) {
-
-                    try {
-
-                        document.execCommand(
-                            "backColor",
-                            false,
-                            color
-                        );
-
-                    } catch (secondError) {
-
-                        console.error(
-                            "تعذر تطبيق التمييز:",
-                            secondError
-                        );
-                    }
-                }
-
-                saveSelection();
-            }
-
-            highlightOverlay.style.display =
-                "none";
-
-            editor.focus();
-        }
-    );
-
-
-document
-    .getElementById("removeHighlight")
-    .addEventListener(
-        "click",
-        function() {
-
-            if (restoreSelection()) {
+            } catch (error) {
 
                 try {
-
-                    document.execCommand(
-                        "hiliteColor",
-                        false,
-                        "transparent"
-                    );
 
                     document.execCommand(
                         "backColor",
                         false,
-                        "transparent"
+                        color
                     );
 
-                } catch (error) {
+                } catch (secondError) {
 
                     console.error(
-                        "تعذر إزالة التمييز:",
-                        error
+                        "تعذر تطبيق التمييز:",
+                        secondError
                     );
                 }
-
-                saveSelection();
             }
 
-            highlightOverlay.style.display =
-                "none";
-
-            editor.focus();
+            saveSelection();
         }
-    );
+
+        highlightOverlay.style.display = "none";
+
+        editor.focus();
+        updateToolbarState();
+    }
+);
+
+
+document.getElementById("removeHighlight").addEventListener(
+    "click",
+    function() {
+
+        if (restoreSelection()) {
+
+            try {
+
+                document.execCommand(
+                    "hiliteColor",
+                    false,
+                    "transparent"
+                );
+
+                document.execCommand(
+                    "backColor",
+                    false,
+                    "transparent"
+                );
+
+            } catch (error) {
+
+                console.error(
+                    "تعذر إزالة التمييز:",
+                    error
+                );
+            }
+
+            saveSelection();
+        }
+
+        highlightOverlay.style.display = "none";
+
+        editor.focus();
+        updateToolbarState();
+    }
+);
 
 
 /* =========================================================
@@ -2542,52 +2350,37 @@ const fontSizes = [
 ];
 
 
-fontSizes.forEach(
-    function(size) {
+fontSizes.forEach(function(size) {
 
-        const button =
-            document.createElement("button");
+    const button = document.createElement("button");
 
-        button.className =
-            "font-size-item";
+    button.className = "font-size-item";
+    button.textContent = size;
+    button.type = "button";
+    button.title = "حجم " + size;
 
-        button.textContent =
-            size;
+    button.addEventListener(
+        "click",
+        function() {
+            applyFontSize(size);
+        }
+    );
 
-        button.type = "button";
-
-        button.title =
-            "حجم " + size;
-
-        button.addEventListener(
-            "click",
-            function() {
-
-                applyFontSize(size);
-            }
-        );
-
-        fontSizeBar.appendChild(button);
-    }
-);
+    fontSizeBar.appendChild(button);
+});
 
 
 function updateFontSizeButtons() {
 
     fontSizeBar
-        .querySelectorAll(
-            ".font-size-item"
-        )
-        .forEach(
-            function(button) {
+        .querySelectorAll(".font-size-item")
+        .forEach(function(button) {
 
-                button.classList.toggle(
-                    "active",
-                    Number(button.textContent) ===
-                    currentFontSize
-                );
-            }
-        );
+            button.classList.toggle(
+                "active",
+                Number(button.textContent) === currentFontSize
+            );
+        });
 }
 
 
@@ -2600,13 +2393,11 @@ function applyFontSize(size) {
     currentFontSize = size;
 
     if (!restoreSelection()) {
-
         editor.focus();
         return;
     }
 
-    const selection =
-        window.getSelection();
+    const selection = window.getSelection();
 
     if (
         !selection ||
@@ -2615,12 +2406,9 @@ function applyFontSize(size) {
         return;
     }
 
-    const range =
-        selection.getRangeAt(0);
+    const range = selection.getRangeAt(0);
 
-    if (
-        !selectionIsInsideEditor(range)
-    ) {
+    if (!selectionIsInsideEditor(range)) {
         return;
     }
 
@@ -2634,9 +2422,7 @@ function applyFontSize(size) {
             size + "px";
 
         const textNode =
-            document.createTextNode(
-                "\u200B"
-            );
+            document.createTextNode("\u200B");
 
         span.appendChild(textNode);
 
@@ -2655,54 +2441,35 @@ function applyFontSize(size) {
         selection.removeAllRanges();
         selection.addRange(newRange);
 
-        savedRange =
-            newRange.cloneRange();
+        savedRange = newRange.cloneRange();
 
     } else {
 
         try {
 
-            document.execCommand(
-                "fontSize",
-                false,
-                "7"
-            );
+            const fragment =
+                range.extractContents();
 
-            const fonts = [
-                ...editor.querySelectorAll(
-                    'font[size="7"]'
-                )
-            ];
+            const wrapper =
+                document.createElement("span");
 
-            fonts.forEach(
-                function(font) {
+            wrapper.style.fontSize =
+                size + "px";
 
-                    try {
+            wrapper.appendChild(fragment);
 
-                        if (
-                            typeof range.intersectsNode ===
-                            "function" &&
-                            !range.intersectsNode(font)
-                        ) {
-                            return;
-                        }
+            range.insertNode(wrapper);
 
-                        font.removeAttribute("size");
+            const newRange =
+                document.createRange();
 
-                        font.style.fontSize =
-                            size + "px";
+            newRange.selectNodeContents(wrapper);
 
-                    } catch (error) {
+            selection.removeAllRanges();
+            selection.addRange(newRange);
 
-                        console.warn(
-                            "تعذر تعديل عنصر:",
-                            error
-                        );
-                    }
-                }
-            );
-
-            saveSelection();
+            savedRange =
+                newRange.cloneRange();
 
         } catch (error) {
 
@@ -2713,8 +2480,7 @@ function applyFontSize(size) {
         }
     }
 
-    fontSizeBar.style.display =
-        "none";
+    fontSizeBar.style.display = "none";
 
     editor.focus();
 
@@ -2727,148 +2493,103 @@ function applyFontSize(size) {
    زر حجم الخط
 ========================================================= */
 
-document
-    .getElementById("sizeButton")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("sizeButton").addEventListener(
+    "click",
+    function() {
 
-            saveSelection();
+        saveSelection();
 
-            detectCurrentFontSize();
-            updateFontSizeButtons();
+        detectCurrentFontSize();
+        updateFontSizeButtons();
 
-            fontSizeBar.style.display =
-                "flex";
+        fontSizeBar.style.display = "flex";
 
-            alignmentBar.style.display =
-                "none";
+        alignmentBar.style.display = "none";
 
-            if (listBar) {
-                listBar.style.display =
-                    "none";
+        if (listBar) {
+            listBar.style.display = "none";
+        }
+
+        setTimeout(function() {
+
+            const active =
+                fontSizeBar.querySelector(
+                    ".font-size-item.active"
+                );
+
+            if (active) {
+
+                active.scrollIntoView({
+                    behavior: "smooth",
+                    block: "nearest",
+                    inline: "center"
+                });
             }
 
-            setTimeout(
-                function() {
-
-                    const active =
-                        fontSizeBar.querySelector(
-                            ".font-size-item.active"
-                        );
-
-                    if (active) {
-
-                        active.scrollIntoView({
-                            behavior: "smooth",
-                            block: "nearest",
-                            inline: "center"
-                        });
-                    }
-
-                },
-                20
-            );
-        }
-    );
+        }, 20);
+    }
+);
 
 
 /* =========================================================
    القوائم
 ========================================================= */
 
-listBar =
-    document.createElement("div");
+listBar = document.createElement("div");
 
-listBar.className =
-    "font-size-bar";
-
-listBar.id =
-    "listBar";
-
-listBar.style.direction =
-    "rtl";
+listBar.className = "font-size-bar";
+listBar.id = "listBar";
+listBar.style.direction = "rtl";
 
 
 const bulletList =
     document.createElement("button");
 
-bulletList.className =
-    "font-size-item";
-
-bulletList.textContent =
-    "•";
-
-bulletList.title =
-    "تنقيط";
-
-bulletList.type =
-    "button";
+bulletList.className = "font-size-item";
+bulletList.textContent = "•";
+bulletList.title = "تنقيط";
+bulletList.type = "button";
 
 
 const numberList =
     document.createElement("button");
 
-numberList.className =
-    "font-size-item";
-
-numberList.textContent =
-    "١.";
-
-numberList.title =
-    "ترقيم";
-
-numberList.type =
-    "button";
+numberList.className = "font-size-item";
+numberList.textContent = "١.";
+numberList.title = "ترقيم";
+numberList.type = "button";
 
 
-listBar.appendChild(
-    bulletList
-);
-
-listBar.appendChild(
-    numberList
-);
+listBar.appendChild(bulletList);
+listBar.appendChild(numberList);
 
 
 document
     .querySelector(".editor-area")
-    .insertBefore(
-        listBar,
-        fontSizeBar
-    );
+    .insertBefore(listBar, fontSizeBar);
 
 
-document
-    .getElementById("listButton")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("listButton").addEventListener(
+    "click",
+    function() {
 
-            saveSelection();
+        saveSelection();
 
-            fontSizeBar.style.display =
-                "none";
+        fontSizeBar.style.display = "none";
+        alignmentBar.style.display = "none";
 
-            alignmentBar.style.display =
-                "none";
-
-            listBar.style.display =
-                "flex";
-        }
-    );
+        listBar.style.display = "flex";
+    }
+);
 
 
 bulletList.addEventListener(
     "click",
     function() {
 
-        command(
-            "insertUnorderedList"
-        );
+        command("insertUnorderedList");
 
-        listBar.style.display =
-            "none";
+        listBar.style.display = "none";
 
         editor.focus();
     }
@@ -2879,12 +2600,9 @@ numberList.addEventListener(
     "click",
     function() {
 
-        command(
-            "insertOrderedList"
-        );
+        command("insertOrderedList");
 
-        listBar.style.display =
-            "none";
+        listBar.style.display = "none";
 
         editor.focus();
     }
@@ -2899,89 +2617,70 @@ function updateAlignmentButtons() {
 
     alignmentBar
         .querySelectorAll(".align-item")
-        .forEach(
-            function(button) {
+        .forEach(function(button) {
 
-                button.classList.toggle(
-                    "active",
-                    button.dataset.align ===
-                    currentAlignment
-                );
-            }
-        );
+            button.classList.toggle(
+                "active",
+                button.dataset.align === currentAlignment
+            );
+        });
 }
 
 
-document
-    .getElementById("alignmentButton")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("alignmentButton").addEventListener(
+    "click",
+    function() {
 
-            saveSelection();
+        saveSelection();
 
-            detectCurrentAlignment();
+        detectCurrentAlignment();
 
-            fontSizeBar.style.display =
-                "none";
+        fontSizeBar.style.display = "none";
+        listBar.style.display = "none";
 
-            listBar.style.display =
-                "none";
+        alignmentBar.style.display = "flex";
 
-            alignmentBar.style.display =
-                "flex";
-
-            updateAlignmentButtons();
-        }
-    );
+        updateAlignmentButtons();
+    }
+);
 
 
 alignmentBar
     .querySelectorAll(".align-item")
-    .forEach(
-        function(button) {
+    .forEach(function(button) {
 
-            button.addEventListener(
-                "click",
-                function() {
+        button.addEventListener(
+            "click",
+            function() {
 
-                    const align =
-                        button.dataset.align;
+                const align =
+                    button.dataset.align;
 
-                    currentAlignment =
-                        align;
+                currentAlignment = align;
 
-                    const commandName =
-                        align === "right"
-                            ? "justifyRight"
-                            : align === "left"
-                                ? "justifyLeft"
-                                : "justifyCenter";
+                const commandName =
+                    align === "right"
+                        ? "justifyRight"
+                        : align === "left"
+                            ? "justifyLeft"
+                            : "justifyCenter";
 
-                    command(commandName);
+                command(commandName);
 
-                    alignmentBar
-                        .querySelectorAll(".align-item")
-                        .forEach(
-                            function(b) {
-                                b.classList.remove(
-                                    "active"
-                                );
-                            }
-                        );
+                alignmentBar
+                    .querySelectorAll(".align-item")
+                    .forEach(function(b) {
+                        b.classList.remove("active");
+                    });
 
-                    button.classList.add(
-                        "active"
-                    );
+                button.classList.add("active");
 
-                    alignmentBar.style.display =
-                        "none";
+                alignmentBar.style.display = "none";
 
-                    editor.focus();
-                }
-            );
-        }
-    );
+                editor.focus();
+            }
+        );
+    });
 
 
 /* =========================================================
@@ -2989,14 +2688,10 @@ alignmentBar
 ========================================================= */
 
 const tableOverlay =
-    document.getElementById(
-        "tableOverlay"
-    );
+    document.getElementById("tableOverlay");
 
 const tableInfo =
-    document.getElementById(
-        "tableInfo"
-    );
+    document.getElementById("tableInfo");
 
 let tableRows = 3;
 let tableCols = 3;
@@ -3005,43 +2700,26 @@ let tableCols = 3;
 function updateTableInfo() {
 
     tableInfo.textContent =
-        tableRows +
-        " × " +
-        tableCols;
+        tableRows + " × " + tableCols;
 }
 
 
 function createTable(rows, cols) {
 
-    const table =
-        document.createElement("table");
+    const table = document.createElement("table");
 
-    const tbody =
-        document.createElement("tbody");
+    const tbody = document.createElement("tbody");
 
-    for (
-        let r = 0;
-        r < rows;
-        r++
-    ) {
+    for (let r = 0; r < rows; r++) {
 
-        const tr =
-            document.createElement("tr");
+        const tr = document.createElement("tr");
 
-        for (
-            let c = 0;
-            c < cols;
-            c++
-        ) {
+        for (let c = 0; c < cols; c++) {
 
-            const td =
-                document.createElement("td");
+            const td = document.createElement("td");
 
-            td.contentEditable =
-                "true";
-
-            td.innerHTML =
-                "<br>";
+            td.contentEditable = "true";
+            td.innerHTML = "<br>";
 
             tr.appendChild(td);
         }
@@ -3055,145 +2733,157 @@ function createTable(rows, cols) {
 }
 
 
-document
-    .getElementById("tableButton")
-    .addEventListener(
-        "click",
-        function() {
+function insertElementAtSelection(element) {
 
-            saveSelection();
+    if (restoreSelection()) {
 
-            tableRows = 3;
-            tableCols = 3;
+        const selection = window.getSelection();
 
-            updateTableInfo();
+        if (
+            selection &&
+            selection.rangeCount > 0
+        ) {
 
-            tableOverlay.style.display =
-                "flex";
-        }
-    );
+            const range =
+                selection
+                    .getRangeAt(0)
+                    .cloneRange();
 
+            range.deleteContents();
+            range.collapse(true);
 
-document
-    .getElementById("tableRowsPlus")
-    .addEventListener(
-        "click",
-        function() {
+            range.insertNode(element);
 
-            tableRows =
-                Math.min(
-                    20,
-                    tableRows + 1
+            const after =
+                document.createTextNode("\u200B");
+
+            if (element.parentNode) {
+
+                element.parentNode.insertBefore(
+                    after,
+                    element.nextSibling
                 );
-
-            updateTableInfo();
-        }
-    );
-
-
-document
-    .getElementById("tableRowsMinus")
-    .addEventListener(
-        "click",
-        function() {
-
-            tableRows =
-                Math.max(
-                    1,
-                    tableRows - 1
-                );
-
-            updateTableInfo();
-        }
-    );
-
-
-document
-    .getElementById("tableColsPlus")
-    .addEventListener(
-        "click",
-        function() {
-
-            tableCols =
-                Math.min(
-                    10,
-                    tableCols + 1
-                );
-
-            updateTableInfo();
-        }
-    );
-
-
-document
-    .getElementById("tableColsMinus")
-    .addEventListener(
-        "click",
-        function() {
-
-            tableCols =
-                Math.max(
-                    1,
-                    tableCols - 1
-                );
-
-            updateTableInfo();
-        }
-    );
-
-
-document
-    .getElementById("tableDone")
-    .addEventListener(
-        "click",
-        function() {
-
-            const table =
-                createTable(
-                    tableRows,
-                    tableCols
-                );
-
-            if (restoreSelection()) {
-
-                const selection =
-                    window.getSelection();
-
-                if (
-                    selection &&
-                    selection.rangeCount > 0
-                ) {
-
-                    const range =
-                        selection
-                            .getRangeAt(0)
-                            .cloneRange();
-
-                    range.collapse(false);
-
-                    range.insertNode(table);
-
-                    range.setStartAfter(table);
-                    range.collapse(true);
-
-                    selection.removeAllRanges();
-                    selection.addRange(range);
-
-                    savedRange =
-                        range.cloneRange();
-                }
-
-            } else {
-
-                editor.appendChild(table);
             }
 
-            tableOverlay.style.display =
-                "none";
+            const newRange =
+                document.createRange();
 
-            editor.focus();
+            newRange.setStart(
+                after,
+                after.length
+            );
+
+            newRange.collapse(true);
+
+            selection.removeAllRanges();
+            selection.addRange(newRange);
+
+            savedRange =
+                newRange.cloneRange();
+
+            return true;
         }
-    );
+    }
+
+    editor.appendChild(element);
+
+    const range = document.createRange();
+
+    range.selectNodeContents(editor);
+    range.collapse(false);
+
+    const selection = window.getSelection();
+
+    selection.removeAllRanges();
+    selection.addRange(range);
+
+    savedRange = range.cloneRange();
+
+    return false;
+}
+
+
+document.getElementById("tableButton").addEventListener(
+    "click",
+    function() {
+
+        saveSelection();
+
+        tableRows = 3;
+        tableCols = 3;
+
+        updateTableInfo();
+
+        tableOverlay.style.display = "flex";
+    }
+);
+
+
+document.getElementById("tableRowsPlus").addEventListener(
+    "click",
+    function() {
+
+        tableRows =
+            Math.min(20, tableRows + 1);
+
+        updateTableInfo();
+    }
+);
+
+
+document.getElementById("tableRowsMinus").addEventListener(
+    "click",
+    function() {
+
+        tableRows =
+            Math.max(1, tableRows - 1);
+
+        updateTableInfo();
+    }
+);
+
+
+document.getElementById("tableColsPlus").addEventListener(
+    "click",
+    function() {
+
+        tableCols =
+            Math.min(10, tableCols + 1);
+
+        updateTableInfo();
+    }
+);
+
+
+document.getElementById("tableColsMinus").addEventListener(
+    "click",
+    function() {
+
+        tableCols =
+            Math.max(1, tableCols - 1);
+
+        updateTableInfo();
+    }
+);
+
+
+document.getElementById("tableDone").addEventListener(
+    "click",
+    function() {
+
+        const table =
+            createTable(
+                tableRows,
+                tableCols
+            );
+
+        insertElementAtSelection(table);
+
+        tableOverlay.style.display = "none";
+
+        editor.focus();
+    }
+);
 
 
 /* =========================================================
@@ -3201,201 +2891,128 @@ document
 ========================================================= */
 
 const mindMapOverlay =
-    document.getElementById(
-        "mindMapOverlay"
-    );
+    document.getElementById("mindMapOverlay");
 
 const mindCenterInput =
-    document.getElementById(
-        "mindCenterInput"
-    );
+    document.getElementById("mindCenterInput");
 
 const mindBranches =
-    document.getElementById(
-        "mindBranches"
-    );
+    document.getElementById("mindBranches");
 
 
 function addMindBranch() {
 
     const input =
-        document.createElement(
-            "textarea"
-        );
+        document.createElement("textarea");
 
-    input.className =
-        "mind-input";
-
-    input.placeholder =
-        "فرع";
-
+    input.className = "mind-input";
+    input.placeholder = "فرع";
     input.rows = 2;
 
     mindBranches.appendChild(input);
 }
 
 
-document
-    .getElementById("mindMapButton")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("mindMapButton").addEventListener(
+    "click",
+    function() {
 
-            saveSelection();
+        saveSelection();
 
-            mindCenterInput.value = "";
+        mindCenterInput.value = "";
+        mindBranches.innerHTML = "";
 
-            mindBranches.innerHTML = "";
+        addMindBranch();
+        addMindBranch();
 
+        mindMapOverlay.style.display = "flex";
+
+        setTimeout(function() {
+            mindCenterInput.focus();
+        }, 50);
+    }
+);
+
+
+document.getElementById("mindAdd").addEventListener(
+    "click",
+    function() {
+
+        if (mindBranches.children.length < 12) {
             addMindBranch();
-            addMindBranch();
-
-            mindMapOverlay.style.display =
-                "flex";
-
-            setTimeout(
-                function() {
-                    mindCenterInput.focus();
-                },
-                50
-            );
         }
-    );
+    }
+);
 
 
-document
-    .getElementById("mindAdd")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("mindDone").addEventListener(
+    "click",
+    function() {
 
-            if (
-                mindBranches.children.length < 12
-            ) {
-                addMindBranch();
-            }
-        }
-    );
+        const center =
+            mindCenterInput.value.trim() ||
+            "الفكرة الرئيسية";
 
-
-document
-    .getElementById("mindDone")
-    .addEventListener(
-        "click",
-        function() {
-
-            const center =
-                mindCenterInput.value.trim() ||
-                "الفكرة الرئيسية";
-
-            const values =
-                [
-                    ...mindBranches.querySelectorAll(
-                        ".mind-input"
-                    )
-                ]
-                .map(
-                    function(input) {
-                        return input.value.trim();
-                    }
+        const values =
+            [
+                ...mindBranches.querySelectorAll(
+                    ".mind-input"
                 )
-                .filter(Boolean);
+            ]
+            .map(function(input) {
+                return input.value.trim();
+            })
+            .filter(Boolean);
 
 
-            const wrap =
+        const wrap =
+            document.createElement("div");
+
+        wrap.className = "mind-map";
+
+
+        const centerBox =
+            document.createElement("div");
+
+        centerBox.className = "mind-center";
+        centerBox.textContent = center;
+
+        wrap.appendChild(centerBox);
+
+
+        if (values.length) {
+
+            const branches =
                 document.createElement("div");
 
-            wrap.className =
-                "mind-map";
+            branches.className =
+                "mind-branches";
 
+            values.forEach(function(value) {
 
-            const centerBox =
-                document.createElement("div");
-
-            centerBox.className =
-                "mind-center";
-
-            centerBox.textContent =
-                center;
-
-            wrap.appendChild(
-                centerBox
-            );
-
-
-            if (values.length) {
-
-                const branches =
+                const branch =
                     document.createElement("div");
 
-                branches.className =
-                    "mind-branches";
+                branch.className =
+                    "mind-branch";
 
-                values.forEach(
-                    function(value) {
+                branch.textContent =
+                    value;
 
-                        const branch =
-                            document.createElement("div");
+                branches.appendChild(branch);
+            });
 
-                        branch.className =
-                            "mind-branch";
-
-                        branch.textContent =
-                            value;
-
-                        branches.appendChild(
-                            branch
-                        );
-                    }
-                );
-
-                wrap.appendChild(
-                    branches
-                );
-            }
-
-
-            if (restoreSelection()) {
-
-                const selection =
-                    window.getSelection();
-
-                if (
-                    selection &&
-                    selection.rangeCount > 0
-                ) {
-
-                    const range =
-                        selection
-                            .getRangeAt(0)
-                            .cloneRange();
-
-                    range.collapse(false);
-
-                    range.insertNode(wrap);
-
-                    range.setStartAfter(wrap);
-                    range.collapse(true);
-
-                    selection.removeAllRanges();
-                    selection.addRange(range);
-
-                    savedRange =
-                        range.cloneRange();
-                }
-
-            } else {
-
-                editor.appendChild(wrap);
-            }
-
-
-            mindMapOverlay.style.display =
-                "none";
-
-            editor.focus();
+            wrap.appendChild(branches);
         }
-    );
+
+
+        insertElementAtSelection(wrap);
+
+        mindMapOverlay.style.display = "none";
+
+        editor.focus();
+    }
+);
 
 
 /* =========================================================
@@ -3403,43 +3020,31 @@ document
 ========================================================= */
 
 const searchOverlay =
-    document.getElementById(
-        "searchOverlay"
-    );
+    document.getElementById("searchOverlay");
 
 const searchInput =
-    document.getElementById(
-        "searchInput"
-    );
+    document.getElementById("searchInput");
 
 const searchResult =
-    document.getElementById(
-        "searchResult"
-    );
+    document.getElementById("searchResult");
 
 
-document
-    .getElementById("searchButton")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("searchButton").addEventListener(
+    "click",
+    function() {
 
-            searchInput.value = "";
-            searchResult.textContent = "";
+        searchInput.value = "";
+        searchResult.textContent = "";
 
-            clearSearchHighlights();
+        clearSearchHighlights();
 
-            searchOverlay.style.display =
-                "flex";
+        searchOverlay.style.display = "flex";
 
-            setTimeout(
-                function() {
-                    searchInput.focus();
-                },
-                50
-            );
-        }
-    );
+        setTimeout(function() {
+            searchInput.focus();
+        }, 50);
+    }
+);
 
 
 /* =========================================================
@@ -3449,46 +3054,36 @@ document
 function clearSearchHighlights() {
 
     document
-        .querySelectorAll(
-            ".search-highlight"
-        )
-        .forEach(
-            function(element) {
+        .querySelectorAll(".search-highlight")
+        .forEach(function(element) {
 
-                element.classList.remove(
-                    "search-highlight"
-                );
-            }
-        );
+            element.classList.remove(
+                "search-highlight"
+            );
+        });
 
 
     document
-        .querySelectorAll(
-            ".search-word"
-        )
-        .forEach(
-            function(element) {
+        .querySelectorAll(".search-word")
+        .forEach(function(element) {
 
-                const parent =
-                    element.parentNode;
+            const parent =
+                element.parentNode;
 
-                if (!parent) {
-                    return;
-                }
-
-                while (
-                    element.firstChild
-                ) {
-
-                    parent.insertBefore(
-                        element.firstChild,
-                        element
-                    );
-                }
-
-                element.remove();
+            if (!parent) {
+                return;
             }
-        );
+
+            while (element.firstChild) {
+
+                parent.insertBefore(
+                    element.firstChild,
+                    element
+                );
+            }
+
+            element.remove();
+        });
 }
 
 
@@ -3501,26 +3096,20 @@ function highlightTextNode(
     query
 ) {
 
-    const text =
-        textNode.nodeValue;
+    const text = textNode.nodeValue;
 
-    if (
-        !text ||
-        !query
-    ) {
+    if (!text || !query) {
         return 0;
     }
 
     const lowerText =
-        text.toLowerCase();
+        text.toLocaleLowerCase();
 
     const lowerQuery =
-        query.toLowerCase();
+        query.toLocaleLowerCase();
 
     let index =
-        lowerText.indexOf(
-            lowerQuery
-        );
+        lowerText.indexOf(lowerQuery);
 
     if (index === -1) {
         return 0;
@@ -3532,7 +3121,6 @@ function highlightTextNode(
     let lastIndex = 0;
     let count = 0;
 
-
     while (index !== -1) {
 
         fragment.appendChild(
@@ -3543,7 +3131,6 @@ function highlightTextNode(
                 )
             )
         );
-
 
         const span =
             document.createElement("span");
@@ -3571,13 +3158,11 @@ function highlightTextNode(
             );
     }
 
-
     fragment.appendChild(
         document.createTextNode(
             text.slice(lastIndex)
         )
     );
-
 
     if (textNode.parentNode) {
 
@@ -3613,15 +3198,13 @@ function highlightWordsInNote(
                         if (
                             !node.nodeValue ||
                             !node.nodeValue
-                                .toLowerCase()
+                                .toLocaleLowerCase()
                                 .includes(
-                                    query.toLowerCase()
+                                    query.toLocaleLowerCase()
                                 )
                         ) {
-
                             return NodeFilter.FILTER_REJECT;
                         }
-
 
                         if (
                             node.parentElement &&
@@ -3634,10 +3217,8 @@ function highlightWordsInNote(
                                 )
                             )
                         ) {
-
                             return NodeFilter.FILTER_REJECT;
                         }
-
 
                         return NodeFilter.FILTER_ACCEPT;
                     }
@@ -3650,24 +3231,19 @@ function highlightWordsInNote(
     let current;
 
     while (
-        current =
-            walker.nextNode()
+        (current = walker.nextNode())
     ) {
-
         nodes.push(current);
     }
 
 
-    nodes.forEach(
-        function(node) {
+    nodes.forEach(function(node) {
 
-            count +=
-                highlightTextNode(
-                    node,
-                    query
-                );
-        }
-    );
+        count += highlightTextNode(
+            node,
+            query
+        );
+    });
 
     return count;
 }
@@ -3697,26 +3273,29 @@ function performSearch() {
 
     document
         .querySelectorAll(".note")
-        .forEach(
-            function(note) {
+        .forEach(function(note) {
 
-                const text =
-                    note.textContent.toLowerCase();
+            const content =
+                note.querySelector("div:not(.note-menu)");
 
-                if (
-                    text.includes(
-                        query.toLowerCase()
-                    )
-                ) {
+            const text =
+                (content || note)
+                    .textContent
+                    .toLocaleLowerCase();
 
-                    noteCount++;
+            if (
+                text.includes(
+                    query.toLocaleLowerCase()
+                )
+            ) {
 
-                    if (!first) {
-                        first = note;
-                    }
+                noteCount++;
+
+                if (!first) {
+                    first = note;
                 }
             }
-        );
+        });
 
 
     if (!first) {
@@ -3730,16 +3309,20 @@ function performSearch() {
 
     document
         .querySelectorAll(".note")
-        .forEach(
-            function(note) {
+        .forEach(function(note) {
+
+            const content =
+                note.querySelector("div:not(.note-menu)");
+
+            if (content) {
 
                 matchCount +=
                     highlightWordsInNote(
-                        note,
+                        content,
                         query
                     );
             }
-        );
+        });
 
 
     first.classList.add(
@@ -3768,18 +3351,15 @@ searchInput.addEventListener(
 );
 
 
-document
-    .getElementById("searchDone")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("searchDone").addEventListener(
+    "click",
+    function() {
 
-            searchOverlay.style.display =
-                "none";
+        searchOverlay.style.display = "none";
 
-            clearSearchHighlights();
-        }
-    );
+        clearSearchHighlights();
+    }
+);
 
 
 /* =========================================================
@@ -3799,19 +3379,9 @@ function resetEditor() {
 
     currentFontSize = 16;
 
-    currentAlignment =
-        "right";
+    currentAlignment = "right";
 
-    fontSizeBar.style.display =
-        "none";
-
-    alignmentBar.style.display =
-        "none";
-
-    if (listBar) {
-        listBar.style.display =
-            "none";
-    }
+    hideToolBars();
 
 
     document
@@ -3828,17 +3398,11 @@ function resetEditor() {
 
 
     alignmentBar
-        .querySelectorAll(
-            ".align-item"
-        )
-        .forEach(
-            function(button) {
+        .querySelectorAll(".align-item")
+        .forEach(function(button) {
 
-                button.classList.remove(
-                    "active"
-                );
-            }
-        );
+            button.classList.remove("active");
+        });
 
 
     updateFontSizeButtons();
@@ -3850,251 +3414,214 @@ function resetEditor() {
    حفظ الرسالة
 ========================================================= */
 
-document
-    .getElementById("sendButton")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("sendButton").addEventListener(
+    "click",
+    function() {
 
-            if (
-                !editorHasRealContent()
-            ) {
-                return;
-            }
-
-
-            const html =
-                cleanEditorHtml(
-                    editor.innerHTML
-                );
-
-
-            if (!html) {
-                return;
-            }
-
-
-            if (
-                editingIndex >= 0 &&
-                editingIndex < notes.length
-            ) {
-
-                notes[editingIndex].html =
-                    html;
-
-            } else {
-
-                notes.push({
-                    html: html
-                });
-            }
-
-
-            saveNotes();
-
-            render();
-
-            resetEditor();
-
-            selectedIndex = -1;
-
-
-            setTimeout(
-                function() {
-
-                    messages.scrollTop =
-                        messages.scrollHeight;
-
-                },
-                50
-            );
+        if (!editorHasRealContent()) {
+            return;
         }
-    );
+
+        const html =
+            cleanEditorHtml(
+                editor.innerHTML
+            );
+
+        if (!html) {
+            return;
+        }
+
+
+        if (
+            editingIndex >= 0 &&
+            editingIndex < notes.length
+        ) {
+
+            notes[editingIndex].html =
+                html;
+
+        } else {
+
+            notes.push({
+                html: html
+            });
+        }
+
+
+        saveNotes();
+        render();
+        resetEditor();
+
+        selectedIndex = -1;
+
+
+        setTimeout(function() {
+
+            messages.scrollTop =
+                messages.scrollHeight;
+
+        }, 50);
+    }
+);
 
 
 /* =========================================================
    تعديل الملاحظة
 ========================================================= */
 
-document
-    .getElementById("editButton")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("editButton").addEventListener(
+    "click",
+    function() {
 
-            if (
-                selectedIndex < 0 ||
-                selectedIndex >= notes.length
-            ) {
-                return;
-            }
-
-
-            editingIndex =
-                selectedIndex;
-
-
-            editor.innerHTML =
-                notes[selectedIndex].html ||
-                "";
-
-
-            state.textContent =
-                "✎ تعديل الملاحظة";
-
-
-            messageMenu.style.display =
-                "none";
-
-
-            savedRange = null;
-
-
-            fontSizeBar.style.display =
-                "none";
-
-            alignmentBar.style.display =
-                "none";
-
-            listBar.style.display =
-                "none";
-
-
-            editor.focus();
-
-
-            setTimeout(
-                function() {
-
-                    const range =
-                        document.createRange();
-
-                    range.selectNodeContents(
-                        editor
-                    );
-
-                    range.collapse(false);
-
-
-                    const selection =
-                        window.getSelection();
-
-                    selection.removeAllRanges();
-                    selection.addRange(range);
-
-
-                    savedRange =
-                        range.cloneRange();
-
-
-                    detectCurrentFontSize();
-                    detectCurrentAlignment();
-
-                    updateToolbarState();
-
-
-                    editor.scrollIntoView({
-                        behavior: "smooth",
-                        block: "end"
-                    });
-
-                },
-                100
-            );
+        if (
+            selectedIndex < 0 ||
+            selectedIndex >= notes.length
+        ) {
+            return;
         }
-    );
+
+        editingIndex =
+            selectedIndex;
+
+        editor.innerHTML =
+            notes[selectedIndex].html || "";
+
+        state.textContent =
+            "✎ تعديل الملاحظة";
+
+        messageMenu.style.display =
+            "none";
+
+        savedRange = null;
+
+        hideToolBars();
+
+        editor.focus();
+
+
+        setTimeout(function() {
+
+            const range =
+                document.createRange();
+
+            range.selectNodeContents(editor);
+            range.collapse(false);
+
+            const selection =
+                window.getSelection();
+
+            selection.removeAllRanges();
+            selection.addRange(range);
+
+            savedRange =
+                range.cloneRange();
+
+            detectCurrentFontSize();
+            detectCurrentAlignment();
+
+            updateToolbarState();
+
+            editor.scrollIntoView({
+                behavior: "smooth",
+                block: "end"
+            });
+
+        }, 100);
+    }
+);
 
 
 /* =========================================================
    حذف الملاحظة
 ========================================================= */
 
-document
-    .getElementById("deleteButton")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("deleteButton").addEventListener(
+    "click",
+    function() {
 
-            if (
-                selectedIndex < 0 ||
-                selectedIndex >= notes.length
-            ) {
-                return;
-            }
+        if (
+            selectedIndex < 0 ||
+            selectedIndex >= notes.length
+        ) {
+            return;
+        }
 
 
-            const deletedIndex =
-                selectedIndex;
-
-
-            notes.splice(
-                deletedIndex,
-                1
+        const confirmed =
+            window.confirm(
+                "هل تريدين حذف هذه الملاحظة؟"
             );
 
-
-            if (
-                editingIndex ===
-                deletedIndex
-            ) {
-
-                resetEditor();
-
-            } else if (
-                editingIndex >
-                deletedIndex
-            ) {
-
-                editingIndex--;
-            }
-
-
-            selectedIndex = -1;
-
-
-            saveNotes();
-
-            render();
-
-
-            messageMenu.style.display =
-                "none";
+        if (!confirmed) {
+            messageMenu.style.display = "none";
+            return;
         }
-    );
+
+
+        const deletedIndex =
+            selectedIndex;
+
+
+        notes.splice(
+            deletedIndex,
+            1
+        );
+
+
+        if (
+            editingIndex ===
+            deletedIndex
+        ) {
+
+            resetEditor();
+
+        } else if (
+            editingIndex >
+            deletedIndex
+        ) {
+
+            editingIndex--;
+        }
+
+
+        selectedIndex = -1;
+
+        saveNotes();
+        render();
+
+        messageMenu.style.display = "none";
+    }
+);
 
 
 /* =========================================================
    إلغاء
 ========================================================= */
 
-document
-    .getElementById("cancelButton")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("cancelButton").addEventListener(
+    "click",
+    function() {
 
-            resetEditor();
+        resetEditor();
 
-            editor.focus();
-        }
-    );
+        editor.focus();
+    }
+);
 
 
 /* =========================================================
    ملاحظة جديدة
 ========================================================= */
 
-document
-    .getElementById("newButton")
-    .addEventListener(
-        "click",
-        function() {
+document.getElementById("newButton").addEventListener(
+    "click",
+    function() {
 
-            resetEditor();
+        resetEditor();
 
-            editor.focus();
-        }
-    );
+        editor.focus();
+    }
+);
 
 
 /* =========================================================
@@ -4103,27 +3630,24 @@ document
 
 document
     .querySelectorAll(".overlay")
-    .forEach(
-        function(overlay) {
+    .forEach(function(overlay) {
 
-            overlay.addEventListener(
-                "click",
-                function(event) {
+        overlay.addEventListener(
+            "click",
+            function(event) {
 
-                    if (
-                        event.target ===
-                        overlay
-                    ) {
+                if (
+                    event.target === overlay
+                ) {
 
-                        overlay.style.display =
-                            "none";
+                    overlay.style.display =
+                        "none";
 
-                        editor.focus();
-                    }
+                    editor.focus();
                 }
-            );
-        }
-    );
+            }
+        );
+    });
 
 
 /* =========================================================
@@ -4138,17 +3662,13 @@ document.addEventListener(
             return;
         }
 
-
         document
             .querySelectorAll(".overlay")
-            .forEach(
-                function(overlay) {
+            .forEach(function(overlay) {
 
-                    overlay.style.display =
-                        "none";
-                }
-            );
-
+                overlay.style.display =
+                    "none";
+            });
 
         messageMenu.style.display =
             "none";
@@ -4162,17 +3682,81 @@ document.addEventListener(
 
 editor.addEventListener(
     "paste",
-    function() {
+    function(event) {
 
-        setTimeout(
-            function() {
+        event.preventDefault();
 
-                saveSelection();
-                updateToolbarState();
+        const clipboard =
+            event.clipboardData ||
+            window.clipboardData;
 
-            },
-            0
-        );
+        if (!clipboard) {
+            return;
+        }
+
+        const text =
+            clipboard.getData("text/plain");
+
+        if (!text) {
+            return;
+        }
+
+        const selection =
+            window.getSelection();
+
+        if (
+            !selection ||
+            selection.rangeCount === 0
+        ) {
+            return;
+        }
+
+        const range =
+            selection.getRangeAt(0);
+
+        if (!selectionIsInsideEditor(range)) {
+            return;
+        }
+
+        range.deleteContents();
+
+        const fragment =
+            document.createDocumentFragment();
+
+        const lines =
+            text.replace(/\r\n/g, "\n")
+                .replace(/\r/g, "\n")
+                .split("\n");
+
+        lines.forEach(function(line, index) {
+
+            if (index > 0) {
+                fragment.appendChild(
+                    document.createElement("br")
+                );
+            }
+
+            fragment.appendChild(
+                document.createTextNode(line)
+            );
+        });
+
+        range.insertNode(fragment);
+
+        range.collapse(false);
+
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        savedRange =
+            range.cloneRange();
+
+        setTimeout(function() {
+
+            saveSelection();
+            updateToolbarState();
+
+        }, 0);
     }
 );
 
@@ -4187,11 +3771,45 @@ editor.addEventListener(
 
         if (
             event.target &&
-            event.target.tagName ===
-            "IMG"
+            event.target.tagName === "IMG"
         ) {
-
             event.preventDefault();
+        }
+    }
+);
+
+
+/* =========================================================
+   منع إدخال عناصر خارج المحرر من بعض عمليات السحب
+========================================================= */
+
+editor.addEventListener(
+    "drop",
+    function(event) {
+
+        if (
+            event.dataTransfer &&
+            event.dataTransfer.files &&
+            event.dataTransfer.files.length
+        ) {
+            event.preventDefault();
+        }
+    }
+);
+
+
+/* =========================================================
+   تغيير حجم النافذة
+========================================================= */
+
+window.addEventListener(
+    "resize",
+    function() {
+
+        if (
+            messageMenu.style.display === "block"
+        ) {
+            messageMenu.style.display = "none";
         }
     }
 );
