@@ -560,6 +560,7 @@ background:#263657;
 text-align:center;
 overflow-wrap:anywhere;
 word-break:break-word;
+white-space:pre-wrap;
 }
 
 .mind-branches{
@@ -581,12 +582,14 @@ background:#292e39;
 text-align:center;
 overflow-wrap:anywhere;
 word-break:break-word;
+white-space:pre-wrap;
+line-height:1.6;
 }
 
 .mind-input{
 width:100%;
 min-height:43px;
-height:43px;
+max-height:130px;
 border:1px solid #464b57;
 border-radius:10px;
 background:#0e1015;
@@ -595,11 +598,13 @@ padding:8px 10px;
 outline:none;
 margin-bottom:7px;
 font-family:inherit;
-font-size:14px;
+font-size:16px;
 line-height:1.6;
 resize:vertical;
-overflow-y:auto;
+direction:rtl;
+text-align:right;
 white-space:pre-wrap;
+overflow-y:auto;
 }
 
 .mind-input:focus{
@@ -1066,10 +1071,12 @@ id="mindMapOverlay">
 خريطة ذهنية
 </div>
 
-<input
+<textarea
 class="mind-input"
 id="mindCenterInput"
-placeholder="الفكرة الرئيسية">
+placeholder="الفكرة الرئيسية"
+rows="2">
+</textarea>
 
 <div
 id="mindBranches">
@@ -1621,7 +1628,6 @@ updateToolbarState();
 
 /* =========================================================
    نظام عجلة الألوان
-   HSL / HSV
 ========================================================= */
 
 function hsvToRgb(h,s,v){
@@ -2304,7 +2310,7 @@ editor.focus();
 
 
 /* ==========================
-   حجم الخط - بأسلوب Word
+   حجم الخط
 ========================== */
 
 const fontSizes = [
@@ -2427,6 +2433,7 @@ saveSelection();
 }else{
 
 editor.focus();
+
 restoreSelection();
 
 const selection =
@@ -2544,7 +2551,6 @@ inline:"center"
 
 /* ==========================
    القوائم
-   بدون نافذة وبدون تم
 ========================== */
 
 let listBar =
@@ -2969,9 +2975,11 @@ document.getElementById(
 );
 
 
-/* ==========================
-   إضافة فرع متعدد الأسطر
-========================== */
+/*
+   تم تغيير خانة الفرع من input
+   إلى textarea حتى يسمح Enter
+   بالنزول لسطر جديد داخل نفس الفرع.
+*/
 
 function addMindBranch(){
 
@@ -2984,7 +2992,7 @@ input.className =
 input.placeholder =
 "فرع";
 
-input.rows = 1;
+input.rows = 2;
 
 mindBranches.appendChild(
 input
@@ -2992,6 +3000,10 @@ input
 
 }
 
+
+/* ==========================
+   فتح الخريطة الذهنية
+========================== */
 
 document
 .getElementById("mindMapButton")
@@ -3026,6 +3038,10 @@ mindCenterInput.focus();
 });
 
 
+/* ==========================
+   إضافة فرع
+========================== */
+
 document
 .getElementById("mindAdd")
 .addEventListener(
@@ -3042,6 +3058,10 @@ addMindBranch();
 
 });
 
+
+/* ==========================
+   إدراج الخريطة الذهنية
+========================== */
 
 document
 .getElementById("mindDone")
@@ -3100,6 +3120,12 @@ document.createElement("div");
 
 branch.className =
 "mind-branch";
+
+/*
+   textContent يحتفظ بأسطر النص،
+   وwhite-space:pre-wrap في CSS
+   يجعل كل Enter يظهر كسطر جديد.
+*/
 
 branch.textContent =
 value;
