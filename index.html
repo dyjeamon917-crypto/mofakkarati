@@ -572,39 +572,82 @@ highlightOverlay.style.display="none";
 editor.focus();
 });
 
+/* ==========================
+   بدون تمييز
+========================== */
+
 document.getElementById("removeHighlight").addEventListener("click",function(){
 
 restoreSelection();
 
 if(savedRange){
 
-const selection=window.getSelection();
-selection.removeAllRanges();
-selection.addRange(savedRange);
+const range=savedRange.cloneRange();
 
-/* إزالة التمييز من النص المحدد */
-document.execCommand("hiliteColor",false,"transparent");
-document.execCommand("backColor",false,"transparent");
+/* استخراج النص المحدد */
+const fragment=range.extractContents();
 
-/* وضع المؤشر بعد النص المحدد */
-const range=selection.getRangeAt(0);
-range.collapse(false);
+/* إزالة لون الخلفية فقط من كل العناصر */
+const elements=fragment.querySelectorAll("*");
 
-selection.removeAllRanges();
-selection.addRange(range);
+elements.forEach(function(element){
 
-/* إلغاء التمييز عن الكتابة القادمة */
-document.execCommand("hiliteColor",false,"transparent");
-document.execCommand("backColor",false,"transparent");
+element.style.backgroundColor="";
+element.style.background="";
 
-saveSelection();
+if(!element.getAttribute("style")){
+element.removeAttribute("style");
 }
-
-highlightOverlay.style.display="none";
-editor.focus();
 
 });
 
+/* إعادة النص بعد إزالة التمييز */
+range.insertNode(fragment);
+
+/* وضع المؤشر بعد النص */
+range.collapse(false);
+
+const selection=window.getSelection();
+selection.removeAllRanges();
+selection.addRange(range);
+
+/*
+   إنشاء مكان كتابة جديد بدون تمييز
+   حتى لا يرث المؤشر لون الخلفية القديم
+*/
+const cleanSpan=document.createElement("span");
+cleanSpan.style.backgroundColor="transparent";
+
+const zero=document.createTextNode("\u200B");
+
+cleanSpan.appendChild(zero);
+range.insertNode(cleanSpan);
+
+const newRange=document.createRange();
+newRange.setStart(zero,1);
+newRange.collapse(true);
+
+selection.removeAllRanges();
+selection.addRange(newRange);
+
+savedRange=newRange.cloneRange();
+}
+
+/* إغلاق النافذة */
+highlightOverlay.style.display="none";
+
+/* التركيز على المحرر */
+editor.focus();
+
+/* التأكد أن التمييز القادم غير موجود */
+try{
+document.execCommand("hiliteColor",false,"transparent");
+document.execCommand("backColor",false,"transparent");
+}catch(e){}
+
+saveSelection();
+
+});
 
 const fontSizes=[8,9,10,11,12,14,16,18,20,22,24,26,28,32,36,40,48,56,64,72];
 
