@@ -630,9 +630,159 @@ editor.focus();
 
 });
 
-/* ==========================
+   /* ==========================
    تمييز النص
 ========================== */
+
+const highlightOverlay=document.getElementById("highlightOverlay");
+const highlightColorWheel=document.getElementById("highlightColorWheel");
+const highlightHueMarker=document.getElementById("highlightHueMarker");
+const highlightColorMarker=document.getElementById("highlightColorMarker");
+const opacityRange=document.getElementById("opacityRange");
+
+let chosenHighlightColor="rgb(255,255,0)";
+let highlightOpacity=.60;
+let highlightColorForTyping="rgba(255,255,0,.60)";
+let highlightEnabled=false;
+
+function hexWithOpacity(color,opacity){
+
+const temp=document.createElement("span");
+
+temp.style.color=color;
+
+document.body.appendChild(temp);
+
+const rgb=getComputedStyle(temp).color;
+
+temp.remove();
+
+const match=rgb.match(/\d+/g);
+
+if(!match)return color;
+
+return `rgba(${match[0]},${match[1]},${match[2]},${opacity})`;
+
+}
+
+setupAdvancedColorWheel(
+highlightColorWheel,
+highlightHueMarker,
+highlightColorMarker,
+60,
+function(color){
+
+chosenHighlightColor=color;
+
+}
+);
+
+opacityRange.addEventListener("input",function(event){
+
+highlightOpacity=Number(event.target.value)/100;
+
+});
+
+/* فتح خانة التمييز */
+
+document.getElementById("highlightButton").addEventListener("click",function(){
+
+saveSelection();
+
+highlightOverlay.style.display="flex";
+
+});
+
+/* تطبيق التمييز */
+
+document.getElementById("highlightDone").addEventListener("click",function(){
+
+highlightEnabled=true;
+
+highlightColorForTyping=hexWithOpacity(
+chosenHighlightColor,
+highlightOpacity
+);
+
+restoreSelection();
+
+if(savedRange&&!savedRange.collapsed){
+
+const selection=window.getSelection();
+
+selection.removeAllRanges();
+selection.addRange(savedRange);
+
+document.execCommand(
+"backColor",
+false,
+highlightColorForTyping
+);
+
+saveSelection();
+
+}else{
+
+/*
+   لا يوجد تحديد:
+   يجعل الكتابة التالية مميزة
+*/
+
+editor.focus();
+
+try{
+
+document.execCommand(
+"backColor",
+false,
+highlightColorForTyping
+);
+
+}catch(e){}
+
+saveSelection();
+
+}
+
+highlightOverlay.style.display="none";
+
+editor.focus();
+
+});
+
+/* ==========================
+   بدون تمييز — للأمام فقط
+========================== */
+
+document.getElementById("removeHighlight").addEventListener("click",function(){
+
+highlightEnabled=false;
+
+highlightOverlay.style.display="none";
+
+editor.focus();
+
+restoreSelection();
+
+try{
+
+document.execCommand(
+"backColor",
+false,
+"transparent"
+);
+
+document.execCommand(
+"hiliteColor",
+false,
+"transparent"
+);
+
+}catch(e){}
+
+saveSelection();
+
+});
 /* ==========================
    شدة التمييز
 ========================== */
