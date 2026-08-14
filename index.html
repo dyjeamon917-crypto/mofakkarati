@@ -574,14 +574,46 @@ editor.focus();
 
 document.getElementById("removeHighlight").addEventListener("click",function(){
 restoreSelection();
+
 if(savedRange){
 const selection=window.getSelection();
 selection.removeAllRanges();
 selection.addRange(savedRange);
+
 document.execCommand("hiliteColor",false,"transparent");
 document.execCommand("backColor",false,"transparent");
+
 saveSelection();
 }
+
+/* إيقاف التمييز عن الكتابة الجديدة */
+editor.focus();
+
+const selection=window.getSelection();
+
+if(selection&&selection.rangeCount>0){
+const range=selection.getRangeAt(0);
+
+if(selectionIsInsideEditor(range)){
+const marker=document.createElement("span");
+marker.style.backgroundColor="transparent";
+
+const text=document.createTextNode("\u200B");
+marker.appendChild(text);
+
+range.insertNode(marker);
+
+const newRange=document.createRange();
+newRange.setStart(text,1);
+newRange.collapse(true);
+
+selection.removeAllRanges();
+selection.addRange(newRange);
+
+savedRange=newRange.cloneRange();
+}
+}
+
 highlightOverlay.style.display="none";
 editor.focus();
 });
