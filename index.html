@@ -505,37 +505,6 @@ color:#fff;
 }
 
 /* ==========================
-   تنسيق التنقيط والترقيم
-========================== */
-
-.editor ul,
-.editor ol,
-.note ul,
-.note ol{
-margin-top:4px;
-margin-bottom:4px;
-padding-right:22px;
-padding-left:0;
-}
-
-.editor ul,
-.note ul{
-list-style-position:outside;
-}
-
-.editor ol,
-.note ol{
-list-style-position:outside;
-}
-
-.editor li,
-.note li{
-padding-right:0;
-margin:2px 0;
-line-height:1.7;
-}
-
-/* ==========================
    الجدول
 ========================== */
 
@@ -577,24 +546,20 @@ max-width:100%;
 display:flex;
 flex-direction:column;
 align-items:center;
-gap:14px;
+gap:12px;
 margin:10px 0;
-position:relative;
 }
 
 .mind-center{
 width:fit-content;
 max-width:90%;
-padding:10px 16px;
+padding:9px 15px;
 border:1px solid #5579bd;
-border-radius:14px;
+border-radius:12px;
 background:#263657;
 text-align:center;
 overflow-wrap:anywhere;
 word-break:break-word;
-font-weight:bold;
-position:relative;
-z-index:2;
 }
 
 .mind-branches{
@@ -602,97 +567,25 @@ width:100%;
 display:flex;
 flex-wrap:wrap;
 justify-content:center;
-gap:12px;
-position:relative;
+gap:9px;
 }
 
 .mind-branch{
 width:auto;
-max-width:42%;
+max-width:45%;
 min-width:80px;
-padding:9px 11px;
+padding:8px 10px;
 border:1px solid #555d6d;
-border-radius:11px;
+border-radius:10px;
 background:#292e39;
 text-align:center;
 overflow-wrap:anywhere;
 word-break:break-word;
-outline:none;
 }
-
-.mind-branch:focus{
-border-color:#3471f6;
-box-shadow:0 0 0 1px #3471f6;
-}
-
-.mind-branch:empty::before{
-content:"اكتب الفرع";
-color:#666;
-}
-
-/* ==========================
-   شكل الشجرة
-========================== */
-
-.mind-map.tree{
-gap:18px;
-}
-
-.mind-map.tree .mind-branches{
-display:flex;
-flex-wrap:wrap;
-justify-content:center;
-gap:12px;
-padding-top:12px;
-}
-
-.mind-map.tree .mind-branch{
-position:relative;
-}
-
-.mind-map.tree .mind-branch::before{
-content:"";
-position:absolute;
-width:1px;
-height:13px;
-background:#5579bd;
-top:-13px;
-left:50%;
-}
-
-/* ==========================
-   الخريطة الذهنية الحقيقية
-========================== */
-
-.mind-map.radial{
-display:grid;
-grid-template-columns:1fr;
-justify-items:center;
-gap:14px;
-}
-
-.mind-map.radial .mind-center{
-margin:0 auto;
-}
-
-.mind-map.radial .mind-branches{
-display:grid;
-grid-template-columns:repeat(2,minmax(80px,1fr));
-width:100%;
-gap:10px;
-}
-
-.mind-map.radial .mind-branch{
-max-width:none;
-width:100%;
-}
-
-/* ==========================
-   مدخلات الخريطة
-========================== */
 
 .mind-input{
 width:100%;
+min-height:43px;
 height:43px;
 border:1px solid #464b57;
 border-radius:10px;
@@ -701,6 +594,12 @@ color:#fff;
 padding:8px 10px;
 outline:none;
 margin-bottom:7px;
+font-family:inherit;
+font-size:14px;
+line-height:1.6;
+resize:vertical;
+overflow-y:auto;
+white-space:pre-wrap;
 }
 
 .mind-input:focus{
@@ -776,11 +675,7 @@ height:220px;
 
 .mind-branch{
 min-width:70px;
-max-width:44%;
-}
-
-.mind-map.radial .mind-branches{
-grid-template-columns:repeat(2,minmax(70px,1fr));
+max-width:45%;
 }
 
 }
@@ -2409,7 +2304,7 @@ editor.focus();
 
 
 /* ==========================
-   حجم الخط
+   حجم الخط - بأسلوب Word
 ========================== */
 
 const fontSizes = [
@@ -2649,7 +2544,7 @@ inline:"center"
 
 /* ==========================
    القوائم
-   رموز فقط وبدون نافذة
+   بدون نافذة وبدون تم
 ========================== */
 
 let listBar =
@@ -3075,124 +2970,13 @@ document.getElementById(
 
 
 /* ==========================
-   نوع الخريطة
-========================== */
-
-let mindMapType = "tree";
-
-const mindPanel =
-mindMapOverlay.querySelector(
-".panel"
-);
-
-const mindTypeChoice =
-document.createElement("div");
-
-mindTypeChoice.style.display =
-"flex";
-
-mindTypeChoice.style.gap =
-"7px";
-
-mindTypeChoice.style.marginBottom =
-"9px";
-
-const treeTypeButton =
-document.createElement("button");
-
-treeTypeButton.type =
-"button";
-
-treeTypeButton.className =
-"panel-button";
-
-treeTypeButton.textContent =
-"🌳";
-
-treeTypeButton.title =
-"شكل شجرة";
-
-const radialTypeButton =
-document.createElement("button");
-
-radialTypeButton.type =
-"button";
-
-radialTypeButton.className =
-"panel-button";
-
-radialTypeButton.textContent =
-"🧠";
-
-radialTypeButton.title =
-"خريطة ذهنية";
-
-mindTypeChoice.appendChild(
-treeTypeButton
-);
-
-mindTypeChoice.appendChild(
-radialTypeButton
-);
-
-mindPanel.insertBefore(
-mindTypeChoice,
-mindCenterInput
-);
-
-
-function updateMindTypeButtons(){
-
-treeTypeButton.style.background =
-mindMapType === "tree"
-?
-"#315fae"
-:
-"#303642";
-
-radialTypeButton.style.background =
-mindMapType === "radial"
-?
-"#315fae"
-:
-"#303642";
-
-}
-
-
-treeTypeButton.addEventListener(
-"click",
-function(){
-
-mindMapType = "tree";
-
-updateMindTypeButtons();
-
-});
-
-
-radialTypeButton.addEventListener(
-"click",
-function(){
-
-mindMapType = "radial";
-
-updateMindTypeButtons();
-
-});
-
-
-/* ==========================
-   إضافة فرع
+   إضافة فرع متعدد الأسطر
 ========================== */
 
 function addMindBranch(){
 
 const input =
-document.createElement("input");
-
-input.type =
-"text";
+document.createElement("textarea");
 
 input.className =
 "mind-input";
@@ -3200,16 +2984,14 @@ input.className =
 input.placeholder =
 "فرع";
 
+input.rows = 1;
+
 mindBranches.appendChild(
 input
 );
 
 }
 
-
-/* ==========================
-   فتح الخريطة
-========================== */
 
 document
 .getElementById("mindMapButton")
@@ -3224,10 +3006,6 @@ mindCenterInput.value =
 
 mindBranches.innerHTML =
 "";
-
-mindMapType = "tree";
-
-updateMindTypeButtons();
 
 addMindBranch();
 
@@ -3248,10 +3026,6 @@ mindCenterInput.focus();
 });
 
 
-/* ==========================
-   إضافة فرع
-========================== */
-
 document
 .getElementById("mindAdd")
 .addEventListener(
@@ -3268,10 +3042,6 @@ addMindBranch();
 
 });
 
-
-/* ==========================
-   إدراج الخريطة
-========================== */
 
 document
 .getElementById("mindDone")
@@ -3295,22 +3065,11 @@ input=>input.value.trim()
 )
 .filter(Boolean);
 
-
-/* ==========================
-   إنشاء الخريطة
-========================== */
-
 const wrap =
 document.createElement("div");
 
 wrap.className =
-"mind-map " +
-mindMapType;
-
-
-/* ==========================
-   الفكرة الرئيسية
-========================== */
+"mind-map";
 
 const centerBox =
 document.createElement("div");
@@ -3324,11 +3083,6 @@ center;
 wrap.appendChild(
 centerBox
 );
-
-
-/* ==========================
-   الفروع
-========================== */
 
 if(values.length){
 
@@ -3347,12 +3101,6 @@ document.createElement("div");
 branch.className =
 "mind-branch";
 
-branch.contentEditable =
-"true";
-
-branch.spellcheck =
-true;
-
 branch.textContent =
 value;
 
@@ -3367,11 +3115,6 @@ branches
 );
 
 }
-
-
-/* ==========================
-   إدراج داخل المحرر
-========================== */
 
 restoreSelection();
 
@@ -3405,11 +3148,6 @@ wrap
 );
 
 }
-
-
-/* ==========================
-   إغلاق
-========================== */
 
 mindMapOverlay.style.display =
 "none";
