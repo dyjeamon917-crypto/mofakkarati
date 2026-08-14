@@ -1,6 +1,5 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
-
 <head>
 <meta charset="UTF-8">
 
@@ -55,6 +54,10 @@ button:disabled{
     opacity:.45;
 }
 
+button:active{
+    transform:scale(.96);
+}
+
 button:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
@@ -100,11 +103,9 @@ textarea:focus-visible,
 
     padding:7px 10px;
 
-    background:rgba(25,29,38,.97);
+    background:rgba(25,29,38,.98);
 
     border-bottom:1px solid rgba(255,255,255,.08);
-
-    box-shadow:0 2px 12px rgba(0,0,0,.15);
 
     position:relative;
     z-index:20;
@@ -135,10 +136,6 @@ textarea:focus-visible,
     font-size:20px;
 }
 
-.icon:active{
-    transform:scale(.93);
-}
-
 
 /* =========================
    MESSAGES
@@ -154,7 +151,7 @@ textarea:focus-visible,
 
     -webkit-overflow-scrolling:touch;
 
-    overscroll-behavior-y:contain;
+    overscroll-behavior:contain;
 }
 
 .empty{
@@ -188,10 +185,9 @@ textarea:focus-visible,
 
     line-height:1.75;
 
+    overflow:hidden;
     overflow-wrap:anywhere;
     word-break:break-word;
-
-    overflow:hidden;
 }
 
 .note-content{
@@ -203,12 +199,9 @@ textarea:focus-visible,
 
 .note img{
     display:block;
-
     max-width:100%;
     height:auto;
-
     margin:6px 0;
-
     border-radius:8px;
 }
 
@@ -230,10 +223,6 @@ textarea:focus-visible,
     color:#aab0bb;
 
     font-size:21px;
-}
-
-.note-menu:active{
-    transform:scale(.92);
 }
 
 .note ul,
@@ -258,7 +247,6 @@ textarea:focus-visible,
 .note td,
 .note th{
     min-width:48px;
-    min-height:35px;
 
     padding:7px 9px;
 
@@ -274,13 +262,9 @@ textarea:focus-visible,
     line-height:1.55;
 }
 
-.note .mind-map{
-    width:100%;
-}
-
 
 /* =========================
-   EDITOR
+   EDITOR AREA
 ========================= */
 
 .editor-area{
@@ -291,11 +275,9 @@ textarea:focus-visible,
         8px
         calc(8px + env(safe-area-inset-bottom));
 
-    background:rgba(25,29,38,.98);
+    background:rgba(25,29,38,.99);
 
     border-top:1px solid rgba(255,255,255,.08);
-
-    box-shadow:0 -4px 20px rgba(0,0,0,.12);
 
     position:relative;
     z-index:30;
@@ -349,8 +331,7 @@ textarea:focus-visible,
     touch-action:pan-x;
 }
 
-.toolbar::-webkit-scrollbar,
-.sub-toolbar::-webkit-scrollbar{
+.toolbar::-webkit-scrollbar{
     display:none;
 }
 
@@ -375,11 +356,6 @@ textarea:focus-visible,
     font-size:17px;
 
     user-select:none;
-    -webkit-user-select:none;
-}
-
-.tool:active{
-    transform:scale(.94);
 }
 
 .tool.active{
@@ -399,7 +375,7 @@ textarea:focus-visible,
 
 
 /* =========================
-   SUB TOOLBARS
+   SUB TOOLBAR
 ========================= */
 
 .sub-toolbar{
@@ -416,14 +392,21 @@ textarea:focus-visible,
     scrollbar-width:none;
 
     position:relative;
-    z-index:50;
+    z-index:40;
+}
+
+.sub-toolbar::-webkit-scrollbar{
+    display:none;
 }
 
 .font-size-bar{
     direction:ltr;
 }
 
-.list-bar,
+.list-bar{
+    direction:rtl;
+}
+
 .alignment-bar{
     direction:rtl;
 }
@@ -432,7 +415,7 @@ textarea:focus-visible,
 .align-item{
     flex:0 0 auto;
 
-    height:34px;
+    height:36px;
 
     border:1px solid #444b58;
 
@@ -441,19 +424,15 @@ textarea:focus-visible,
     background:#292e39;
 
     color:#fff;
-
-    cursor:pointer;
-
-    touch-action:manipulation;
 }
 
 .font-size-item{
-    width:36px;
+    width:38px;
     font-size:13px;
 }
 
 .align-item{
-    width:38px;
+    width:40px;
     font-size:17px;
 }
 
@@ -465,7 +444,7 @@ textarea:focus-visible,
 
 
 /* =========================
-   WRITE
+   WRITE ROW
 ========================= */
 
 .write-row{
@@ -525,8 +504,8 @@ textarea:focus-visible,
 
 .editor:empty::before{
     content:"اكتبي ملاحظتك هنا...";
+
     color:#606774;
-    pointer-events:none;
 }
 
 .editor img{
@@ -552,7 +531,6 @@ textarea:focus-visible,
 .editor td,
 .editor th{
     min-width:48px;
-    min-height:35px;
 
     padding:7px 9px;
 
@@ -569,12 +547,6 @@ textarea:focus-visible,
     text-align:right;
 
     line-height:1.55;
-}
-
-.editor td:focus,
-.editor th:focus{
-    outline:2px solid #4d7fd8;
-    outline-offset:-2px;
 }
 
 .send{
@@ -601,10 +573,6 @@ textarea:focus-visible,
     font-size:21px;
 }
 
-.send:active{
-    transform:scale(.94);
-}
-
 
 /* =========================
    OVERLAYS
@@ -627,7 +595,6 @@ textarea:focus-visible,
     background:rgba(0,0,0,.62);
 
     backdrop-filter:blur(4px);
-
     -webkit-backdrop-filter:blur(4px);
 }
 
@@ -664,7 +631,6 @@ textarea:focus-visible,
     text-align:center;
 
     font-size:16px;
-
     font-weight:800;
 
     margin-bottom:13px;
@@ -682,10 +648,6 @@ textarea:focus-visible,
     background:#303642;
 
     color:#fff;
-}
-
-.panel-button:active{
-    transform:scale(.98);
 }
 
 
@@ -720,7 +682,6 @@ textarea:focus-visible,
 
 .hue-ring{
     position:absolute;
-
     inset:0;
 
     border-radius:50%;
@@ -756,7 +717,6 @@ textarea:focus-visible,
 
 .sv-white{
     position:absolute;
-
     inset:0;
 
     background:
@@ -769,7 +729,6 @@ textarea:focus-visible,
 
 .sv-black{
     position:absolute;
-
     inset:0;
 
     background:
@@ -786,7 +745,8 @@ textarea:focus-visible,
 
     pointer-events:none;
 
-    transform:translate(-50%,-50%);
+    transform:
+        translate(-50%,-50%);
 
     border-radius:50%;
 }
@@ -814,11 +774,8 @@ textarea:focus-visible,
 
 .color-presets{
     display:flex;
-
     justify-content:center;
-
     gap:9px;
-
     margin-top:10px;
 }
 
@@ -827,7 +784,6 @@ textarea:focus-visible,
     height:37px;
 
     border:2px solid #6a7180;
-
     border-radius:50%;
 }
 
@@ -841,7 +797,7 @@ textarea:focus-visible,
 
 
 /* =========================
-   OTHER
+   OTHER PANELS
 ========================= */
 
 .range-title{
@@ -887,78 +843,6 @@ textarea:focus-visible,
     color:#fff;
 }
 
-.mind-map{
-    width:100%;
-
-    display:flex;
-
-    flex-direction:column;
-
-    align-items:center;
-
-    gap:12px;
-
-    margin:10px 0;
-}
-
-.mind-center{
-    width:fit-content;
-
-    max-width:90%;
-
-    padding:9px 15px;
-
-    border:1px solid #5579bd;
-
-    border-radius:12px;
-
-    background:#263657;
-
-    text-align:center;
-
-    line-height:1.6;
-
-    overflow-wrap:anywhere;
-
-    white-space:pre-wrap;
-}
-
-.mind-branches{
-    width:100%;
-
-    display:flex;
-
-    flex-wrap:wrap;
-
-    justify-content:center;
-
-    gap:9px;
-}
-
-.mind-branch{
-    width:auto;
-
-    max-width:45%;
-
-    min-width:80px;
-
-    padding:8px 10px;
-
-    border:1px solid #555d6d;
-
-    border-radius:10px;
-
-    background:#292e39;
-
-    text-align:center;
-
-    line-height:1.6;
-
-    overflow-wrap:anywhere;
-
-    white-space:pre-wrap;
-}
-
 .mind-input,
 .search-input{
     width:100%;
@@ -988,7 +872,6 @@ textarea:focus-visible,
     line-height:1.6;
 
     direction:rtl;
-
     text-align:right;
 
     resize:vertical;
@@ -1017,10 +900,79 @@ textarea:focus-visible,
 
 .search-word{
     padding:0 2px;
-
     border-radius:3px;
-
     background:rgba(255,214,0,.45);
+}
+
+
+/* =========================
+   MIND MAP
+========================= */
+
+.mind-map{
+    width:100%;
+
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+
+    gap:12px;
+
+    margin:10px 0;
+}
+
+.mind-center{
+    width:fit-content;
+    max-width:90%;
+
+    padding:9px 15px;
+
+    border:1px solid #5579bd;
+
+    border-radius:12px;
+
+    background:#263657;
+
+    text-align:center;
+
+    line-height:1.6;
+
+    overflow-wrap:anywhere;
+
+    white-space:pre-wrap;
+}
+
+.mind-branches{
+    width:100%;
+
+    display:flex;
+    flex-wrap:wrap;
+
+    justify-content:center;
+
+    gap:9px;
+}
+
+.mind-branch{
+    width:auto;
+    max-width:45%;
+    min-width:80px;
+
+    padding:8px 10px;
+
+    border:1px solid #555d6d;
+
+    border-radius:10px;
+
+    background:#292e39;
+
+    text-align:center;
+
+    line-height:1.6;
+
+    overflow-wrap:anywhere;
+
+    white-space:pre-wrap;
 }
 
 
@@ -1072,7 +1024,7 @@ textarea:focus-visible,
     text-align:right;
 }
 
-.menu button:active{
+.menu button:hover{
     background:#303642;
 }
 
@@ -1139,18 +1091,6 @@ textarea:focus-visible,
         padding-top:7px;
     }
 }
-
-@media(prefers-reduced-motion:reduce){
-
-    *,
-    *::before,
-    *::after{
-        animation-duration:.001ms!important;
-        animation-iteration-count:1!important;
-        scroll-behavior:auto!important;
-        transition-duration:.001ms!important;
-    }
-}
 </style>
 </head>
 
@@ -1196,7 +1136,6 @@ textarea:focus-visible,
             class="cancel"
             id="cancelButton"
             type="button"
-            aria-label="إلغاء"
         >×</button>
 
     </div>
@@ -1333,7 +1272,9 @@ textarea:focus-visible,
 </div>
 
 
-<!-- COLOR -->
+<!-- =========================
+     COLOR
+========================= -->
 
 <div
     class="overlay"
@@ -1402,7 +1343,9 @@ textarea:focus-visible,
 </div>
 
 
-<!-- HIGHLIGHT -->
+<!-- =========================
+     HIGHLIGHT
+========================= -->
 
 <div
     class="overlay"
@@ -1474,7 +1417,9 @@ textarea:focus-visible,
 </div>
 
 
-<!-- TABLE -->
+<!-- =========================
+     TABLE
+========================= -->
 
 <div
     class="overlay"
@@ -1536,7 +1481,9 @@ textarea:focus-visible,
 </div>
 
 
-<!-- MIND MAP -->
+<!-- =========================
+     MIND MAP
+========================= -->
 
 <div
     class="overlay"
@@ -1573,7 +1520,9 @@ textarea:focus-visible,
 </div>
 
 
-<!-- SEARCH -->
+<!-- =========================
+     SEARCH
+========================= -->
 
 <div
     class="overlay"
@@ -1608,7 +1557,9 @@ textarea:focus-visible,
 </div>
 
 
-<!-- NOTE MENU -->
+<!-- =========================
+     NOTE MENU
+========================= -->
 
 <div
     class="menu"
@@ -1636,7 +1587,7 @@ textarea:focus-visible,
    CONFIG
 ===================================================== */
 
-const STORAGE_KEY = "notes_modern_editor_v10";
+const STORAGE_KEY = "notes_stable_v10";
 
 const FONT_SIZES = [
     8,9,10,11,12,
@@ -1704,71 +1655,40 @@ const searchResult = $("searchResult");
 
 
 /* =====================================================
-   GENERAL HELPERS
+   OVERLAYS
 ===================================================== */
 
-function isEditorFocused(){
+function openOverlay(element){
 
-    return document.activeElement === editor ||
-           editor.contains(document.activeElement);
+    if(!element) return;
 
+    element.classList.add("open");
+}
+
+function closeOverlay(element){
+
+    if(!element) return;
+
+    element.classList.remove("open");
 }
 
 
-function closeAllSubToolbars(){
+/* =====================================================
+   SUB TOOLBARS
+===================================================== */
+
+function closeSubToolbars(){
 
     fontSizeBar.style.display = "none";
     listBar.style.display = "none";
     alignmentBar.style.display = "none";
-
 }
 
+function openSubToolbar(element){
 
-function openSubToolbar(bar){
+    closeSubToolbars();
 
-    closeAllSubToolbars();
-
-    bar.style.display = "flex";
-
-}
-
-
-function openOverlay(overlay){
-
-    if(!overlay){
-        return;
-    }
-
-    overlay.classList.add("open");
-
-}
-
-
-function closeOverlay(overlay){
-
-    if(!overlay){
-        return;
-    }
-
-    overlay.classList.remove("open");
-
-}
-
-
-function closeAllOverlays(){
-
-    document
-        .querySelectorAll(".overlay.open")
-        .forEach(closeOverlay);
-
-}
-
-
-function closeMessageMenu(){
-
-    messageMenu.classList.remove("open");
-    messageMenu.style.display = "none";
-
+    element.style.display = "flex";
 }
 
 
@@ -1802,7 +1722,6 @@ function loadNotes(){
         }else{
 
             AppState.notes = [];
-
         }
 
     }catch(error){
@@ -1810,9 +1729,7 @@ function loadNotes(){
         console.error("loadNotes:",error);
 
         AppState.notes = [];
-
     }
-
 }
 
 
@@ -1834,47 +1751,7 @@ function saveNotes(){
         alert("تعذر حفظ الملاحظات في الجهاز.");
 
         return false;
-
     }
-
-}
-
-
-/* =====================================================
-   CONTENT
-===================================================== */
-
-function cleanHtml(html){
-
-    return String(html || "")
-        .replace(/\u200B/g,"")
-        .replace(/\uFEFF/g,"")
-        .trim();
-
-}
-
-
-function hasRealContent(){
-
-    const clone = editor.cloneNode(true);
-
-    clone
-        .querySelectorAll("br")
-        .forEach(br => br.replaceWith(" "));
-
-    const text = (clone.textContent || "")
-        .replace(/\u200B/g,"")
-        .replace(/\uFEFF/g,"")
-        .replace(/\u00a0/g," ")
-        .trim();
-
-    return Boolean(
-        text ||
-        clone.querySelector("table") ||
-        clone.querySelector(".mind-map") ||
-        clone.querySelector("img")
-    );
-
 }
 
 
@@ -1882,7 +1759,7 @@ function hasRealContent(){
    SELECTION
 ===================================================== */
 
-function getCurrentSelection(){
+function selectionIsInsideEditor(){
 
     const selection = window.getSelection();
 
@@ -1890,52 +1767,41 @@ function getCurrentSelection(){
         !selection ||
         selection.rangeCount === 0
     ){
-
-        return null;
-
-    }
-
-    return selection;
-
-}
-
-
-function isRangeInsideEditor(range){
-
-    if(!range){
-        return false;
-    }
-
-    return (
-        editor.contains(range.startContainer) &&
-        editor.contains(range.endContainer)
-    );
-
-}
-
-
-function saveSelection(){
-
-    const selection = getCurrentSelection();
-
-    if(!selection){
-        return false;
-    }
-
-    if(selection.rangeCount === 0){
         return false;
     }
 
     const range = selection.getRangeAt(0);
 
-    if(!isRangeInsideEditor(range)){
+    return (
+        editor.contains(range.startContainer) &&
+        editor.contains(range.endContainer)
+    );
+}
+
+
+function saveSelection(){
+
+    const selection = window.getSelection();
+
+    if(
+        !selection ||
+        selection.rangeCount === 0
+    ){
+        return false;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    if(
+        !editor.contains(range.startContainer) ||
+        !editor.contains(range.endContainer)
+    ){
         return false;
     }
 
     AppState.savedRange = range.cloneRange();
 
     return true;
-
 }
 
 
@@ -1943,11 +1809,20 @@ function restoreSelection(){
 
     const range = AppState.savedRange;
 
-    if(!range || !isRangeInsideEditor(range)){
+    if(!range){
+
         return false;
     }
 
     try{
+
+        if(
+            !editor.contains(range.startContainer) ||
+            !editor.contains(range.endContainer)
+        ){
+
+            return false;
+        }
 
         const selection = window.getSelection();
 
@@ -1960,12 +1835,8 @@ function restoreSelection(){
 
         console.error("restoreSelection:",error);
 
-        AppState.savedRange = null;
-
         return false;
-
     }
-
 }
 
 
@@ -1984,21 +1855,6 @@ function focusEditorEnd(){
     selection.addRange(range);
 
     AppState.savedRange = range.cloneRange();
-
-}
-
-
-/*
-    مهم:
-    هذه الدالة تحافظ على التحديد حتى إذا ضغط المستخدم
-    على زر من أزرار الأدوات على الهاتف.
-*/
-function preserveSelectionFromEditor(){
-
-    if(isEditorFocused()){
-        saveSelection();
-    }
-
 }
 
 
@@ -2006,15 +1862,14 @@ function preserveSelectionFromEditor(){
    COMMAND
 ===================================================== */
 
-function executeCommand(command,value=null){
+function runCommand(command,value=null){
+
+    editor.focus();
 
     if(!restoreSelection()){
 
         focusEditorEnd();
-
     }
-
-    editor.focus();
 
     try{
 
@@ -2031,12 +1886,11 @@ function executeCommand(command,value=null){
             command,
             error
         );
-
     }
 
     saveSelection();
-    updateToolbarState();
 
+    updateToolbar();
 }
 
 
@@ -2046,19 +1900,17 @@ function executeCommand(command,value=null){
 
 $("boldButton").addEventListener(
     "click",
-    () => executeCommand("bold")
+    () => runCommand("bold")
 );
-
 
 $("italicButton").addEventListener(
     "click",
-    () => executeCommand("italic")
+    () => runCommand("italic")
 );
-
 
 $("underlineButton").addEventListener(
     "click",
-    () => executeCommand("underline")
+    () => runCommand("underline")
 );
 
 
@@ -2066,37 +1918,29 @@ $("underlineButton").addEventListener(
    TOOLBAR STATE
 ===================================================== */
 
-function safeQueryState(command){
+function updateToolbar(){
 
     try{
-        return document.queryCommandState(command);
-    }catch(error){
-        return false;
-    }
 
-}
+        $("boldButton").classList.toggle(
+            "active",
+            document.queryCommandState("bold")
+        );
 
+        $("italicButton").classList.toggle(
+            "active",
+            document.queryCommandState("italic")
+        );
 
-function updateToolbarState(){
+        $("underlineButton").classList.toggle(
+            "active",
+            document.queryCommandState("underline")
+        );
 
-    $("boldButton").classList.toggle(
-        "active",
-        safeQueryState("bold")
-    );
-
-    $("italicButton").classList.toggle(
-        "active",
-        safeQueryState("italic")
-    );
-
-    $("underlineButton").classList.toggle(
-        "active",
-        safeQueryState("underline")
-    );
+    }catch(error){}
 
     updateFontSizeButtons();
     updateAlignmentButtons();
-
 }
 
 
@@ -2108,8 +1952,12 @@ editor.addEventListener(
     "mouseup",
     () => {
 
-        saveSelection();
-        updateToolbarState();
+        setTimeout(() => {
+
+            saveSelection();
+            updateToolbar();
+
+        },0);
 
     }
 );
@@ -2119,8 +1967,12 @@ editor.addEventListener(
     "keyup",
     () => {
 
-        saveSelection();
-        updateToolbarState();
+        setTimeout(() => {
+
+            saveSelection();
+            updateToolbar();
+
+        },0);
 
     }
 );
@@ -2130,18 +1982,14 @@ editor.addEventListener(
     "touchend",
     () => {
 
-        setTimeout(
-            () => {
+        setTimeout(() => {
 
-                saveSelection();
-                updateToolbarState();
+            saveSelection();
+            updateToolbar();
 
-            },
-            80
-        );
+        },100);
 
-    },
-    {passive:true}
+    }
 );
 
 
@@ -2149,15 +1997,11 @@ editor.addEventListener(
     "input",
     () => {
 
-        setTimeout(
-            () => {
+        setTimeout(() => {
 
-                saveSelection();
-                updateToolbarState();
+            saveSelection();
 
-            },
-            0
-        );
+        },0);
 
     }
 );
@@ -2167,68 +2011,14 @@ document.addEventListener(
     "selectionchange",
     () => {
 
-        const selection = getCurrentSelection();
+        if(selectionIsInsideEditor()){
 
-        if(!selection){
-            return;
-        }
-
-        if(selection.rangeCount === 0){
-            return;
-        }
-
-        const range = selection.getRangeAt(0);
-
-        if(isRangeInsideEditor(range)){
-
-            AppState.savedRange = range.cloneRange();
-
-            updateToolbarState();
-
+            saveSelection();
+            updateToolbar();
         }
 
     }
 );
-
-
-/*
-    أهم إصلاح:
-    منع أزرار الـ toolbar من سحب التركيز من
-    contenteditable قبل تنفيذ click.
-*/
-document
-    .querySelectorAll(
-        ".toolbar button, .sub-toolbar button"
-    )
-    .forEach(button => {
-
-        button.addEventListener(
-            "mousedown",
-            event => {
-
-                preserveSelectionFromEditor();
-
-                /*
-                    يمنع blur وفقدان selection في
-                    Chrome/Android في كثير من الحالات.
-                    click سيستمر في العمل.
-                */
-                event.preventDefault();
-
-            }
-        );
-
-        button.addEventListener(
-            "touchstart",
-            () => {
-
-                preserveSelectionFromEditor();
-
-            },
-            {passive:true}
-        );
-
-    });
 
 
 /* =====================================================
@@ -2240,43 +2030,48 @@ editor.addEventListener(
     event => {
 
         if(event.key !== "Enter"){
+
             return;
         }
 
-        const active = document.activeElement;
-
         const cell =
-            active &&
-            active.closest &&
-            active.closest("td,th");
+            event.target &&
+            event.target.closest
+                ? event.target.closest("td,th")
+                : null;
 
         if(cell){
+
             return;
         }
 
         event.preventDefault();
 
         if(!restoreSelection()){
+
             focusEditorEnd();
         }
 
-        const selection = getCurrentSelection();
+        const selection = window.getSelection();
 
-        if(!selection){
-            return;
-        }
-
-        if(selection.rangeCount === 0){
+        if(
+            !selection ||
+            selection.rangeCount === 0
+        ){
             return;
         }
 
         const range = selection.getRangeAt(0);
 
-        if(!isRangeInsideEditor(range)){
+        if(
+            !editor.contains(range.startContainer) ||
+            !editor.contains(range.endContainer)
+        ){
             return;
         }
 
         if(!range.collapsed){
+
             range.deleteContents();
         }
 
@@ -2287,10 +2082,13 @@ editor.addEventListener(
 
         range.insertNode(br);
 
-        br.parentNode.insertBefore(
-            marker,
-            br.nextSibling
-        );
+        if(br.parentNode){
+
+            br.parentNode.insertBefore(
+                marker,
+                br.nextSibling
+            );
+        }
 
         const newRange = document.createRange();
 
@@ -2306,13 +2104,12 @@ editor.addEventListener(
 
         AppState.savedRange =
             newRange.cloneRange();
-
     }
 );
 
 
 /* =====================================================
-   FONT SIZE
+   FONT SIZE BAR
 ===================================================== */
 
 FONT_SIZES.forEach(size => {
@@ -2320,19 +2117,21 @@ FONT_SIZES.forEach(size => {
     const button =
         document.createElement("button");
 
-    button.className =
-        "font-size-item";
-
     button.type = "button";
-
+    button.className = "font-size-item";
     button.textContent = size;
 
-    button.setAttribute(
-        "aria-label",
-        "حجم الخط " + size
-    );
-
     fontSizeBar.appendChild(button);
+
+    button.addEventListener(
+        "mousedown",
+        event => {
+
+            event.preventDefault();
+            saveSelection();
+
+        }
+    );
 
     button.addEventListener(
         "click",
@@ -2355,29 +2154,33 @@ function updateFontSizeButtons(){
             );
 
         });
-
 }
 
 
 function applyFontSize(size){
 
     if(!restoreSelection()){
+
         focusEditorEnd();
     }
 
-    const selection = getCurrentSelection();
+    const selection = window.getSelection();
 
-    if(!selection || selection.rangeCount === 0){
+    if(
+        !selection ||
+        selection.rangeCount === 0
+    ){
         return;
     }
 
     const range = selection.getRangeAt(0);
 
-    if(!isRangeInsideEditor(range)){
+    if(
+        !editor.contains(range.startContainer) ||
+        !editor.contains(range.endContainer)
+    ){
         return;
     }
-
-    editor.focus();
 
     try{
 
@@ -2390,9 +2193,7 @@ function applyFontSize(size){
             );
 
             editor
-                .querySelectorAll(
-                    'font[size="7"]'
-                )
+                .querySelectorAll('font[size="7"]')
                 .forEach(font => {
 
                     const span =
@@ -2406,7 +2207,6 @@ function applyFontSize(size){
                         span.appendChild(
                             font.firstChild
                         );
-
                     }
 
                     font.replaceWith(span);
@@ -2440,38 +2240,30 @@ function applyFontSize(size){
 
             selection.removeAllRanges();
             selection.addRange(newRange);
-
         }
+
+        AppState.fontSize = size;
+
+        saveSelection();
+
+        closeSubToolbars();
+
+        updateToolbar();
+
+        editor.focus();
 
     }catch(error){
 
-        console.error(
-            "applyFontSize:",
-            error
-        );
-
+        console.error("fontSize:",error);
     }
-
-    AppState.fontSize = size;
-
-    saveSelection();
-
-    closeAllSubToolbars();
-
-    updateToolbarState();
-
 }
 
 
-/* SIZE BUTTON */
-
 $("sizeButton").addEventListener(
     "click",
-    event => {
+    () => {
 
-        event.stopPropagation();
-
-        preserveSelectionFromEditor();
+        saveSelection();
 
         openSubToolbar(fontSizeBar);
 
@@ -2482,26 +2274,22 @@ $("sizeButton").addEventListener(
 
 
 /* =====================================================
-   LISTS
+   LIST
 ===================================================== */
 
 const bulletButton =
     document.createElement("button");
 
-bulletButton.className =
-    "font-size-item";
-
 bulletButton.type = "button";
+bulletButton.className = "font-size-item";
 bulletButton.textContent = "•";
 bulletButton.title = "قائمة نقطية";
 
 const numberButton =
     document.createElement("button");
 
-numberButton.className =
-    "font-size-item";
-
 numberButton.type = "button";
+numberButton.className = "font-size-item";
 numberButton.textContent = "١.";
 numberButton.title = "قائمة مرقمة";
 
@@ -2510,32 +2298,43 @@ listBar.appendChild(numberButton);
 
 
 bulletButton.addEventListener(
-    "click",
-    () => {
+    "mousedown",
+    event => {
 
-        executeCommand(
-            "insertUnorderedList"
-        );
-
-        closeAllSubToolbars();
-
-        editor.focus();
+        event.preventDefault();
+        saveSelection();
 
     }
 );
 
+numberButton.addEventListener(
+    "mousedown",
+    event => {
+
+        event.preventDefault();
+        saveSelection();
+
+    }
+);
+
+bulletButton.addEventListener(
+    "click",
+    () => {
+
+        runCommand("insertUnorderedList");
+
+        closeSubToolbars();
+
+    }
+);
 
 numberButton.addEventListener(
     "click",
     () => {
 
-        executeCommand(
-            "insertOrderedList"
-        );
+        runCommand("insertOrderedList");
 
-        closeAllSubToolbars();
-
-        editor.focus();
+        closeSubToolbars();
 
     }
 );
@@ -2543,11 +2342,9 @@ numberButton.addEventListener(
 
 $("listButton").addEventListener(
     "click",
-    event => {
+    () => {
 
-        event.stopPropagation();
-
-        preserveSelectionFromEditor();
+        saveSelection();
 
         openSubToolbar(listBar);
 
@@ -2572,17 +2369,14 @@ function updateAlignmentButtons(){
             );
 
         });
-
 }
 
 
 $("alignmentButton").addEventListener(
     "click",
-    event => {
+    () => {
 
-        event.stopPropagation();
-
-        preserveSelectionFromEditor();
+        saveSelection();
 
         openSubToolbar(alignmentBar);
 
@@ -2597,6 +2391,16 @@ alignmentBar
     .forEach(button => {
 
         button.addEventListener(
+            "mousedown",
+            event => {
+
+                event.preventDefault();
+                saveSelection();
+
+            }
+        );
+
+        button.addEventListener(
             "click",
             () => {
 
@@ -2607,17 +2411,18 @@ alignmentBar
 
                 let command = "justifyRight";
 
-                if(align === "left"){
+                if(align === "center"){
+
+                    command = "justifyCenter";
+
+                }else if(align === "left"){
+
                     command = "justifyLeft";
                 }
 
-                if(align === "center"){
-                    command = "justifyCenter";
-                }
+                runCommand(command);
 
-                executeCommand(command);
-
-                closeAllSubToolbars();
+                closeSubToolbars();
 
             }
         );
@@ -2626,7 +2431,7 @@ alignmentBar
 
 
 /* =====================================================
-   COLOR FUNCTIONS
+   COLOR HELPERS
 ===================================================== */
 
 function hsvToRgb(h,s,v){
@@ -2680,24 +2485,19 @@ function hsvToRgb(h,s,v){
 
         r = c;
         b = x;
-
     }
 
     return {
-
         r:Math.round((r+m)*255),
         g:Math.round((g+m)*255),
         b:Math.round((b+m)*255)
-
     };
-
 }
 
 
 function rgbString(rgb){
 
     return `rgb(${rgb.r},${rgb.g},${rgb.b})`;
-
 }
 
 
@@ -2732,7 +2532,8 @@ function setupColorWheel(
                 )
             );
 
-        colorMarker.style.background = color;
+        colorMarker.style.background =
+            color;
 
         const rect =
             wheel.getBoundingClientRect();
@@ -2774,6 +2575,7 @@ function setupColorWheel(
                 100
             ) + "%";
 
+
         const left = width * .13;
         const top = height * .13;
 
@@ -2784,7 +2586,7 @@ function setupColorWheel(
             (
                 (
                     left +
-                    saturation / 100 *
+                    saturation/100 *
                     innerWidth
                 ) /
                 width *
@@ -2795,7 +2597,7 @@ function setupColorWheel(
             (
                 (
                     top +
-                    (1 - value / 100) *
+                    (1-value/100) *
                     innerHeight
                 ) /
                 height *
@@ -2803,7 +2605,6 @@ function setupColorWheel(
             ) + "%";
 
         callback(color);
-
     }
 
 
@@ -2813,29 +2614,27 @@ function setupColorWheel(
             wheel.getBoundingClientRect();
 
         const cx =
-            rect.left +
-            rect.width / 2;
+            rect.left + rect.width/2;
 
         const cy =
-            rect.top +
-            rect.height / 2;
+            rect.top + rect.height/2;
 
         let angle =
             Math.atan2(
-                event.clientX - cx,
-                -(event.clientY - cy)
+                event.clientX-cx,
+                -(event.clientY-cy)
             ) *
             180 /
             Math.PI;
 
         if(angle < 0){
+
             angle += 360;
         }
 
         hue = angle;
 
         update();
-
     }
 
 
@@ -2844,11 +2643,11 @@ function setupColorWheel(
         const rect =
             wheel.getBoundingClientRect();
 
-        const left = rect.width * .13;
-        const top = rect.height * .13;
+        const left = rect.width*.13;
+        const top = rect.height*.13;
 
-        const width = rect.width * .74;
-        const height = rect.height * .74;
+        const width = rect.width*.74;
+        const height = rect.height*.74;
 
         let x =
             event.clientX -
@@ -2860,25 +2659,13 @@ function setupColorWheel(
             rect.top -
             top;
 
-        x = Math.max(
-            0,
-            Math.min(width,x)
-        );
+        x = Math.max(0,Math.min(width,x));
+        y = Math.max(0,Math.min(height,y));
 
-        y = Math.max(
-            0,
-            Math.min(height,y)
-        );
-
-        saturation =
-            x / width * 100;
-
-        value =
-            100 -
-            y / height * 100;
+        saturation = x / width * 100;
+        value = 100 - y / height * 100;
 
         update();
-
     }
 
 
@@ -2890,40 +2677,43 @@ function setupColorWheel(
                 wheel.getBoundingClientRect();
 
             const cx =
-                rect.left +
-                rect.width / 2;
+                rect.left + rect.width/2;
 
             const cy =
-                rect.top +
-                rect.height / 2;
+                rect.top + rect.height/2;
 
             const distance =
                 Math.hypot(
-                    event.clientX - cx,
-                    event.clientY - cy
+                    event.clientX-cx,
+                    event.clientY-cy
                 );
 
             const radius =
                 Math.min(
                     rect.width,
                     rect.height
-                ) / 2;
+                )/2;
 
             mode =
-                distance > radius * .76
+                distance > radius*.76
                     ? "hue"
                     : "sv";
 
             if(mode === "hue"){
+
                 hueFromEvent(event);
+
             }else{
+
                 svFromEvent(event);
             }
 
             try{
+
                 wheel.setPointerCapture(
                     event.pointerId
                 );
+
             }catch(error){}
 
             event.preventDefault();
@@ -2937,10 +2727,11 @@ function setupColorWheel(
         event => {
 
             if(mode === "hue"){
-                hueFromEvent(event);
-            }
 
-            if(mode === "sv"){
+                hueFromEvent(event);
+
+            }else if(mode === "sv"){
+
                 svFromEvent(event);
             }
 
@@ -2955,9 +2746,11 @@ function setupColorWheel(
             mode = null;
 
             try{
+
                 wheel.releasePointerCapture(
                     event.pointerId
                 );
+
             }catch(error){}
 
         }
@@ -2967,13 +2760,14 @@ function setupColorWheel(
     wheel.addEventListener(
         "pointercancel",
         () => {
+
             mode = null;
+
         }
     );
 
 
     update();
-
 }
 
 
@@ -2983,7 +2777,9 @@ setupColorWheel(
     $("textColorMarker"),
     0,
     color => {
+
         AppState.textColor = color;
+
     }
 );
 
@@ -2994,22 +2790,24 @@ setupColorWheel(
     $("highlightColorMarker"),
     60,
     color => {
+
         AppState.highlightColor = color;
+
     }
 );
 
 
 /* =====================================================
-   COLOR UI
+   COLOR BUTTON
 ===================================================== */
 
 $("colorButton").addEventListener(
     "click",
     () => {
 
-        preserveSelectionFromEditor();
+        saveSelection();
 
-        closeAllSubToolbars();
+        closeSubToolbars();
 
         openOverlay(colorOverlay);
 
@@ -3023,8 +2821,8 @@ $("blackText").addEventListener(
 
         AppState.textColor = "rgb(0,0,0)";
 
-        $("textColorMarker")
-            .style.background = "#000";
+        $("textColorMarker").style.background =
+            "#000";
 
     }
 );
@@ -3037,8 +2835,8 @@ $("whiteText").addEventListener(
         AppState.textColor =
             "rgb(255,255,255)";
 
-        $("textColorMarker")
-            .style.background = "#fff";
+        $("textColorMarker").style.background =
+            "#fff";
 
     }
 );
@@ -3049,10 +2847,11 @@ $("colorDone").addEventListener(
     () => {
 
         if(!restoreSelection()){
+
             focusEditorEnd();
         }
 
-        executeCommand(
+        runCommand(
             "foreColor",
             AppState.textColor
         );
@@ -3085,8 +2884,6 @@ function colorToRgba(color,opacity){
 
     temp.style.color = color;
 
-    temp.style.display = "none";
-
     document.body.appendChild(temp);
 
     const computed =
@@ -3097,12 +2894,14 @@ function colorToRgba(color,opacity){
     const values =
         computed.match(/\d+/g);
 
-    if(!values || values.length < 3){
+    if(
+        !values ||
+        values.length < 3
+    ){
         return color;
     }
 
     return `rgba(${values[0]},${values[1]},${values[2]},${opacity})`;
-
 }
 
 
@@ -3110,9 +2909,9 @@ $("highlightButton").addEventListener(
     "click",
     () => {
 
-        preserveSelectionFromEditor();
+        saveSelection();
 
-        closeAllSubToolbars();
+        closeSubToolbars();
 
         openOverlay(highlightOverlay);
 
@@ -3125,24 +2924,17 @@ $("highlightDone").addEventListener(
     () => {
 
         if(!restoreSelection()){
+
             focusEditorEnd();
         }
 
-        const color =
+        runCommand(
+            "hiliteColor",
             colorToRgba(
                 AppState.highlightColor,
                 AppState.highlightOpacity
-            );
-
-        executeCommand(
-            "hiliteColor",
-            color
+            )
         );
-
-        /*
-            Firefox/بعض نسخ Chromium تستخدم backColor.
-            نطبق hiliteColor أولًا ثم نترك المحتوى.
-        */
 
         closeOverlay(highlightOverlay);
 
@@ -3155,15 +2947,16 @@ $("removeHighlight").addEventListener(
     () => {
 
         if(!restoreSelection()){
+
             focusEditorEnd();
         }
 
-        executeCommand(
+        runCommand(
             "hiliteColor",
             "transparent"
         );
 
-        executeCommand(
+        runCommand(
             "backColor",
             "transparent"
         );
@@ -3182,7 +2975,6 @@ function updateTableInfo(){
 
     $("tableInfo").textContent =
         `${AppState.tableRows} × ${AppState.tableCols}`;
-
 }
 
 
@@ -3205,36 +2997,31 @@ function createTable(rows,cols){
                 document.createElement("td");
 
             td.contentEditable = "true";
-
             td.innerHTML = "<br>";
 
             tr.appendChild(td);
-
         }
 
         tbody.appendChild(tr);
-
     }
 
     table.appendChild(tbody);
 
     return table;
-
 }
 
 
 function insertElement(element){
 
-    if(!element){
-        return;
-    }
+    editor.focus();
 
     if(!restoreSelection()){
+
         focusEditorEnd();
     }
 
     const selection =
-        getCurrentSelection();
+        window.getSelection();
 
     if(
         !selection ||
@@ -3246,20 +3033,21 @@ function insertElement(element){
         focusEditorEnd();
 
         return;
-
     }
 
     const range =
         selection.getRangeAt(0);
 
-    if(!isRangeInsideEditor(range)){
+    if(
+        !editor.contains(range.startContainer) ||
+        !editor.contains(range.endContainer)
+    ){
 
         editor.appendChild(element);
 
         focusEditorEnd();
 
         return;
-
     }
 
     range.deleteContents();
@@ -3275,11 +3063,6 @@ function insertElement(element){
             marker,
             element.nextSibling
         );
-
-    }else{
-
-        editor.appendChild(marker);
-
     }
 
     const newRange =
@@ -3297,7 +3080,6 @@ function insertElement(element){
 
     AppState.savedRange =
         newRange.cloneRange();
-
 }
 
 
@@ -3305,14 +3087,14 @@ $("tableButton").addEventListener(
     "click",
     () => {
 
-        preserveSelectionFromEditor();
+        saveSelection();
 
         AppState.tableRows = 3;
         AppState.tableCols = 3;
 
         updateTableInfo();
 
-        closeAllSubToolbars();
+        closeSubToolbars();
 
         openOverlay(tableOverlay);
 
@@ -3388,97 +3170,16 @@ $("tableDone").addEventListener(
     "click",
     () => {
 
-        const table =
+        insertElement(
             createTable(
                 AppState.tableRows,
                 AppState.tableCols
-            );
-
-        insertElement(table);
+            )
+        );
 
         closeOverlay(tableOverlay);
 
         editor.focus();
-
-    }
-);
-
-
-/* =====================================================
-   TABLE KEYBOARD
-===================================================== */
-
-editor.addEventListener(
-    "keydown",
-    event => {
-
-        const active =
-            document.activeElement;
-
-        const cell =
-            active &&
-            active.closest &&
-            active.closest("td,th");
-
-        if(!cell){
-            return;
-        }
-
-        if(event.key === "Tab"){
-
-            event.preventDefault();
-
-            const cells =
-                Array.from(
-                    editor.querySelectorAll(
-                        "table td,table th"
-                    )
-                );
-
-            const index =
-                cells.indexOf(cell);
-
-            let nextIndex =
-                event.shiftKey
-                    ? index - 1
-                    : index + 1;
-
-            /*
-                عند الوصول لآخر خلية:
-                نعود إلى أول خلية بدل الخروج من المحرر.
-            */
-            if(nextIndex >= cells.length){
-                nextIndex = 0;
-            }
-
-            if(nextIndex < 0){
-                nextIndex = cells.length - 1;
-            }
-
-            const next = cells[nextIndex];
-
-            if(next){
-
-                next.focus();
-
-                const range =
-                    document.createRange();
-
-                range.selectNodeContents(next);
-                range.collapse(false);
-
-                const selection =
-                    window.getSelection();
-
-                selection.removeAllRanges();
-                selection.addRange(range);
-
-                AppState.savedRange =
-                    range.cloneRange();
-
-            }
-
-        }
 
     }
 );
@@ -3494,6 +3195,7 @@ function addMindBranch(){
         $("mindBranches");
 
     if(container.children.length >= 12){
+
         return;
     }
 
@@ -3507,7 +3209,6 @@ function addMindBranch(){
     input.rows = 2;
 
     container.appendChild(input);
-
 }
 
 
@@ -3515,7 +3216,7 @@ $("mindMapButton").addEventListener(
     "click",
     () => {
 
-        preserveSelectionFromEditor();
+        saveSelection();
 
         $("mindCenterInput").value = "";
 
@@ -3524,7 +3225,7 @@ $("mindMapButton").addEventListener(
         addMindBranch();
         addMindBranch();
 
-        closeAllSubToolbars();
+        closeSubToolbars();
 
         openOverlay(mindMapOverlay);
 
@@ -3580,16 +3281,14 @@ $("mindDone").addEventListener(
             const branches =
                 document.createElement("div");
 
-            branches.className =
-                "mind-branches";
+            branches.className = "mind-branches";
 
             values.forEach(value => {
 
                 const branch =
                     document.createElement("div");
 
-                branch.className =
-                    "mind-branch";
+                branch.className = "mind-branch";
 
                 branch.textContent = value;
 
@@ -3598,7 +3297,6 @@ $("mindDone").addEventListener(
             });
 
             wrap.appendChild(branches);
-
         }
 
         insertElement(wrap);
@@ -3617,7 +3315,7 @@ $("mindDone").addEventListener(
 
 function clearSearchHighlights(){
 
-    messages
+    document
         .querySelectorAll(".search-word")
         .forEach(span => {
 
@@ -3633,15 +3331,13 @@ function clearSearchHighlights(){
                     span.firstChild,
                     span
                 );
-
             }
 
             span.remove();
 
         });
 
-
-    messages
+    document
         .querySelectorAll(".search-highlight")
         .forEach(element => {
 
@@ -3650,7 +3346,6 @@ function clearSearchHighlights(){
             );
 
         });
-
 }
 
 
@@ -3662,14 +3357,10 @@ function highlightTextNode(node,query){
         return 0;
     }
 
-    const lower =
-        text.toLocaleLowerCase();
+    const lower = text.toLocaleLowerCase();
+    const q = query.toLocaleLowerCase();
 
-    const q =
-        query.toLocaleLowerCase();
-
-    let index =
-        lower.indexOf(q);
+    let index = lower.indexOf(q);
 
     if(index === -1){
         return 0;
@@ -3704,12 +3395,10 @@ function highlightTextNode(node,query){
 
         count++;
 
-        last =
-            index + query.length;
+        last = index + query.length;
 
         index =
             lower.indexOf(q,last);
-
     }
 
     fragment.appendChild(
@@ -3724,7 +3413,6 @@ function highlightTextNode(node,query){
     );
 
     return count;
-
 }
 
 
@@ -3754,15 +3442,10 @@ function highlightNote(content,query){
         if(
             node.nodeValue
                 .toLocaleLowerCase()
-                .includes(
-                    query.toLocaleLowerCase()
-                )
+                .includes(query.toLocaleLowerCase())
         ){
-
             nodes.push(node);
-
         }
-
     }
 
     nodes.forEach(textNode => {
@@ -3776,7 +3459,6 @@ function highlightNote(content,query){
     });
 
     return count;
-
 }
 
 
@@ -3792,7 +3474,6 @@ function performSearch(){
         searchResult.textContent = "";
 
         return;
-
     }
 
     const notes =
@@ -3814,9 +3495,7 @@ function performSearch(){
         if(
             content.textContent
                 .toLocaleLowerCase()
-                .includes(
-                    query.toLocaleLowerCase()
-                )
+                .includes(query.toLocaleLowerCase())
         ){
 
             noteCount++;
@@ -3824,7 +3503,6 @@ function performSearch(){
             if(!first){
                 first = note;
             }
-
         }
 
     });
@@ -3836,7 +3514,6 @@ function performSearch(){
             "لم يتم العثور على النص";
 
         return;
-
     }
 
 
@@ -3852,7 +3529,6 @@ function performSearch(){
                     content,
                     query
                 );
-
         }
 
     });
@@ -3869,7 +3545,6 @@ function performSearch(){
 
     searchResult.textContent =
         `تم العثور على ${matchCount} نتيجة في ${noteCount} ملاحظة`;
-
 }
 
 
@@ -3878,7 +3553,6 @@ $("searchButton").addEventListener(
     () => {
 
         searchInput.value = "";
-
         searchResult.textContent = "";
 
         clearSearchHighlights();
@@ -3913,7 +3587,7 @@ $("searchDone").addEventListener(
 
 
 /* =====================================================
-   RENDER
+   RENDER NOTES
 ===================================================== */
 
 function renderNotes(){
@@ -3924,13 +3598,17 @@ function renderNotes(){
 
     if(!AppState.notes.length){
 
-        messages.innerHTML =
-            `<div class="empty">
-                لا توجد ملاحظات بعد
-            </div>`;
+        const empty =
+            document.createElement("div");
+
+        empty.className = "empty";
+
+        empty.textContent =
+            "لا توجد ملاحظات بعد";
+
+        messages.appendChild(empty);
 
         return;
-
     }
 
 
@@ -3951,11 +3629,6 @@ function renderNotes(){
             menuButton.type = "button";
 
             menuButton.textContent = "⋮";
-
-            menuButton.setAttribute(
-                "aria-label",
-                "خيارات الملاحظة"
-            );
 
 
             menuButton.addEventListener(
@@ -3978,7 +3651,8 @@ function renderNotes(){
             const content =
                 document.createElement("div");
 
-            content.className = "note-content";
+            content.className =
+                "note-content";
 
             content.innerHTML =
                 note.html || "";
@@ -3991,13 +3665,20 @@ function renderNotes(){
 
         }
     );
-
 }
 
 
 /* =====================================================
    MESSAGE MENU
 ===================================================== */
+
+function closeMessageMenu(){
+
+    messageMenu.classList.remove("open");
+
+    messageMenu.style.display = "none";
+}
+
 
 function openMessageMenu(x,y){
 
@@ -4036,12 +3717,8 @@ function openMessageMenu(x,y){
             )
         );
 
-    messageMenu.style.left =
-        left + "px";
-
-    messageMenu.style.top =
-        top + "px";
-
+    messageMenu.style.left = left + "px";
+    messageMenu.style.top = top + "px";
 }
 
 
@@ -4055,7 +3732,6 @@ document.addEventListener(
         ){
 
             closeMessageMenu();
-
         }
 
     }
@@ -4074,21 +3750,59 @@ function resetEditor(){
 
     editor.innerHTML = "";
 
-    state.textContent = "رسالة جديدة";
+    state.textContent =
+        "رسالة جديدة";
 
     AppState.fontSize = 16;
 
     AppState.alignment = "right";
 
-    closeAllSubToolbars();
+    closeSubToolbars();
 
-    updateToolbarState();
+    document
+        .querySelectorAll(".tool")
+        .forEach(button => {
 
+            button.classList.remove("active");
+
+        });
+
+    updateFontSizeButtons();
+    updateAlignmentButtons();
 }
 
 
 /* =====================================================
-   SAVE NOTE
+   CONTENT CHECK
+===================================================== */
+
+function hasRealContent(){
+
+    const clone =
+        editor.cloneNode(true);
+
+    clone
+        .querySelectorAll("br")
+        .forEach(br => br.replaceWith(" "));
+
+    const text =
+        (clone.textContent || "")
+            .replace(/\u200B/g,"")
+            .replace(/\uFEFF/g,"")
+            .replace(/\u00A0/g," ")
+            .trim();
+
+    return Boolean(
+        text ||
+        clone.querySelector("table") ||
+        clone.querySelector(".mind-map") ||
+        clone.querySelector("img")
+    );
+}
+
+
+/* =====================================================
+   SAVE
 ===================================================== */
 
 $("sendButton").addEventListener(
@@ -4096,13 +3810,19 @@ $("sendButton").addEventListener(
     () => {
 
         if(!hasRealContent()){
+
+            editor.focus();
+
             return;
         }
 
         const html =
-            cleanHtml(editor.innerHTML);
+            editor.innerHTML
+                .replace(/\u200B/g,"")
+                .trim();
 
         if(!html){
+
             return;
         }
 
@@ -4127,6 +3847,7 @@ $("sendButton").addEventListener(
 
 
         if(!saveNotes()){
+
             return;
         }
 
@@ -4171,7 +3892,6 @@ $("editButton").addEventListener(
             closeMessageMenu();
 
             return;
-
         }
 
         AppState.editingIndex = index;
@@ -4184,7 +3904,7 @@ $("editButton").addEventListener(
 
         closeMessageMenu();
 
-        closeAllSubToolbars();
+        closeSubToolbars();
 
         editor.focus();
 
@@ -4192,8 +3912,7 @@ $("editButton").addEventListener(
             () => {
 
                 focusEditorEnd();
-
-                updateToolbarState();
+                updateToolbar();
 
             },
             50
@@ -4222,20 +3941,19 @@ $("deleteButton").addEventListener(
             closeMessageMenu();
 
             return;
-
         }
 
 
-        if(
-            !window.confirm(
+        const confirmed =
+            window.confirm(
                 "هل تريدين حذف هذه الملاحظة؟"
-            )
-        ){
+            );
+
+        if(!confirmed){
 
             closeMessageMenu();
 
             return;
-
         }
 
 
@@ -4253,7 +3971,6 @@ $("deleteButton").addEventListener(
         ){
 
             AppState.editingIndex--;
-
         }
 
 
@@ -4296,7 +4013,7 @@ $("newButton").addEventListener(
 
 
 /* =====================================================
-   OVERLAY CLICK
+   OVERLAY BACKDROP
 ===================================================== */
 
 document
@@ -4310,7 +4027,6 @@ document
                 if(event.target === overlay){
 
                     closeOverlay(overlay);
-
                 }
 
             }
@@ -4320,7 +4036,7 @@ document
 
 
 /* =====================================================
-   ESC
+   ESCAPE
 ===================================================== */
 
 document.addEventListener(
@@ -4328,14 +4044,17 @@ document.addEventListener(
     event => {
 
         if(event.key !== "Escape"){
+
             return;
         }
 
-        closeAllOverlays();
+        document
+            .querySelectorAll(".overlay.open")
+            .forEach(closeOverlay);
 
         closeMessageMenu();
 
-        closeAllSubToolbars();
+        closeSubToolbars();
 
     }
 );
@@ -4367,11 +4086,12 @@ editor.addEventListener(
         }
 
         if(!restoreSelection()){
+
             focusEditorEnd();
         }
 
         const selection =
-            getCurrentSelection();
+            window.getSelection();
 
         if(
             !selection ||
@@ -4383,7 +4103,10 @@ editor.addEventListener(
         const range =
             selection.getRangeAt(0);
 
-        if(!isRangeInsideEditor(range)){
+        if(
+            !editor.contains(range.startContainer) ||
+            !editor.contains(range.endContainer)
+        ){
             return;
         }
 
@@ -4433,52 +4156,96 @@ editor.addEventListener(
 
 
 /* =====================================================
-   PREVENT SUB TOOLBAR FROM CLOSING
+   TABLE TAB
 ===================================================== */
 
-[
-    fontSizeBar,
-    listBar,
-    alignmentBar
-].forEach(bar => {
-
-    bar.addEventListener(
-        "click",
-        event => {
-            event.stopPropagation();
-        }
-    );
-
-});
-
-
-/* =====================================================
-   OUTSIDE CLICK
-===================================================== */
-
-document.addEventListener(
-    "click",
+editor.addEventListener(
+    "keydown",
     event => {
 
-        if(
-            !event.target.closest(".toolbar") &&
-            !event.target.closest(".sub-toolbar")
-        ){
+        const cell =
+            event.target &&
+            event.target.closest
+                ? event.target.closest("td,th")
+                : null;
 
-            /*
-                لا نغلق الـ toolbar إذا كان المستخدم
-                داخل المحرر؛ نغلق فقط القوائم الفرعية
-                عند الضغط خارجه.
-            */
-
-            if(!event.target.closest(".editor")){
-                closeAllSubToolbars();
-            }
-
+        if(!cell){
+            return;
         }
+
+        if(event.key !== "Tab"){
+            return;
+        }
+
+        event.preventDefault();
+
+        const cells =
+            Array.from(
+                editor.querySelectorAll(
+                    "table td, table th"
+                )
+            );
+
+        const index =
+            cells.indexOf(cell);
+
+        const next =
+            cells[
+                event.shiftKey
+                    ? index - 1
+                    : index + 1
+            ];
+
+        if(!next){
+            return;
+        }
+
+        next.focus();
+
+        const range =
+            document.createRange();
+
+        range.selectNodeContents(next);
+        range.collapse(false);
+
+        const selection =
+            window.getSelection();
+
+        selection.removeAllRanges();
+        selection.addRange(range);
+
+        AppState.savedRange =
+            range.cloneRange();
 
     }
 );
+
+
+/* =====================================================
+   TOOLBAR SELECTION FIX
+===================================================== */
+
+/*
+   مهم:
+   لا نضع preventDefault على أزرار الـtoolbar.
+   الضغط على الزر يجب أن ينتج click طبيعي.
+   وفي الوقت نفسه نحفظ الـselection قبل فقدان التركيز.
+*/
+
+document
+    .querySelectorAll(".toolbar button")
+    .forEach(button => {
+
+        button.addEventListener(
+            "mousedown",
+            () => {
+
+                saveSelection();
+
+            }
+        );
+
+    });
 
 
 /* =====================================================
@@ -4495,11 +4262,7 @@ updateAlignmentButtons();
 
 updateTableInfo();
 
-closeAllSubToolbars();
-
-closeAllOverlays();
-
-closeMessageMenu();
+closeSubToolbars();
 
 </script>
 
