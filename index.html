@@ -634,60 +634,6 @@ editor.focus();
    تمييز النص
 ========================== */
 
-const highlightOverlay=document.getElementById("highlightOverlay");
-const highlightColorWheel=document.getElementById("highlightColorWheel");
-const highlightHueMarker=document.getElementById("highlightHueMarker");
-const highlightColorMarker=document.getElementById("highlightColorMarker");
-const opacityRange=document.getElementById("opacityRange");
-
-let chosenHighlightColor="rgb(255,255,0)";
-let highlightOpacity=.60;
-
-function hexWithOpacity(color,opacity){
-
-const temp=document.createElement("span");
-
-temp.style.color=color;
-
-document.body.appendChild(temp);
-
-const rgb=getComputedStyle(temp).color;
-
-temp.remove();
-
-const match=rgb.match(/\d+/g);
-
-if(!match)return color;
-
-return `rgba(${match[0]},${match[1]},${match[2]},${opacity})`;
-
-}
-
-setupAdvancedColorWheel(
-highlightColorWheel,
-highlightHueMarker,
-highlightColorMarker,
-60,
-function(color){
-
-chosenHighlightColor=color;
-
-}
-);
-
-opacityRange.addEventListener("input",function(event){
-
-highlightOpacity=Number(event.target.value)/100;
-
-});
-
-document.getElementById("highlightButton").addEventListener("click",function(){
-
-saveSelection();
-
-highlightOverlay.style.display="flex";
-
-});
 
 
 
