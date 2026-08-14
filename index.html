@@ -2,11 +2,22 @@
 <html lang="ar" dir="rtl">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes">
+
+<meta
+    name="viewport"
+    content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=yes,viewport-fit=cover"
+>
+
+<meta name="theme-color" content="#10131a">
 
 <title>ملاحظاتي</title>
 
 <style>
+
+/* =========================================================
+   1. RESET
+========================================================= */
+
 *{
     box-sizing:border-box;
     -webkit-tap-highlight-color:transparent;
@@ -14,129 +25,237 @@
 
 html,
 body{
-    margin:0;
     width:100%;
     height:100%;
-    overflow:hidden;
-    font-family:Arial,sans-serif;
-    background:#101218;
-    color:#fff;
+    margin:0;
+    padding:0;
+}
+
+html{
+    color-scheme:dark;
 }
 
 body{
+    overflow:hidden;
+    background:#0f1117;
+    color:#f5f7fb;
+    font-family:
+        Arial,
+        "Segoe UI",
+        Tahoma,
+        sans-serif;
+
     -webkit-text-size-adjust:100%;
 }
 
 button,
 input,
 textarea{
-    font-family:inherit;
+    font:inherit;
 }
 
 button{
-    touch-action:manipulation;
+    border:0;
     cursor:pointer;
+    touch-action:manipulation;
 }
 
 button:disabled{
-    opacity:.5;
+    opacity:.45;
     cursor:default;
 }
+
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+[contenteditable="true"]:focus-visible{
+    outline:2px solid #6d9dff;
+    outline-offset:2px;
+}
+
+
+/* =========================================================
+   2. APP
+========================================================= */
 
 .app{
     width:100%;
     height:100%;
+    height:100dvh;
+
     display:flex;
     flex-direction:column;
+
+    background:
+        radial-gradient(
+            circle at 50% -20%,
+            rgba(64,100,170,.12),
+            transparent 45%
+        ),
+        #10131a;
 }
 
+
+/* =========================================================
+   3. HEADER
+========================================================= */
+
 .header{
-    height:56px;
-    flex-shrink:0;
+    flex:0 0 58px;
+    height:58px;
+
     display:flex;
     align-items:center;
+
     gap:8px;
     padding:7px 10px;
-    background:#191c24;
-    border-bottom:1px solid #343944;
+
+    background:rgba(25,29,38,.96);
+
+    border-bottom:
+        1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 2px 12px rgba(0,0,0,.15);
+
+    position:relative;
+    z-index:20;
 }
 
 .title{
     flex:1;
+
     text-align:center;
+
     font-size:18px;
-    font-weight:bold;
+    font-weight:800;
+
+    letter-spacing:.2px;
 }
 
 .icon{
-    width:40px;
-    height:40px;
-    border:0;
+    width:42px;
+    height:42px;
+    flex:0 0 42px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
     border-radius:50%;
+
     background:#292e39;
     color:#fff;
+
     font-size:20px;
+
+    transition:
+        transform .15s ease,
+        background .15s ease;
 }
 
-.icon:active,
-.tool:active,
-.send:active,
-.panel-button:active,
-.list-choice button:active,
-.align-item:active,
-.font-size-item:active,
-.note-menu:active{
-    transform:scale(.96);
+.icon:hover{
+    background:#343b49;
 }
 
-button:focus-visible{
-    outline:2px solid #5f8fe8;
-    outline-offset:2px;
+.icon:active{
+    transform:scale(.93);
 }
+
+
+/* =========================================================
+   4. NOTES AREA
+========================================================= */
 
 .messages{
     flex:1;
     min-height:0;
+
     overflow-y:auto;
-    padding:10px;
+
+    padding:
+        12px
+        10px
+        14px;
+
     -webkit-overflow-scrolling:touch;
-    overscroll-behavior:contain;
+
+    overscroll-behavior-y:contain;
+
+    scroll-behavior:smooth;
+}
+
+.messages::-webkit-scrollbar{
+    width:5px;
+}
+
+.messages::-webkit-scrollbar-thumb{
+    background:#3a404c;
+    border-radius:10px;
 }
 
 .empty{
-    text-align:center;
-    color:#777;
     margin-top:30vh;
+
+    text-align:center;
+
+    color:#707783;
+
+    font-size:14px;
 }
+
+
+/* =========================================================
+   5. NOTE
+========================================================= */
 
 .note{
-    background:#20242d;
-    border-radius:14px;
-    padding:11px 13px;
-    margin-bottom:9px;
-    line-height:1.7;
+    position:relative;
+
+    margin-bottom:10px;
+    padding:12px 14px;
+
+    border:
+        1px solid rgba(255,255,255,.055);
+
+    border-radius:16px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #222731,
+            #1e222b
+        );
+
+    box-shadow:
+        0 4px 18px rgba(0,0,0,.12);
+
+    line-height:1.75;
+
     overflow-wrap:anywhere;
     word-break:break-word;
-    position:relative;
+
+    animation:
+        noteIn .18s ease;
 }
 
-.note-menu{
-    float:left;
-    width:32px;
-    height:32px;
-    border:0;
-    border-radius:50%;
-    background:transparent;
-    color:#aaa;
-    font-size:20px;
-}
+@keyframes noteIn{
+    from{
+        opacity:0;
+        transform:translateY(4px);
+    }
 
-.note-menu:hover{
-    background:#292e39;
+    to{
+        opacity:1;
+        transform:translateY(0);
+    }
 }
 
 .note-content{
     min-width:0;
+
+    overflow-wrap:anywhere;
+    word-break:break-word;
 }
 
 .note:after{
@@ -145,69 +264,181 @@ button:focus-visible{
     clear:both;
 }
 
-.note table{
-    display:block;
-    max-width:100%;
-    overflow-x:auto;
-}
-
 .note img{
+    display:block;
+
     max-width:100%;
     height:auto;
+
+    margin:6px 0;
+
+    border-radius:8px;
+}
+
+.note-menu{
+    float:left;
+
+    width:34px;
+    height:34px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
+    margin:
+        -3px
+        -5px
+        2px
+        7px;
+
+    border-radius:50%;
+
+    background:transparent;
+    color:#aab0bb;
+
+    font-size:21px;
+
+    transition:
+        background .15s ease,
+        transform .15s ease;
+}
+
+.note-menu:hover{
+    background:#303642;
+}
+
+.note-menu:active{
+    transform:scale(.92);
+}
+
+
+/* =========================================================
+   6. NOTE CONTENT
+========================================================= */
+
+.note ul,
+.note ol{
+    margin:7px 0;
+
+    padding-right:27px;
 }
 
 .note table{
+    display:block;
+
     width:max-content;
     max-width:100%;
+
+    overflow-x:auto;
+
+    margin:10px 0;
+
     border-collapse:collapse;
-    table-layout:auto;
-    margin:8px 0;
+
+    scrollbar-width:thin;
 }
 
 .note td,
 .note th{
-    border:1px solid #666d7b;
+    min-width:48px;
+    min-height:35px;
+
     padding:7px 9px;
-    min-width:45px;
-    height:34px;
+
+    border:
+        1px solid #687080;
+
     vertical-align:top;
+
     white-space:pre-wrap;
+
     overflow-wrap:anywhere;
     word-break:break-word;
+
+    line-height:1.55;
 }
+
+.note .mind-map{
+    width:100%;
+}
+
+
+/* =========================================================
+   7. EDITOR AREA
+========================================================= */
 
 .editor-area{
     flex-shrink:0;
-    background:#191c24;
-    border-top:1px solid #343944;
-    padding:5px 7px calc(8px + env(safe-area-inset-bottom));
+
+    padding:
+        5px
+        8px
+        calc(8px + env(safe-area-inset-bottom));
+
+    background:rgba(25,29,38,.98);
+
+    border-top:
+        1px solid rgba(255,255,255,.08);
+
+    box-shadow:
+        0 -4px 20px rgba(0,0,0,.12);
+
+    position:relative;
+    z-index:30;
 }
 
 .edit-state{
-    height:28px;
+    height:27px;
+
     display:flex;
     align-items:center;
     justify-content:space-between;
-    color:#aaa;
+
+    color:#9299a5;
+
     font-size:12px;
 }
 
 .cancel{
     width:34px;
-    height:28px;
-    border:0;
+    height:27px;
+
+    display:flex;
+    align-items:center;
+    justify-content:center;
+
     background:transparent;
-    color:#aaa;
+    color:#9da4af;
+
     font-size:21px;
+
+    border-radius:7px;
 }
+
+.cancel:hover{
+    background:#292e39;
+}
+
+
+/* =========================================================
+   8. TOOLBAR
+========================================================= */
 
 .toolbar{
     display:flex;
+
     gap:5px;
+
+    padding:
+        3px
+        0
+        7px;
+
     overflow-x:auto;
-    padding:3px 0 7px;
+
     scrollbar-width:none;
-    overscroll-behavior:contain;
+
+    overscroll-behavior-x:contain;
 }
 
 .toolbar::-webkit-scrollbar{
@@ -215,23 +446,47 @@ button:focus-visible{
 }
 
 .tool{
-    flex:0 0 39px;
-    width:39px;
-    height:39px;
-    border:1px solid #444955;
-    border-radius:10px;
-    background:#292e39;
-    color:#fff;
-    font-size:17px;
+    width:40px;
+    height:40px;
+
+    flex:0 0 40px;
+
     display:flex;
     align-items:center;
     justify-content:center;
+
+    border:
+        1px solid #444b58;
+
+    border-radius:11px;
+
+    background:#292e39;
+    color:#fff;
+
+    font-size:17px;
+
+    transition:
+        background .15s ease,
+        border-color .15s ease,
+        transform .12s ease;
+}
+
+.tool:hover{
+    background:#323845;
+}
+
+.tool:active{
+    transform:scale(.94);
 }
 
 .tool.active{
     background:#315fae;
-    border-color:#5f8fe8;
-    box-shadow:0 0 0 2px rgba(52,113,246,.25);
+
+    border-color:#6b9bf0;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(67,122,230,.18);
 }
 
 .bold{
@@ -241,43 +496,151 @@ button:focus-visible{
 .underline{
     text-decoration:underline;
     text-decoration-thickness:2px;
-    text-underline-offset:7px;
+    text-underline-offset:5px;
 }
+
+
+/* =========================================================
+   9. SUB TOOLBARS
+========================================================= */
+
+.sub-toolbar{
+    display:none;
+
+    align-items:center;
+
+    gap:5px;
+
+    padding:
+        2px
+        0
+        7px;
+
+    overflow-x:auto;
+
+    scrollbar-width:none;
+}
+
+.sub-toolbar::-webkit-scrollbar{
+    display:none;
+}
+
+.font-size-bar{
+    direction:ltr;
+}
+
+.list-bar{
+    direction:rtl;
+}
+
+.alignment-bar{
+    direction:rtl;
+}
+
+.font-size-item,
+.align-item{
+    flex:0 0 auto;
+
+    height:34px;
+
+    border:
+        1px solid #444b58;
+
+    border-radius:9px;
+
+    background:#292e39;
+    color:#fff;
+}
+
+.font-size-item{
+    width:36px;
+
+    font-size:13px;
+}
+
+.align-item{
+    width:38px;
+
+    font-size:17px;
+}
+
+.font-size-item:hover,
+.align-item:hover{
+    background:#333a47;
+}
+
+.font-size-item.active,
+.align-item.active{
+    background:#315fae;
+    border-color:#6b9bf0;
+}
+
+
+/* =========================================================
+   10. WRITE ROW
+========================================================= */
 
 .write-row{
     display:flex;
     align-items:flex-end;
-    gap:6px;
+
+    gap:7px;
 }
 
 .editor{
     flex:1;
     min-width:0;
-    min-height:48px;
-    max-height:170px;
+
+    min-height:49px;
+    max-height:175px;
+
     overflow-y:auto;
+
     padding:9px 11px;
-    border:1px solid #464b57;
-    border-radius:12px;
-    outline:none;
-    background:#0e1015;
+
+    border:
+        1px solid #484f5c;
+
+    border-radius:13px;
+
+    background:#0c0f14;
     color:#fff;
+
     line-height:1.7;
-    overflow-wrap:anywhere;
-    word-break:break-word;
-    white-space:pre-wrap;
-    user-select:text;
-    -webkit-user-select:text;
+
     direction:rtl;
     text-align:right;
-    overscroll-behavior:contain;
-    -webkit-overflow-scrolling:touch;
+
+    overflow-wrap:anywhere;
+    word-break:break-word;
+
+    white-space:pre-wrap;
+
     caret-color:#fff;
+
+    user-select:text;
+    -webkit-user-select:text;
+
+    overscroll-behavior:contain;
+
+    -webkit-overflow-scrolling:touch;
+
+    transition:
+        border-color .15s ease,
+        box-shadow .15s ease;
 }
 
-.editor:empty::before{
+.editor:focus{
+    border-color:#4d7fd8;
+
+    box-shadow:
+        0 0 0 2px
+        rgba(66,120,220,.12);
+}
+
+.editor:empty:before{
     content:"اكتبي ملاحظتك هنا...";
-    color:#666;
+    color:#606774;
 }
 
 .editor img{
@@ -285,194 +648,283 @@ button:focus-visible{
     height:auto;
 }
 
-.editor u{
-    text-underline-offset:7px;
-    text-decoration-thickness:2px;
+.editor ul,
+.editor ol{
+    margin:7px 0;
+    padding-right:27px;
 }
 
 .editor table{
     width:max-content;
     max-width:100%;
+
     border-collapse:collapse;
-    table-layout:auto;
+
     margin:8px 0;
 }
 
 .editor td,
 .editor th{
-    border:1px solid #666d7b;
+    min-width:48px;
+    min-height:35px;
+
     padding:7px 9px;
-    min-width:45px;
-    height:34px;
+
+    border:
+        1px solid #687080;
+
     vertical-align:top;
+
     white-space:pre-wrap;
+
     overflow-wrap:anywhere;
     word-break:break-word;
+
+    direction:rtl;
+    text-align:right;
+
+    line-height:1.55;
 }
 
 .editor td:focus,
 .editor th:focus{
-    outline:1px solid #3471f6;
+    outline:
+        1px solid #3471f6;
+
+    outline-offset:-1px;
 }
 
-.editor td,
-.editor th{
-    direction:rtl;
-    text-align:right;
-}
+
+/* =========================================================
+   11. SEND
+========================================================= */
 
 .send{
-    flex:0 0 47px;
-    width:47px;
-    height:47px;
-    border:0;
-    border-radius:50%;
-    background:#3471f6;
-    color:#fff;
-    font-size:21px;
-}
+    width:48px;
+    height:48px;
 
-.font-size-bar,
-.alignment-bar{
-    display:none;
+    flex:0 0 48px;
+
+    display:flex;
     align-items:center;
-    gap:5px;
-    overflow-x:auto;
-    scrollbar-width:none;
-    padding:3px 0 7px;
-    overscroll-behavior:contain;
-}
+    justify-content:center;
 
-.font-size-bar{
-    direction:ltr;
-}
+    border-radius:50%;
 
-.font-size-bar::-webkit-scrollbar,
-.alignment-bar::-webkit-scrollbar{
-    display:none;
-}
+    background:
+        linear-gradient(
+            145deg,
+            #4280fa,
+            #2c65d8
+        );
 
-.font-size-item{
-    flex:0 0 34px;
-    width:34px;
-    height:32px;
-    border:1px solid #444955;
-    border-radius:8px;
-    background:#292e39;
     color:#fff;
-    font-size:13px;
-    padding:0;
+
+    font-size:21px;
+
+    box-shadow:
+        0 5px 15px
+        rgba(40,91,190,.25);
+
+    transition:
+        transform .15s ease,
+        filter .15s ease;
 }
 
-.font-size-item.active{
-    background:#315fae;
-    border-color:#6b98ef;
+.send:hover{
+    filter:brightness(1.08);
 }
 
-.alignment-bar{
-    direction:rtl;
+.send:active{
+    transform:scale(.92);
 }
 
-.align-item{
-    flex:0 0 36px;
-    width:36px;
-    height:32px;
-    border:1px solid #444955;
-    border-radius:8px;
-    background:#292e39;
-    color:#fff;
-    font-size:16px;
-    padding:0;
-}
 
-.align-item.active{
-    background:#315fae;
-    border-color:#6b98ef;
-}
+/* =========================================================
+   12. OVERLAY
+========================================================= */
 
 .overlay{
     display:none;
+
     position:fixed;
     inset:0;
+
     z-index:500;
-    background:rgba(0,0,0,.58);
+
     align-items:center;
     justify-content:center;
-    padding:15px;
+
+    padding:14px;
+
+    background:
+        rgba(0,0,0,.62);
+
+    backdrop-filter:
+        blur(4px);
+
+    -webkit-backdrop-filter:
+        blur(4px);
+
     overscroll-behavior:contain;
 }
 
 .panel{
-    width:min(94vw,350px);
-    max-height:86vh;
+    width:min(94vw,360px);
+    max-height:90vh;
+
     overflow:auto;
-    background:#20242d;
-    border:1px solid #444955;
-    border-radius:17px;
-    padding:15px;
-    box-shadow:0 15px 50px #000b;
+
+    padding:16px;
+
+    border:
+        1px solid #454c59;
+
+    border-radius:18px;
+
+    background:
+        linear-gradient(
+            145deg,
+            #222731,
+            #1d2129
+        );
+
+    box-shadow:
+        0 20px 60px
+        rgba(0,0,0,.55);
+
     overscroll-behavior:contain;
+
+    animation:
+        panelIn .18s ease;
+}
+
+@keyframes panelIn{
+    from{
+        opacity:0;
+        transform:scale(.96) translateY(5px);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1) translateY(0);
+    }
 }
 
 .panel-title{
     text-align:center;
-    font-weight:bold;
-    margin-bottom:12px;
+
+    font-size:16px;
+    font-weight:800;
+
+    margin-bottom:13px;
 }
+
+
+/* =========================================================
+   13. PANEL BUTTON
+========================================================= */
+
+.panel-button{
+    width:100%;
+    min-height:43px;
+
+    margin-top:10px;
+
+    border-radius:11px;
+
+    background:#303642;
+    color:#fff;
+
+    transition:
+        background .15s ease,
+        transform .12s ease;
+}
+
+.panel-button:hover{
+    background:#383f4c;
+}
+
+.panel-button:active{
+    transform:scale(.98);
+}
+
+
+/* =========================================================
+   14. COLOR PICKER
+========================================================= */
 
 .color-picker{
     width:270px;
     max-width:78vw;
-    margin:10px auto 15px;
+
+    margin:
+        10px
+        auto
+        15px;
 }
 
 .color-wheel{
     position:relative;
+
     width:250px;
     height:250px;
+
     max-width:72vw;
     max-height:72vw;
+
     margin:auto;
-    touch-action:none;
+
     border-radius:50%;
+
     overflow:hidden;
+
+    touch-action:none;
 }
 
 .hue-ring{
     position:absolute;
     inset:0;
+
     border-radius:50%;
-    background:conic-gradient(
-        red,
-        yellow,
-        lime,
-        cyan,
-        blue,
-        magenta,
-        red
-    );
+
+    background:
+        conic-gradient(
+            #ff0000,
+            #ffff00,
+            #00ff00,
+            #00ffff,
+            #0000ff,
+            #ff00ff,
+            #ff0000
+        );
 }
 
 .sv-area{
     position:absolute;
+
     inset:13%;
+
     border-radius:50%;
+
     overflow:hidden;
+
     background:
-        linear-gradient(
-            to right,
-            #fff,
-            hsl(var(--hue),100%,50%)
+        hsl(
+            var(--hue),
+            100%,
+            50%
         );
 }
 
 .sv-white{
     position:absolute;
     inset:0;
+
     background:
         linear-gradient(
             to right,
-            rgba(255,255,255,1),
+            #fff,
             rgba(255,255,255,0)
         );
 }
@@ -480,49 +932,70 @@ button:focus-visible{
 .sv-black{
     position:absolute;
     inset:0;
+
     background:
         linear-gradient(
             to bottom,
             rgba(0,0,0,0),
-            rgba(0,0,0,1)
+            #000
         );
 }
 
-.color-marker{
+.color-marker,
+.hue-marker{
     position:absolute;
+
+    pointer-events:none;
+
+    transform:
+        translate(-50%,-50%);
+
+    border-radius:50%;
+}
+
+.color-marker{
     width:21px;
     height:21px;
-    border:3px solid white;
-    border-radius:50%;
-    box-shadow:0 0 0 2px #000,0 0 4px #000;
-    transform:translate(-50%,-50%);
-    pointer-events:none;
+
+    border:
+        3px solid #fff;
+
+    box-shadow:
+        0 0 0 2px #000,
+        0 0 5px #000;
+
     z-index:10;
 }
 
 .hue-marker{
-    position:absolute;
     width:19px;
     height:19px;
-    border:3px solid white;
-    border-radius:50%;
-    box-shadow:0 0 0 2px #000;
-    transform:translate(-50%,-50%);
-    pointer-events:none;
+
+    border:
+        3px solid #fff;
+
+    box-shadow:
+        0 0 0 2px #000;
+
     z-index:11;
 }
 
 .color-presets{
     display:flex;
     justify-content:center;
-    gap:8px;
+
+    gap:9px;
+
     margin-top:10px;
 }
 
 .color-preset{
-    width:36px;
-    height:36px;
-    border:2px solid #666;
+    width:37px;
+    height:37px;
+
+    border:
+        2px solid #6a7180;
+
     border-radius:50%;
 }
 
@@ -534,35 +1007,46 @@ button:focus-visible{
     background:#fff;
 }
 
+
+/* =========================================================
+   15. RANGE
+========================================================= */
+
 .range-title{
     text-align:center;
-    color:#ccc;
+
     margin-bottom:5px;
+
+    color:#c8cdd6;
+
+    font-size:13px;
 }
 
 .range{
     width:100%;
+
     accent-color:#4c80ff;
 }
 
-.panel-button{
-    width:100%;
-    height:43px;
-    border:0;
-    border-radius:10px;
-    background:#303642;
-    color:#fff;
-    margin-top:10px;
-}
+
+/* =========================================================
+   16. HIGHLIGHT ACTIONS
+========================================================= */
 
 .highlight-actions{
     display:flex;
+
     gap:7px;
 }
 
-.highlight-actions button{
+.highlight-actions .panel-button{
     flex:1;
 }
+
+
+/* =========================================================
+   17. CHOICES
+========================================================= */
 
 .list-choice{
     display:flex;
@@ -571,77 +1055,126 @@ button:focus-visible{
 
 .list-choice button{
     flex:1;
-    min-height:48px;
-    border:1px solid #444955;
-    border-radius:10px;
-    background:#2a2f39;
+
+    min-height:47px;
+
+    border:
+        1px solid #454c59;
+
+    border-radius:11px;
+
+    background:#292f3a;
     color:#fff;
 }
 
+.list-choice button:hover{
+    background:#333a47;
+}
+
+
+/* =========================================================
+   18. MIND MAP
+========================================================= */
+
 .mind-map{
     width:100%;
-    max-width:100%;
+
     display:flex;
     flex-direction:column;
     align-items:center;
+
     gap:12px;
+
     margin:10px 0;
 }
 
 .mind-center{
     width:fit-content;
     max-width:90%;
+
     padding:9px 15px;
-    border:1px solid #5579bd;
+
+    border:
+        1px solid #5579bd;
+
     border-radius:12px;
+
     background:#263657;
+
     text-align:center;
+
+    line-height:1.6;
+
     overflow-wrap:anywhere;
     word-break:break-word;
+
     white-space:pre-wrap;
 }
 
 .mind-branches{
     width:100%;
+
     display:flex;
     flex-wrap:wrap;
+
     justify-content:center;
+
     gap:9px;
 }
 
 .mind-branch{
     width:auto;
+
     max-width:45%;
     min-width:80px;
+
     padding:8px 10px;
-    border:1px solid #555d6d;
+
+    border:
+        1px solid #555d6d;
+
     border-radius:10px;
+
     background:#292e39;
+
     text-align:center;
+
+    line-height:1.6;
+
     overflow-wrap:anywhere;
     word-break:break-word;
+
     white-space:pre-wrap;
-    line-height:1.6;
 }
 
 .mind-input{
     width:100%;
+
     min-height:43px;
     max-height:130px;
-    border:1px solid #464b57;
-    border-radius:10px;
-    background:#0e1015;
-    color:#fff;
+
     padding:8px 10px;
-    outline:none;
+
     margin-bottom:7px;
-    font-family:inherit;
+
+    border:
+        1px solid #464d5a;
+
+    border-radius:10px;
+
+    background:#0d1015;
+    color:#fff;
+
+    outline:none;
+
     font-size:16px;
     line-height:1.6;
-    resize:vertical;
+
     direction:rtl;
     text-align:right;
-    white-space:pre-wrap;
+
+    resize:vertical;
+
     overflow-y:auto;
 }
 
@@ -649,68 +1182,153 @@ button:focus-visible{
     border-color:#3471f6;
 }
 
-.menu{
-    display:none;
-    position:fixed;
-    z-index:1000;
-    min-width:135px;
-    padding:5px;
-    background:#20242d;
-    border:1px solid #444955;
-    border-radius:11px;
-    box-shadow:0 10px 35px #000b;
-}
 
-.menu button{
-    display:block;
-    width:100%;
-    min-height:42px;
-    border:0;
-    border-radius:7px;
-    background:transparent;
-    color:#fff;
-    text-align:right;
-    padding:0 10px;
-}
-
-.menu button:hover{
-    background:#292e39;
-}
+/* =========================================================
+   19. SEARCH
+========================================================= */
 
 .search-input{
     width:100%;
-    height:45px;
-    border:1px solid #464b57;
-    border-radius:10px;
-    background:#0e1015;
+    height:46px;
+
+    padding:8px 11px;
+
+    border:
+        1px solid #464d5a;
+
+    border-radius:11px;
+
+    background:#0d1015;
     color:#fff;
-    padding:8px 10px;
+
     outline:none;
+
     font-size:16px;
 }
 
+.search-input:focus{
+    border-color:#3471f6;
+}
+
 .search-result{
+    min-height:20px;
+
     margin-top:10px;
-    color:#aaa;
+
+    color:#aab0ba;
+
     text-align:center;
+
     font-size:13px;
 }
 
 .search-highlight{
-    outline:2px solid #3471f6;
+    outline:
+        2px solid #3471f6;
+
     outline-offset:2px;
 }
 
 .search-word{
-    background:rgba(255,214,0,.45);
-    border-radius:3px;
     padding:0 2px;
+
+    border-radius:3px;
+
+    background:
+        rgba(255,214,0,.45);
 }
+
+
+/* =========================================================
+   20. MESSAGE MENU
+========================================================= */
+
+.menu{
+    display:none;
+
+    position:fixed;
+
+    z-index:1000;
+
+    min-width:145px;
+
+    padding:5px;
+
+    border:
+        1px solid #454c59;
+
+    border-radius:12px;
+
+    background:#20242d;
+
+    box-shadow:
+        0 12px 40px
+        rgba(0,0,0,.55);
+
+    animation:
+        menuIn .12s ease;
+}
+
+@keyframes menuIn{
+    from{
+        opacity:0;
+        transform:scale(.96);
+    }
+
+    to{
+        opacity:1;
+        transform:scale(1);
+    }
+}
+
+.menu button{
+    display:block;
+
+    width:100%;
+    min-height:42px;
+
+    padding:0 10px;
+
+    border-radius:8px;
+
+    background:transparent;
+    color:#fff;
+
+    text-align:right;
+}
+
+.menu button:hover{
+    background:#2d333e;
+}
+
+
+/* =========================================================
+   21. RESPONSIVE
+========================================================= */
 
 @media(max-width:420px){
 
-    .panel{
-        width:94vw;
+    .header{
+        height:55px;
+        flex-basis:55px;
+    }
+
+    .icon{
+        width:40px;
+        height:40px;
+        flex-basis:40px;
+    }
+
+    .messages{
+        padding:
+            9px
+            8px
+            12px;
+    }
+
+    .note{
+        padding:11px 12px;
+        border-radius:14px;
     }
 
     .color-wheel{
@@ -720,502 +1338,595 @@ button:focus-visible{
 
     .mind-branch{
         min-width:70px;
-        max-width:45%;
+        max-width:46%;
     }
 
     .editor{
         max-height:155px;
+    }
+
+    .tool{
+        width:38px;
+        height:38px;
+        flex-basis:38px;
+    }
+
+    .send{
+        width:46px;
+        height:46px;
+        flex-basis:46px;
     }
 }
 
 @media(max-height:650px){
 
     .panel{
-        max-height:92vh;
+        max-height:93vh;
     }
 
     .editor{
         max-height:125px;
     }
+
+    .messages{
+        padding-top:7px;
+    }
 }
+
+@media(prefers-reduced-motion:reduce){
+
+    *,
+    *::before,
+    *::after{
+        animation-duration:.001ms !important;
+        animation-iteration-count:1 !important;
+        scroll-behavior:auto !important;
+        transition-duration:.001ms !important;
+    }
+}
+
 </style>
 </head>
+
 
 <body>
 
 <div class="app">
 
+<!-- =======================================================
+     HEADER
+======================================================= -->
+
 <header class="header">
 
-<button
-    class="icon"
-    id="searchButton"
-    type="button"
-    aria-label="بحث"
->⌕</button>
+    <button
+        class="icon"
+        id="searchButton"
+        type="button"
+        aria-label="بحث"
+        title="بحث"
+    >⌕</button>
 
-<div class="title">ملاحظاتي</div>
+    <div class="title">
+        ملاحظاتي
+    </div>
 
-<button
-    class="icon"
-    id="newButton"
-    type="button"
-    aria-label="ملاحظة جديدة"
->＋</button>
+    <button
+        class="icon"
+        id="newButton"
+        type="button"
+        aria-label="ملاحظة جديدة"
+        title="ملاحظة جديدة"
+    >＋</button>
 
 </header>
+
+
+<!-- =======================================================
+     NOTES
+======================================================= -->
 
 <main
     class="messages"
     id="messages"
 ></main>
 
+
+<!-- =======================================================
+     EDITOR
+======================================================= -->
+
 <section class="editor-area">
 
-<div class="edit-state">
+    <div class="edit-state">
 
-<span id="state">رسالة جديدة</span>
+        <span id="state">
+            رسالة جديدة
+        </span>
 
-<button
-    class="cancel"
-    id="cancelButton"
-    type="button"
-    aria-label="إلغاء"
->×</button>
+        <button
+            class="cancel"
+            id="cancelButton"
+            type="button"
+            aria-label="إلغاء"
+            title="إلغاء"
+        >×</button>
 
-</div>
+    </div>
 
-<div class="toolbar">
 
-<button
-    class="tool bold"
-    id="boldButton"
-    type="button"
-    title="عريض"
->B</button>
+    <!-- أدوات التنسيق -->
 
-<button
-    class="tool"
-    id="italicButton"
-    type="button"
-    title="مائل"
-><i>I</i></button>
+    <div
+        class="toolbar"
+        id="mainToolbar"
+    >
 
-<button
-    class="tool underline"
-    id="underlineButton"
-    type="button"
-    title="تحته خط"
->U</button>
+        <button
+            class="tool bold"
+            id="boldButton"
+            type="button"
+            title="عريض"
+        >B</button>
 
-<button
-    class="tool"
-    id="colorButton"
-    type="button"
-    title="لون الخط"
->●</button>
+        <button
+            class="tool"
+            id="italicButton"
+            type="button"
+            title="مائل"
+        ><i>I</i></button>
 
-<button
-    class="tool"
-    id="highlightButton"
-    type="button"
-    title="تمييز"
->▰</button>
+        <button
+            class="tool underline"
+            id="underlineButton"
+            type="button"
+            title="تحته خط"
+        >U</button>
 
-<button
-    class="tool"
-    id="sizeButton"
-    type="button"
-    title="حجم الخط"
->A↕</button>
+        <button
+            class="tool"
+            id="colorButton"
+            type="button"
+            title="لون الخط"
+        >●</button>
 
-<button
-    class="tool"
-    id="listButton"
-    type="button"
-    title="قائمة"
->☷</button>
+        <button
+            class="tool"
+            id="highlightButton"
+            type="button"
+            title="تمييز النص"
+        >▰</button>
 
-<button
-    class="tool"
-    id="alignmentButton"
-    type="button"
-    title="المحاذاة"
->☰</button>
+        <button
+            class="tool"
+            id="sizeButton"
+            type="button"
+            title="حجم الخط"
+        >A↕</button>
 
-<button
-    class="tool"
-    id="tableButton"
-    type="button"
-    title="جدول"
->▦</button>
+        <button
+            class="tool"
+            id="listButton"
+            type="button"
+            title="القوائم"
+        >☷</button>
 
-<button
-    class="tool"
-    id="mindMapButton"
-    type="button"
-    title="خريطة ذهنية"
->🧠</button>
+        <button
+            class="tool"
+            id="alignmentButton"
+            type="button"
+            title="المحاذاة"
+        >☰</button>
 
-</div>
+        <button
+            class="tool"
+            id="tableButton"
+            type="button"
+            title="جدول"
+        >▦</button>
 
-<div
-    class="font-size-bar"
-    id="fontSizeBar"
-></div>
+        <button
+            class="tool"
+            id="mindMapButton"
+            type="button"
+            title="خريطة ذهنية"
+        >🧠</button>
 
-<div
-    class="font-size-bar"
-    id="listBar"
-></div>
+    </div>
 
-<div
-    class="alignment-bar"
-    id="alignmentBar"
->
 
-<button
-    class="align-item"
-    data-align="right"
-    type="button"
-    title="محاذاة لليمين"
->≡</button>
+    <!-- أحجام الخط -->
 
-<button
-    class="align-item"
-    data-align="center"
-    type="button"
-    title="توسيط"
->≣</button>
+    <div
+        class="sub-toolbar font-size-bar"
+        id="fontSizeBar"
+    ></div>
 
-<button
-    class="align-item"
-    data-align="left"
-    type="button"
-    title="محاذاة لليسار"
->≡</button>
 
-</div>
+    <!-- القوائم -->
 
-<div class="write-row">
+    <div
+        class="sub-toolbar list-bar"
+        id="listBar"
+    ></div>
 
-<div
-    class="editor"
-    id="editor"
-    contenteditable="true"
-    spellcheck="true"
-    role="textbox"
-    aria-multiline="true"
-></div>
 
-<button
-    class="send"
-    id="sendButton"
-    type="button"
-    aria-label="حفظ"
->➤</button>
+    <!-- المحاذاة -->
 
-</div>
+    <div
+        class="sub-toolbar alignment-bar"
+        id="alignmentBar"
+    >
+
+        <button
+            class="align-item"
+            data-align="right"
+            type="button"
+            title="يمين"
+        >≡</button>
+
+        <button
+            class="align-item"
+            data-align="center"
+            type="button"
+            title="توسيط"
+        >≣</button>
+
+        <button
+            class="align-item"
+            data-align="left"
+            type="button"
+            title="يسار"
+        >≡</button>
+
+    </div>
+
+
+    <!-- الكتابة -->
+
+    <div class="write-row">
+
+        <div
+            class="editor"
+            id="editor"
+            contenteditable="true"
+            spellcheck="true"
+            role="textbox"
+            aria-multiline="true"
+        ></div>
+
+        <button
+            class="send"
+            id="sendButton"
+            type="button"
+            aria-label="حفظ الملاحظة"
+            title="حفظ"
+        >➤</button>
+
+    </div>
 
 </section>
+
 </div>
 
 
-<!-- لون الخط -->
+<!-- =======================================================
+     COLOR OVERLAY
+======================================================= -->
 
 <div
     class="overlay"
     id="colorOverlay"
 >
 
-<div class="panel">
+    <div class="panel">
 
-<div class="panel-title">
-    لون الخط
+        <div class="panel-title">
+            لون الخط
+        </div>
+
+        <div class="color-picker">
+
+            <div
+                class="color-wheel"
+                id="textColorWheel"
+                style="--hue:0"
+            >
+
+                <div class="hue-ring"></div>
+
+                <div class="sv-area">
+                    <div class="sv-white"></div>
+                    <div class="sv-black"></div>
+                </div>
+
+                <div
+                    class="hue-marker"
+                    id="textHueMarker"
+                ></div>
+
+                <div
+                    class="color-marker"
+                    id="textColorMarker"
+                ></div>
+
+            </div>
+
+            <div class="color-presets">
+
+                <button
+                    class="color-preset black-preset"
+                    id="blackText"
+                    type="button"
+                    title="أسود"
+                    aria-label="أسود"
+                ></button>
+
+                <button
+                    class="color-preset white-preset"
+                    id="whiteText"
+                    type="button"
+                    title="أبيض"
+                    aria-label="أبيض"
+                ></button>
+
+            </div>
+
+        </div>
+
+        <button
+            class="panel-button"
+            id="colorDone"
+            type="button"
+        >تم</button>
+
+    </div>
+
 </div>
 
-<div class="color-picker">
 
-<div
-    class="color-wheel"
-    id="textColorWheel"
-    style="--hue:0"
->
-
-<div class="hue-ring"></div>
-
-<div class="sv-area">
-<div class="sv-white"></div>
-<div class="sv-black"></div>
-</div>
-
-<div
-    class="hue-marker"
-    id="textHueMarker"
-></div>
-
-<div
-    class="color-marker"
-    id="textColorMarker"
-></div>
-
-</div>
-
-<div class="color-presets">
-
-<button
-    class="color-preset black-preset"
-    id="blackText"
-    type="button"
-    title="أسود"
-    aria-label="أسود"
-></button>
-
-<button
-    class="color-preset white-preset"
-    id="whiteText"
-    type="button"
-    title="أبيض"
-    aria-label="أبيض"
-></button>
-
-</div>
-</div>
-
-<button
-    class="panel-button"
-    id="colorDone"
-    type="button"
->تم</button>
-
-</div>
-</div>
-
-
-<!-- التمييز -->
+<!-- =======================================================
+     HIGHLIGHT OVERLAY
+======================================================= -->
 
 <div
     class="overlay"
     id="highlightOverlay"
 >
 
-<div class="panel">
+    <div class="panel">
 
-<div class="panel-title">
-    تمييز النص
+        <div class="panel-title">
+            تمييز النص
+        </div>
+
+        <div class="color-picker">
+
+            <div
+                class="color-wheel"
+                id="highlightColorWheel"
+                style="--hue:60"
+            >
+
+                <div class="hue-ring"></div>
+
+                <div class="sv-area">
+                    <div class="sv-white"></div>
+                    <div class="sv-black"></div>
+                </div>
+
+                <div
+                    class="hue-marker"
+                    id="highlightHueMarker"
+                ></div>
+
+                <div
+                    class="color-marker"
+                    id="highlightColorMarker"
+                ></div>
+
+            </div>
+
+        </div>
+
+        <div class="range-title">
+            شدة التمييز
+        </div>
+
+        <input
+            class="range"
+            id="opacityRange"
+            type="range"
+            min="10"
+            max="100"
+            value="60"
+        >
+
+        <div class="highlight-actions">
+
+            <button
+                class="panel-button"
+                id="removeHighlight"
+                type="button"
+            >بدون تمييز</button>
+
+            <button
+                class="panel-button"
+                id="highlightDone"
+                type="button"
+            >تم</button>
+
+        </div>
+
+    </div>
+
 </div>
 
-<div class="color-picker">
 
-<div
-    class="color-wheel"
-    id="highlightColorWheel"
-    style="--hue:60"
->
-
-<div class="hue-ring"></div>
-
-<div class="sv-area">
-<div class="sv-white"></div>
-<div class="sv-black"></div>
-</div>
-
-<div
-    class="hue-marker"
-    id="highlightHueMarker"
-></div>
-
-<div
-    class="color-marker"
-    id="highlightColorMarker"
-></div>
-
-</div>
-</div>
-
-<div class="range-title">
-    شدة التمييز
-</div>
-
-<input
-    class="range"
-    id="opacityRange"
-    type="range"
-    min="10"
-    max="100"
-    value="60"
->
-
-<div class="highlight-actions">
-
-<button
-    class="panel-button"
-    id="removeHighlight"
-    type="button"
->بدون تمييز</button>
-
-<button
-    class="panel-button"
-    id="highlightDone"
-    type="button"
->تم</button>
-
-</div>
-</div>
-</div>
-
-
-<!-- الجدول -->
+<!-- =======================================================
+     TABLE OVERLAY
+======================================================= -->
 
 <div
     class="overlay"
     id="tableOverlay"
 >
 
-<div class="panel">
+    <div class="panel">
 
-<div class="panel-title">
-    إدراج جدول
+        <div class="panel-title">
+            إدراج جدول
+        </div>
+
+        <div class="list-choice">
+
+            <button
+                id="tableRowsMinus"
+                type="button"
+            >− الصفوف</button>
+
+            <button
+                id="tableRowsPlus"
+                type="button"
+            >＋ الصفوف</button>
+
+        </div>
+
+        <div
+            class="list-choice"
+            style="margin-top:7px"
+        >
+
+            <button
+                id="tableColsMinus"
+                type="button"
+            >− الأعمدة</button>
+
+            <button
+                id="tableColsPlus"
+                type="button"
+            >＋ الأعمدة</button>
+
+        </div>
+
+        <div
+            id="tableInfo"
+            style="
+                text-align:center;
+                margin-top:10px;
+                color:#ccc
+            "
+        >3 × 3</div>
+
+        <button
+            class="panel-button"
+            id="tableDone"
+            type="button"
+        >إدراج</button>
+
+    </div>
+
 </div>
 
-<div class="list-choice">
 
-<button
-    id="tableRowsMinus"
-    type="button"
->− الصفوف</button>
-
-<button
-    id="tableRowsPlus"
-    type="button"
->＋ الصفوف</button>
-
-</div>
-
-<div
-    class="list-choice"
-    style="margin-top:7px"
->
-
-<button
-    id="tableColsMinus"
-    type="button"
->− الأعمدة</button>
-
-<button
-    id="tableColsPlus"
-    type="button"
->＋ الأعمدة</button>
-
-</div>
-
-<div
-    id="tableInfo"
-    style="text-align:center;margin-top:10px;color:#ccc"
->
-3 × 3
-</div>
-
-<button
-    class="panel-button"
-    id="tableDone"
-    type="button"
->إدراج</button>
-
-</div>
-</div>
-
-
-<!-- الخريطة الذهنية -->
+<!-- =======================================================
+     MIND MAP OVERLAY
+======================================================= -->
 
 <div
     class="overlay"
     id="mindMapOverlay"
 >
 
-<div class="panel">
+    <div class="panel">
 
-<div class="panel-title">
-    خريطة ذهنية
+        <div class="panel-title">
+            خريطة ذهنية
+        </div>
+
+        <textarea
+            class="mind-input"
+            id="mindCenterInput"
+            placeholder="الفكرة الرئيسية"
+            rows="2"
+        ></textarea>
+
+        <div id="mindBranches"></div>
+
+        <button
+            class="panel-button"
+            id="mindAdd"
+            type="button"
+        >＋ إضافة فرع</button>
+
+        <button
+            class="panel-button"
+            id="mindDone"
+            type="button"
+        >إدراج</button>
+
+    </div>
+
 </div>
 
-<textarea
-    class="mind-input"
-    id="mindCenterInput"
-    placeholder="الفكرة الرئيسية"
-    rows="2"
-></textarea>
 
-<div id="mindBranches"></div>
-
-<button
-    class="panel-button"
-    id="mindAdd"
-    type="button"
->＋ إضافة فرع</button>
-
-<button
-    class="panel-button"
-    id="mindDone"
-    type="button"
->إدراج</button>
-
-</div>
-</div>
-
-
-<!-- البحث -->
+<!-- =======================================================
+     SEARCH OVERLAY
+======================================================= -->
 
 <div
     class="overlay"
     id="searchOverlay"
 >
 
-<div class="panel">
+    <div class="panel">
 
-<div class="panel-title">
-    بحث
+        <div class="panel-title">
+            بحث
+        </div>
+
+        <input
+            class="search-input"
+            id="searchInput"
+            type="search"
+            placeholder="اكتبي النص الذي تريدين البحث عنه"
+            autocomplete="off"
+        >
+
+        <div
+            class="search-result"
+            id="searchResult"
+        ></div>
+
+        <button
+            class="panel-button"
+            id="searchDone"
+            type="button"
+        >تم</button>
+
+    </div>
+
 </div>
 
-<input
-    class="search-input"
-    id="searchInput"
-    type="search"
-    placeholder="اكتبي النص الذي تريدين البحث عنه"
-    autocomplete="off"
->
 
-<div
-    class="search-result"
-    id="searchResult"
-></div>
-
-<button
-    class="panel-button"
-    id="searchDone"
-    type="button"
->تم</button>
-
-</div>
-</div>
-
-
-<!-- قائمة الملاحظة -->
+<!-- =======================================================
+     NOTE MENU
+======================================================= -->
 
 <div
     class="menu"
     id="messageMenu"
 >
 
-<button
-    id="editButton"
-    type="button"
->✎ تعديل</button>
+    <button
+        id="editButton"
+        type="button"
+    >✎ تعديل</button>
 
-<button
-    id="deleteButton"
-    type="button"
->🗑 حذف</button>
+    <button
+        id="deleteButton"
+        type="button"
+    >🗑 حذف</button>
 
 </div>
 
@@ -1224,110 +1935,169 @@ button:focus-visible{
 "use strict";
 
 /* =========================================================
-   التخزين والحالة
+   1. CONFIGURATION
 ========================================================= */
 
-const STORAGE = "notes_clean_editor_v5";
-
-let notes = [];
-
-try {
-
-    const stored =
-        localStorage.getItem(STORAGE);
-
-    const parsed =
-        stored
-            ? JSON.parse(stored)
-            : [];
-
-    if (Array.isArray(parsed)) {
-
-        notes = parsed.filter(function(note){
-
-            return (
-                note &&
-                typeof note === "object" &&
-                typeof note.html === "string"
-            );
-
-        });
-
-    }
-
-} catch(error){
-
-    console.error(
-        "تعذر قراءة الملاحظات:",
-        error
-    );
-
-    notes = [];
-}
-
-
-let editingIndex = -1;
-let selectedIndex = -1;
-
-let savedRange = null;
-
-let currentFontSize = 16;
-let currentAlignment = "right";
-
-let listBar = null;
+const STORAGE_KEY =
+    "notes_modern_editor_v6";
 
 
 /* =========================================================
-   العناصر
+   2. STATE
 ========================================================= */
+
+const AppState = {
+
+    notes: [],
+
+    editingIndex: -1,
+
+    selectedIndex: -1,
+
+    savedRange: null,
+
+    fontSize: 16,
+
+    alignment: "right",
+
+    tableRows: 3,
+
+    tableCols: 3,
+
+    textColor: "rgb(255,255,255)",
+
+    highlightColor: "rgb(255,255,0)",
+
+    highlightOpacity: .60
+
+};
+
+
+/* =========================================================
+   3. DOM
+========================================================= */
+
+const $ = id =>
+    document.getElementById(id);
+
 
 const editor =
-    document.getElementById("editor");
+    $("editor");
 
 const messages =
-    document.getElementById("messages");
+    $("messages");
 
 const state =
-    document.getElementById("state");
+    $("state");
 
 const messageMenu =
-    document.getElementById("messageMenu");
+    $("messageMenu");
 
 const fontSizeBar =
-    document.getElementById("fontSizeBar");
+    $("fontSizeBar");
+
+const listBar =
+    $("listBar");
 
 const alignmentBar =
-    document.getElementById("alignmentBar");
+    $("alignmentBar");
+
+
+const colorOverlay =
+    $("colorOverlay");
+
+const highlightOverlay =
+    $("highlightOverlay");
+
+const tableOverlay =
+    $("tableOverlay");
+
+const mindMapOverlay =
+    $("mindMapOverlay");
+
+const searchOverlay =
+    $("searchOverlay");
 
 
 /* =========================================================
-   التخزين
+   4. STORAGE
 ========================================================= */
+
+function loadNotes(){
+
+    try{
+
+        const raw =
+            localStorage.getItem(STORAGE_KEY);
+
+        if(!raw){
+
+            AppState.notes = [];
+            return;
+        }
+
+        const data =
+            JSON.parse(raw);
+
+        if(!Array.isArray(data)){
+
+            AppState.notes = [];
+            return;
+        }
+
+        AppState.notes =
+            data.filter(note => {
+
+                return (
+                    note &&
+                    typeof note === "object" &&
+                    typeof note.html === "string"
+                );
+
+            });
+
+    }catch(error){
+
+        console.error(
+            "خطأ في تحميل الملاحظات:",
+            error
+        );
+
+        AppState.notes = [];
+    }
+}
+
 
 function saveNotes(){
 
     try{
 
         localStorage.setItem(
-            STORAGE,
-            JSON.stringify(notes)
+            STORAGE_KEY,
+            JSON.stringify(
+                AppState.notes
+            )
         );
+
+        return true;
 
     }catch(error){
 
         console.error(
-            "تعذر حفظ الملاحظات:",
+            "خطأ في حفظ الملاحظات:",
             error
         );
+
+        return false;
     }
 }
 
 
 /* =========================================================
-   تنظيف HTML
+   5. HTML UTILITIES
 ========================================================= */
 
-function cleanEditorHtml(html){
+function cleanHtml(html){
 
     return String(html || "")
         .replace(/\u200B/g,"")
@@ -1336,132 +2106,120 @@ function cleanEditorHtml(html){
 }
 
 
-/* =========================================================
-   هل المحرر يحتوي محتوى حقيقي؟
-========================================================= */
-
-function editorHasRealContent(){
+function hasRealContent(){
 
     const clone =
         editor.cloneNode(true);
 
     clone
         .querySelectorAll("br")
-        .forEach(function(br){
-
+        .forEach(br => {
             br.replaceWith(" ");
-
         });
 
     const text =
         (clone.textContent || "")
-            .replace(/\u200B/g,"")
-            .replace(/\uFEFF/g,"")
-            .replace(/\u00A0/g," ")
-            .trim();
-
-    const hasTable =
-        Boolean(
-            clone.querySelector("table")
-        );
-
-    const hasMindMap =
-        Boolean(
-            clone.querySelector(".mind-map")
-        );
-
-    const hasImage =
-        Boolean(
-            clone.querySelector("img")
-        );
+        .replace(/\u200B/g,"")
+        .replace(/\uFEFF/g,"")
+        .replace(/\u00a0/g," ")
+        .trim();
 
     return Boolean(
         text ||
-        hasTable ||
-        hasMindMap ||
-        hasImage
+        clone.querySelector("table") ||
+        clone.querySelector(".mind-map") ||
+        clone.querySelector("img")
     );
 }
 
 
 /* =========================================================
-   عرض الملاحظات
+   6. RENDER NOTES
 ========================================================= */
 
-function render(){
+function renderNotes(){
+
+    clearSearchHighlights();
 
     messages.innerHTML = "";
 
-    if(notes.length === 0){
+    if(AppState.notes.length === 0){
 
         messages.innerHTML =
-            '<div class="empty">لا توجد ملاحظات بعد</div>';
+            `<div class="empty">
+                لا توجد ملاحظات بعد
+            </div>`;
 
         return;
     }
 
 
-    notes.forEach(function(note,index){
+    AppState.notes.forEach(
+        (note,index) => {
 
-        const box =
-            document.createElement("div");
+            const box =
+                document.createElement("article");
 
-        box.className = "note";
-
-
-        const menu =
-            document.createElement("button");
-
-        menu.className = "note-menu";
-        menu.textContent = "⋮";
-        menu.type = "button";
-
-        menu.setAttribute(
-            "aria-label",
-            "خيارات الملاحظة"
-        );
+            box.className =
+                "note";
 
 
-        menu.addEventListener(
-            "click",
-            function(event){
+            const menuButton =
+                document.createElement("button");
 
-                event.stopPropagation();
+            menuButton.className =
+                "note-menu";
 
-                selectedIndex = index;
+            menuButton.type =
+                "button";
 
-                openMessageMenu(
-                    event.clientX,
-                    event.clientY
-                );
+            menuButton.textContent =
+                "⋮";
 
-            }
-        );
-
-
-        box.appendChild(menu);
+            menuButton.setAttribute(
+                "aria-label",
+                "خيارات الملاحظة"
+            );
 
 
-        const content =
-            document.createElement("div");
+            menuButton.addEventListener(
+                "click",
+                event => {
 
-        content.className =
-            "note-content";
+                    event.stopPropagation();
 
-        content.innerHTML =
-            note.html || "";
+                    AppState.selectedIndex =
+                        index;
+
+                    openMessageMenu(
+                        event.clientX,
+                        event.clientY
+                    );
+                }
+            );
 
 
-        box.appendChild(content);
+            const content =
+                document.createElement("div");
 
-        messages.appendChild(box);
+            content.className =
+                "note-content";
 
-    });
+            content.innerHTML =
+                note.html || "";
+
+
+            box.appendChild(menuButton);
+            box.appendChild(content);
+
+            messages.appendChild(box);
+        }
+    );
 }
 
 
 /* =========================================================
-   قائمة الملاحظة
+   7. MESSAGE MENU
 ========================================================= */
 
 function openMessageMenu(x,y){
@@ -1469,65 +2227,56 @@ function openMessageMenu(x,y){
     messageMenu.style.display =
         "block";
 
-    const menuWidth =
+
+    const width =
         messageMenu.offsetWidth || 145;
 
-    const menuHeight =
-        messageMenu.offsetHeight || 100;
+    const height =
+        messageMenu.offsetHeight || 95;
+
 
     let left =
-        x - menuWidth;
+        x - width;
 
     let top =
         y;
 
 
-    if(left < 5){
-
-        left = 5;
-    }
-
-    if(
-        left + menuWidth >
-        window.innerWidth - 5
-    ){
-
-        left =
-            window.innerWidth -
-            menuWidth -
-            5;
-    }
+    left =
+        Math.max(
+            5,
+            Math.min(
+                left,
+                window.innerWidth -
+                width -
+                5
+            )
+        );
 
 
-    if(
-        top + menuHeight >
-        window.innerHeight - 5
-    ){
-
-        top =
-            window.innerHeight -
-            menuHeight -
-            5;
-    }
-
-
-    if(top < 5){
-
-        top = 5;
-    }
+    top =
+        Math.max(
+            5,
+            Math.min(
+                top,
+                window.innerHeight -
+                height -
+                5
+            )
+        );
 
 
     messageMenu.style.left =
-        left + "px";
+        `${left}px`;
 
     messageMenu.style.top =
-        top + "px";
+        `${top}px`;
 }
 
 
 document.addEventListener(
     "click",
-    function(event){
+    event => {
 
         if(
             !event.target.closest(".menu") &&
@@ -1537,46 +2286,34 @@ document.addEventListener(
             messageMenu.style.display =
                 "none";
         }
-
     }
 );
 
 
 /* =========================================================
-   Selection / Range
+   8. SELECTION
 ========================================================= */
 
-/*
-    هذه الدوال هي أهم جزء تم إصلاحه.
-    الهدف هو الاحتفاظ بالتحديد الحقيقي داخل المحرر
-    حتى بعد فتح نافذة لون / تمييز / جدول / حجم.
-*/
+function nodeInsideEditor(node){
 
-function nodeIsInsideEditor(node){
-
-    if(!node){
-        return false;
-    }
-
-    if(node === editor){
-        return true;
-    }
-
-    return editor.contains(node);
+    return Boolean(
+        node &&
+        (
+            node === editor ||
+            editor.contains(node)
+        )
+    );
 }
 
 
-function rangeBelongsToEditor(range){
+function rangeInsideEditor(range){
 
-    if(!range){
-        return false;
-    }
-
-    return (
-        nodeIsInsideEditor(
+    return Boolean(
+        range &&
+        nodeInsideEditor(
             range.startContainer
         ) &&
-        nodeIsInsideEditor(
+        nodeInsideEditor(
             range.endContainer
         )
     );
@@ -1590,8 +2327,9 @@ function saveSelection(){
 
     if(
         !selection ||
-        selection.rangeCount === 0
+        !selection.rangeCount
     ){
+
         return false;
     }
 
@@ -1600,15 +2338,13 @@ function saveSelection(){
         selection.getRangeAt(0);
 
 
-    if(
-        !rangeBelongsToEditor(range)
-    ){
+    if(!rangeInsideEditor(range)){
 
         return false;
     }
 
 
-    savedRange =
+    AppState.savedRange =
         range.cloneRange();
 
     return true;
@@ -1617,19 +2353,19 @@ function saveSelection(){
 
 function restoreSelection(){
 
-    if(!savedRange){
+    const range =
+        AppState.savedRange;
 
+
+    if(!range){
         return false;
     }
 
 
-    if(
-        !rangeBelongsToEditor(
-            savedRange
-        )
-    ){
+    if(!rangeInsideEditor(range)){
 
-        savedRange = null;
+        AppState.savedRange =
+            null;
 
         return false;
     }
@@ -1643,92 +2379,75 @@ function restoreSelection(){
         selection.removeAllRanges();
 
         selection.addRange(
-            savedRange
+            range
         );
 
         return true;
 
     }catch(error){
 
-        console.error(
-            "تعذر استعادة التحديد:",
-            error
-        );
-
-        savedRange = null;
+        AppState.savedRange =
+            null;
 
         return false;
     }
 }
 
 
-function focusEditor(){
-
-    editor.focus();
-
-    restoreSelection();
-}
-
-
-/*
-    إذا لم يكن هناك تحديد محفوظ،
-    نضع المؤشر في نهاية المحرر.
-*/
-
-function focusEditorAtEnd(){
+function focusEditorEnd(){
 
     editor.focus();
 
     const range =
         document.createRange();
 
-    range.selectNodeContents(editor);
+    range.selectNodeContents(
+        editor
+    );
+
     range.collapse(false);
+
 
     const selection =
         window.getSelection();
 
     selection.removeAllRanges();
 
-    selection.addRange(range);
+    selection.addRange(
+        range
+    );
 
-    savedRange =
+
+    AppState.savedRange =
         range.cloneRange();
 }
 
 
 /* =========================================================
-   إخفاء أشرطة الأدوات
+   9. TOOLBAR STATE
 ========================================================= */
 
-function hideToolBars(){
+function hideSubToolbars(){
 
     fontSizeBar.style.display =
         "none";
 
-    alignmentBar.style.display =
+    listBar.style.display =
         "none";
 
-    if(listBar){
-
-        listBar.style.display =
-            "none";
-    }
+    alignmentBar.style.display =
+        "none";
 }
 
 
-/* =========================================================
-   معرفة العنصر عند المؤشر
-========================================================= */
-
-function getSelectionElement(){
+function selectionElement(){
 
     const selection =
         window.getSelection();
 
     if(
         !selection ||
-        selection.rangeCount === 0
+        !selection.rangeCount
     ){
 
         return null;
@@ -1751,7 +2470,7 @@ function getSelectionElement(){
 
     if(
         !node ||
-        !nodeIsInsideEditor(node)
+        !nodeInsideEditor(node)
     ){
 
         return null;
@@ -1763,17 +2482,16 @@ function getSelectionElement(){
 
 
 /* =========================================================
-   حجم الخط الحالي
+   10. DETECT FONT SIZE
 ========================================================= */
 
-function detectCurrentFontSize(){
+function detectFontSize(){
 
     const element =
-        getSelectionElement();
+        selectionElement();
 
     if(!element){
-
-        return currentFontSize;
+        return AppState.fontSize;
     }
 
 
@@ -1797,10 +2515,10 @@ function detectCurrentFontSize(){
             size > 0
         ){
 
-            currentFontSize =
+            AppState.fontSize =
                 Math.round(size);
 
-            return currentFontSize;
+            return AppState.fontSize;
         }
 
 
@@ -1809,37 +2527,21 @@ function detectCurrentFontSize(){
     }
 
 
-    const editorSize =
-        parseFloat(
-            getComputedStyle(editor).fontSize
-        );
-
-
-    if(
-        Number.isFinite(editorSize)
-    ){
-
-        currentFontSize =
-            Math.round(editorSize);
-    }
-
-
-    return currentFontSize;
+    return AppState.fontSize;
 }
 
 
 /* =========================================================
-   المحاذاة الحالية
+   11. DETECT ALIGNMENT
 ========================================================= */
 
-function detectCurrentAlignment(){
+function detectAlignment(){
 
     const element =
-        getSelectionElement();
+        selectionElement();
 
     if(!element){
-
-        return currentAlignment;
+        return AppState.alignment;
     }
 
 
@@ -1857,15 +2559,14 @@ function detectCurrentAlignment(){
 
 
         if(
-            align === "right" ||
-            align === "center" ||
-            align === "left"
+            ["right","center","left"]
+                .includes(align)
         ){
 
-            currentAlignment =
+            AppState.alignment =
                 align;
 
-            return currentAlignment;
+            return align;
         }
 
 
@@ -1874,75 +2575,38 @@ function detectCurrentAlignment(){
     }
 
 
-    currentAlignment =
-        getComputedStyle(editor).textAlign ||
-        "right";
-
-
-    return currentAlignment;
+    return AppState.alignment;
 }
 
 
 /* =========================================================
-   تحديث حالة الأدوات
+   12. UPDATE TOOLBAR
 ========================================================= */
 
-function updateToolbarState(){
-
-    const selection =
-        window.getSelection();
-
-    const range =
-        selection &&
-        selection.rangeCount > 0
-            ? selection.getRangeAt(0)
-            : null;
-
-
-    if(
-        !rangeBelongsToEditor(range)
-    ){
-
-        return;
-    }
-
+function updateToolbar(){
 
     try{
 
-        document
-            .getElementById("boldButton")
-            .classList.toggle(
-                "active",
-                document.queryCommandState("bold")
-            );
-
-
-        document
-            .getElementById("italicButton")
-            .classList.toggle(
-                "active",
-                document.queryCommandState("italic")
-            );
-
-
-        document
-            .getElementById("underlineButton")
-            .classList.toggle(
-                "active",
-                document.queryCommandState("underline")
-            );
-
-    }catch(error){
-
-        console.warn(
-            "تعذر معرفة حالة التنسيق:",
-            error
+        $("boldButton").classList.toggle(
+            "active",
+            document.queryCommandState("bold")
         );
-    }
+
+        $("italicButton").classList.toggle(
+            "active",
+            document.queryCommandState("italic")
+        );
+
+        $("underlineButton").classList.toggle(
+            "active",
+            document.queryCommandState("underline")
+        );
+
+    }catch(error){}
 
 
-    detectCurrentFontSize();
-    detectCurrentAlignment();
+    detectFontSize();
+    detectAlignment();
 
     updateFontSizeButtons();
     updateAlignmentButtons();
@@ -1950,23 +2614,20 @@ function updateToolbarState(){
 
 
 /* =========================================================
-   تنفيذ execCommand بأمان
+   13. EXECUTE COMMAND
 ========================================================= */
 
-function command(name,value=null){
+function exec(command,value=null){
 
-    if(
-        !restoreSelection()
-    ){
-
-        focusEditorAtEnd();
+    if(!restoreSelection()){
+        focusEditorEnd();
     }
 
 
     try{
 
         document.execCommand(
-            name,
+            command,
             false,
             value
         );
@@ -1974,8 +2635,8 @@ function command(name,value=null){
     }catch(error){
 
         console.error(
-            "فشل تنفيذ الأمر:",
-            name,
+            "فشل الأمر:",
+            command,
             error
         );
     }
@@ -1983,113 +2644,110 @@ function command(name,value=null){
 
     saveSelection();
 
-    updateToolbarState();
+    updateToolbar();
 }
 
 
 /* =========================================================
-   أزرار التنسيق
+   14. TOOLBAR SELECTION PROTECTION
 ========================================================= */
 
-document
-    .getElementById("boldButton")
-    .addEventListener(
-        "mousedown",
-        function(event){
+const toolbarButtons = [
 
-            event.preventDefault();
-        }
-    );
+    "boldButton",
+    "italicButton",
+    "underlineButton",
+    "colorButton",
+    "highlightButton",
+    "sizeButton",
+    "listButton",
+    "alignmentButton",
+    "tableButton",
+    "mindMapButton"
 
-
-document
-    .getElementById("italicButton")
-    .addEventListener(
-        "mousedown",
-        function(event){
-
-            event.preventDefault();
-        }
-    );
+];
 
 
-document
-    .getElementById("underlineButton")
-    .addEventListener(
-        "mousedown",
-        function(event){
+toolbarButtons.forEach(id => {
 
-            event.preventDefault();
-        }
-    );
+    const button =
+        $(id);
+
+    if(!button){
+        return;
+    }
 
 
-document
-    .getElementById("boldButton")
-    .addEventListener(
-        "click",
-        function(){
+    button.addEventListener(
+        "pointerdown",
+        event => {
+
+            if(event.pointerType !== "mouse"){
+                event.preventDefault();
+            }
 
             saveSelection();
-
-            command("bold");
-
-            editor.focus();
         }
     );
 
 
-document
-    .getElementById("italicButton")
-    .addEventListener(
-        "click",
-        function(){
+    button.addEventListener(
+        "mousedown",
+        event => {
+
+            event.preventDefault();
 
             saveSelection();
-
-            command("italic");
-
-            editor.focus();
         }
     );
-
-
-document
-    .getElementById("underlineButton")
-    .addEventListener(
-        "click",
-        function(){
-
-            saveSelection();
-
-            command("underline");
-
-            editor.focus();
-        }
-    );
+});
 
 
 /* =========================================================
-   Enter
+   15. BASIC FORMATTING
+========================================================= */
+
+$("boldButton").onclick =
+    () => {
+
+        exec("bold");
+        editor.focus();
+
+    };
+
+
+$("italicButton").onclick =
+    () => {
+
+        exec("italic");
+        editor.focus();
+
+    };
+
+
+$("underlineButton").onclick =
+    () => {
+
+        exec("underline");
+        editor.focus();
+
+    };
+
+
+/* =========================================================
+   16. ENTER
 ========================================================= */
 
 editor.addEventListener(
     "keydown",
-    function(event){
+    event => {
 
         if(event.key !== "Enter"){
-
             return;
         }
 
 
-        /*
-            داخل خلايا الجدول نترك المتصفح
-            يتعامل مع Enter بصورة طبيعية.
-        */
-
         if(
-            event.target &&
             event.target.closest &&
             event.target.closest("td,th")
         ){
@@ -2104,10 +2762,9 @@ editor.addEventListener(
         const selection =
             window.getSelection();
 
-
         if(
             !selection ||
-            selection.rangeCount === 0
+            !selection.rangeCount
         ){
 
             return;
@@ -2118,16 +2775,12 @@ editor.addEventListener(
             selection.getRangeAt(0);
 
 
-        if(
-            !rangeBelongsToEditor(range)
-        ){
-
+        if(!rangeInsideEditor(range)){
             return;
         }
 
 
         if(!range.collapsed){
-
             range.deleteContents();
         }
 
@@ -2136,11 +2789,13 @@ editor.addEventListener(
             document.createElement("br");
 
 
-        range.insertNode(br);
-
-
         const marker =
-            document.createTextNode("\u200B");
+            document.createTextNode(
+                "\u200B"
+            );
+
+
+        range.insertNode(br);
 
 
         br.parentNode.insertBefore(
@@ -2169,27 +2824,26 @@ editor.addEventListener(
         );
 
 
-        savedRange =
+        AppState.savedRange =
             newRange.cloneRange();
 
 
-        updateToolbarState();
+        updateToolbar();
     }
 );
 
 
 /* =========================================================
-   التحديد
+   17. SELECTION EVENTS
 ========================================================= */
 
-function updateSelectionState(){
+function updateSelection(){
 
     setTimeout(
-        function(){
+        () => {
 
             saveSelection();
-
-            updateToolbarState();
+            updateToolbar();
 
         },
         0
@@ -2199,65 +2853,50 @@ function updateSelectionState(){
 
 editor.addEventListener(
     "mouseup",
-    updateSelectionState
+    updateSelection
 );
-
 
 editor.addEventListener(
     "keyup",
-    updateSelectionState
+    updateSelection
 );
-
 
 editor.addEventListener(
     "touchend",
-    function(){
+    () => {
 
         setTimeout(
-            function(){
-
-                saveSelection();
-
-                updateToolbarState();
-
-            },
+            updateSelection,
             100
         );
+
     }
 );
 
-
 editor.addEventListener(
     "input",
-    function(){
+    () => {
 
         setTimeout(
-            function(){
-
-                saveSelection();
-
-                updateToolbarState();
-
-            },
+            updateSelection,
             0
         );
+
     }
 );
 
 
 document.addEventListener(
     "selectionchange",
-    function(){
+    () => {
 
         const selection =
             window.getSelection();
 
-
         if(
             !selection ||
-            selection.rangeCount === 0
+            !selection.rangeCount
         ){
-
             return;
         }
 
@@ -2266,27 +2905,26 @@ document.addEventListener(
             selection.getRangeAt(0);
 
 
-        if(
-            rangeBelongsToEditor(range)
-        ){
+        if(rangeInsideEditor(range)){
 
-            savedRange =
+            AppState.savedRange =
                 range.cloneRange();
 
-            updateToolbarState();
+            updateToolbar();
         }
     }
 );
 
 
 /* =========================================================
-   HSV → RGB
+   18. HSV COLOR
 ========================================================= */
 
 function hsvToRgb(h,s,v){
 
     s /= 100;
     v /= 100;
+
 
     const c =
         v * s;
@@ -2296,12 +2934,14 @@ function hsvToRgb(h,s,v){
         (
             1 -
             Math.abs(
-                (h / 60) % 2 - 1
+                ((h / 60) % 2) - 1
             )
         );
 
+
     const m =
         v - c;
+
 
     let r = 0;
     let g = 0;
@@ -2342,9 +2982,17 @@ function hsvToRgb(h,s,v){
 
     return {
 
-        r:Math.round((r+m)*255),
-        g:Math.round((g+m)*255),
-        b:Math.round((b+m)*255)
+        r:Math.round(
+            (r+m)*255
+        ),
+
+        g:Math.round(
+            (g+m)*255
+        ),
+
+        b:Math.round(
+            (b+m)*255
+        )
 
     };
 }
@@ -2352,21 +3000,20 @@ function hsvToRgb(h,s,v){
 
 function rgbString(rgb){
 
-    return (
-        "rgb(" +
-        rgb.r + "," +
-        rgb.g + "," +
-        rgb.b +
-        ")"
-    );
+    return `rgb(
+        ${rgb.r},
+        ${rgb.g},
+        ${rgb.b}
+    )`
+    .replace(/\s+/g,"");
 }
 
 
 /* =========================================================
-   عجلة الألوان
+   19. COLOR WHEEL
 ========================================================= */
 
-function setupAdvancedColorWheel(
+function setupColorWheel(
     wheel,
     hueMarker,
     colorMarker,
@@ -2384,123 +3031,14 @@ function setupAdvancedColorWheel(
         100;
 
 
-    function updateHueMarker(){
+    let draggingHue =
+        false;
 
-        const rect =
-            wheel.getBoundingClientRect();
-
-
-        const cx =
-            rect.width / 2;
-
-        const cy =
-            rect.height / 2;
+    let draggingSV =
+        false;
 
 
-        const radius =
-            Math.min(
-                rect.width,
-                rect.height
-            ) / 2;
-
-
-        const ringRadius =
-            radius * .89;
-
-
-        const x =
-            cx +
-            Math.sin(
-                hue *
-                Math.PI /
-                180
-            ) *
-            ringRadius;
-
-
-        const y =
-            cy -
-            Math.cos(
-                hue *
-                Math.PI /
-                180
-            ) *
-            ringRadius;
-
-
-        hueMarker.style.left =
-            (
-                x /
-                rect.width *
-                100
-            ) + "%";
-
-
-        hueMarker.style.top =
-            (
-                y /
-                rect.height *
-                100
-            ) + "%";
-    }
-
-
-    function updateColorMarker(){
-
-        const rect =
-            wheel.getBoundingClientRect();
-
-
-        const innerLeft =
-            rect.width * .13;
-
-        const innerTop =
-            rect.height * .13;
-
-        const innerWidth =
-            rect.width * .74;
-
-        const innerHeight =
-            rect.height * .74;
-
-
-        const x =
-            innerLeft +
-            (
-                saturation /
-                100
-            ) *
-            innerWidth;
-
-
-        const y =
-            innerTop +
-            (
-                1 -
-                value /
-                100
-            ) *
-            innerHeight;
-
-
-        colorMarker.style.left =
-            (
-                x /
-                rect.width *
-                100
-            ) + "%";
-
-
-        colorMarker.style.top =
-            (
-                y /
-                rect.height *
-                100
-            ) + "%";
-    }
-
-
-    function setColor(){
+    function update(){
 
         wheel.style.setProperty(
             "--hue",
@@ -2516,17 +3054,102 @@ function setupAdvancedColorWheel(
             );
 
 
-        colorMarker.style.background =
+        const color =
             rgbString(rgb);
 
 
-        updateHueMarker();
-        updateColorMarker();
+        colorMarker.style.background =
+            color;
 
 
-        callback(
-            rgbString(rgb)
-        );
+        const rect =
+            wheel.getBoundingClientRect();
+
+
+        const width =
+            rect.width;
+
+        const height =
+            rect.height;
+
+
+        const cx =
+            width / 2;
+
+        const cy =
+            height / 2;
+
+
+        const radius =
+            Math.min(
+                width,
+                height
+            ) / 2;
+
+
+        const ringRadius =
+            radius * .88;
+
+
+        const angle =
+            hue *
+            Math.PI /
+            180;
+
+
+        const hx =
+            cx +
+            Math.sin(angle) *
+            ringRadius;
+
+
+        const hy =
+            cy -
+            Math.cos(angle) *
+            ringRadius;
+
+
+        hueMarker.style.left =
+            `${hx / width * 100}%`;
+
+        hueMarker.style.top =
+            `${hy / height * 100}%`;
+
+
+        const left =
+            width * .13;
+
+        const top =
+            height * .13;
+
+        const innerWidth =
+            width * .74;
+
+        const innerHeight =
+            height * .74;
+
+
+        const sx =
+            left +
+            saturation /
+            100 *
+            innerWidth;
+
+
+        const sy =
+            top +
+            (1 - value / 100) *
+            innerHeight;
+
+
+        colorMarker.style.left =
+            `${sx / width * 100}%`;
+
+        colorMarker.style.top =
+            `${sy / height * 100}%`;
+
+
+        callback(color);
     }
 
 
@@ -2546,36 +3169,30 @@ function setupAdvancedColorWheel(
 
 
         const dx =
-            event.clientX -
-            cx;
+            event.clientX - cx;
 
         const dy =
-            event.clientY -
-            cy;
+            event.clientY - cy;
 
 
         let angle =
             Math.atan2(
-                dy,
-                dx
+                dx,
+                -dy
             ) *
             180 /
             Math.PI;
 
 
-        angle =
-            (
-                angle +
-                90 +
-                360
-            ) % 360;
+        if(angle < 0){
+            angle += 360;
+        }
 
 
         hue =
             angle;
 
-
-        setColor();
+        update();
     }
 
 
@@ -2585,75 +3202,60 @@ function setupAdvancedColorWheel(
             wheel.getBoundingClientRect();
 
 
-        const innerLeft =
+        const left =
             rect.width * .13;
 
-        const innerTop =
+        const top =
             rect.height * .13;
 
-        const innerWidth =
+        const width =
             rect.width * .74;
 
-        const innerHeight =
+        const height =
             rect.height * .74;
 
 
         let x =
             event.clientX -
             rect.left -
-            innerLeft;
-
+            left;
 
         let y =
             event.clientY -
             rect.top -
-            innerTop;
+            top;
 
 
         x =
             Math.max(
                 0,
-                Math.min(
-                    innerWidth,
-                    x
-                )
+                Math.min(width,x)
             );
 
 
         y =
             Math.max(
                 0,
-                Math.min(
-                    innerHeight,
-                    y
-                )
+                Math.min(height,y)
             );
 
 
         saturation =
-            x /
-            innerWidth *
-            100;
+            x / width * 100;
 
 
         value =
             100 -
-            y /
-            innerHeight *
-            100;
+            y / height * 100;
 
 
-        setColor();
+        update();
     }
-
-
-    let hueDragging = false;
-    let svDragging = false;
 
 
     wheel.addEventListener(
         "pointerdown",
-        function(event){
+        event => {
 
             const rect =
                 wheel.getBoundingClientRect();
@@ -2669,17 +3271,9 @@ function setupAdvancedColorWheel(
 
 
             const distance =
-                Math.sqrt(
-                    Math.pow(
-                        event.clientX -
-                        cx,
-                        2
-                    ) +
-                    Math.pow(
-                        event.clientY -
-                        cy,
-                        2
-                    )
+                Math.hypot(
+                    event.clientX - cx,
+                    event.clientY - cy
                 );
 
 
@@ -2690,16 +3284,19 @@ function setupAdvancedColorWheel(
                 ) / 2;
 
 
-            if(
-                distance >
-                radius * .78
-            ){
+            if(distance > radius * .76){
 
-                hueDragging = true;
+                draggingHue = true;
+                draggingSV = false;
+
+                setHue(event);
 
             }else{
 
-                svDragging = true;
+                draggingSV = true;
+                draggingHue = false;
+
+                setSV(event);
             }
 
 
@@ -2712,16 +3309,6 @@ function setupAdvancedColorWheel(
             }catch(error){}
 
 
-            if(hueDragging){
-
-                setHue(event);
-
-            }else{
-
-                setSV(event);
-            }
-
-
             event.preventDefault();
         }
     );
@@ -2729,30 +3316,25 @@ function setupAdvancedColorWheel(
 
     wheel.addEventListener(
         "pointermove",
-        function(event){
+        event => {
 
-            if(hueDragging){
-
+            if(draggingHue){
                 setHue(event);
             }
 
-
-            if(svDragging){
-
+            if(draggingSV){
                 setSV(event);
             }
-
 
             event.preventDefault();
         }
     );
 
 
-    function stopDragging(event){
+    function stop(event){
 
-        hueDragging = false;
-        svDragging = false;
-
+        draggingHue = false;
+        draggingSV = false;
 
         try{
 
@@ -2766,197 +3348,132 @@ function setupAdvancedColorWheel(
 
     wheel.addEventListener(
         "pointerup",
-        stopDragging
+        stop
     );
-
 
     wheel.addEventListener(
         "pointercancel",
-        function(){
-
-            hueDragging = false;
-            svDragging = false;
-
-        }
+        stop
     );
 
 
-    setColor();
+    update();
 }
 
 
 /* =========================================================
-   لون الخط
+   20. TEXT COLOR
 ========================================================= */
 
-const colorOverlay =
-    document.getElementById(
-        "colorOverlay"
-    );
-
-const textColorWheel =
-    document.getElementById(
-        "textColorWheel"
-    );
-
-const textHueMarker =
-    document.getElementById(
-        "textHueMarker"
-    );
-
-const textColorMarker =
-    document.getElementById(
-        "textColorMarker"
-    );
-
-
-let chosenTextColor =
-    "rgb(255,255,255)";
-
-
-setupAdvancedColorWheel(
-    textColorWheel,
-    textHueMarker,
-    textColorMarker,
+setupColorWheel(
+    $("textColorWheel"),
+    $("textHueMarker"),
+    $("textColorMarker"),
     0,
-    function(color){
+    color => {
 
-        chosenTextColor =
+        AppState.textColor =
             color;
+
     }
 );
 
 
-document
-    .getElementById("blackText")
-    .addEventListener(
-        "click",
-        function(){
+$("blackText").onclick =
+    () => {
 
-            chosenTextColor =
-                "rgb(0,0,0)";
+        AppState.textColor =
+            "rgb(0,0,0)";
 
-            textColorMarker.style.background =
-                "#000";
+        $("textColorMarker").style.background =
+            "#000";
+
+    };
+
+
+$("whiteText").onclick =
+    () => {
+
+        AppState.textColor =
+            "rgb(255,255,255)";
+
+        $("textColorMarker").style.background =
+            "#fff";
+
+    };
+
+
+$("colorButton").onclick =
+    () => {
+
+        saveSelection();
+
+        colorOverlay.style.display =
+            "flex";
+
+    };
+
+
+$("colorDone").onclick =
+    () => {
+
+        if(!restoreSelection()){
+            focusEditorEnd();
         }
-    );
 
 
-document
-    .getElementById("whiteText")
-    .addEventListener(
-        "click",
-        function(){
+        try{
 
-            chosenTextColor =
-                "rgb(255,255,255)";
+            document.execCommand(
+                "foreColor",
+                false,
+                AppState.textColor
+            );
 
-            textColorMarker.style.background =
-                "#fff";
+        }catch(error){
+
+            console.error(error);
         }
-    );
 
 
-document
-    .getElementById("colorButton")
-    .addEventListener(
-        "mousedown",
-        function(event){
+        saveSelection();
 
-            event.preventDefault();
-        }
-    );
+        colorOverlay.style.display =
+            "none";
 
+        editor.focus();
 
-document
-    .getElementById("colorButton")
-    .addEventListener(
-        "click",
-        function(){
-
-            saveSelection();
-
-            colorOverlay.style.display =
-                "flex";
-        }
-    );
-
-
-document
-    .getElementById("colorDone")
-    .addEventListener(
-        "click",
-        function(){
-
-            if(
-                !restoreSelection()
-            ){
-
-                focusEditorAtEnd();
-            }
-
-
-            try{
-
-                document.execCommand(
-                    "foreColor",
-                    false,
-                    chosenTextColor
-                );
-
-            }catch(error){
-
-                console.error(
-                    "تعذر تطبيق لون الخط:",
-                    error
-                );
-            }
-
-
-            saveSelection();
-
-
-            colorOverlay.style.display =
-                "none";
-
-
-            editor.focus();
-
-            updateToolbarState();
-        }
-    );
+        updateToolbar();
+    };
 
 
 /* =========================================================
-   التمييز
+   21. HIGHLIGHT
 ========================================================= */
 
-const highlightOverlay =
-    document.getElementById(
-        "highlightOverlay"
-    );
+setupColorWheel(
+    $("highlightColorWheel"),
+    $("highlightHueMarker"),
+    $("highlightColorMarker"),
+    60,
+    color => {
 
-const highlightColorWheel =
-    document.getElementById(
-        "highlightColorWheel"
-    );
+        AppState.highlightColor =
+            color;
 
-const highlightHueMarker =
-    document.getElementById(
-        "highlightHueMarker"
-    );
-
-const highlightColorMarker =
-    document.getElementById(
-        "highlightColorMarker"
-    );
+    }
+);
 
 
-let chosenHighlightColor =
-    "rgb(255,255,0)";
+$("opacityRange").addEventListener(
+    "input",
+    event => {
 
-let highlightOpacity =
-    .60;
+        AppState.highlightOpacity =
+            Number(event.target.value) / 100;
+
+    }
+);
 
 
 function colorToRgba(
@@ -2977,17 +3494,15 @@ function colorToRgba(
     );
 
 
-    const rgb =
-        getComputedStyle(
-            temp
-        ).color;
+    const computed =
+        getComputedStyle(temp).color;
 
 
     temp.remove();
 
 
     const match =
-        rgb.match(/\d+/g);
+        computed.match(/\d+/g);
 
 
     if(
@@ -2999,273 +3514,202 @@ function colorToRgba(
     }
 
 
-    return (
-        "rgba(" +
-        match[0] + "," +
-        match[1] + "," +
-        match[2] + "," +
-        opacity +
-        ")"
-    );
+    return `rgba(
+        ${match[0]},
+        ${match[1]},
+        ${match[2]},
+        ${opacity}
+    )`
+    .replace(/\s+/g,"");
 }
 
 
-setupAdvancedColorWheel(
-    highlightColorWheel,
-    highlightHueMarker,
-    highlightColorMarker,
-    60,
-    function(color){
+$("highlightButton").onclick =
+    () => {
 
-        chosenHighlightColor =
-            color;
-    }
-);
+        saveSelection();
+
+        highlightOverlay.style.display =
+            "flex";
+
+    };
 
 
-document
-    .getElementById("opacityRange")
-    .addEventListener(
-        "input",
-        function(event){
+$("highlightDone").onclick =
+    () => {
 
-            highlightOpacity =
-                Number(
-                    event.target.value
-                ) / 100;
+        if(!restoreSelection()){
+            focusEditorEnd();
         }
-    );
 
 
-document
-    .getElementById("highlightButton")
-    .addEventListener(
-        "mousedown",
-        function(event){
-
-            event.preventDefault();
-        }
-    );
+        const color =
+            colorToRgba(
+                AppState.highlightColor,
+                AppState.highlightOpacity
+            );
 
 
-document
-    .getElementById("highlightButton")
-    .addEventListener(
-        "click",
-        function(){
-
-            saveSelection();
-
-            highlightOverlay.style.display =
-                "flex";
-        }
-    );
+        let success =
+            false;
 
 
-document
-    .getElementById("highlightDone")
-    .addEventListener(
-        "click",
-        function(){
+        try{
 
-            if(
-                !restoreSelection()
-            ){
-
-                focusEditorAtEnd();
-            }
-
-
-            const color =
-                colorToRgba(
-                    chosenHighlightColor,
-                    highlightOpacity
-                );
-
-
-            try{
-
+            success =
                 document.execCommand(
                     "hiliteColor",
                     false,
                     color
                 );
 
-            }catch(error){
-
-                try{
-
-                    document.execCommand(
-                        "backColor",
-                        false,
-                        color
-                    );
-
-                }catch(secondError){
-
-                    console.error(
-                        "تعذر تطبيق التمييز:",
-                        secondError
-                    );
-                }
-            }
+        }catch(error){}
 
 
-            saveSelection();
-
-
-            highlightOverlay.style.display =
-                "none";
-
-
-            editor.focus();
-
-            updateToolbarState();
-        }
-    );
-
-
-document
-    .getElementById("removeHighlight")
-    .addEventListener(
-        "click",
-        function(){
-
-            if(
-                !restoreSelection()
-            ){
-
-                focusEditorAtEnd();
-            }
-
+        if(!success){
 
             try{
 
                 document.execCommand(
-                    "hiliteColor",
-                    false,
-                    "transparent"
-                );
-
-                document.execCommand(
                     "backColor",
                     false,
-                    "transparent"
+                    color
                 );
 
-            }catch(error){
-
-                console.error(
-                    "تعذر إزالة التمييز:",
-                    error
-                );
-            }
-
-
-            saveSelection();
-
-
-            highlightOverlay.style.display =
-                "none";
-
-
-            editor.focus();
-
-            updateToolbarState();
+            }catch(error){}
         }
-    );
+
+
+        saveSelection();
+
+        highlightOverlay.style.display =
+            "none";
+
+        editor.focus();
+
+        updateToolbar();
+    };
+
+
+$("removeHighlight").onclick =
+    () => {
+
+        if(!restoreSelection()){
+            focusEditorEnd();
+        }
+
+
+        try{
+
+            document.execCommand(
+                "hiliteColor",
+                false,
+                "transparent"
+            );
+
+        }catch(error){}
+
+
+        try{
+
+            document.execCommand(
+                "backColor",
+                false,
+                "transparent"
+            );
+
+        }catch(error){}
+
+
+        saveSelection();
+
+        highlightOverlay.style.display =
+            "none";
+
+        editor.focus();
+
+        updateToolbar();
+    };
 
 
 /* =========================================================
-   أحجام الخط
+   22. FONT SIZES
 ========================================================= */
 
-const fontSizes = [
+const FONT_SIZES = [
     8,9,10,11,12,14,16,18,20,22,
     24,26,28,32,36,40,48,56,64,72
 ];
 
 
-fontSizes.forEach(
-    function(size){
+FONT_SIZES.forEach(size => {
 
-        const button =
-            document.createElement("button");
+    const button =
+        document.createElement("button");
 
+    button.className =
+        "font-size-item";
 
-        button.className =
-            "font-size-item";
+    button.type =
+        "button";
 
-        button.textContent =
-            size;
+    button.textContent =
+        size;
 
-        button.type =
-            "button";
-
-        button.title =
-            "حجم " + size;
+    button.title =
+        `حجم ${size}`;
 
 
-        button.addEventListener(
-            "mousedown",
-            function(event){
+    button.addEventListener(
+        "mousedown",
+        event => {
 
-                event.preventDefault();
-            }
-        );
+            event.preventDefault();
 
+            saveSelection();
 
-        button.addEventListener(
-            "click",
-            function(){
-
-                applyFontSize(size);
-            }
-        );
+        }
+    );
 
 
-        fontSizeBar.appendChild(
-            button
-        );
-    }
-);
+    button.onclick =
+        () => {
+
+            applyFontSize(size);
+
+        };
+
+
+    fontSizeBar.appendChild(
+        button
+    );
+});
 
 
 function updateFontSizeButtons(){
 
     fontSizeBar
-        .querySelectorAll(
-            ".font-size-item"
-        )
-        .forEach(
-            function(button){
+        .querySelectorAll(".font-size-item")
+        .forEach(button => {
 
-                button.classList.toggle(
-                    "active",
-                    Number(
-                        button.textContent
-                    ) === currentFontSize
-                );
-            }
-        );
+            button.classList.toggle(
+                "active",
+                Number(button.textContent) ===
+                AppState.fontSize
+            );
+
+        });
 }
 
 
-/* =========================================================
-   تطبيق حجم الخط
-========================================================= */
-
 function applyFontSize(size){
 
-    currentFontSize =
+    AppState.fontSize =
         size;
 
 
-    if(
-        !restoreSelection()
-    ){
-
-        focusEditorAtEnd();
+    if(!restoreSelection()){
+        focusEditorEnd();
     }
 
 
@@ -3275,7 +3719,7 @@ function applyFontSize(size){
 
     if(
         !selection ||
-        selection.rangeCount === 0
+        !selection.rangeCount
     ){
 
         return;
@@ -3286,39 +3730,75 @@ function applyFontSize(size){
         selection.getRangeAt(0);
 
 
-    if(
-        !rangeBelongsToEditor(range)
-    ){
-
+    if(!rangeInsideEditor(range)){
         return;
     }
 
 
-    /*
-        إذا لم يوجد تحديد:
-        ننشئ span يحتوي على marker
-        حتى تستمر الكتابة بالحجم المختار.
-    */
+    if(!range.collapsed){
 
-    if(range.collapsed){
+        try{
+
+            document.execCommand(
+                "fontSize",
+                false,
+                "7"
+            );
+
+
+            editor
+                .querySelectorAll(
+                    'font[size="7"]'
+                )
+                .forEach(font => {
+
+                    const span =
+                        document.createElement(
+                            "span"
+                        );
+
+
+                    span.style.fontSize =
+                        `${size}px`;
+
+
+                    while(font.firstChild){
+
+                        span.appendChild(
+                            font.firstChild
+                        );
+
+                    }
+
+
+                    font.replaceWith(
+                        span
+                    );
+
+                });
+
+        }catch(error){
+
+            console.error(error);
+        }
+
+    }else{
 
         const span =
             document.createElement("span");
 
 
         span.style.fontSize =
-            size + "px";
+            `${size}px`;
 
 
-        const textNode =
+        const marker =
             document.createTextNode(
                 "\u200B"
             );
 
 
-        span.appendChild(
-            textNode
-        );
+        span.appendChild(marker);
 
 
         range.insertNode(
@@ -3331,8 +3811,8 @@ function applyFontSize(size){
 
 
         newRange.setStart(
-            textNode,
-            textNode.length
+            marker,
+            marker.length
         );
 
 
@@ -3346,254 +3826,138 @@ function applyFontSize(size){
         );
 
 
-        savedRange =
+        AppState.savedRange =
             newRange.cloneRange();
-
-    }else{
-
-        try{
-
-            const fragment =
-                range.extractContents();
-
-
-            const wrapper =
-                document.createElement(
-                    "span"
-                );
-
-
-            wrapper.style.fontSize =
-                size + "px";
-
-
-            wrapper.appendChild(
-                fragment
-            );
-
-
-            range.insertNode(
-                wrapper
-            );
-
-
-            const newRange =
-                document.createRange();
-
-
-            newRange.selectNodeContents(
-                wrapper
-            );
-
-
-            selection.removeAllRanges();
-
-            selection.addRange(
-                newRange
-            );
-
-
-            savedRange =
-                newRange.cloneRange();
-
-        }catch(error){
-
-            console.error(
-                "تعذر تطبيق حجم الخط:",
-                error
-            );
-        }
     }
+
+
+    saveSelection();
 
 
     fontSizeBar.style.display =
         "none";
 
-
     editor.focus();
 
-    updateToolbarState();
-
-    updateFontSizeButtons();
+    updateToolbar();
 }
 
 
 /* =========================================================
-   زر حجم الخط
+   23. FONT SIZE BUTTON
 ========================================================= */
 
-document
-    .getElementById("sizeButton")
-    .addEventListener(
-        "mousedown",
-        function(event){
+$("sizeButton").onclick =
+    () => {
 
-            event.preventDefault();
-        }
-    );
+        saveSelection();
 
+        detectFontSize();
 
-document
-    .getElementById("sizeButton")
-    .addEventListener(
-        "click",
-        function(){
-
-            saveSelection();
-
-            detectCurrentFontSize();
-
-            updateFontSizeButtons();
+        updateFontSizeButtons();
 
 
-            fontSizeBar.style.display =
-                "flex";
+        fontSizeBar.style.display =
+            "flex";
+
+        listBar.style.display =
+            "none";
+
+        alignmentBar.style.display =
+            "none";
 
 
-            alignmentBar.style.display =
-                "none";
+        setTimeout(() => {
+
+            const active =
+                fontSizeBar.querySelector(
+                    ".active"
+                );
 
 
-            listBar.style.display =
-                "none";
+            if(active){
 
+                active.scrollIntoView({
+                    behavior:"smooth",
+                    block:"nearest",
+                    inline:"center"
+                });
 
-            setTimeout(
-                function(){
+            }
 
-                    const active =
-                        fontSizeBar.querySelector(
-                            ".font-size-item.active"
-                        );
+        },30);
 
-
-                    if(active){
-
-                        active.scrollIntoView({
-                            behavior:"smooth",
-                            block:"nearest",
-                            inline:"center"
-                        });
-                    }
-
-                },
-                20
-            );
-        }
-    );
+    };
 
 
 /* =========================================================
-   القوائم
+   24. LISTS
 ========================================================= */
 
-listBar =
-    document.getElementById(
-        "listBar"
-    );
+const bulletButton =
+    document.createElement("button");
 
-
-const bulletList =
-    document.createElement(
-        "button"
-    );
-
-
-bulletList.className =
+bulletButton.className =
     "font-size-item";
 
-bulletList.textContent =
+bulletButton.type =
+    "button";
+
+bulletButton.textContent =
     "•";
 
-bulletList.title =
-    "تنقيط";
-
-bulletList.type =
-    "button";
+bulletButton.title =
+    "قائمة نقطية";
 
 
-const numberList =
-    document.createElement(
-        "button"
-    );
+const numberButton =
+    document.createElement("button");
 
-
-numberList.className =
+numberButton.className =
     "font-size-item";
 
-numberList.textContent =
-    "١.";
-
-numberList.title =
-    "ترقيم";
-
-numberList.type =
+numberButton.type =
     "button";
 
+numberButton.textContent =
+    "١.";
+
+numberButton.title =
+    "قائمة مرقمة";
+
 
 listBar.appendChild(
-    bulletList
+    bulletButton
 );
 
 listBar.appendChild(
-    numberList
+    numberButton
 );
 
 
-document
-    .getElementById("listButton")
-    .addEventListener(
+[
+    bulletButton,
+    numberButton
+].forEach(button => {
+
+    button.addEventListener(
         "mousedown",
-        function(event){
+        event => {
 
             event.preventDefault();
-        }
-    );
-
-
-document
-    .getElementById("listButton")
-    .addEventListener(
-        "click",
-        function(){
 
             saveSelection();
 
-            fontSizeBar.style.display =
-                "none";
-
-            alignmentBar.style.display =
-                "none";
-
-            listBar.style.display =
-                "flex";
         }
     );
 
-
-bulletList.addEventListener(
-    "mousedown",
-    function(event){
-
-        event.preventDefault();
-    }
-);
+});
 
 
-numberList.addEventListener(
-    "mousedown",
-    function(event){
+bulletButton.onclick =
+    () => {
 
-        event.preventDefault();
-    }
-);
-
-
-bulletList.addEventListener(
-    "click",
-    function(){
-
-        command(
+        exec(
             "insertUnorderedList"
         );
 
@@ -3601,15 +3965,14 @@ bulletList.addEventListener(
             "none";
 
         editor.focus();
-    }
-);
+
+    };
 
 
-numberList.addEventListener(
-    "click",
-    function(){
+numberButton.onclick =
+    () => {
 
-        command(
+        exec(
             "insertOrderedList"
         );
 
@@ -3617,166 +3980,127 @@ numberList.addEventListener(
             "none";
 
         editor.focus();
-    }
-);
+
+    };
+
+
+$("listButton").onclick =
+    () => {
+
+        saveSelection();
+
+
+        fontSizeBar.style.display =
+            "none";
+
+        alignmentBar.style.display =
+            "none";
+
+        listBar.style.display =
+            "flex";
+
+    };
 
 
 /* =========================================================
-   المحاذاة
+   25. ALIGNMENT
 ========================================================= */
 
 function updateAlignmentButtons(){
 
     alignmentBar
-        .querySelectorAll(
-            ".align-item"
-        )
-        .forEach(
-            function(button){
+        .querySelectorAll(".align-item")
+        .forEach(button => {
 
-                button.classList.toggle(
-                    "active",
-                    button.dataset.align ===
-                    currentAlignment
-                );
-            }
-        );
+            button.classList.toggle(
+                "active",
+                button.dataset.align ===
+                AppState.alignment
+            );
+
+        });
 }
 
 
-document
-    .getElementById("alignmentButton")
-    .addEventListener(
-        "mousedown",
-        function(event){
+$("alignmentButton").onclick =
+    () => {
 
-            event.preventDefault();
-        }
-    );
+        saveSelection();
+
+        detectAlignment();
 
 
-document
-    .getElementById("alignmentButton")
-    .addEventListener(
-        "click",
-        function(){
+        fontSizeBar.style.display =
+            "none";
 
-            saveSelection();
+        listBar.style.display =
+            "none";
 
-            detectCurrentAlignment();
-
-
-            fontSizeBar.style.display =
-                "none";
-
-            listBar.style.display =
-                "none";
-
-            alignmentBar.style.display =
-                "flex";
+        alignmentBar.style.display =
+            "flex";
 
 
-            updateAlignmentButtons();
-        }
-    );
+        updateAlignmentButtons();
+
+    };
 
 
 alignmentBar
-    .querySelectorAll(
-        ".align-item"
-    )
-    .forEach(
-        function(button){
+    .querySelectorAll(".align-item")
+    .forEach(button => {
 
-            button.addEventListener(
-                "mousedown",
-                function(event){
+        button.addEventListener(
+            "mousedown",
+            event => {
 
-                    event.preventDefault();
-                }
-            );
+                event.preventDefault();
 
+                saveSelection();
 
-            button.addEventListener(
-                "click",
-                function(){
-
-                    const align =
-                        button.dataset.align;
+            }
+        );
 
 
-                    currentAlignment =
-                        align;
+        button.onclick =
+            () => {
+
+                const align =
+                    button.dataset.align;
 
 
-                    const commandName =
-                        align === "right"
-                            ? "justifyRight"
-                            : align === "left"
-                                ? "justifyLeft"
-                                : "justifyCenter";
+                AppState.alignment =
+                    align;
 
 
-                    command(
-                        commandName
-                    );
+                const command =
+                    align === "right"
+                        ? "justifyRight"
+                        : align === "left"
+                            ? "justifyLeft"
+                            : "justifyCenter";
 
 
-                    alignmentBar
-                        .querySelectorAll(
-                            ".align-item"
-                        )
-                        .forEach(
-                            function(b){
-
-                                b.classList.remove(
-                                    "active"
-                                );
-                            }
-                        );
+                exec(command);
 
 
-                    button.classList.add(
-                        "active"
-                    );
+                alignmentBar.style.display =
+                    "none";
 
+                editor.focus();
 
-                    alignmentBar.style.display =
-                        "none";
+            };
 
-
-                    editor.focus();
-                }
-            );
-        }
-    );
+    });
 
 
 /* =========================================================
-   الجداول
+   26. TABLES
 ========================================================= */
-
-const tableOverlay =
-    document.getElementById(
-        "tableOverlay"
-    );
-
-const tableInfo =
-    document.getElementById(
-        "tableInfo"
-    );
-
-
-let tableRows = 3;
-let tableCols = 3;
-
 
 function updateTableInfo(){
 
-    tableInfo.textContent =
-        tableRows +
-        " × " +
-        tableCols;
+    $("tableInfo").textContent =
+        `${AppState.tableRows} × ${AppState.tableCols}`;
 }
 
 
@@ -3786,39 +4110,23 @@ function createTable(
 ){
 
     const table =
-        document.createElement(
-            "table"
-        );
+        document.createElement("table");
 
 
     const tbody =
-        document.createElement(
-            "tbody"
-        );
+        document.createElement("tbody");
 
 
-    for(
-        let r = 0;
-        r < rows;
-        r++
-    ){
+    for(let r=0;r<rows;r++){
 
         const tr =
-            document.createElement(
-                "tr"
-            );
+            document.createElement("tr");
 
 
-        for(
-            let c = 0;
-            c < cols;
-            c++
-        ){
+        for(let c=0;c<cols;c++){
 
             const td =
-                document.createElement(
-                    "td"
-                );
+                document.createElement("td");
 
 
             td.contentEditable =
@@ -3829,9 +4137,8 @@ function createTable(
                 "<br>";
 
 
-            tr.appendChild(
-                td
-            );
+            tr.appendChild(td);
+
         }
 
 
@@ -3850,19 +4157,14 @@ function createTable(
 }
 
 
-/*
-    إدراج عنصر في المكان المحفوظ.
-*/
+/* =========================================================
+   27. INSERT ELEMENT
+========================================================= */
 
-function insertElementAtSelection(
-    element
-){
+function insertElement(element){
 
-    if(
-        !restoreSelection()
-    ){
-
-        focusEditorAtEnd();
+    if(!restoreSelection()){
+        focusEditorEnd();
     }
 
 
@@ -3872,14 +4174,14 @@ function insertElementAtSelection(
 
     if(
         !selection ||
-        selection.rangeCount === 0
+        !selection.rangeCount
     ){
 
         editor.appendChild(
             element
         );
 
-        focusEditorAtEnd();
+        focusEditorEnd();
 
         return;
     }
@@ -3891,15 +4193,13 @@ function insertElementAtSelection(
             .cloneRange();
 
 
-    if(
-        !rangeBelongsToEditor(range)
-    ){
+    if(!rangeInsideEditor(range)){
 
         editor.appendChild(
             element
         );
 
-        focusEditorAtEnd();
+        focusEditorEnd();
 
         return;
     }
@@ -3907,20 +4207,12 @@ function insertElementAtSelection(
 
     range.deleteContents();
 
-    range.collapse(true);
-
     range.insertNode(
         element
     );
 
 
-    /*
-        نضع فاصلاً بعد العنصر
-        حتى يستطيع المستخدم الاستمرار
-        في الكتابة بعد الجدول/الخريطة.
-    */
-
-    const after =
+    const marker =
         document.createTextNode(
             "\u200B"
         );
@@ -3929,9 +4221,10 @@ function insertElementAtSelection(
     if(element.parentNode){
 
         element.parentNode.insertBefore(
-            after,
+            marker,
             element.nextSibling
         );
+
     }
 
 
@@ -3940,8 +4233,8 @@ function insertElementAtSelection(
 
 
     newRange.setStart(
-        after,
-        after.length
+        marker,
+        marker.length
     );
 
 
@@ -3955,169 +4248,143 @@ function insertElementAtSelection(
     );
 
 
-    savedRange =
+    AppState.savedRange =
         newRange.cloneRange();
 }
 
 
-document
-    .getElementById("tableButton")
-    .addEventListener(
-        "mousedown",
-        function(event){
+$("tableButton").onclick =
+    () => {
 
-            event.preventDefault();
-        }
-    );
+        saveSelection();
 
 
-document
-    .getElementById("tableButton")
-    .addEventListener(
-        "click",
-        function(){
+        AppState.tableRows =
+            3;
 
-            saveSelection();
-
-            tableRows = 3;
-            tableCols = 3;
-
-            updateTableInfo();
-
-            tableOverlay.style.display =
-                "flex";
-        }
-    );
+        AppState.tableCols =
+            3;
 
 
-document
-    .getElementById("tableRowsPlus")
-    .addEventListener(
-        "click",
-        function(){
-
-            tableRows =
-                Math.min(
-                    20,
-                    tableRows + 1
-                );
-
-            updateTableInfo();
-        }
-    );
+        updateTableInfo();
 
 
-document
-    .getElementById("tableRowsMinus")
-    .addEventListener(
-        "click",
-        function(){
+        tableOverlay.style.display =
+            "flex";
 
-            tableRows =
-                Math.max(
-                    1,
-                    tableRows - 1
-                );
-
-            updateTableInfo();
-        }
-    );
+    };
 
 
-document
-    .getElementById("tableColsPlus")
-    .addEventListener(
-        "click",
-        function(){
+$("tableRowsPlus").onclick =
+    () => {
 
-            tableCols =
-                Math.min(
-                    10,
-                    tableCols + 1
-                );
+        AppState.tableRows =
+            Math.min(
+                20,
+                AppState.tableRows + 1
+            );
 
-            updateTableInfo();
-        }
-    );
+        updateTableInfo();
+
+    };
 
 
-document
-    .getElementById("tableColsMinus")
-    .addEventListener(
-        "click",
-        function(){
+$("tableRowsMinus").onclick =
+    () => {
 
-            tableCols =
-                Math.max(
-                    1,
-                    tableCols - 1
-                );
+        AppState.tableRows =
+            Math.max(
+                1,
+                AppState.tableRows - 1
+            );
 
-            updateTableInfo();
-        }
-    );
+        updateTableInfo();
+
+    };
 
 
-document
-    .getElementById("tableDone")
-    .addEventListener(
-        "click",
-        function(){
+$("tableColsPlus").onclick =
+    () => {
 
-            const table =
-                createTable(
-                    tableRows,
-                    tableCols
-                );
+        AppState.tableCols =
+            Math.min(
+                10,
+                AppState.tableCols + 1
+            );
+
+        updateTableInfo();
+
+    };
 
 
-            insertElementAtSelection(
-                table
+$("tableColsMinus").onclick =
+    () => {
+
+        AppState.tableCols =
+            Math.max(
+                1,
+                AppState.tableCols - 1
+            );
+
+        updateTableInfo();
+
+    };
+
+
+$("tableDone").onclick =
+    () => {
+
+        const table =
+            createTable(
+                AppState.tableRows,
+                AppState.tableCols
             );
 
 
-            tableOverlay.style.display =
-                "none";
+        insertElement(
+            table
+        );
 
 
-            editor.focus();
-        }
-    );
+        tableOverlay.style.display =
+            "none";
+
+        editor.focus();
+
+    };
 
 
 /* =========================================================
-   الخريطة الذهنية
+   28. MIND MAP
 ========================================================= */
 
-const mindMapOverlay =
-    document.getElementById(
-        "mindMapOverlay"
-    );
-
 const mindCenterInput =
-    document.getElementById(
-        "mindCenterInput"
-    );
+    $("mindCenterInput");
 
 const mindBranches =
-    document.getElementById(
-        "mindBranches"
-    );
+    $("mindBranches");
 
 
 function addMindBranch(){
 
+    if(
+        mindBranches.children.length >= 12
+    ){
+        return;
+    }
+
+
     const input =
-        document.createElement(
-            "textarea"
-        );
+        document.createElement("textarea");
 
 
     input.className =
         "mind-input";
 
+
     input.placeholder =
         "فرع";
+
 
     input.rows =
         2;
@@ -4129,309 +4396,210 @@ function addMindBranch(){
 }
 
 
-document
-    .getElementById("mindMapButton")
-    .addEventListener(
-        "mousedown",
-        function(event){
+$("mindMapButton").onclick =
+    () => {
 
-            event.preventDefault();
-        }
-    );
+        saveSelection();
 
 
-document
-    .getElementById("mindMapButton")
-    .addEventListener(
-        "click",
-        function(){
+        mindCenterInput.value =
+            "";
 
-            saveSelection();
-
-            mindCenterInput.value =
-                "";
-
-            mindBranches.innerHTML =
-                "";
+        mindBranches.innerHTML =
+            "";
 
 
-            addMindBranch();
-            addMindBranch();
+        addMindBranch();
+        addMindBranch();
 
 
-            mindMapOverlay.style.display =
-                "flex";
+        mindMapOverlay.style.display =
+            "flex";
 
 
-            setTimeout(
-                function(){
+        setTimeout(
+            () => mindCenterInput.focus(),
+            50
+        );
 
-                    mindCenterInput.focus();
-
-                },
-                50
-            );
-        }
-    );
+    };
 
 
-document
-    .getElementById("mindAdd")
-    .addEventListener(
-        "click",
-        function(){
+$("mindAdd").onclick =
+    () => {
 
-            if(
-                mindBranches.children.length <
-                12
-            ){
+        addMindBranch();
 
-                addMindBranch();
-            }
-        }
-    );
+    };
 
 
-document
-    .getElementById("mindDone")
-    .addEventListener(
-        "click",
-        function(){
+$("mindDone").onclick =
+    () => {
 
-            const center =
-                mindCenterInput.value.trim() ||
-                "الفكرة الرئيسية";
+        const center =
+            mindCenterInput.value.trim() ||
+            "الفكرة الرئيسية";
 
 
-            const values =
-                Array.from(
-                    mindBranches.querySelectorAll(
-                        ".mind-input"
-                    )
+        const values =
+            Array.from(
+                mindBranches.querySelectorAll(
+                    ".mind-input"
                 )
-                .map(
-                    function(input){
+            )
+            .map(
+                input =>
+                    input.value.trim()
+            )
+            .filter(Boolean);
 
-                        return input.value.trim();
-                    }
-                )
-                .filter(Boolean);
+
+        const wrap =
+            document.createElement("div");
 
 
-            const wrap =
-                document.createElement(
-                    "div"
+        wrap.className =
+            "mind-map";
+
+
+        const centerBox =
+            document.createElement("div");
+
+
+        centerBox.className =
+            "mind-center";
+
+
+        centerBox.textContent =
+            center;
+
+
+        wrap.appendChild(
+            centerBox
+        );
+
+
+        if(values.length){
+
+            const branches =
+                document.createElement("div");
+
+
+            branches.className =
+                "mind-branches";
+
+
+            values.forEach(value => {
+
+                const branch =
+                    document.createElement("div");
+
+
+                branch.className =
+                    "mind-branch";
+
+
+                branch.textContent =
+                    value;
+
+
+                branches.appendChild(
+                    branch
                 );
 
-
-            wrap.className =
-                "mind-map";
-
-
-            const centerBox =
-                document.createElement(
-                    "div"
-                );
-
-
-            centerBox.className =
-                "mind-center";
-
-            centerBox.textContent =
-                center;
+            });
 
 
             wrap.appendChild(
-                centerBox
+                branches
             );
-
-
-            if(values.length){
-
-                const branches =
-                    document.createElement(
-                        "div"
-                    );
-
-
-                branches.className =
-                    "mind-branches";
-
-
-                values.forEach(
-                    function(value){
-
-                        const branch =
-                            document.createElement(
-                                "div"
-                            );
-
-
-                        branch.className =
-                            "mind-branch";
-
-                        branch.textContent =
-                            value;
-
-
-                        branches.appendChild(
-                            branch
-                        );
-                    }
-                );
-
-
-                wrap.appendChild(
-                    branches
-                );
-            }
-
-
-            insertElementAtSelection(
-                wrap
-            );
-
-
-            mindMapOverlay.style.display =
-                "none";
-
-
-            editor.focus();
         }
-    );
+
+
+        insertElement(
+            wrap
+        );
+
+
+        mindMapOverlay.style.display =
+            "none";
+
+
+        editor.focus();
+
+    };
 
 
 /* =========================================================
-   البحث
+   29. SEARCH
 ========================================================= */
-
-const searchOverlay =
-    document.getElementById(
-        "searchOverlay"
-    );
 
 const searchInput =
-    document.getElementById(
-        "searchInput"
-    );
+    $("searchInput");
 
 const searchResult =
-    document.getElementById(
-        "searchResult"
-    );
+    $("searchResult");
 
-
-document
-    .getElementById("searchButton")
-    .addEventListener(
-        "click",
-        function(){
-
-            searchInput.value =
-                "";
-
-            searchResult.textContent =
-                "";
-
-
-            clearSearchHighlights();
-
-
-            searchOverlay.style.display =
-                "flex";
-
-
-            setTimeout(
-                function(){
-
-                    searchInput.focus();
-
-                },
-                50
-            );
-        }
-    );
-
-
-/* =========================================================
-   إزالة تمييز البحث
-========================================================= */
 
 function clearSearchHighlights(){
 
     document
-        .querySelectorAll(
-            ".search-highlight"
-        )
-        .forEach(
-            function(element){
+        .querySelectorAll(".search-word")
+        .forEach(span => {
 
-                element.classList.remove(
-                    "search-highlight"
+            const parent =
+                span.parentNode;
+
+            if(!parent){
+                return;
+            }
+
+
+            while(span.firstChild){
+
+                parent.insertBefore(
+                    span.firstChild,
+                    span
                 );
             }
-        );
+
+
+            span.remove();
+
+        });
 
 
     document
-        .querySelectorAll(
-            ".search-word"
-        )
-        .forEach(
-            function(element){
+        .querySelectorAll(".search-highlight")
+        .forEach(element => {
 
-                const parent =
-                    element.parentNode;
+            element.classList.remove(
+                "search-highlight"
+            );
 
-
-                if(!parent){
-
-                    return;
-                }
-
-
-                while(
-                    element.firstChild
-                ){
-
-                    parent.insertBefore(
-                        element.firstChild,
-                        element
-                    );
-                }
-
-
-                element.remove();
-            }
-        );
+        });
 }
 
 
-/* =========================================================
-   إبراز نص البحث
-========================================================= */
-
 function highlightTextNode(
-    textNode,
+    node,
     query
 ){
 
     const text =
-        textNode.nodeValue;
+        node.nodeValue;
 
 
     if(
         !text ||
         !query
     ){
-
         return 0;
     }
 
 
     const lowerText =
         text.toLocaleLowerCase();
-
 
     const lowerQuery =
         query.toLocaleLowerCase();
@@ -4444,7 +4612,6 @@ function highlightTextNode(
 
 
     if(index === -1){
-
         return 0;
     }
 
@@ -4453,8 +4620,11 @@ function highlightTextNode(
         document.createDocumentFragment();
 
 
-    let lastIndex = 0;
-    let count = 0;
+    let last =
+        0;
+
+    let count =
+        0;
 
 
     while(index !== -1){
@@ -4462,24 +4632,22 @@ function highlightTextNode(
         fragment.appendChild(
             document.createTextNode(
                 text.slice(
-                    lastIndex,
+                    last,
                     index
                 )
             )
         );
 
 
-        const span =
-            document.createElement(
-                "span"
-            );
+        const mark =
+            document.createElement("span");
 
 
-        span.className =
+        mark.className =
             "search-word";
 
 
-        span.textContent =
+        mark.textContent =
             text.slice(
                 index,
                 index + query.length
@@ -4487,97 +4655,84 @@ function highlightTextNode(
 
 
         fragment.appendChild(
-            span
+            mark
         );
 
 
         count++;
 
 
-        lastIndex =
-            index +
-            query.length;
+        last =
+            index + query.length;
 
 
         index =
             lowerText.indexOf(
                 lowerQuery,
-                lastIndex
+                last
             );
     }
 
 
     fragment.appendChild(
         document.createTextNode(
-            text.slice(lastIndex)
+            text.slice(last)
         )
     );
 
 
-    if(textNode.parentNode){
-
-        textNode.parentNode.replaceChild(
-            fragment,
-            textNode
-        );
-    }
+    node.parentNode.replaceChild(
+        fragment,
+        node
+    );
 
 
     return count;
 }
 
 
-/* =========================================================
-   البحث داخل الملاحظة
-========================================================= */
-
-function highlightWordsInNote(
-    note,
+function highlightNote(
+    content,
     query
 ){
 
-    let count = 0;
+    let count =
+        0;
 
 
     const walker =
         document.createTreeWalker(
-            note,
+            content,
             NodeFilter.SHOW_TEXT,
             {
-                acceptNode:
-                    function(node){
+                acceptNode(node){
 
-                        if(
-                            !node.nodeValue ||
-                            !node.nodeValue
-                                .toLocaleLowerCase()
-                                .includes(
-                                    query.toLocaleLowerCase()
-                                )
-                        ){
-
-                            return NodeFilter.FILTER_REJECT;
-                        }
-
-
-                        if(
-                            node.parentElement &&
-                            (
-                                node.parentElement.closest(
-                                    ".note-menu"
-                                ) ||
-                                node.parentElement.closest(
-                                    ".search-word"
-                                )
+                    if(
+                        !node.nodeValue ||
+                        !node.nodeValue
+                            .toLocaleLowerCase()
+                            .includes(
+                                query.toLocaleLowerCase()
                             )
-                        ){
+                    ){
 
-                            return NodeFilter.FILTER_REJECT;
-                        }
-
-
-                        return NodeFilter.FILTER_ACCEPT;
+                        return NodeFilter.FILTER_REJECT;
                     }
+
+
+                    if(
+                        node.parentElement &&
+                        node.parentElement.closest(
+                            ".search-word"
+                        )
+                    ){
+
+                        return NodeFilter.FILTER_REJECT;
+                    }
+
+
+                    return NodeFilter.FILTER_ACCEPT;
+                }
             }
         );
 
@@ -4585,27 +4740,28 @@ function highlightWordsInNote(
     const nodes = [];
 
 
-    let current;
+    let node;
 
 
     while(
-        (current = walker.nextNode())
+        (node = walker.nextNode())
     ){
 
         nodes.push(
-            current
+            node
         );
     }
 
 
     nodes.forEach(
-        function(node){
+        textNode => {
 
             count +=
                 highlightTextNode(
-                    node,
+                    textNode,
                     query
                 );
+
         }
     );
 
@@ -4614,17 +4770,13 @@ function highlightWordsInNote(
 }
 
 
-/* =========================================================
-   تنفيذ البحث
-========================================================= */
-
 function performSearch(){
+
+    clearSearchHighlights();
+
 
     const query =
         searchInput.value.trim();
-
-
-    clearSearchHighlights();
 
 
     if(!query){
@@ -4636,52 +4788,65 @@ function performSearch(){
     }
 
 
-    let noteCount = 0;
-    let matchCount = 0;
-    let first = null;
+    const lowerQuery =
+        query.toLocaleLowerCase();
 
 
-    document
-        .querySelectorAll(
+    const noteElements =
+        messages.querySelectorAll(
             ".note"
-        )
-        .forEach(
-            function(note){
-
-                const content =
-                    note.querySelector(
-                        ".note-content"
-                    );
-
-
-                const text =
-                    (
-                        content ||
-                        note
-                    )
-                    .textContent
-                    .toLocaleLowerCase();
-
-
-                if(
-                    text.includes(
-                        query.toLocaleLowerCase()
-                    )
-                ){
-
-                    noteCount++;
-
-
-                    if(!first){
-
-                        first = note;
-                    }
-                }
-            }
         );
 
 
-    if(!first){
+    let noteCount =
+        0;
+
+    let matchCount =
+        0;
+
+    let firstNote =
+        null;
+
+
+    noteElements.forEach(
+        note => {
+
+            const content =
+                note.querySelector(
+                    ".note-content"
+                );
+
+
+            if(!content){
+                return;
+            }
+
+
+            const text =
+                content.textContent
+                    .toLocaleLowerCase();
+
+
+            if(
+                text.includes(
+                    lowerQuery
+                )
+            ){
+
+                noteCount++;
+
+
+                if(!firstNote){
+                    firstNote = note;
+                }
+
+            }
+
+        }
+    );
+
+
+    if(!firstNote){
 
         searchResult.textContent =
             "لم يتم العثور على النص";
@@ -4690,49 +4855,66 @@ function performSearch(){
     }
 
 
-    document
-        .querySelectorAll(
-            ".note"
-        )
-        .forEach(
-            function(note){
+    noteElements.forEach(
+        note => {
 
-                const content =
-                    note.querySelector(
-                        ".note-content"
+            const content =
+                note.querySelector(
+                    ".note-content"
+                );
+
+
+            if(content){
+
+                matchCount +=
+                    highlightNote(
+                        content,
+                        query
                     );
-
-
-                if(content){
-
-                    matchCount +=
-                        highlightWordsInNote(
-                            content,
-                            query
-                        );
-                }
             }
-        );
+
+        }
+    );
 
 
-    first.classList.add(
+    firstNote.classList.add(
         "search-highlight"
     );
 
 
-    first.scrollIntoView({
+    firstNote.scrollIntoView({
         behavior:"smooth",
         block:"center"
     });
 
 
     searchResult.textContent =
-        "تم العثور على " +
-        matchCount +
-        " نتيجة في " +
-        noteCount +
-        " ملاحظة";
+        `تم العثور على ${matchCount} نتيجة في ${noteCount} ملاحظة`;
 }
+
+
+$("searchButton").onclick =
+    () => {
+
+        searchInput.value =
+            "";
+
+        searchResult.textContent =
+            "";
+
+        clearSearchHighlights();
+
+
+        searchOverlay.style.display =
+            "flex";
+
+
+        setTimeout(
+            () => searchInput.focus(),
+            50
+        );
+
+    };
 
 
 searchInput.addEventListener(
@@ -4741,84 +4923,60 @@ searchInput.addEventListener(
 );
 
 
-document
-    .getElementById("searchDone")
-    .addEventListener(
-        "click",
-        function(){
+$("searchDone").onclick =
+    () => {
 
-            searchOverlay.style.display =
-                "none";
+        clearSearchHighlights();
 
+        searchOverlay.style.display =
+            "none";
 
-            clearSearchHighlights();
-        }
-    );
+    };
 
 
 /* =========================================================
-   إعادة ضبط المحرر
+   30. RESET EDITOR
 ========================================================= */
 
 function resetEditor(){
 
-    editingIndex = -1;
+    AppState.editingIndex =
+        -1;
+
+    AppState.savedRange =
+        null;
+
 
     editor.innerHTML =
         "";
-
-    savedRange =
-        null;
 
 
     state.textContent =
         "رسالة جديدة";
 
 
-    currentFontSize =
+    AppState.fontSize =
         16;
 
-
-    currentAlignment =
+    AppState.alignment =
         "right";
 
 
-    hideToolBars();
+    hideSubToolbars();
 
 
-    document
-        .getElementById("boldButton")
-        .classList.remove(
+    [
+        "boldButton",
+        "italicButton",
+        "underlineButton"
+    ]
+    .forEach(id => {
+
+        $(id).classList.remove(
             "active"
         );
 
-
-    document
-        .getElementById("italicButton")
-        .classList.remove(
-            "active"
-        );
-
-
-    document
-        .getElementById("underlineButton")
-        .classList.remove(
-            "active"
-        );
-
-
-    alignmentBar
-        .querySelectorAll(
-            ".align-item"
-        )
-        .forEach(
-            function(button){
-
-                button.classList.remove(
-                    "active"
-                );
-            }
-        );
+    });
 
 
     updateFontSizeButtons();
@@ -4828,355 +4986,338 @@ function resetEditor(){
 
 
 /* =========================================================
-   حفظ الملاحظة
+   31. SAVE NOTE
 ========================================================= */
 
-document
-    .getElementById("sendButton")
-    .addEventListener(
-        "click",
-        function(){
+$("sendButton").onclick =
+    () => {
 
-            if(
-                !editorHasRealContent()
-            ){
-
-                return;
-            }
-
-
-            const html =
-                cleanEditorHtml(
-                    editor.innerHTML
-                );
-
-
-            if(!html){
-
-                return;
-            }
-
-
-            if(
-                editingIndex >= 0 &&
-                editingIndex < notes.length
-            ){
-
-                notes[
-                    editingIndex
-                ].html =
-                    html;
-
-            }else{
-
-                notes.push({
-                    html:html
-                });
-            }
-
-
-            saveNotes();
-
-            render();
-
-            resetEditor();
-
-            selectedIndex =
-                -1;
-
-
-            setTimeout(
-                function(){
-
-                    messages.scrollTop =
-                        messages.scrollHeight;
-
-                },
-                50
-            );
+        if(!hasRealContent()){
+            return;
         }
-    );
 
 
-/* =========================================================
-   تعديل الملاحظة
-========================================================= */
-
-document
-    .getElementById("editButton")
-    .addEventListener(
-        "click",
-        function(){
-
-            if(
-                selectedIndex < 0 ||
-                selectedIndex >= notes.length
-            ){
-
-                return;
-            }
-
-
-            editingIndex =
-                selectedIndex;
-
-
-            editor.innerHTML =
-                notes[
-                    selectedIndex
-                ].html || "";
-
-
-            state.textContent =
-                "✎ تعديل الملاحظة";
-
-
-            messageMenu.style.display =
-                "none";
-
-
-            savedRange =
-                null;
-
-
-            hideToolBars();
-
-
-            editor.focus();
-
-
-            setTimeout(
-                function(){
-
-                    const range =
-                        document.createRange();
-
-
-                    range.selectNodeContents(
-                        editor
-                    );
-
-
-                    range.collapse(
-                        false
-                    );
-
-
-                    const selection =
-                        window.getSelection();
-
-
-                    selection.removeAllRanges();
-
-                    selection.addRange(
-                        range
-                    );
-
-
-                    savedRange =
-                        range.cloneRange();
-
-
-                    detectCurrentFontSize();
-
-                    detectCurrentAlignment();
-
-                    updateToolbarState();
-
-
-                    editor.scrollIntoView({
-                        behavior:"smooth",
-                        block:"end"
-                    });
-
-                },
-                100
-            );
-        }
-    );
-
-
-/* =========================================================
-   حذف الملاحظة
-========================================================= */
-
-document
-    .getElementById("deleteButton")
-    .addEventListener(
-        "click",
-        function(){
-
-            if(
-                selectedIndex < 0 ||
-                selectedIndex >= notes.length
-            ){
-
-                return;
-            }
-
-
-            const confirmed =
-                window.confirm(
-                    "هل تريدين حذف هذه الملاحظة؟"
-                );
-
-
-            if(!confirmed){
-
-                messageMenu.style.display =
-                    "none";
-
-                return;
-            }
-
-
-            const deletedIndex =
-                selectedIndex;
-
-
-            notes.splice(
-                deletedIndex,
-                1
+        const html =
+            cleanHtml(
+                editor.innerHTML
             );
 
 
-            if(
-                editingIndex ===
-                deletedIndex
-            ){
-
-                resetEditor();
-
-            }else if(
-                editingIndex >
-                deletedIndex
-            ){
-
-                editingIndex--;
-            }
-
-
-            selectedIndex =
-                -1;
-
-
-            saveNotes();
-
-            render();
-
-
-            messageMenu.style.display =
-                "none";
+        if(!html){
+            return;
         }
-    );
 
 
-/* =========================================================
-   إلغاء
-========================================================= */
+        const index =
+            AppState.editingIndex;
 
-document
-    .getElementById("cancelButton")
-    .addEventListener(
-        "click",
-        function(){
-
-            resetEditor();
-
-            editor.focus();
-        }
-    );
-
-
-/* =========================================================
-   ملاحظة جديدة
-========================================================= */
-
-document
-    .getElementById("newButton")
-    .addEventListener(
-        "click",
-        function(){
-
-            resetEditor();
-
-            editor.focus();
-        }
-    );
-
-
-/* =========================================================
-   إغلاق النوافذ عند الضغط خارجها
-========================================================= */
-
-document
-    .querySelectorAll(
-        ".overlay"
-    )
-    .forEach(
-        function(overlay){
-
-            overlay.addEventListener(
-                "click",
-                function(event){
-
-                    if(
-                        event.target === overlay
-                    ){
-
-                        overlay.style.display =
-                            "none";
-
-                        editor.focus();
-                    }
-                }
-            );
-        }
-    );
-
-
-/* =========================================================
-   Escape
-========================================================= */
-
-document.addEventListener(
-    "keydown",
-    function(event){
 
         if(
-            event.key !== "Escape"
+            index >= 0 &&
+            index < AppState.notes.length
         ){
+
+            AppState.notes[index].html =
+                html;
+
+        }else{
+
+            AppState.notes.push({
+                html:html
+            });
+
+        }
+
+
+        if(!saveNotes()){
+            return;
+        }
+
+
+        renderNotes();
+
+        resetEditor();
+
+
+        AppState.selectedIndex =
+            -1;
+
+
+        setTimeout(
+            () => {
+
+                messages.scrollTop =
+                    messages.scrollHeight;
+
+            },
+            50
+        );
+
+    };
+
+
+/* =========================================================
+   32. EDIT
+========================================================= */
+
+$("editButton").onclick =
+    () => {
+
+        const index =
+            AppState.selectedIndex;
+
+
+        if(
+            index < 0 ||
+            index >= AppState.notes.length
+        ){
+            return;
+        }
+
+
+        AppState.editingIndex =
+            index;
+
+
+        editor.innerHTML =
+            AppState.notes[index].html || "";
+
+
+        state.textContent =
+            "✎ تعديل الملاحظة";
+
+
+        messageMenu.style.display =
+            "none";
+
+
+        AppState.savedRange =
+            null;
+
+
+        hideSubToolbars();
+
+
+        editor.focus();
+
+
+        setTimeout(
+            () => {
+
+                const range =
+                    document.createRange();
+
+
+                range.selectNodeContents(
+                    editor
+                );
+
+
+                range.collapse(false);
+
+
+                const selection =
+                    window.getSelection();
+
+
+                selection.removeAllRanges();
+
+                selection.addRange(
+                    range
+                );
+
+
+                AppState.savedRange =
+                    range.cloneRange();
+
+
+                detectFontSize();
+
+                detectAlignment();
+
+                updateToolbar();
+
+
+                editor.scrollIntoView({
+                    behavior:"smooth",
+                    block:"end"
+                });
+
+            },
+            100
+        );
+
+    };
+
+
+/* =========================================================
+   33. DELETE
+========================================================= */
+
+$("deleteButton").onclick =
+    () => {
+
+        const index =
+            AppState.selectedIndex;
+
+
+        if(
+            index < 0 ||
+            index >= AppState.notes.length
+        ){
+            return;
+        }
+
+
+        const confirmed =
+            window.confirm(
+                "هل تريدين حذف هذه الملاحظة؟"
+            );
+
+
+        if(!confirmed){
+
+            messageMenu.style.display =
+                "none";
 
             return;
         }
 
 
-        document
-            .querySelectorAll(
-                ".overlay"
-            )
-            .forEach(
-                function(overlay){
+        AppState.notes.splice(
+            index,
+            1
+        );
+
+
+        if(
+            AppState.editingIndex ===
+            index
+        ){
+
+            resetEditor();
+
+        }else if(
+            AppState.editingIndex >
+            index
+        ){
+
+            AppState.editingIndex--;
+
+        }
+
+
+        AppState.selectedIndex =
+            -1;
+
+
+        saveNotes();
+
+        renderNotes();
+
+
+        messageMenu.style.display =
+            "none";
+
+    };
+
+
+/* =========================================================
+   34. CANCEL
+========================================================= */
+
+$("cancelButton").onclick =
+    () => {
+
+        resetEditor();
+
+        editor.focus();
+
+    };
+
+
+/* =========================================================
+   35. NEW NOTE
+========================================================= */
+
+$("newButton").onclick =
+    () => {
+
+        resetEditor();
+
+        editor.focus();
+
+    };
+
+
+/* =========================================================
+   36. CLOSE OVERLAYS
+========================================================= */
+
+document
+    .querySelectorAll(".overlay")
+    .forEach(overlay => {
+
+        overlay.addEventListener(
+            "click",
+            event => {
+
+                if(
+                    event.target === overlay
+                ){
 
                     overlay.style.display =
                         "none";
+
+                    editor.focus();
+
+                }
+
+            }
+        );
+
+    });
+
+
+/* =========================================================
+   37. ESCAPE
+========================================================= */
+
+document.addEventListener(
+    "keydown",
+    event => {
+
+        if(event.key !== "Escape"){
+            return;
+        }
+
+
+        document
+            .querySelectorAll(".overlay")
+            .forEach(
+                overlay => {
+
+                    overlay.style.display =
+                        "none";
+
                 }
             );
 
 
         messageMenu.style.display =
             "none";
+
     }
 );
 
 
 /* =========================================================
-   معالجة اللصق
+   38. PASTE AS PLAIN TEXT
 ========================================================= */
 
 editor.addEventListener(
     "paste",
-    function(event){
+    event => {
 
         event.preventDefault();
 
@@ -5187,15 +5328,9 @@ editor.addEventListener(
 
 
         if(!clipboard){
-
             return;
         }
 
-
-        /*
-            إذا كان هناك نص فقط:
-            نحافظ على الأسطر.
-        */
 
         const text =
             clipboard.getData(
@@ -5204,8 +5339,12 @@ editor.addEventListener(
 
 
         if(!text){
-
             return;
+        }
+
+
+        if(!restoreSelection()){
+            focusEditorEnd();
         }
 
 
@@ -5215,9 +5354,8 @@ editor.addEventListener(
 
         if(
             !selection ||
-            selection.rangeCount === 0
+            !selection.rangeCount
         ){
-
             return;
         }
 
@@ -5226,10 +5364,7 @@ editor.addEventListener(
             selection.getRangeAt(0);
 
 
-        if(
-            !rangeBelongsToEditor(range)
-        ){
-
+        if(!rangeInsideEditor(range)){
             return;
         }
 
@@ -5243,27 +5378,20 @@ editor.addEventListener(
 
         const lines =
             text
-                .replace(
-                    /\r\n/g,
-                    "\n"
-                )
-                .replace(
-                    /\r/g,
-                    "\n"
-                )
+                .replace(/\r\n/g,"\n")
+                .replace(/\r/g,"\n")
                 .split("\n");
 
 
         lines.forEach(
-            function(line,index){
+            (line,index) => {
 
                 if(index > 0){
 
                     fragment.appendChild(
-                        document.createElement(
-                            "br"
-                        )
+                        document.createElement("br")
                     );
+
                 }
 
 
@@ -5272,6 +5400,7 @@ editor.addEventListener(
                         line
                     )
                 );
+
             }
         );
 
@@ -5281,9 +5410,7 @@ editor.addEventListener(
         );
 
 
-        range.collapse(
-            false
-        );
+        range.collapse(false);
 
 
         selection.removeAllRanges();
@@ -5293,51 +5420,53 @@ editor.addEventListener(
         );
 
 
-        savedRange =
+        AppState.savedRange =
             range.cloneRange();
 
 
         setTimeout(
-            function(){
+            () => {
 
                 saveSelection();
 
-                updateToolbarState();
+                updateToolbar();
 
             },
             0
         );
+
     }
 );
 
 
 /* =========================================================
-   منع سحب الصور
+   39. IMAGE PROTECTION
 ========================================================= */
 
 editor.addEventListener(
     "dragstart",
-    function(event){
+    event => {
 
         if(
             event.target &&
-            event.target.tagName ===
-            "IMG"
+            event.target.tagName === "IMG"
         ){
 
             event.preventDefault();
+
         }
+
     }
 );
 
 
 /* =========================================================
-   منع سحب الملفات
+   40. DROP FILE PROTECTION
 ========================================================= */
 
 editor.addEventListener(
     "drop",
-    function(event){
+    event => {
 
         if(
             event.dataTransfer &&
@@ -5346,18 +5475,20 @@ editor.addEventListener(
         ){
 
             event.preventDefault();
+
         }
+
     }
 );
 
 
 /* =========================================================
-   تغيير حجم النافذة
+   41. WINDOW RESIZE
 ========================================================= */
 
 window.addEventListener(
     "resize",
-    function(){
+    () => {
 
         if(
             messageMenu.style.display ===
@@ -5366,20 +5497,26 @@ window.addEventListener(
 
             messageMenu.style.display =
                 "none";
+
         }
+
     }
 );
 
 
 /* =========================================================
-   بدء التطبيق
+   42. INITIALIZATION
 ========================================================= */
 
-render();
+loadNotes();
+
+renderNotes();
 
 updateFontSizeButtons();
 
 updateAlignmentButtons();
+
+updateTableInfo();
 
 </script>
 
