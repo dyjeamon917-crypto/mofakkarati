@@ -1,532 +1,680 @@
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
+
 <head>
+
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1.0,user-scalable=yes">
+
+<meta
+name="viewport"
+content="width=device-width,initial-scale=1.0,user-scalable=yes">
+
 <title>ملاحظاتي</title>
 
 <style>
+
 *{
-  box-sizing:border-box;
-  -webkit-tap-highlight-color:transparent;
+box-sizing:border-box;
+-webkit-tap-highlight-color:transparent;
 }
 
-html,body{
-  margin:0;
-  width:100%;
-  height:100%;
-  overflow:hidden;
-  font-family:Arial,sans-serif;
-  background:#101218;
-  color:#fff;
+html,
+body{
+margin:0;
+width:100%;
+height:100%;
+overflow:hidden;
+font-family:Arial,sans-serif;
+background:#101218;
+color:#fff;
 }
 
 button{
-  font-family:inherit;
-  touch-action:manipulation;
-  cursor:pointer;
+font-family:inherit;
+touch-action:manipulation;
+cursor:pointer;
 }
 
 .app{
-  width:100%;
-  height:100%;
-  display:flex;
-  flex-direction:column;
+width:100%;
+height:100%;
+display:flex;
+flex-direction:column;
 }
 
 .header{
-  height:56px;
-  flex-shrink:0;
-  display:flex;
-  align-items:center;
-  gap:8px;
-  padding:7px 10px;
-  background:#191c24;
-  border-bottom:1px solid #343944;
+height:56px;
+flex-shrink:0;
+display:flex;
+align-items:center;
+gap:8px;
+padding:7px 10px;
+background:#191c24;
+border-bottom:1px solid #343944;
 }
 
 .title{
-  flex:1;
-  text-align:center;
-  font-size:18px;
-  font-weight:bold;
+flex:1;
+text-align:center;
+font-size:18px;
+font-weight:bold;
 }
 
 .icon{
-  width:40px;
-  height:40px;
-  border:0;
-  border-radius:50%;
-  background:#292e39;
-  color:#fff;
-  font-size:20px;
+width:40px;
+height:40px;
+border:0;
+border-radius:50%;
+background:#292e39;
+color:#fff;
+font-size:20px;
 }
 
 .messages{
-  flex:1;
-  min-height:0;
-  overflow-y:auto;
-  padding:10px;
-  -webkit-overflow-scrolling:touch;
+flex:1;
+min-height:0;
+overflow-y:auto;
+padding:10px;
+-webkit-overflow-scrolling:touch;
 }
 
 .empty{
-  text-align:center;
-  color:#777;
-  margin-top:30vh;
+text-align:center;
+color:#777;
+margin-top:30vh;
 }
 
 .note{
-  background:#20242d;
-  border-radius:14px;
-  padding:11px 13px;
-  margin-bottom:9px;
-  line-height:1.7;
-  overflow-wrap:anywhere;
+background:#20242d;
+border-radius:14px;
+padding:11px 13px;
+margin-bottom:9px;
+line-height:1.7;
+overflow-wrap:anywhere;
 }
 
 .note-menu{
-  float:left;
-  width:32px;
-  height:32px;
-  border:0;
-  border-radius:50%;
-  background:transparent;
-  color:#aaa;
-  font-size:20px;
+float:left;
+width:32px;
+height:32px;
+border:0;
+border-radius:50%;
+background:transparent;
+color:#aaa;
+font-size:20px;
 }
 
 .editor-area{
-  flex-shrink:0;
-  background:#191c24;
-  border-top:1px solid #343944;
-  padding:5px 7px calc(8px + env(safe-area-inset-bottom));
+flex-shrink:0;
+background:#191c24;
+border-top:1px solid #343944;
+padding:5px 7px calc(8px + env(safe-area-inset-bottom));
 }
 
 .edit-state{
-  height:28px;
-  display:flex;
-  align-items:center;
-  justify-content:space-between;
-  color:#aaa;
-  font-size:12px;
+height:28px;
+display:flex;
+align-items:center;
+justify-content:space-between;
+color:#aaa;
+font-size:12px;
 }
 
 .cancel{
-  width:34px;
-  height:28px;
-  border:0;
-  background:transparent;
-  color:#aaa;
-  font-size:21px;
+width:34px;
+height:28px;
+border:0;
+background:transparent;
+color:#aaa;
+font-size:21px;
 }
 
 .toolbar{
-  display:flex;
-  gap:5px;
-  overflow-x:auto;
-  padding:3px 0 7px;
-  scrollbar-width:none;
+display:flex;
+gap:5px;
+overflow-x:auto;
+padding:3px 0 7px;
+scrollbar-width:none;
 }
 
 .toolbar::-webkit-scrollbar{
-  display:none;
+display:none;
 }
 
 .tool{
-  flex:0 0 39px;
-  width:39px;
-  height:39px;
-  border:1px solid #444955;
-  border-radius:10px;
-  background:#292e39;
-  color:#fff;
-  font-size:17px;
-  display:flex;
-  align-items:center;
-  justify-content:center;
+flex:0 0 39px;
+width:39px;
+height:39px;
+border:1px solid #444955;
+border-radius:10px;
+background:#292e39;
+color:#fff;
+font-size:17px;
+display:flex;
+align-items:center;
+justify-content:center;
 }
 
 .tool.active{
-  background:#315fae;
-  border-color:#5f8fe8;
-  box-shadow:0 0 0 2px rgba(52,113,246,.25);
+background:#315fae;
+border-color:#5f8fe8;
+box-shadow:0 0 0 2px rgba(52,113,246,.25);
 }
 
 .bold{
-  font-weight:900;
+font-weight:900;
 }
 
 .underline{
-  text-decoration:underline;
-  text-decoration-thickness:2px;
-  text-underline-offset:7px;
+text-decoration:underline;
+text-decoration-thickness:2px;
+text-underline-offset:7px;
 }
 
 .write-row{
-  display:flex;
-  align-items:flex-end;
-  gap:6px;
+display:flex;
+align-items:flex-end;
+gap:6px;
 }
 
 .editor{
-  flex:1;
-  min-width:0;
-  min-height:48px;
-  max-height:170px;
-  overflow-y:auto;
-  padding:9px 11px;
-  border:1px solid #464b57;
-  border-radius:12px;
-  outline:none;
-  background:#0e1015;
-  color:#fff;
-  line-height:1.7;
-  overflow-wrap:anywhere;
-  user-select:text;
-  -webkit-user-select:text;
+flex:1;
+min-width:0;
+min-height:48px;
+max-height:170px;
+overflow-y:auto;
+padding:9px 11px;
+border:1px solid #464b57;
+border-radius:12px;
+outline:none;
+background:#0e1015;
+color:#fff;
+line-height:1.7;
+overflow-wrap:anywhere;
+word-break:break-word;
+white-space:pre-wrap;
+user-select:text;
+-webkit-user-select:text;
+direction:rtl;
+text-align:right;
 }
 
 .editor:empty::before{
-  content:"اكتبي ملاحظتك هنا...";
-  color:#666;
+content:"اكتبي ملاحظتك هنا...";
+color:#666;
 }
 
 .editor u{
-  text-underline-offset:7px;
-  text-decoration-thickness:2px;
+text-underline-offset:7px;
+text-decoration-thickness:2px;
 }
 
 .send{
-  flex:0 0 47px;
-  width:47px;
-  height:47px;
-  border:0;
-  border-radius:50%;
-  background:#3471f6;
-  color:#fff;
-  font-size:21px;
+flex:0 0 47px;
+width:47px;
+height:47px;
+border:0;
+border-radius:50%;
+background:#3471f6;
+color:#fff;
+font-size:21px;
 }
 
 /* ==========================
-   شريط أحجام الخط
+   شريط حجم الخط
 ========================== */
 
 .font-size-bar{
-  display:none;
-  align-items:center;
-  gap:5px;
-  overflow-x:auto;
-  scrollbar-width:none;
-  padding:3px 0 7px;
-  direction:ltr;
+display:none;
+align-items:center;
+gap:5px;
+overflow-x:auto;
+scrollbar-width:none;
+padding:3px 0 7px;
+direction:ltr;
 }
 
 .font-size-bar::-webkit-scrollbar{
-  display:none;
+display:none;
 }
 
 .font-size-item{
-  flex:0 0 34px;
-  width:34px;
-  height:32px;
-  border:1px solid #444955;
-  border-radius:8px;
-  background:#292e39;
-  color:#fff;
-  font-size:13px;
-  padding:0;
+flex:0 0 38px;
+width:38px;
+height:34px;
+border:1px solid #444955;
+border-radius:8px;
+background:#292e39;
+color:#fff;
+font-size:13px;
+padding:0;
 }
 
 .font-size-item.active{
-  background:#315fae;
-  border-color:#6b98ef;
+background:#315fae;
+border-color:#6b98ef;
 }
 
-/* النوافذ */
+/* ==========================
+   شريط المحاذاة
+========================== */
+
+.alignment-bar{
+display:none;
+align-items:center;
+gap:5px;
+overflow-x:auto;
+scrollbar-width:none;
+padding:3px 0 7px;
+}
+
+.alignment-bar::-webkit-scrollbar{
+display:none;
+}
+
+.align-item{
+flex:0 0 36px;
+width:36px;
+height:32px;
+border:1px solid #444955;
+border-radius:8px;
+background:#292e39;
+color:#fff;
+font-size:16px;
+padding:0;
+}
+
+.align-item.active{
+background:#315fae;
+border-color:#6b98ef;
+}
+
+/* ==========================
+   النوافذ
+========================== */
 
 .overlay{
-  display:none;
-  position:fixed;
-  inset:0;
-  z-index:500;
-  background:rgba(0,0,0,.58);
-  align-items:center;
-  justify-content:center;
-  padding:15px;
+display:none;
+position:fixed;
+inset:0;
+z-index:500;
+background:rgba(0,0,0,.58);
+align-items:center;
+justify-content:center;
+padding:15px;
 }
 
 .panel{
-  width:min(94vw,350px);
-  max-height:86vh;
-  overflow:auto;
-  background:#20242d;
-  border:1px solid #444955;
-  border-radius:17px;
-  padding:15px;
-  box-shadow:0 15px 50px #000b;
+width:min(94vw,350px);
+max-height:86vh;
+overflow:auto;
+background:#20242d;
+border:1px solid #444955;
+border-radius:17px;
+padding:15px;
+box-shadow:0 15px 50px #000b;
 }
 
 .panel-title{
-  text-align:center;
-  font-weight:bold;
-  margin-bottom:12px;
+text-align:center;
+font-weight:bold;
+margin-bottom:12px;
 }
 
-/* عجلة اللون */
+/* ==========================
+   منتقي الألوان
+========================== */
 
-.wheel-box{
-  width:250px;
-  height:250px;
-  max-width:72vw;
-  max-height:72vw;
-  position:relative;
-  margin:10px auto 15px;
-  touch-action:none;
+.color-picker{
+width:270px;
+max-width:78vw;
+margin:10px auto 15px;
 }
 
-.wheel{
-  position:absolute;
-  inset:0;
-  border-radius:50%;
-  background:
-    conic-gradient(
-      red,
-      yellow,
-      lime,
-      cyan,
-      blue,
-      magenta,
-      red
-    );
-  touch-action:none;
+.color-wheel{
+position:relative;
+width:250px;
+height:250px;
+max-width:72vw;
+max-height:72vw;
+margin:auto;
+touch-action:none;
+border-radius:50%;
+overflow:hidden;
 }
 
-.wheel::after{
-  content:"";
-  position:absolute;
-  inset:0;
-  border-radius:50%;
-  background:
-    radial-gradient(
-      circle,
-      rgba(255,255,255,1) 0%,
-      rgba(255,255,255,.88) 20%,
-      rgba(255,255,255,.45) 48%,
-      rgba(255,255,255,0) 72%
-    );
-  pointer-events:none;
+.hue-ring{
+position:absolute;
+inset:0;
+border-radius:50%;
+background:
+conic-gradient(
+red,
+yellow,
+lime,
+cyan,
+blue,
+magenta,
+red
+);
 }
 
-.marker{
-  position:absolute;
-  width:23px;
-  height:23px;
-  border:3px solid white;
-  border-radius:50%;
-  box-shadow:0 0 0 2px #000;
-  transform:translate(-50%,-50%);
-  pointer-events:none;
-  z-index:5;
+.sv-area{
+position:absolute;
+inset:13%;
+border-radius:50%;
+overflow:hidden;
+background:
+linear-gradient(
+to right,
+#fff,
+hsl(
+var(--hue),
+100%,
+50%
+)
+),
+linear-gradient(
+to bottom,
+transparent,
+#000
+);
 }
+
+.sv-white{
+position:absolute;
+inset:0;
+background:
+linear-gradient(
+to right,
+rgba(255,255,255,1),
+rgba(255,255,255,0)
+);
+}
+
+.sv-black{
+position:absolute;
+inset:0;
+background:
+linear-gradient(
+to bottom,
+rgba(0,0,0,0),
+rgba(0,0,0,1)
+);
+}
+
+.color-marker{
+position:absolute;
+width:21px;
+height:21px;
+border:3px solid white;
+border-radius:50%;
+box-shadow:
+0 0 0 2px #000,
+0 0 4px #000;
+transform:translate(-50%,-50%);
+pointer-events:none;
+z-index:10;
+}
+
+.hue-marker{
+position:absolute;
+width:19px;
+height:19px;
+border:3px solid white;
+border-radius:50%;
+box-shadow:
+0 0 0 2px #000;
+transform:translate(-50%,-50%);
+pointer-events:none;
+z-index:11;
+}
+
+.color-presets{
+display:flex;
+justify-content:center;
+gap:8px;
+margin-top:10px;
+}
+
+.color-preset{
+width:36px;
+height:36px;
+border:2px solid #666;
+border-radius:50%;
+}
+
+.black-preset{
+background:#000;
+}
+
+.white-preset{
+background:#fff;
+}
+
+/* ==========================
+   شدة التمييز
+========================== */
 
 .range-title{
-  text-align:center;
-  color:#ccc;
-  margin-bottom:5px;
+text-align:center;
+color:#ccc;
+margin-bottom:5px;
 }
 
 .range{
-  width:100%;
-  accent-color:#4c80ff;
+width:100%;
+accent-color:#4c80ff;
 }
 
 .panel-button{
-  width:100%;
-  height:43px;
-  border:0;
-  border-radius:10px;
-  background:#303642;
-  color:#fff;
-  margin-top:10px;
+width:100%;
+height:43px;
+border:0;
+border-radius:10px;
+background:#303642;
+color:#fff;
+margin-top:10px;
 }
 
-/* القوائم */
+.highlight-actions{
+display:flex;
+gap:7px;
+}
+
+.highlight-actions button{
+flex:1;
+}
+
+/* ==========================
+   القوائم
+========================== */
 
 .list-choice{
-  display:flex;
-  gap:7px;
+display:flex;
+gap:7px;
 }
 
 .list-choice button{
-  flex:1;
-  min-height:48px;
-  border:1px solid #444955;
-  border-radius:10px;
-  background:#2a2f39;
-  color:#fff;
+flex:1;
+min-height:48px;
+border:1px solid #444955;
+border-radius:10px;
+background:#2a2f39;
+color:#fff;
 }
 
-/* الجدول */
+/* ==========================
+   الجدول
+========================== */
 
 .editor table,
 .note table{
-  width:max-content;
-  max-width:100%;
-  border-collapse:collapse;
-  table-layout:auto;
-  margin:8px 0;
+width:100%;
+max-width:100%;
+border-collapse:collapse;
+table-layout:fixed;
+margin:8px 0;
 }
 
 .editor td,
 .editor th,
 .note td,
 .note th{
-  border:1px solid #666d7b;
-  padding:7px 9px;
-  min-width:45px;
-  min-height:34px;
-  vertical-align:top;
-  white-space:pre-wrap;
-  overflow-wrap:anywhere;
-  word-break:break-word;
+border:1px solid #666d7b;
+padding:7px 9px;
+min-width:45px;
+height:34px;
+vertical-align:top;
+white-space:pre-wrap;
+overflow-wrap:anywhere;
+word-break:break-word;
 }
 
 .editor td:focus,
 .editor th:focus{
-  outline:1px solid #3471f6;
+outline:1px solid #3471f6;
 }
 
-/* الخريطة الذهنية */
+/* ==========================
+   الخريطة الذهنية
+========================== */
 
 .mind-map{
-  width:max-content;
-  max-width:100%;
-  display:flex;
-  flex-direction:column;
-  align-items:center;
-  gap:12px;
-  margin:10px 0;
+width:100%;
+max-width:100%;
+display:flex;
+flex-direction:column;
+align-items:center;
+gap:12px;
+margin:10px 0;
 }
 
 .mind-center{
-  width:fit-content;
-  max-width:100%;
-  padding:9px 15px;
-  border:1px solid #5579bd;
-  border-radius:12px;
-  background:#263657;
-  text-align:center;
-  overflow-wrap:anywhere;
-  word-break:break-word;
+width:fit-content;
+max-width:90%;
+padding:9px 15px;
+border:1px solid #5579bd;
+border-radius:12px;
+background:#263657;
+text-align:center;
+overflow-wrap:anywhere;
+word-break:break-word;
 }
 
 .mind-branches{
-  width:max-content;
-  max-width:100%;
-  display:flex;
-  flex-wrap:wrap;
-  justify-content:center;
-  gap:9px;
+width:100%;
+display:flex;
+flex-wrap:wrap;
+justify-content:center;
+gap:9px;
 }
 
 .mind-branch{
-  width:max-content;
-  max-width:100%;
-  min-width:80px;
-  padding:8px 10px;
-  border:1px solid #555d6d;
-  border-radius:10px;
-  background:#292e39;
-  text-align:center;
-  overflow-wrap:anywhere;
-  word-break:break-word;
+width:auto;
+max-width:45%;
+min-width:80px;
+padding:8px 10px;
+border:1px solid #555d6d;
+border-radius:10px;
+background:#292e39;
+text-align:center;
+overflow-wrap:anywhere;
+word-break:break-word;
 }
 
 .mind-input{
-  width:100%;
-  height:43px;
-  border:1px solid #464b57;
-  border-radius:10px;
-  background:#0e1015;
-  color:#fff;
-  padding:8px 10px;
-  outline:none;
-  margin-bottom:7px;
+width:100%;
+height:43px;
+border:1px solid #464b57;
+border-radius:10px;
+background:#0e1015;
+color:#fff;
+padding:8px 10px;
+outline:none;
+margin-bottom:7px;
 }
 
 .mind-input:focus{
-  border-color:#3471f6;
+border-color:#3471f6;
 }
 
-/* قائمة الرسالة */
+/* ==========================
+   قائمة الرسالة
+========================== */
 
 .menu{
-  display:none;
-  position:fixed;
-  z-index:1000;
-  min-width:135px;
-  padding:5px;
-  background:#20242d;
-  border:1px solid #444955;
-  border-radius:11px;
-  box-shadow:0 10px 35px #000b;
+display:none;
+position:fixed;
+z-index:1000;
+min-width:135px;
+padding:5px;
+background:#20242d;
+border:1px solid #444955;
+border-radius:11px;
+box-shadow:0 10px 35px #000b;
 }
 
 .menu button{
-  display:block;
-  width:100%;
-  min-height:42px;
-  border:0;
-  border-radius:7px;
-  background:transparent;
-  color:#fff;
-  text-align:right;
-  padding:0 10px;
+display:block;
+width:100%;
+min-height:42px;
+border:0;
+border-radius:7px;
+background:transparent;
+color:#fff;
+text-align:right;
+padding:0 10px;
 }
 
-/* البحث */
+/* ==========================
+   البحث
+========================== */
 
 .search-input{
-  width:100%;
-  height:45px;
-  border:1px solid #464b57;
-  border-radius:10px;
-  background:#0e1015;
-  color:#fff;
-  padding:8px 10px;
-  outline:none;
-  font-size:16px;
+width:100%;
+height:45px;
+border:1px solid #464b57;
+border-radius:10px;
+background:#0e1015;
+color:#fff;
+padding:8px 10px;
+outline:none;
+font-size:16px;
 }
 
 .search-result{
-  margin-top:10px;
-  color:#aaa;
-  text-align:center;
-  font-size:13px;
+margin-top:10px;
+color:#aaa;
+text-align:center;
+font-size:13px;
 }
 
 .search-highlight{
-  outline:2px solid #3471f6;
-  outline-offset:2px;
+outline:2px solid #3471f6;
+outline-offset:2px;
 }
 
 @media(max-width:420px){
 
-  .panel{
-    width:94vw;
-  }
-
-  .wheel-box{
-    width:220px;
-    height:220px;
-  }
-
-  .mind-branch{
-    min-width:70px;
-  }
+.panel{
+width:94vw;
 }
+
+.color-wheel{
+width:220px;
+height:220px;
+}
+
+.mind-branch{
+min-width:70px;
+max-width:45%;
+}
+
+}
+
 </style>
+
 </head>
 
 <body>
@@ -610,6 +758,11 @@ type="button">☷</button>
 
 <button
 class="tool"
+id="alignmentButton"
+type="button">☰</button>
+
+<button
+class="tool"
 id="tableButton"
 type="button">▦</button>
 
@@ -623,6 +776,27 @@ type="button">🧠</button>
 <div
 class="font-size-bar"
 id="fontSizeBar">
+</div>
+
+<div
+class="alignment-bar"
+id="alignmentBar">
+
+<button
+class="align-item"
+data-align="right"
+type="button">≡</button>
+
+<button
+class="align-item"
+data-align="center"
+type="button">≣</button>
+
+<button
+class="align-item"
+data-align="left"
+type="button">≡</button>
+
 </div>
 
 <div class="write-row">
@@ -646,7 +820,9 @@ type="button">➤</button>
 </div>
 
 
-<!-- لون الخط -->
+<!-- ==========================
+     لون الخط
+========================== -->
 
 <div
 class="overlay"
@@ -658,17 +834,53 @@ id="colorOverlay">
 لون الخط
 </div>
 
-<div class="wheel-box">
+<div class="color-picker">
 
 <div
-class="wheel"
-id="colorWheel">
+class="color-wheel"
+id="textColorWheel"
+style="--hue:0">
+
+<div
+class="hue-ring">
 </div>
 
 <div
-class="marker"
-id="colorMarker"
-style="left:50%;top:50%">
+class="sv-area">
+
+<div class="sv-white"></div>
+<div class="sv-black"></div>
+
+</div>
+
+<div
+class="hue-marker"
+id="textHueMarker">
+</div>
+
+<div
+class="color-marker"
+id="textColorMarker">
+</div>
+
+</div>
+
+<div class="color-presets">
+
+<button
+class="color-preset black-preset"
+id="blackText"
+type="button"
+title="أسود">
+</button>
+
+<button
+class="color-preset white-preset"
+id="whiteText"
+type="button"
+title="أبيض">
+</button>
+
 </div>
 
 </div>
@@ -681,10 +893,13 @@ type="button">
 </button>
 
 </div>
+
 </div>
 
 
-<!-- التمييز -->
+<!-- ==========================
+     التمييز
+========================== -->
 
 <div
 class="overlay"
@@ -696,17 +911,35 @@ id="highlightOverlay">
 تمييز النص
 </div>
 
-<div class="wheel-box">
+<div class="color-picker">
 
 <div
-class="wheel"
-id="highlightWheel">
+class="color-wheel"
+id="highlightColorWheel"
+style="--hue:60">
+
+<div
+class="hue-ring">
 </div>
 
 <div
-class="marker"
-id="highlightMarker"
-style="left:50%;top:50%">
+class="sv-area">
+
+<div class="sv-white"></div>
+<div class="sv-black"></div>
+
+</div>
+
+<div
+class="hue-marker"
+id="highlightHueMarker">
+</div>
+
+<div
+class="color-marker"
+id="highlightColorMarker">
+</div>
+
 </div>
 
 </div>
@@ -723,6 +956,15 @@ min="10"
 max="100"
 value="60">
 
+<div class="highlight-actions">
+
+<button
+class="panel-button"
+id="removeHighlight"
+type="button">
+بدون تمييز
+</button>
+
 <button
 class="panel-button"
 id="highlightDone"
@@ -731,42 +973,15 @@ type="button">
 </button>
 
 </div>
-</div>
-
-
-<!-- التنقيط والترقيم -->
-
-<div
-class="overlay"
-id="listOverlay">
-
-<div class="panel">
-
-<div class="panel-title">
-اختيار القائمة
-</div>
-
-<div class="list-choice">
-
-<button
-id="bulletButton"
-type="button">
-• تنقيط
-</button>
-
-<button
-id="numberButton"
-type="button">
-١. ترقيم
-</button>
 
 </div>
 
 </div>
-</div>
 
 
-<!-- الجدول -->
+<!-- ==========================
+     الجدول
+========================== -->
 
 <div
 class="overlay"
@@ -826,10 +1041,13 @@ type="button">
 </button>
 
 </div>
+
 </div>
 
 
-<!-- الخريطة الذهنية -->
+<!-- ==========================
+     الخريطة الذهنية
+========================== -->
 
 <div
 class="overlay"
@@ -865,10 +1083,13 @@ type="button">
 </button>
 
 </div>
+
 </div>
 
 
-<!-- البحث -->
+<!-- ==========================
+     البحث
+========================== -->
 
 <div
 class="overlay"
@@ -899,10 +1120,13 @@ type="button">
 </button>
 
 </div>
+
 </div>
 
 
-<!-- قائمة تعديل الرسالة -->
+<!-- ==========================
+     قائمة الرسالة
+========================== -->
 
 <div
 class="menu"
@@ -924,6 +1148,7 @@ type="button">
 
 
 <script>
+
 "use strict";
 
 /* ==========================
@@ -939,27 +1164,14 @@ localStorage.getItem(STORAGE) || "[]"
 );
 
 let editingIndex = -1;
+
 let selectedIndex = -1;
+
 let savedRange = null;
 
-
-/* ==========================
-   حجم الكتابة
-========================== */
-
-/*
-   أحجام شبيهة بـ Word
-   وتبدأ من 8.
-*/
-
-const fontSizes = [
-  8, 9, 10, 11, 12,
-  14, 16, 18, 20, 22,
-  24, 26, 28, 32, 36,
-  40, 48, 56, 64, 72
-];
-
 let currentFontSize = 18;
+
+let currentAlignment = "right";
 
 
 /* ==========================
@@ -980,6 +1192,9 @@ document.getElementById("messageMenu");
 
 const fontSizeBar =
 document.getElementById("fontSizeBar");
+
+const alignmentBar =
+document.getElementById("alignmentBar");
 
 
 /* ==========================
@@ -1024,6 +1239,7 @@ const menu =
 document.createElement("button");
 
 menu.className = "note-menu";
+
 menu.textContent = "⋮";
 
 menu.addEventListener(
@@ -1068,6 +1284,7 @@ messageMenu.style.display =
 "block";
 
 let left = x - 140;
+
 let top = y;
 
 if(left < 5){
@@ -1089,7 +1306,6 @@ messageMenu.style.top =
 top + "px";
 
 }
-
 
 document.addEventListener(
 "click",
@@ -1190,7 +1406,7 @@ restoreSelection();
 
 
 /* ==========================
-   تحديث حالة الأزرار
+   حالة الأزرار
 ========================== */
 
 function updateToolbarState(){
@@ -1199,34 +1415,25 @@ if(document.activeElement !== editor){
 return;
 }
 
-const bold =
-document.queryCommandState("bold");
-
-const italic =
-document.queryCommandState("italic");
-
-const underline =
-document.queryCommandState("underline");
-
 document
 .getElementById("boldButton")
 .classList.toggle(
 "active",
-bold
+document.queryCommandState("bold")
 );
 
 document
 .getElementById("italicButton")
 .classList.toggle(
 "active",
-italic
+document.queryCommandState("italic")
 );
 
 document
 .getElementById("underlineButton")
 .classList.toggle(
 "active",
-underline
+document.queryCommandState("underline")
 );
 
 }
@@ -1351,6 +1558,7 @@ setTimeout(
 function(){
 
 saveSelection();
+
 updateToolbarState();
 
 },
@@ -1367,6 +1575,7 @@ setTimeout(
 function(){
 
 saveSelection();
+
 updateToolbarState();
 
 },
@@ -1379,42 +1588,145 @@ document.addEventListener(
 "selectionchange",
 function(){
 
+const selection =
+window.getSelection();
+
 if(
-selectionIsInsideEditor(
-window.getSelection().rangeCount
-?
-window.getSelection().getRangeAt(0)
-:
-null
-)
+selection &&
+selection.rangeCount > 0
 ){
 
+const range =
+selection.getRangeAt(0);
+
+if(selectionIsInsideEditor(range)){
+
 saveSelection();
+
 updateToolbarState();
+
+}
 
 }
 
 });
 
 
-/* ==========================
-   عجلة اللون
-========================== */
+/* =========================================================
+   نظام عجلة الألوان
+   HSL / HSV
+========================================================= */
 
-function getWheelColor(
+function hsvToRgb(h,s,v){
+
+s /= 100;
+
+v /= 100;
+
+const c = v * s;
+
+const x =
+c *
+(1 -
+Math.abs(
+(h / 60) % 2 - 1
+));
+
+const m = v - c;
+
+let r = 0;
+let g = 0;
+let b = 0;
+
+if(h < 60){
+
+r = c;
+g = x;
+
+}else if(h < 120){
+
+r = x;
+g = c;
+
+}else if(h < 180){
+
+g = c;
+b = x;
+
+}else if(h < 240){
+
+g = x;
+b = c;
+
+}else if(h < 300){
+
+r = x;
+b = c;
+
+}else{
+
+r = c;
+b = x;
+
+}
+
+return {
+r:Math.round((r+m)*255),
+g:Math.round((g+m)*255),
+b:Math.round((b+m)*255)
+};
+
+}
+
+
+function rgbString(rgb){
+
+return `rgb(${rgb.r},${rgb.g},${rgb.b})`;
+
+}
+
+
+function setupAdvancedColorWheel(
 wheel,
-marker,
-event
+hueMarker,
+colorMarker,
+initialHue,
+callback
 ){
+
+let hue = initialHue;
+
+let saturation = 100;
+
+let value = 100;
+
+function setColor(){
+
+wheel.style.setProperty(
+"--hue",
+hue
+);
+
+const rgb =
+hsvToRgb(
+hue,
+saturation,
+value
+);
+
+colorMarker.style.background =
+rgbString(rgb);
+
+callback(
+rgbString(rgb)
+);
+
+}
+
+function setHue(event){
 
 const rect =
 wheel.getBoundingClientRect();
-
-const radius =
-Math.min(
-rect.width,
-rect.height
-) / 2;
 
 const cx =
 rect.left + rect.width / 2;
@@ -1428,94 +1740,189 @@ event.clientX - cx;
 let dy =
 event.clientY - cy;
 
-let distance =
-Math.sqrt(
-dx * dx + dy * dy
-);
+let angle =
+Math.atan2(dy,dx)
+* 180 / Math.PI;
 
-if(distance > radius){
+angle =
+(angle + 90 + 360) % 360;
 
-dx =
-dx / distance * radius;
+hue = angle;
 
-dy =
-dy / distance * radius;
+const radius =
+Math.min(
+rect.width,
+rect.height
+) / 2;
 
-distance =
-radius;
+const ringRadius =
+radius * .89;
+
+const x =
+cx +
+Math.sin(
+hue * Math.PI / 180
+) *
+ringRadius;
+
+const y =
+cy -
+Math.cos(
+hue * Math.PI / 180
+) *
+ringRadius;
+
+hueMarker.style.left =
+(
+(x - rect.left) /
+rect.width *
+100
+) + "%";
+
+hueMarker.style.top =
+(
+(y - rect.top) /
+rect.height *
+100
+) + "%";
+
+setColor();
 
 }
 
-const angle =
-(
-Math.atan2(dy,dx) *
-180 /
-Math.PI +
-360
-) % 360;
+function setSV(event){
 
-const saturation =
+const rect =
+wheel.getBoundingClientRect();
+
+const innerLeft =
+rect.width * .13;
+
+const innerTop =
+rect.height * .13;
+
+const innerWidth =
+rect.width * .74;
+
+const innerHeight =
+rect.height * .74;
+
+let x =
+event.clientX -
+rect.left -
+innerLeft;
+
+let y =
+event.clientY -
+rect.top -
+innerTop;
+
+x =
 Math.max(
 0,
 Math.min(
-100,
-(distance / radius) * 100
+innerWidth,
+x
 )
 );
 
-const color =
-`hsl(${angle}, ${saturation}%, 50%)`;
-
-marker.style.left =
-(
-((dx + radius) / (radius * 2)) * 100
-) + "%";
-
-marker.style.top =
-(
-((dy + radius) / (radius * 2)) * 100
-) + "%";
-
-marker.style.background =
-color;
-
-return color;
-
-}
-
-
-function setupColorWheel(
-wheel,
-marker,
-callback
-){
-
-let dragging = false;
-
-function pick(event){
-
-const color =
-getWheelColor(
-wheel,
-marker,
-event
+y =
+Math.max(
+0,
+Math.min(
+innerHeight,
+y
+)
 );
 
-callback(color);
+saturation =
+x / innerWidth * 100;
+
+value =
+100 -
+y / innerHeight * 100;
+
+const markerX =
+innerLeft +
+x;
+
+const markerY =
+innerTop +
+y;
+
+colorMarker.style.left =
+(
+markerX /
+rect.width *
+100
+) + "%";
+
+colorMarker.style.top =
+(
+markerY /
+rect.height *
+100
+) + "%";
+
+setColor();
 
 }
+
+let hueDragging = false;
+
+let svDragging = false;
 
 wheel.addEventListener(
 "pointerdown",
 function(event){
 
-dragging = true;
+const rect =
+wheel.getBoundingClientRect();
+
+const cx =
+rect.left + rect.width/2;
+
+const cy =
+rect.top + rect.height/2;
+
+const distance =
+Math.sqrt(
+Math.pow(event.clientX-cx,2) +
+Math.pow(event.clientY-cy,2)
+);
+
+const radius =
+Math.min(
+rect.width,
+rect.height
+)/2;
+
+if(
+distance >
+radius*.78
+){
+
+hueDragging = true;
+
+}else{
+
+svDragging = true;
+
+}
 
 wheel.setPointerCapture(
 event.pointerId
 );
 
-pick(event);
+if(hueDragging){
+
+setHue(event);
+
+}else{
+
+setSV(event);
+
+}
 
 event.preventDefault();
 
@@ -1525,11 +1932,17 @@ wheel.addEventListener(
 "pointermove",
 function(event){
 
-if(!dragging){
-return;
+if(hueDragging){
+
+setHue(event);
+
 }
 
-pick(event);
+if(svDragging){
+
+setSV(event);
+
+}
 
 event.preventDefault();
 
@@ -1539,12 +1952,16 @@ wheel.addEventListener(
 "pointerup",
 function(event){
 
-dragging = false;
+hueDragging = false;
+
+svDragging = false;
 
 try{
+
 wheel.releasePointerCapture(
 event.pointerId
 );
+
 }catch(e){}
 
 });
@@ -1553,9 +1970,13 @@ wheel.addEventListener(
 "pointercancel",
 function(){
 
-dragging = false;
+hueDragging = false;
+
+svDragging = false;
 
 });
+
+setColor();
 
 }
 
@@ -1569,29 +1990,64 @@ document.getElementById(
 "colorOverlay"
 );
 
-const colorWheel =
+const textColorWheel =
 document.getElementById(
-"colorWheel"
+"textColorWheel"
 );
 
-const colorMarker =
+const textHueMarker =
 document.getElementById(
-"colorMarker"
+"textHueMarker"
+);
+
+const textColorMarker =
+document.getElementById(
+"textColorMarker"
 );
 
 let chosenTextColor =
 "rgb(255,255,255)";
 
-setupColorWheel(
-colorWheel,
-colorMarker,
+setupAdvancedColorWheel(
+textColorWheel,
+textHueMarker,
+textColorMarker,
+0,
 function(color){
 
 chosenTextColor =
 color;
 
-}
-);
+});
+
+
+document
+.getElementById("blackText")
+.addEventListener(
+"click",
+function(){
+
+chosenTextColor =
+"rgb(0,0,0)";
+
+textColorMarker.style.background =
+"#000";
+
+});
+
+document
+.getElementById("whiteText")
+.addEventListener(
+"click",
+function(){
+
+chosenTextColor =
+"rgb(255,255,255)";
+
+textColorMarker.style.background =
+"#fff";
+
+});
 
 
 document
@@ -1654,14 +2110,19 @@ document.getElementById(
 "highlightOverlay"
 );
 
-const highlightWheel =
+const highlightColorWheel =
 document.getElementById(
-"highlightWheel"
+"highlightColorWheel"
 );
 
-const highlightMarker =
+const highlightHueMarker =
 document.getElementById(
-"highlightMarker"
+"highlightHueMarker"
+);
+
+const highlightColorMarker =
+document.getElementById(
+"highlightColorMarker"
 );
 
 let chosenHighlightColor =
@@ -1706,16 +2167,17 @@ ${opacity}
 }
 
 
-setupColorWheel(
-highlightWheel,
-highlightMarker,
+setupAdvancedColorWheel(
+highlightColorWheel,
+highlightHueMarker,
+highlightColorMarker,
+60,
 function(color){
 
 chosenHighlightColor =
 color;
 
-}
-);
+});
 
 
 document
@@ -1788,13 +2250,79 @@ editor.focus();
 
 
 /* ==========================
-   حجم الخط — شبيه بـ Word
+   إزالة التمييز
 ========================== */
 
-/*
-   إنشاء الأحجام:
-   8، 9، 10، 11، 12، 14...
-*/
+document
+.getElementById("removeHighlight")
+.addEventListener(
+"click",
+function(){
+
+restoreSelection();
+
+if(savedRange){
+
+const selection =
+window.getSelection();
+
+selection.removeAllRanges();
+
+selection.addRange(
+savedRange
+);
+
+document.execCommand(
+"hiliteColor",
+false,
+"transparent"
+);
+
+document.execCommand(
+"backColor",
+false,
+"transparent"
+);
+
+saveSelection();
+
+}
+
+highlightOverlay.style.display =
+"none";
+
+editor.focus();
+
+});
+
+
+/* ==========================
+   حجم الخط - بأسلوب Word
+========================== */
+
+const fontSizes = [
+8,
+9,
+10,
+11,
+12,
+14,
+16,
+18,
+20,
+22,
+24,
+26,
+28,
+32,
+36,
+40,
+48,
+56,
+64,
+72
+];
+
 
 fontSizes.forEach(
 function(size){
@@ -1825,13 +2353,12 @@ button
 
 function updateFontSizeButtons(){
 
-const buttons =
-fontSizeBar.querySelectorAll(
+fontSizeBar
+.querySelectorAll(
 ".font-size-item"
-);
-
-buttons.forEach(
-function(button){
+)
+.forEach(
+button=>{
 
 button.classList.toggle(
 "active",
@@ -1844,37 +2371,24 @@ currentFontSize
 }
 
 
-/*
-   تطبيق حجم الخط
-*/
-
 function applyFontSize(size){
 
 currentFontSize =
 size;
 
-const range =
-savedRange;
-
-if(
-range &&
-!range.collapsed &&
-selectionIsInsideEditor(range)
-){
+restoreSelection();
 
 const selection =
 window.getSelection();
 
-selection.removeAllRanges();
-
-selection.addRange(
-range.cloneRange()
-);
-
-/*
-   نستخدم الأمر فقط لإنشاء
-   علامة مؤقتة للنص المحدد.
-*/
+if(
+selection &&
+selection.rangeCount > 0 &&
+!selection.isCollapsed &&
+selectionIsInsideEditor(
+selection.getRangeAt(0)
+)
+){
 
 document.execCommand(
 "fontSize",
@@ -1888,7 +2402,7 @@ editor.querySelectorAll(
 );
 
 fonts.forEach(
-function(font){
+font=>{
 
 font.removeAttribute("size");
 
@@ -1897,101 +2411,23 @@ size + "px";
 
 });
 
-saveSelection();
-
-}else{
-
-/*
-   لا يوجد تحديد:
-   الحجم المختار يصبح حجم
-   الكتابة الجديدة.
-*/
-
-editor.focus();
-
-restoreSelection();
-
-const selection =
-window.getSelection();
-
-if(
-selection &&
-selection.rangeCount > 0
-){
-
-const range =
-selection.getRangeAt(0);
-
-if(
-selectionIsInsideEditor(range) &&
-range.collapsed
-){
-
-/*
-   نضع span فارغًا في مكان
-   المؤشر ليأخذ النص الجديد
-   الحجم المختار.
-*/
-
-const span =
-document.createElement("span");
-
-span.style.fontSize =
-size + "px";
-
-const textNode =
-document.createTextNode(
-"\u200B"
-);
-
-span.appendChild(
-textNode
-);
-
-range.insertNode(span);
-
-const newRange =
-document.createRange();
-
-newRange.setStart(
-textNode,
-textNode.length
-);
-
-newRange.collapse(true);
-
-selection.removeAllRanges();
-
-selection.addRange(
-newRange
-);
-
-savedRange =
-newRange.cloneRange();
-
 }
-
-}
-
-}
-
-/*
-   إخفاء شريط الأحجام
-*/
 
 fontSizeBar.style.display =
 "none";
 
 editor.focus();
 
-updateToolbarState();
+saveSelection();
+
+updateFontSizeButtons();
 
 }
 
 
-/*
-   فتح شريط الأحجام
-*/
+/* ==========================
+   فتح شريط الحجم
+========================== */
 
 document
 .getElementById("sizeButton")
@@ -2005,6 +2441,9 @@ updateFontSizeButtons();
 
 fontSizeBar.style.display =
 "flex";
+
+alignmentBar.style.display =
+"none";
 
 setTimeout(
 function(){
@@ -2032,13 +2471,61 @@ inline:"center"
 
 
 /* ==========================
-   التنقيط والترقيم
+   القوائم
+   بدون نافذة وبدون تم
 ========================== */
 
-const listOverlay =
-document.getElementById(
-"listOverlay"
+let listBar =
+document.createElement("div");
+
+listBar.className =
+"font-size-bar";
+
+listBar.id =
+"listBar";
+
+listBar.style.direction =
+"rtl";
+
+const bulletList =
+document.createElement("button");
+
+bulletList.className =
+"font-size-item";
+
+bulletList.textContent =
+"•";
+
+bulletList.title =
+"تنقيط";
+
+const numberList =
+document.createElement("button");
+
+numberList.className =
+"font-size-item";
+
+numberList.textContent =
+"١.";
+
+numberList.title =
+"ترقيم";
+
+listBar.appendChild(
+bulletList
 );
+
+listBar.appendChild(
+numberList
+);
+
+document
+.querySelector(".editor-area")
+.insertBefore(
+listBar,
+fontSizeBar
+);
+
 
 document
 .getElementById("listButton")
@@ -2048,15 +2535,19 @@ function(){
 
 saveSelection();
 
-listOverlay.style.display =
+fontSizeBar.style.display =
+"none";
+
+alignmentBar.style.display =
+"none";
+
+listBar.style.display =
 "flex";
 
 });
 
 
-document
-.getElementById("bulletButton")
-.addEventListener(
+bulletList.addEventListener(
 "click",
 function(){
 
@@ -2064,7 +2555,7 @@ command(
 "insertUnorderedList"
 );
 
-listOverlay.style.display =
+listBar.style.display =
 "none";
 
 editor.focus();
@@ -2072,9 +2563,7 @@ editor.focus();
 });
 
 
-document
-.getElementById("numberButton")
-.addEventListener(
+numberList.addEventListener(
 "click",
 function(){
 
@@ -2082,10 +2571,90 @@ command(
 "insertOrderedList"
 );
 
-listOverlay.style.display =
+listBar.style.display =
 "none";
 
 editor.focus();
+
+});
+
+
+/* ==========================
+   المحاذاة
+========================== */
+
+document
+.getElementById("alignmentButton")
+.addEventListener(
+"click",
+function(){
+
+saveSelection();
+
+fontSizeBar.style.display =
+"none";
+
+listBar.style.display =
+"none";
+
+alignmentBar.style.display =
+"flex";
+
+});
+
+
+alignmentBar
+.querySelectorAll(
+".align-item"
+)
+.forEach(
+button=>{
+
+button.addEventListener(
+"click",
+function(){
+
+const align =
+button.dataset.align;
+
+currentAlignment =
+align;
+
+command(
+"justify" +
+(
+align === "right"
+?
+"Right"
+:
+align === "left"
+?
+"Left"
+:
+"Center"
+)
+);
+
+alignmentBar
+.querySelectorAll(
+".align-item"
+)
+.forEach(
+b=>b.classList.remove(
+"active"
+)
+);
+
+button.classList.add(
+"active"
+);
+
+alignmentBar.style.display =
+"none";
+
+editor.focus();
+
+});
 
 });
 
@@ -2105,13 +2674,16 @@ document.getElementById(
 );
 
 let tableRows = 3;
+
 let tableCols = 3;
 
 
 function updateTableInfo(){
 
 tableInfo.textContent =
-tableRows + " × " + tableCols;
+tableRows +
+" × " +
+tableCols;
 
 }
 
@@ -2128,8 +2700,8 @@ const tbody =
 document.createElement("tbody");
 
 for(
-let r = 0;
-r < rows;
+let r=0;
+r<rows;
 r++
 ){
 
@@ -2137,8 +2709,8 @@ const tr =
 document.createElement("tr");
 
 for(
-let c = 0;
-c < cols;
+let c=0;
+c<cols;
 c++
 ){
 
@@ -2175,6 +2747,7 @@ function(){
 saveSelection();
 
 tableRows = 3;
+
 tableCols = 3;
 
 updateTableInfo();
@@ -2194,7 +2767,7 @@ function(){
 tableRows =
 Math.min(
 20,
-tableRows + 1
+tableRows+1
 );
 
 updateTableInfo();
@@ -2211,7 +2784,7 @@ function(){
 tableRows =
 Math.max(
 1,
-tableRows - 1
+tableRows-1
 );
 
 updateTableInfo();
@@ -2228,7 +2801,7 @@ function(){
 tableCols =
 Math.min(
 10,
-tableCols + 1
+tableCols+1
 );
 
 updateTableInfo();
@@ -2245,7 +2818,7 @@ function(){
 tableCols =
 Math.max(
 1,
-tableCols - 1
+tableCols-1
 );
 
 updateTableInfo();
@@ -2329,7 +2902,8 @@ function addMindBranch(){
 const input =
 document.createElement("input");
 
-input.type = "text";
+input.type =
+"text";
 
 input.className =
 "mind-input";
@@ -2359,6 +2933,7 @@ mindBranches.innerHTML =
 "";
 
 addMindBranch();
+
 addMindBranch();
 
 mindMapOverlay.style.display =
@@ -2401,7 +2976,8 @@ function(){
 
 const center =
 mindCenterInput.value.trim()
-|| "الفكرة الرئيسية";
+||
+"الفكرة الرئيسية";
 
 const values =
 [
@@ -2442,7 +3018,7 @@ branches.className =
 "mind-branches";
 
 values.forEach(
-function(value){
+value=>{
 
 const branch =
 document.createElement("div");
@@ -2561,9 +3137,11 @@ searchInput.value
 .toLowerCase();
 
 document
-.querySelectorAll(".search-highlight")
+.querySelectorAll(
+".search-highlight"
+)
 .forEach(
-function(element){
+element=>{
 
 element.classList.remove(
 "search-highlight"
@@ -2581,12 +3159,13 @@ return;
 }
 
 let count = 0;
+
 let first = null;
 
 document
 .querySelectorAll(".note")
 .forEach(
-function(note){
+note=>{
 
 if(
 note.textContent
@@ -2597,7 +3176,9 @@ note.textContent
 count++;
 
 if(!first){
+
 first = note;
+
 }
 
 }
@@ -2646,9 +3227,11 @@ searchOverlay.style.display =
 "none";
 
 document
-.querySelectorAll(".search-highlight")
+.querySelectorAll(
+".search-highlight"
+)
 .forEach(
-function(element){
+element=>{
 
 element.classList.remove(
 "search-highlight"
@@ -2704,7 +3287,16 @@ savedRange = null;
 
 currentFontSize = 18;
 
+currentAlignment =
+"right";
+
 fontSizeBar.style.display =
+"none";
+
+alignmentBar.style.display =
+"none";
+
+listBar.style.display =
 "none";
 
 document
@@ -2809,7 +3401,7 @@ messageMenu.style.display =
 
 
 /* ==========================
-   إلغاء التعديل
+   إلغاء
 ========================== */
 
 document
@@ -2828,6 +3420,12 @@ state.textContent =
 "رسالة جديدة";
 
 fontSizeBar.style.display =
+"none";
+
+alignmentBar.style.display =
+"none";
+
+listBar.style.display =
 "none";
 
 document
@@ -2869,6 +3467,12 @@ state.textContent =
 fontSizeBar.style.display =
 "none";
 
+alignmentBar.style.display =
+"none";
+
+listBar.style.display =
+"none";
+
 document
 .getElementById("boldButton")
 .classList.remove("active");
@@ -2882,6 +3486,9 @@ document
 .classList.remove("active");
 
 currentFontSize = 18;
+
+currentAlignment =
+"right";
 
 editor.focus();
 
