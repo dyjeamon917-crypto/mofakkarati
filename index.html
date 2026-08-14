@@ -635,7 +635,54 @@ editor.focus();
 ========================== */
 
 
+/* ==========================
+   بدون تمييز — للكتابة القادمة فقط
+========================== */
 
+document.getElementById("removeHighlight").addEventListener("click",function(){
+
+/*
+   إيقاف التمييز للكتابة الجديدة فقط
+*/
+highlightEnabled=false;
+
+/*
+   إغلاق نافذة التمييز
+*/
+highlightOverlay.style.display="none";
+
+/*
+   إعادة المؤشر للمحرر
+*/
+editor.focus();
+
+restoreSelection();
+
+/*
+   إلغاء تمييز الكتابة القادمة فقط
+*/
+try{
+
+document.execCommand(
+"backColor",
+false,
+"transparent"
+);
+
+document.execCommand(
+"hiliteColor",
+false,
+"transparent"
+);
+
+}catch(e){}
+
+/*
+   حفظ مكان المؤشر
+*/
+saveSelection();
+
+});
 
 /* ==========================
    أحجام الخط
