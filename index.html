@@ -1,3 +1,4 @@
+````html
 <!DOCTYPE html>
 <html lang="ar" dir="rtl">
 <head>
@@ -281,6 +282,13 @@ textarea:focus-visible,
 
     position:relative;
     z-index:30;
+
+    /*
+       مهم للموبايل:
+       السماح للـvisual viewport بتحديد
+       المساحة الظاهرة عند ظهور الكيبورد.
+    */
+    transition:transform .18s ease;
 }
 
 .edit-state{
@@ -370,7 +378,7 @@ textarea:focus-visible,
 .underline{
     text-decoration:underline;
     text-decoration-thickness:2px;
-    text-underline-offset:5px;
+    text-underline-offset:0.08in;
 }
 
 
@@ -492,6 +500,12 @@ textarea:focus-visible,
     overscroll-behavior:contain;
 
     -webkit-overflow-scrolling:touch;
+
+    /*
+       مهم مع كيبورد الهاتف حتى لا يختفي
+       آخر سطر أثناء الكتابة.
+    */
+    scroll-padding-bottom:20px;
 }
 
 .editor:focus{
@@ -1091,10 +1105,98 @@ textarea:focus-visible,
         padding-top:7px;
     }
 }
+
+
+/* =====================================================
+   SINGLE COLOR PICKER INDICATOR
+===================================================== */
+
+#textColorWheel #textHueMarker,
+#highlightColorWheel #highlightHueMarker{
+    display:none !important;
+}
+
+#textColorWheel #textColorMarker,
+#highlightColorWheel #highlightColorMarker{
+    display:block !important;
+    pointer-events:none;
+    z-index:20;
+}
+
+
+#textColorMarker,
+#highlightColorMarker{
+    width:18px !important;
+    height:18px !important;
+    border:2px solid #fff !important;
+    border-radius:50% !important;
+    box-shadow:0 1px 4px rgba(0,0,0,.45) !important;
+    transform:translate(-50%,-50%) !important;
+    box-sizing:border-box !important;
+}
+
+
+/* =====================================================
+   UNDERLINE
+===================================================== */
+
+#editor u,
+#editor [style*="text-decoration: underline"],
+#editor [style*="text-decoration-line: underline"]{
+    text-underline-offset:0.08in !important;
+}
+
+
+/* =====================================================
+   KEYBOARD / VISUAL VIEWPORT
+===================================================== */
+
+html.keyboard-open,
+html.keyboard-open body{
+    height:100%;
+}
+
+body.keyboard-open{
+    overflow:hidden;
+}
+
+.app.keyboard-open{
+    height:100dvh;
+}
+
+.editor-area.keyboard-open{
+    padding-bottom:
+        calc(
+            8px +
+            env(safe-area-inset-bottom)
+        );
+}
+
+@supports (height:100svh){
+
+    .app{
+        min-height:100svh;
+    }
+}
+
+
+/* =====================================================
+   EDITING NOTE
+===================================================== */
+
+.note.editing-note{
+    border-color:#4d7fd8;
+
+    box-shadow:
+        0 0 0 1px rgba(77,127,216,.25),
+        0 4px 18px rgba(0,0,0,.18);
+}
+
 </style>
 </head>
-
-
+```:::
+````
+```html
 <body>
 
 <div class="app">
@@ -1601,17 +1703,40 @@ const FONT_SIZES = [
    STATE
 ===================================================== */
 
+function createNoteId(){
+
+    if(
+        window.crypto &&
+        typeof window.crypto.randomUUID === "function"
+    ){
+
+        return window.crypto.randomUUID();
+    }
+
+    return (
+        "note_" +
+        Date.now().toString(36) +
+        "_" +
+        Math.random().toString(36).slice(2)
+    );
+}
+
+
 const AppState = {
 
     notes:[],
 
     editingIndex:-1,
 
+    editingId:null,
+
     selectedIndex:-1,
+
+    selectedNoteId:null,
 
     savedRange:null,
 
-    fontSize:16,
+    fontSize:8,
 
     alignment:"right",
 
@@ -1632,26 +1757,59 @@ const AppState = {
    DOM
 ===================================================== */
 
-const $ = id => document.getElementById(id);
+const $ = id =>
+    document.getElementById(id);
+
 
 const editor = $("editor");
 const messages = $("messages");
 const state = $("state");
 
-const messageMenu = $("messageMenu");
+const editorArea =
+    document.querySelector(".editor-area");
 
-const fontSizeBar = $("fontSizeBar");
-const listBar = $("listBar");
-const alignmentBar = $("alignmentBar");
+const app =
+    document.querySelector(".app");
 
-const colorOverlay = $("colorOverlay");
-const highlightOverlay = $("highlightOverlay");
-const tableOverlay = $("tableOverlay");
-const mindMapOverlay = $("mindMapOverlay");
-const searchOverlay = $("searchOverlay");
 
-const searchInput = $("searchInput");
-const searchResult = $("searchResult");
+const messageMenu =
+    $("messageMenu");
+
+
+messageMenu.dataset.noteId = "";
+
+
+const fontSizeBar =
+    $("fontSizeBar");
+
+const listBar =
+    $("listBar");
+
+const alignmentBar =
+    $("alignmentBar");
+
+
+const colorOverlay =
+    $("colorOverlay");
+
+const highlightOverlay =
+    $("highlightOverlay");
+
+const tableOverlay =
+    $("tableOverlay");
+
+const mindMapOverlay =
+    $("mindMapOverlay");
+
+const searchOverlay =
+    $("searchOverlay");
+
+
+const searchInput =
+    $("searchInput");
+
+const searchResult =
+    $("searchResult");
 
 
 /* =====================================================
@@ -1660,14 +1818,19 @@ const searchResult = $("searchResult");
 
 function openOverlay(element){
 
-    if(!element) return;
+    if(!element){
+        return;
+    }
 
     element.classList.add("open");
 }
 
+
 function closeOverlay(element){
 
-    if(!element) return;
+    if(!element){
+        return;
+    }
 
     element.classList.remove("open");
 }
@@ -1680,9 +1843,12 @@ function closeOverlay(element){
 function closeSubToolbars(){
 
     fontSizeBar.style.display = "none";
+
     listBar.style.display = "none";
+
     alignmentBar.style.display = "none";
 }
+
 
 function openSubToolbar(element){
 
@@ -1700,24 +1866,37 @@ function loadNotes(){
 
     try{
 
-        const raw = localStorage.getItem(STORAGE_KEY);
+        const raw =
+            localStorage.getItem(STORAGE_KEY);
 
         if(!raw){
 
             AppState.notes = [];
+
             return;
         }
 
-        const data = JSON.parse(raw);
+        const data =
+            JSON.parse(raw);
 
         if(Array.isArray(data)){
 
-            AppState.notes = data.filter(
-                note =>
-                    note &&
-                    typeof note === "object" &&
-                    typeof note.html === "string"
-            );
+            AppState.notes =
+                data
+                    .filter(note =>
+                        note &&
+                        typeof note === "object" &&
+                        typeof note.html === "string"
+                    )
+                    .map(note => ({
+                        id:
+                            typeof note.id === "string" &&
+                            note.id
+                                ? note.id
+                                : createNoteId(),
+
+                        html:note.html
+                    }));
 
         }else{
 
@@ -1726,7 +1905,10 @@ function loadNotes(){
 
     }catch(error){
 
-        console.error("loadNotes:",error);
+        console.error(
+            "loadNotes:",
+            error
+        );
 
         AppState.notes = [];
     }
@@ -1739,16 +1921,23 @@ function saveNotes(){
 
         localStorage.setItem(
             STORAGE_KEY,
-            JSON.stringify(AppState.notes)
+            JSON.stringify(
+                AppState.notes
+            )
         );
 
         return true;
 
     }catch(error){
 
-        console.error("saveNotes:",error);
+        console.error(
+            "saveNotes:",
+            error
+        );
 
-        alert("تعذر حفظ الملاحظات في الجهاز.");
+        alert(
+            "تعذر حفظ الملاحظات في الجهاز."
+        );
 
         return false;
     }
@@ -1761,45 +1950,61 @@ function saveNotes(){
 
 function selectionIsInsideEditor(){
 
-    const selection = window.getSelection();
+    const selection =
+        window.getSelection();
 
     if(
         !selection ||
         selection.rangeCount === 0
     ){
+
         return false;
     }
 
-    const range = selection.getRangeAt(0);
+    const range =
+        selection.getRangeAt(0);
 
     return (
-        editor.contains(range.startContainer) &&
-        editor.contains(range.endContainer)
+        editor.contains(
+            range.startContainer
+        ) &&
+        editor.contains(
+            range.endContainer
+        )
     );
 }
 
 
 function saveSelection(){
 
-    const selection = window.getSelection();
+    const selection =
+        window.getSelection();
 
     if(
         !selection ||
         selection.rangeCount === 0
     ){
+
         return false;
     }
 
-    const range = selection.getRangeAt(0);
+    const range =
+        selection.getRangeAt(0);
 
     if(
-        !editor.contains(range.startContainer) ||
-        !editor.contains(range.endContainer)
+        !editor.contains(
+            range.startContainer
+        ) ||
+        !editor.contains(
+            range.endContainer
+        )
     ){
+
         return false;
     }
 
-    AppState.savedRange = range.cloneRange();
+    AppState.savedRange =
+        range.cloneRange();
 
     return true;
 }
@@ -1807,7 +2012,8 @@ function saveSelection(){
 
 function restoreSelection(){
 
-    const range = AppState.savedRange;
+    const range =
+        AppState.savedRange;
 
     if(!range){
 
@@ -1817,23 +2023,32 @@ function restoreSelection(){
     try{
 
         if(
-            !editor.contains(range.startContainer) ||
-            !editor.contains(range.endContainer)
+            !editor.contains(
+                range.startContainer
+            ) ||
+            !editor.contains(
+                range.endContainer
+            )
         ){
 
             return false;
         }
 
-        const selection = window.getSelection();
+        const selection =
+            window.getSelection();
 
         selection.removeAllRanges();
+
         selection.addRange(range);
 
         return true;
 
     }catch(error){
 
-        console.error("restoreSelection:",error);
+        console.error(
+            "restoreSelection:",
+            error
+        );
 
         return false;
     }
@@ -1844,17 +2059,24 @@ function focusEditorEnd(){
 
     editor.focus();
 
-    const range = document.createRange();
+    const range =
+        document.createRange();
 
-    range.selectNodeContents(editor);
+    range.selectNodeContents(
+        editor
+    );
+
     range.collapse(false);
 
-    const selection = window.getSelection();
+    const selection =
+        window.getSelection();
 
     selection.removeAllRanges();
+
     selection.addRange(range);
 
-    AppState.savedRange = range.cloneRange();
+    AppState.savedRange =
+        range.cloneRange();
 }
 
 
@@ -1862,7 +2084,10 @@ function focusEditorEnd(){
    COMMAND
 ===================================================== */
 
-function runCommand(command,value=null){
+function runCommand(
+    command,
+    value=null
+){
 
     editor.focus();
 
@@ -1900,17 +2125,22 @@ function runCommand(command,value=null){
 
 $("boldButton").addEventListener(
     "click",
-    () => runCommand("bold")
+    () =>
+        runCommand("bold")
 );
+
 
 $("italicButton").addEventListener(
     "click",
-    () => runCommand("italic")
+    () =>
+        runCommand("italic")
 );
+
 
 $("underlineButton").addEventListener(
     "click",
-    () => runCommand("underline")
+    () =>
+        runCommand("underline")
 );
 
 
@@ -1922,24 +2152,34 @@ function updateToolbar(){
 
     try{
 
-        $("boldButton").classList.toggle(
-            "active",
-            document.queryCommandState("bold")
-        );
+        $("boldButton")
+            .classList.toggle(
+                "active",
+                document.queryCommandState(
+                    "bold"
+                )
+            );
 
-        $("italicButton").classList.toggle(
-            "active",
-            document.queryCommandState("italic")
-        );
+        $("italicButton")
+            .classList.toggle(
+                "active",
+                document.queryCommandState(
+                    "italic"
+                )
+            );
 
-        $("underlineButton").classList.toggle(
-            "active",
-            document.queryCommandState("underline")
-        );
+        $("underlineButton")
+            .classList.toggle(
+                "active",
+                document.queryCommandState(
+                    "underline"
+                )
+            );
 
     }catch(error){}
 
     updateFontSizeButtons();
+
     updateAlignmentButtons();
 }
 
@@ -1952,12 +2192,16 @@ editor.addEventListener(
     "mouseup",
     () => {
 
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            saveSelection();
-            updateToolbar();
+                saveSelection();
 
-        },0);
+                updateToolbar();
+
+            },
+            0
+        );
 
     }
 );
@@ -1967,12 +2211,16 @@ editor.addEventListener(
     "keyup",
     () => {
 
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            saveSelection();
-            updateToolbar();
+                saveSelection();
 
-        },0);
+                updateToolbar();
+
+            },
+            0
+        );
 
     }
 );
@@ -1982,12 +2230,16 @@ editor.addEventListener(
     "touchend",
     () => {
 
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            saveSelection();
-            updateToolbar();
+                saveSelection();
 
-        },100);
+                updateToolbar();
+
+            },
+            100
+        );
 
     }
 );
@@ -1997,11 +2249,14 @@ editor.addEventListener(
     "input",
     () => {
 
-        setTimeout(() => {
+        setTimeout(
+            () => {
 
-            saveSelection();
+                saveSelection();
 
-        },0);
+            },
+            0
+        );
 
     }
 );
@@ -2011,9 +2266,12 @@ document.addEventListener(
     "selectionchange",
     () => {
 
-        if(selectionIsInsideEditor()){
+        if(
+            selectionIsInsideEditor()
+        ){
 
             saveSelection();
+
             updateToolbar();
         }
 
@@ -2029,81 +2287,15 @@ editor.addEventListener(
     "keydown",
     event => {
 
-        if(event.key !== "Enter"){
-
-            return;
-        }
-
-        const cell =
-            event.target &&
-            event.target.closest
-                ? event.target.closest("td,th")
-                : null;
-
-        if(cell){
-
-            return;
-        }
-
-        event.preventDefault();
-
-        if(!restoreSelection()){
-
-            focusEditorEnd();
-        }
-
-        const selection = window.getSelection();
-
         if(
-            !selection ||
-            selection.rangeCount === 0
+            event.key !== "Enter"
         ){
+
             return;
         }
 
-        const range = selection.getRangeAt(0);
+        saveSelection();
 
-        if(
-            !editor.contains(range.startContainer) ||
-            !editor.contains(range.endContainer)
-        ){
-            return;
-        }
-
-        if(!range.collapsed){
-
-            range.deleteContents();
-        }
-
-        const br = document.createElement("br");
-
-        const marker =
-            document.createTextNode("\u200B");
-
-        range.insertNode(br);
-
-        if(br.parentNode){
-
-            br.parentNode.insertBefore(
-                marker,
-                br.nextSibling
-            );
-        }
-
-        const newRange = document.createRange();
-
-        newRange.setStart(
-            marker,
-            marker.length
-        );
-
-        newRange.collapse(true);
-
-        selection.removeAllRanges();
-        selection.addRange(newRange);
-
-        AppState.savedRange =
-            newRange.cloneRange();
     }
 );
 
@@ -2112,48 +2304,68 @@ editor.addEventListener(
    FONT SIZE BAR
 ===================================================== */
 
-FONT_SIZES.forEach(size => {
+FONT_SIZES.forEach(
+    size => {
 
-    const button =
-        document.createElement("button");
+        const button =
+            document.createElement(
+                "button"
+            );
 
-    button.type = "button";
-    button.className = "font-size-item";
-    button.textContent = size;
+        button.type = "button";
 
-    fontSizeBar.appendChild(button);
+        button.className =
+            "font-size-item";
 
-    button.addEventListener(
-        "mousedown",
-        event => {
+        button.textContent =
+            size;
 
-            event.preventDefault();
-            saveSelection();
+        fontSizeBar.appendChild(
+            button
+        );
 
-        }
-    );
 
-    button.addEventListener(
-        "click",
-        () => applyFontSize(size)
-    );
+        button.addEventListener(
+            "mousedown",
+            event => {
 
-});
+                event.preventDefault();
+
+                saveSelection();
+
+            }
+        );
+
+
+        button.addEventListener(
+            "click",
+            () =>
+                applyFontSize(size)
+        );
+
+    }
+);
 
 
 function updateFontSizeButtons(){
 
     fontSizeBar
-        .querySelectorAll(".font-size-item")
-        .forEach(button => {
+        .querySelectorAll(
+            ".font-size-item"
+        )
+        .forEach(
+            button => {
 
-            button.classList.toggle(
-                "active",
-                Number(button.textContent) ===
-                AppState.fontSize
-            );
+                button.classList.toggle(
+                    "active",
+                    Number(
+                        button.textContent
+                    ) ===
+                    AppState.fontSize
+                );
 
-        });
+            }
+        );
 }
 
 
@@ -2164,69 +2376,56 @@ function applyFontSize(size){
         focusEditorEnd();
     }
 
-    const selection = window.getSelection();
+    const selection =
+        window.getSelection();
 
     if(
         !selection ||
         selection.rangeCount === 0
     ){
+
         return;
     }
 
-    const range = selection.getRangeAt(0);
+    const range =
+        selection.getRangeAt(0);
 
     if(
-        !editor.contains(range.startContainer) ||
-        !editor.contains(range.endContainer)
+        !editor.contains(
+            range.startContainer
+        ) ||
+        !editor.contains(
+            range.endContainer
+        )
     ){
+
         return;
     }
 
     try{
 
-        if(!range.collapsed){
-
-            document.execCommand(
-                "fontSize",
-                false,
-                "7"
-            );
-
-            editor
-                .querySelectorAll('font[size="7"]')
-                .forEach(font => {
-
-                    const span =
-                        document.createElement("span");
-
-                    span.style.fontSize =
-                        size + "px";
-
-                    while(font.firstChild){
-
-                        span.appendChild(
-                            font.firstChild
-                        );
-                    }
-
-                    font.replaceWith(span);
-
-                });
-
-        }else{
+        if(range.collapsed){
 
             const span =
-                document.createElement("span");
+                document.createElement(
+                    "span"
+                );
 
             span.style.fontSize =
                 size + "px";
 
             const marker =
-                document.createTextNode("\u200B");
+                document.createTextNode(
+                    "\u200B"
+                );
 
-            span.appendChild(marker);
+            span.appendChild(
+                marker
+            );
 
-            range.insertNode(span);
+            range.insertNode(
+                span
+            );
 
             const newRange =
                 document.createRange();
@@ -2239,10 +2438,184 @@ function applyFontSize(size){
             newRange.collapse(true);
 
             selection.removeAllRanges();
-            selection.addRange(newRange);
+
+            selection.addRange(
+                newRange
+            );
+
+        }else{
+
+            const startMarker =
+                document.createSpan
+                ? document.createElement("span")
+                : document.createElement("span");
+
+            const endMarker =
+                document.createElement(
+                    "span"
+                );
+
+            startMarker.dataset.fontSizeMarker =
+                "start";
+
+            endMarker.dataset.fontSizeMarker =
+                "end";
+
+            startMarker.appendChild(
+                document.createTextNode(
+                    "\u200B"
+                )
+            );
+
+            endMarker.appendChild(
+                document.createTextNode(
+                    "\u200B"
+                )
+            );
+
+
+            const endRange =
+                range.cloneRange();
+
+            endRange.collapse(false);
+
+            endRange.insertNode(
+                endMarker
+            );
+
+
+            const startRange =
+                range.cloneRange();
+
+            startRange.collapse(true);
+
+            startRange.insertNode(
+                startMarker
+            );
+
+
+            const workRange =
+                document.createRange();
+
+            workRange.setStartAfter(
+                startMarker
+            );
+
+            workRange.setEndBefore(
+                endMarker
+            );
+
+
+            selection.removeAllRanges();
+
+            selection.addRange(
+                workRange
+            );
+
+
+            document.execCommand(
+                "fontSize",
+                false,
+                "7"
+            );
+
+
+            const walker =
+                document.createTreeWalker(
+                    editor,
+                    NodeFilter.SHOW_ELEMENT
+                );
+
+            const fonts = [];
+
+            let el;
+
+            while(
+                el = walker.nextNode()
+            ){
+
+                if(
+                    el.tagName === "FONT" &&
+                    el.getAttribute("size") === "7"
+                ){
+
+                    const r =
+                        document.createRange();
+
+                    r.selectNode(el);
+
+                    const beforeStart =
+                        r.compareBoundaryPoints(
+                            Range.END_TO_START,
+                            workRange
+                        ) < 0;
+
+                    const afterEnd =
+                        r.compareBoundaryPoints(
+                            Range.START_TO_END,
+                            workRange
+                        ) > 0;
+
+                    if(
+                        !beforeStart &&
+                        !afterEnd
+                    ){
+
+                        fonts.push(el);
+                    }
+                }
+            }
+
+
+            fonts.forEach(
+                font => {
+
+                    const span =
+                        document.createElement(
+                            "span"
+                        );
+
+                    span.style.fontSize =
+                        size + "px";
+
+                    while(
+                        font.firstChild
+                    ){
+
+                        span.appendChild(
+                            font.firstChild
+                        );
+                    }
+
+                    font.replaceWith(
+                        span
+                    );
+
+                }
+            );
+
+
+            startMarker.remove();
+
+            endMarker.remove();
+
+            selection.removeAllRanges();
+
+            try{
+
+                selection.addRange(
+                    workRange
+                );
+
+            }catch(error){
+
+                focusEditorEnd();
+            }
+
         }
 
-        AppState.fontSize = size;
+        AppState.fontSize =
+            size;
 
         saveSelection();
 
@@ -2254,7 +2627,12 @@ function applyFontSize(size){
 
     }catch(error){
 
-        console.error("fontSize:",error);
+        console.error(
+            "fontSize:",
+            error
+        );
+
+        focusEditorEnd();
     }
 }
 
@@ -2265,7 +2643,9 @@ $("sizeButton").addEventListener(
 
         saveSelection();
 
-        openSubToolbar(fontSizeBar);
+        openSubToolbar(
+            fontSizeBar
+        );
 
         updateFontSizeButtons();
 
@@ -2278,23 +2658,46 @@ $("sizeButton").addEventListener(
 ===================================================== */
 
 const bulletButton =
-    document.createElement("button");
+    document.createElement(
+        "button"
+    );
 
 bulletButton.type = "button";
-bulletButton.className = "font-size-item";
-bulletButton.textContent = "•";
-bulletButton.title = "قائمة نقطية";
+
+bulletButton.className =
+    "font-size-item";
+
+bulletButton.textContent =
+    "•";
+
+bulletButton.title =
+    "قائمة نقطية";
+
 
 const numberButton =
-    document.createElement("button");
+    document.createElement(
+        "button"
+    );
 
 numberButton.type = "button";
-numberButton.className = "font-size-item";
-numberButton.textContent = "١.";
-numberButton.title = "قائمة مرقمة";
 
-listBar.appendChild(bulletButton);
-listBar.appendChild(numberButton);
+numberButton.className =
+    "font-size-item";
+
+numberButton.textContent =
+    "١.";
+
+numberButton.title =
+    "قائمة مرقمة";
+
+
+listBar.appendChild(
+    bulletButton
+);
+
+listBar.appendChild(
+    numberButton
+);
 
 
 bulletButton.addEventListener(
@@ -2302,37 +2705,46 @@ bulletButton.addEventListener(
     event => {
 
         event.preventDefault();
+
         saveSelection();
 
     }
 );
+
 
 numberButton.addEventListener(
     "mousedown",
     event => {
 
         event.preventDefault();
+
         saveSelection();
 
     }
 );
 
+
 bulletButton.addEventListener(
     "click",
     () => {
 
-        runCommand("insertUnorderedList");
+        runCommand(
+            "insertUnorderedList"
+        );
 
         closeSubToolbars();
 
     }
 );
 
+
 numberButton.addEventListener(
     "click",
     () => {
 
-        runCommand("insertOrderedList");
+        runCommand(
+            "insertOrderedList"
+        );
 
         closeSubToolbars();
 
@@ -2346,7 +2758,9 @@ $("listButton").addEventListener(
 
         saveSelection();
 
-        openSubToolbar(listBar);
+        openSubToolbar(
+            listBar
+        );
 
     }
 );
@@ -2359,16 +2773,20 @@ $("listButton").addEventListener(
 function updateAlignmentButtons(){
 
     alignmentBar
-        .querySelectorAll(".align-item")
-        .forEach(button => {
+        .querySelectorAll(
+            ".align-item"
+        )
+        .forEach(
+            button => {
 
-            button.classList.toggle(
-                "active",
-                button.dataset.align ===
-                AppState.alignment
-            );
+                button.classList.toggle(
+                    "active",
+                    button.dataset.align ===
+                    AppState.alignment
+                );
 
-        });
+            }
+        );
 }
 
 
@@ -2378,7 +2796,9 @@ $("alignmentButton").addEventListener(
 
         saveSelection();
 
-        openSubToolbar(alignmentBar);
+        openSubToolbar(
+            alignmentBar
+        );
 
         updateAlignmentButtons();
 
@@ -2387,59 +2807,83 @@ $("alignmentButton").addEventListener(
 
 
 alignmentBar
-    .querySelectorAll(".align-item")
-    .forEach(button => {
+    .querySelectorAll(
+        ".align-item"
+    )
+    .forEach(
+        button => {
 
-        button.addEventListener(
-            "mousedown",
-            event => {
+            button.addEventListener(
+                "mousedown",
+                event => {
 
-                event.preventDefault();
-                saveSelection();
+                    event.preventDefault();
 
-            }
-        );
+                    saveSelection();
 
-        button.addEventListener(
-            "click",
-            () => {
-
-                const align =
-                    button.dataset.align;
-
-                AppState.alignment = align;
-
-                let command = "justifyRight";
-
-                if(align === "center"){
-
-                    command = "justifyCenter";
-
-                }else if(align === "left"){
-
-                    command = "justifyLeft";
                 }
+            );
 
-                runCommand(command);
 
-                closeSubToolbars();
+            button.addEventListener(
+                "click",
+                () => {
 
-            }
-        );
+                    const align =
+                        button.dataset.align;
 
-    });
+                    AppState.alignment =
+                        align;
+
+                    let command =
+                        "justifyRight";
+
+
+                    if(
+                        align === "center"
+                    ){
+
+                        command =
+                            "justifyCenter";
+
+                    }else if(
+                        align === "left"
+                    ){
+
+                        command =
+                            "justifyLeft";
+                    }
+
+
+                    runCommand(
+                        command
+                    );
+
+                    closeSubToolbars();
+
+                }
+            );
+
+        }
+    );
 
 
 /* =====================================================
    COLOR HELPERS
 ===================================================== */
 
-function hsvToRgb(h,s,v){
+function hsvToRgb(
+    h,
+    s,
+    v
+){
 
     s /= 100;
+
     v /= 100;
 
-    const c = v * s;
+    const c =
+        v * s;
 
     const x =
         c *
@@ -2450,11 +2894,13 @@ function hsvToRgb(h,s,v){
             )
         );
 
-    const m = v - c;
+    const m =
+        v - c;
 
     let r = 0;
     let g = 0;
     let b = 0;
+
 
     if(h < 60){
 
@@ -2487,17 +2933,115 @@ function hsvToRgb(h,s,v){
         b = x;
     }
 
+
     return {
-        r:Math.round((r+m)*255),
-        g:Math.round((g+m)*255),
-        b:Math.round((b+m)*255)
+
+        r:
+            Math.round(
+                (r + m) * 255
+            ),
+
+        g:
+            Math.round(
+                (g + m) * 255
+            ),
+
+        b:
+            Math.round(
+                (b + m) * 255
+            )
     };
 }
 
 
 function rgbString(rgb){
 
-    return `rgb(${rgb.r},${rgb.g},${rgb.b})`;
+    return (
+        `rgb(${rgb.r},${rgb.g},${rgb.b})`
+    );
+}
+
+
+function rgbToHsv(
+    r,
+    g,
+    b
+){
+
+    r /= 255;
+    g /= 255;
+    b /= 255;
+
+
+    const max =
+        Math.max(
+            r,
+            g,
+            b
+        );
+
+    const min =
+        Math.min(
+            r,
+            g,
+            b
+        );
+
+    const d =
+        max - min;
+
+    let h = 0;
+
+
+    if(d !== 0){
+
+        if(max === r){
+
+            h =
+                60 *
+                (
+                    ((g - b) / d) % 6
+                );
+
+        }else if(max === g){
+
+            h =
+                60 *
+                (
+                    (b - r) / d + 2
+                );
+
+        }else{
+
+            h =
+                60 *
+                (
+                    (r - g) / d + 4
+                );
+        }
+    }
+
+
+    if(h < 0){
+
+        h += 360;
+    }
+
+
+    const s =
+        max === 0
+            ? 0
+            : d / max * 100;
+
+    const v =
+        max * 100;
+
+
+    return {
+        h,
+        s,
+        v
+    };
 }
 
 
@@ -2509,11 +3053,33 @@ function setupColorWheel(
     callback
 ){
 
-    let hue = initialHue;
-    let saturation = 100;
-    let value = 100;
+    let hue =
+        initialHue;
 
-    let mode = null;
+    let saturation =
+        100;
+
+    let value =
+        100;
+
+    let mode =
+        null;
+
+
+    function clamp(
+        v,
+        min,
+        max
+    ){
+
+        return Math.max(
+            min,
+            Math.min(
+                max,
+                v
+            )
+        );
+    }
 
 
     function update(){
@@ -2522,6 +3088,7 @@ function setupColorWheel(
             "--hue",
             hue
         );
+
 
         const color =
             rgbString(
@@ -2532,26 +3099,51 @@ function setupColorWheel(
                 )
             );
 
+
         colorMarker.style.background =
             color;
+
 
         const rect =
             wheel.getBoundingClientRect();
 
-        const width = rect.width;
-        const height = rect.height;
+        const width =
+            rect.width;
 
-        const cx = width / 2;
-        const cy = height / 2;
+        const height =
+            rect.height;
+
+
+        if(
+            !width ||
+            !height
+        ){
+
+            return;
+        }
+
+
+        const cx =
+            width / 2;
+
+        const cy =
+            height / 2;
 
         const radius =
-            Math.min(width,height) / 2;
+            Math.min(
+                width,
+                height
+            ) / 2;
+
 
         const ringRadius =
-            radius * .88;
+            radius * .86;
 
         const angle =
-            hue * Math.PI / 180;
+            hue *
+            Math.PI /
+            180;
+
 
         hueMarker.style.left =
             (
@@ -2562,7 +3154,9 @@ function setupColorWheel(
                 ) /
                 width *
                 100
-            ) + "%";
+            ) +
+            "%";
+
 
         hueMarker.style.top =
             (
@@ -2573,81 +3167,139 @@ function setupColorWheel(
                 ) /
                 height *
                 100
-            ) + "%";
+            ) +
+            "%";
 
 
-        const left = width * .13;
-        const top = height * .13;
+        const inset =
+            .13;
 
-        const innerWidth = width * .74;
-        const innerHeight = height * .74;
+        const left =
+            width * inset;
+
+        const top =
+            height * inset;
+
+        const innerWidth =
+            width *
+            (
+                1 -
+                inset * 2
+            );
+
+        const innerHeight =
+            height *
+            (
+                1 -
+                inset * 2
+            );
+
 
         colorMarker.style.left =
             (
                 (
                     left +
-                    saturation/100 *
+                    saturation / 100 *
                     innerWidth
                 ) /
                 width *
                 100
-            ) + "%";
+            ) +
+            "%";
+
 
         colorMarker.style.top =
             (
                 (
                     top +
-                    (1-value/100) *
+                    (
+                        1 -
+                        value / 100
+                    ) *
                     innerHeight
                 ) /
                 height *
                 100
-            ) + "%";
+            ) +
+            "%";
 
-        callback(color);
+
+        callback(
+            color
+        );
     }
 
 
-    function hueFromEvent(event){
+    function hueFromEvent(
+        event
+    ){
 
         const rect =
             wheel.getBoundingClientRect();
 
+
         const cx =
-            rect.left + rect.width/2;
+            rect.left +
+            rect.width / 2;
 
         const cy =
-            rect.top + rect.height/2;
+            rect.top +
+            rect.height / 2;
+
 
         let angle =
             Math.atan2(
-                event.clientX-cx,
-                -(event.clientY-cy)
+                event.clientX - cx,
+                -(event.clientY - cy)
             ) *
             180 /
             Math.PI;
+
 
         if(angle < 0){
 
             angle += 360;
         }
 
-        hue = angle;
+
+        hue =
+            angle;
 
         update();
     }
 
 
-    function svFromEvent(event){
+    function svFromEvent(
+        event
+    ){
 
         const rect =
             wheel.getBoundingClientRect();
 
-        const left = rect.width*.13;
-        const top = rect.height*.13;
+        const inset =
+            .13;
 
-        const width = rect.width*.74;
-        const height = rect.height*.74;
+
+        const left =
+            rect.width * inset;
+
+        const top =
+            rect.height * inset;
+
+        const width =
+            rect.width *
+            (
+                1 -
+                inset * 2
+            );
+
+        const height =
+            rect.height *
+            (
+                1 -
+                inset * 2
+            );
+
 
         let x =
             event.clientX -
@@ -2659,13 +3311,81 @@ function setupColorWheel(
             rect.top -
             top;
 
-        x = Math.max(0,Math.min(width,x));
-        y = Math.max(0,Math.min(height,y));
 
-        saturation = x / width * 100;
-        value = 100 - y / height * 100;
+        x =
+            clamp(
+                x,
+                0,
+                width
+            );
+
+        y =
+            clamp(
+                y,
+                0,
+                height
+            );
+
+
+        saturation =
+            x /
+            width *
+            100;
+
+        value =
+            100 -
+            y /
+            height *
+            100;
+
 
         update();
+    }
+
+
+    function isInsideSV(
+        event
+    ){
+
+        const rect =
+            wheel.getBoundingClientRect();
+
+
+        const cx =
+            rect.left +
+            rect.width / 2;
+
+        const cy =
+            rect.top +
+            rect.height / 2;
+
+
+        const rx =
+            rect.width * .37;
+
+        const ry =
+            rect.height * .37;
+
+
+        const dx =
+            (
+                event.clientX -
+                cx
+            ) /
+            rx;
+
+        const dy =
+            (
+                event.clientY -
+                cy
+            ) /
+            ry;
+
+
+        return (
+            dx * dx +
+            dy * dy
+        ) <= 1;
     }
 
 
@@ -2673,40 +3393,27 @@ function setupColorWheel(
         "pointerdown",
         event => {
 
-            const rect =
-                wheel.getBoundingClientRect();
-
-            const cx =
-                rect.left + rect.width/2;
-
-            const cy =
-                rect.top + rect.height/2;
-
-            const distance =
-                Math.hypot(
-                    event.clientX-cx,
-                    event.clientY-cy
-                );
-
-            const radius =
-                Math.min(
-                    rect.width,
-                    rect.height
-                )/2;
-
             mode =
-                distance > radius*.76
-                    ? "hue"
-                    : "sv";
+                isInsideSV(event)
+                    ? "sv"
+                    : "hue";
 
-            if(mode === "hue"){
 
-                hueFromEvent(event);
+            if(
+                mode === "sv"
+            ){
+
+                svFromEvent(
+                    event
+                );
 
             }else{
 
-                svFromEvent(event);
+                hueFromEvent(
+                    event
+                );
             }
+
 
             try{
 
@@ -2715,6 +3422,7 @@ function setupColorWheel(
                 );
 
             }catch(error){}
+
 
             event.preventDefault();
 
@@ -2726,13 +3434,21 @@ function setupColorWheel(
         "pointermove",
         event => {
 
-            if(mode === "hue"){
+            if(
+                mode === "hue"
+            ){
 
-                hueFromEvent(event);
+                hueFromEvent(
+                    event
+                );
 
-            }else if(mode === "sv"){
+            }else if(
+                mode === "sv"
+            ){
 
-                svFromEvent(event);
+                svFromEvent(
+                    event
+                );
             }
 
         }
@@ -2743,7 +3459,9 @@ function setupColorWheel(
         "pointerup",
         event => {
 
-            mode = null;
+            mode =
+                null;
+
 
             try{
 
@@ -2761,40 +3479,102 @@ function setupColorWheel(
         "pointercancel",
         () => {
 
-            mode = null;
+            mode =
+                null;
 
         }
     );
 
 
+    window.addEventListener(
+        "resize",
+        update
+    );
+
+
     update();
+
+
+    return {
+
+        setHSV(
+            h,
+            s,
+            v
+        ){
+
+            hue =
+                h;
+
+            saturation =
+                s;
+
+            value =
+                v;
+
+            update();
+        },
+
+
+        setRGB(
+            r,
+            g,
+            b
+        ){
+
+            const hsv =
+                rgbToHsv(
+                    r,
+                    g,
+                    b
+                );
+
+
+            hue =
+                hsv.h;
+
+            saturation =
+                hsv.s;
+
+            value =
+                hsv.v;
+
+
+            update();
+        }
+
+    };
 }
 
 
-setupColorWheel(
-    $("textColorWheel"),
-    $("textHueMarker"),
-    $("textColorMarker"),
-    0,
-    color => {
+const textColorWheelAPI =
+    setupColorWheel(
+        $("textColorWheel"),
+        $("textHueMarker"),
+        $("textColorMarker"),
+        0,
+        color => {
 
-        AppState.textColor = color;
+            AppState.textColor =
+                color;
 
-    }
-);
+        }
+    );
 
 
-setupColorWheel(
-    $("highlightColorWheel"),
-    $("highlightHueMarker"),
-    $("highlightColorMarker"),
-    60,
-    color => {
+const highlightColorWheelAPI =
+    setupColorWheel(
+        $("highlightColorWheel"),
+        $("highlightHueMarker"),
+        $("highlightColorMarker"),
+        60,
+        color => {
 
-        AppState.highlightColor = color;
+            AppState.highlightColor =
+                color;
 
-    }
-);
+        }
+    );
 
 
 /* =====================================================
@@ -2809,7 +3589,9 @@ $("colorButton").addEventListener(
 
         closeSubToolbars();
 
-        openOverlay(colorOverlay);
+        openOverlay(
+            colorOverlay
+        );
 
     }
 );
@@ -2819,10 +3601,11 @@ $("blackText").addEventListener(
     "click",
     () => {
 
-        AppState.textColor = "rgb(0,0,0)";
-
-        $("textColorMarker").style.background =
-            "#000";
+        textColorWheelAPI.setRGB(
+            0,
+            0,
+            0
+        );
 
     }
 );
@@ -2832,11 +3615,11 @@ $("whiteText").addEventListener(
     "click",
     () => {
 
-        AppState.textColor =
-            "rgb(255,255,255)";
-
-        $("textColorMarker").style.background =
-            "#fff";
+        textColorWheelAPI.setRGB(
+            255,
+            255,
+            255
+        );
 
     }
 );
@@ -2846,17 +3629,23 @@ $("colorDone").addEventListener(
     "click",
     () => {
 
-        if(!restoreSelection()){
+        if(
+            !restoreSelection()
+        ){
 
             focusEditorEnd();
         }
+
 
         runCommand(
             "foreColor",
             AppState.textColor
         );
 
-        closeOverlay(colorOverlay);
+
+        closeOverlay(
+            colorOverlay
+        );
 
     }
 );
@@ -2871,39 +3660,420 @@ $("opacityRange").addEventListener(
     event => {
 
         AppState.highlightOpacity =
-            Number(event.target.value) / 100;
+            Number(
+                event.target.value
+            ) / 100;
 
     }
 );
 
 
-function colorToRgba(color,opacity){
+function colorToRgb(
+    color
+){
 
     const temp =
-        document.createElement("span");
+        document.createElement(
+            "span"
+        );
 
-    temp.style.color = color;
 
-    document.body.appendChild(temp);
+    temp.style.color =
+        color;
+
+
+    document.body.appendChild(
+        temp
+    );
+
 
     const computed =
-        getComputedStyle(temp).color;
+        getComputedStyle(
+            temp
+        ).color;
+
 
     temp.remove();
 
+
     const values =
-        computed.match(/\d+/g);
+        computed.match(
+            /\d+/g
+        );
+
 
     if(
         !values ||
         values.length < 3
     ){
-        return color;
+
+        return {
+            r:255,
+            g:255,
+            b:0
+        };
     }
 
-    return `rgba(${values[0]},${values[1]},${values[2]},${opacity})`;
+
+    return {
+
+        r:
+            Number(
+                values[0]
+            ),
+
+        g:
+            Number(
+                values[1]
+            ),
+
+        b:
+            Number(
+                values[2]
+            )
+    };
 }
 
+
+function getHighlightColor(){
+
+    const rgb =
+        colorToRgb(
+            AppState.highlightColor
+        );
+
+
+    return (
+        `rgba(` +
+        `${rgb.r},` +
+        `${rgb.g},` +
+        `${rgb.b},` +
+        `${AppState.highlightOpacity}` +
+        `)`
+    );
+}
+
+
+/* =====================================================
+   TEXT HIGHLIGHT
+===================================================== */
+
+function applyWordHighlight(){
+
+    if(
+        !restoreSelection()
+    ){
+
+        return;
+    }
+
+
+    const selection =
+        window.getSelection();
+
+
+    if(
+        !selection ||
+        selection.rangeCount === 0 ||
+        selection.isCollapsed
+    ){
+
+        return;
+    }
+
+
+    const range =
+        selection.getRangeAt(0);
+
+
+    if(
+        !editor.contains(
+            range.commonAncestorContainer
+        )
+    ){
+
+        return;
+    }
+
+
+    const color =
+        getHighlightColor();
+
+
+    const fragment =
+        range.extractContents();
+
+
+    const highlight =
+        document.createElement(
+            "span"
+        );
+
+
+    highlight.className =
+        "word-text-highlight";
+
+
+    highlight.style.backgroundColor =
+        color;
+
+
+    highlight.style.padding =
+        "0";
+
+    highlight.style.margin =
+        "0";
+
+    highlight.style.borderRadius =
+        "0";
+
+
+    highlight.appendChild(
+        fragment
+    );
+
+
+    range.insertNode(
+        highlight
+    );
+
+
+    const newRange =
+        document.createRange();
+
+
+    newRange.selectNodeContents(
+        highlight
+    );
+
+
+    selection.removeAllRanges();
+
+    selection.addRange(
+        newRange
+    );
+
+
+    saveSelection();
+}
+
+
+function removeWordHighlight(){
+
+    if(
+        !restoreSelection()
+    ){
+
+        return;
+    }
+
+
+    const selection =
+        window.getSelection();
+
+
+    if(
+        !selection ||
+        selection.rangeCount === 0 ||
+        selection.isCollapsed
+    ){
+
+        return;
+    }
+
+
+    const range =
+        selection.getRangeAt(0);
+
+
+    if(
+        !editor.contains(
+            range.commonAncestorContainer
+        )
+    ){
+
+        return;
+    }
+
+
+    const highlights =
+        Array.from(
+            editor.querySelectorAll(
+                ".word-text-highlight"
+            )
+        );
+
+
+    highlights.forEach(
+        highlight => {
+
+            try{
+
+                if(
+                    !range.intersectsNode(
+                        highlight
+                    )
+                ){
+
+                    return;
+                }
+
+
+                const full =
+                    document.createRange();
+
+
+                full.selectNodeContents(
+                    highlight
+                );
+
+
+                const coversAll =
+                    range.compareBoundaryPoints(
+                        Range.START_TO_START,
+                        full
+                    ) <= 0 &&
+                    range.compareBoundaryPoints(
+                        Range.END_TO_END,
+                        full
+                    ) >= 0;
+
+
+                if(coversAll){
+
+                    const parent =
+                        highlight.parentNode;
+
+
+                    while(
+                        highlight.firstChild
+                    ){
+
+                        parent.insertBefore(
+                            highlight.firstChild,
+                            highlight
+                        );
+                    }
+
+
+                    parent.removeChild(
+                        highlight
+                    );
+
+
+                    return;
+                }
+
+
+                const intersection =
+                    document.createRange();
+
+
+                const startCmp =
+                    range.compareBoundaryPoints(
+                        Range.START_TO_START,
+                        full
+                    );
+
+
+                const endCmp =
+                    range.compareBoundaryPoints(
+                        Range.END_TO_END,
+                        full
+                    );
+
+
+                if(
+                    startCmp <= 0
+                ){
+
+                    intersection.setStart(
+                        full.startContainer,
+                        full.startOffset
+                    );
+
+                }else{
+
+                    intersection.setStart(
+                        range.startContainer,
+                        range.startOffset
+                    );
+                }
+
+
+                if(
+                    endCmp >= 0
+                ){
+
+                    intersection.setEnd(
+                        full.endContainer,
+                        full.endOffset
+                    );
+
+                }else{
+
+                    intersection.setEnd(
+                        range.endContainer,
+                        range.endOffset
+                    );
+                }
+
+
+                if(
+                    intersection.collapsed
+                ){
+
+                    return;
+                }
+
+
+                const fragment =
+                    intersection.extractContents();
+
+
+                const plain =
+                    document.createElement(
+                        "span"
+                    );
+
+
+                plain.className =
+                    "word-text-no-highlight";
+
+
+                plain.style.backgroundColor =
+                    "transparent";
+
+
+                plain.appendChild(
+                    fragment
+                );
+
+
+                intersection.insertNode(
+                    plain
+                );
+
+
+            }catch(error){
+
+                console.error(
+                    "removeWordHighlight:",
+                    error
+                );
+            }
+
+        }
+    );
+
+
+    saveSelection();
+}
+
+
+/* =====================================================
+   HIGHLIGHT BUTTONS
+===================================================== */
 
 $("highlightButton").addEventListener(
     "click",
@@ -2913,7 +4083,9 @@ $("highlightButton").addEventListener(
 
         closeSubToolbars();
 
-        openOverlay(highlightOverlay);
+        openOverlay(
+            highlightOverlay
+        );
 
     }
 );
@@ -2923,20 +4095,11 @@ $("highlightDone").addEventListener(
     "click",
     () => {
 
-        if(!restoreSelection()){
+        applyWordHighlight();
 
-            focusEditorEnd();
-        }
-
-        runCommand(
-            "hiliteColor",
-            colorToRgba(
-                AppState.highlightColor,
-                AppState.highlightOpacity
-            )
+        closeOverlay(
+            highlightOverlay
         );
-
-        closeOverlay(highlightOverlay);
 
     }
 );
@@ -2946,28 +4109,55 @@ $("removeHighlight").addEventListener(
     "click",
     () => {
 
-        if(!restoreSelection()){
+        removeWordHighlight();
 
-            focusEditorEnd();
-        }
-
-        runCommand(
-            "hiliteColor",
-            "transparent"
+        closeOverlay(
+            highlightOverlay
         );
-
-        runCommand(
-            "backColor",
-            "transparent"
-        );
-
-        closeOverlay(highlightOverlay);
 
     }
 );
 
 
 /* =====================================================
+   WORD HIGHLIGHT STYLE
+===================================================== */
+
+if(
+    !document.getElementById(
+        "wordTextHighlightStyle"
+    )
+){
+
+    const style =
+        document.createElement(
+            "style"
+        );
+
+
+    style.id =
+        "wordTextHighlightStyle";
+
+
+    style.textContent = `
+        .word-text-highlight{
+            background-color:transparent;
+            padding:0;
+            margin:0;
+            border:0;
+            border-radius:0;
+            box-decoration-break:clone;
+            -webkit-box-decoration-break:clone;
+        }
+    `;
+
+
+    document.head.appendChild(
+        style
+    );
+}
+```
+    /* =====================================================
    TABLE
 ===================================================== */
 
@@ -2980,21 +4170,17 @@ function updateTableInfo(){
 
 function createTable(rows,cols){
 
-    const table =
-        document.createElement("table");
+    const table = document.createElement("table");
 
-    const tbody =
-        document.createElement("tbody");
+    const tbody = document.createElement("tbody");
 
-    for(let r=0;r<rows;r++){
+    for(let r = 0; r < rows; r++){
 
-        const tr =
-            document.createElement("tr");
+        const tr = document.createElement("tr");
 
-        for(let c=0;c<cols;c++){
+        for(let c = 0; c < cols; c++){
 
-            const td =
-                document.createElement("td");
+            const td = document.createElement("td");
 
             td.contentEditable = "true";
             td.innerHTML = "<br>";
@@ -3016,12 +4202,10 @@ function insertElement(element){
     editor.focus();
 
     if(!restoreSelection()){
-
         focusEditorEnd();
     }
 
-    const selection =
-        window.getSelection();
+    const selection = window.getSelection();
 
     if(
         !selection ||
@@ -3035,8 +4219,7 @@ function insertElement(element){
         return;
     }
 
-    const range =
-        selection.getRangeAt(0);
+    const range = selection.getRangeAt(0);
 
     if(
         !editor.contains(range.startContainer) ||
@@ -3054,8 +4237,7 @@ function insertElement(element){
 
     range.insertNode(element);
 
-    const marker =
-        document.createTextNode("\u200B");
+    const marker = document.createTextNode("\u200B");
 
     if(element.parentNode){
 
@@ -3065,8 +4247,7 @@ function insertElement(element){
         );
     }
 
-    const newRange =
-        document.createRange();
+    const newRange = document.createRange();
 
     newRange.setStart(
         marker,
@@ -3078,8 +4259,7 @@ function insertElement(element){
     selection.removeAllRanges();
     selection.addRange(newRange);
 
-    AppState.savedRange =
-        newRange.cloneRange();
+    AppState.savedRange = newRange.cloneRange();
 }
 
 
@@ -3097,7 +4277,6 @@ $("tableButton").addEventListener(
         closeSubToolbars();
 
         openOverlay(tableOverlay);
-
     }
 );
 
@@ -3106,14 +4285,12 @@ $("tableRowsPlus").addEventListener(
     "click",
     () => {
 
-        AppState.tableRows =
-            Math.min(
-                20,
-                AppState.tableRows + 1
-            );
+        AppState.tableRows = Math.min(
+            20,
+            AppState.tableRows + 1
+        );
 
         updateTableInfo();
-
     }
 );
 
@@ -3122,14 +4299,12 @@ $("tableRowsMinus").addEventListener(
     "click",
     () => {
 
-        AppState.tableRows =
-            Math.max(
-                1,
-                AppState.tableRows - 1
-            );
+        AppState.tableRows = Math.max(
+            1,
+            AppState.tableRows - 1
+        );
 
         updateTableInfo();
-
     }
 );
 
@@ -3138,14 +4313,12 @@ $("tableColsPlus").addEventListener(
     "click",
     () => {
 
-        AppState.tableCols =
-            Math.min(
-                10,
-                AppState.tableCols + 1
-            );
+        AppState.tableCols = Math.min(
+            10,
+            AppState.tableCols + 1
+        );
 
         updateTableInfo();
-
     }
 );
 
@@ -3154,14 +4327,12 @@ $("tableColsMinus").addEventListener(
     "click",
     () => {
 
-        AppState.tableCols =
-            Math.max(
-                1,
-                AppState.tableCols - 1
-            );
+        AppState.tableCols = Math.max(
+            1,
+            AppState.tableCols - 1
+        );
 
         updateTableInfo();
-
     }
 );
 
@@ -3180,7 +4351,6 @@ $("tableDone").addEventListener(
         closeOverlay(tableOverlay);
 
         editor.focus();
-
     }
 );
 
@@ -3191,21 +4361,16 @@ $("tableDone").addEventListener(
 
 function addMindBranch(){
 
-    const container =
-        $("mindBranches");
+    const container = $("mindBranches");
 
     if(container.children.length >= 12){
-
         return;
     }
 
-    const input =
-        document.createElement("textarea");
+    const input = document.createElement("textarea");
 
     input.className = "mind-input";
-
     input.placeholder = "فرع";
-
     input.rows = 2;
 
     container.appendChild(input);
@@ -3219,7 +4384,6 @@ $("mindMapButton").addEventListener(
         saveSelection();
 
         $("mindCenterInput").value = "";
-
         $("mindBranches").innerHTML = "";
 
         addMindBranch();
@@ -3233,7 +4397,6 @@ $("mindMapButton").addEventListener(
             () => $("mindCenterInput").focus(),
             50
         );
-
     }
 );
 
@@ -3262,8 +4425,7 @@ $("mindDone").addEventListener(
             .map(input => input.value.trim())
             .filter(Boolean);
 
-        const wrap =
-            document.createElement("div");
+        const wrap = document.createElement("div");
 
         wrap.className = "mind-map";
 
@@ -3271,7 +4433,6 @@ $("mindDone").addEventListener(
             document.createElement("div");
 
         centerBox.className = "mind-center";
-
         centerBox.textContent = center;
 
         wrap.appendChild(centerBox);
@@ -3289,11 +4450,9 @@ $("mindDone").addEventListener(
                     document.createElement("div");
 
                 branch.className = "mind-branch";
-
                 branch.textContent = value;
 
                 branches.appendChild(branch);
-
             });
 
             wrap.appendChild(branches);
@@ -3304,7 +4463,6 @@ $("mindDone").addEventListener(
         closeOverlay(mindMapOverlay);
 
         editor.focus();
-
     }
 );
 
@@ -3334,7 +4492,6 @@ function clearSearchHighlights(){
             }
 
             span.remove();
-
         });
 
     document
@@ -3344,7 +4501,6 @@ function clearSearchHighlights(){
             element.classList.remove(
                 "search-highlight"
             );
-
         });
 }
 
@@ -3397,8 +4553,7 @@ function highlightTextNode(node,query){
 
         last = index + query.length;
 
-        index =
-            lower.indexOf(q,last);
+        index = lower.indexOf(q,last);
     }
 
     fragment.appendChild(
@@ -3444,18 +4599,17 @@ function highlightNote(content,query){
                 .toLocaleLowerCase()
                 .includes(query.toLocaleLowerCase())
         ){
+
             nodes.push(node);
         }
     }
 
     nodes.forEach(textNode => {
 
-        count +=
-            highlightTextNode(
-                textNode,
-                query
-            );
-
+        count += highlightTextNode(
+            textNode,
+            query
+        );
     });
 
     return count;
@@ -3504,7 +4658,6 @@ function performSearch(){
                 first = note;
             }
         }
-
     });
 
 
@@ -3524,13 +4677,11 @@ function performSearch(){
 
         if(content){
 
-            matchCount +=
-                highlightNote(
-                    content,
-                    query
-                );
+            matchCount += highlightNote(
+                content,
+                query
+            );
         }
-
     });
 
 
@@ -3563,7 +4714,6 @@ $("searchButton").addEventListener(
             () => searchInput.focus(),
             50
         );
-
     }
 );
 
@@ -3581,7 +4731,6 @@ $("searchDone").addEventListener(
         clearSearchHighlights();
 
         closeOverlay(searchOverlay);
-
     }
 );
 
@@ -3620,30 +4769,32 @@ function renderNotes(){
 
             box.className = "note";
 
-
             const menuButton =
                 document.createElement("button");
 
             menuButton.className = "note-menu";
-
             menuButton.type = "button";
-
             menuButton.textContent = "⋮";
 
+            menuButton.dataset.noteId =
+                note.id;
 
             menuButton.addEventListener(
                 "click",
                 event => {
 
+                    event.preventDefault();
                     event.stopPropagation();
 
                     AppState.selectedIndex = index;
+
+                    messageMenu.dataset.noteId =
+                        note.id;
 
                     openMessageMenu(
                         event.clientX,
                         event.clientY
                     );
-
                 }
             );
 
@@ -3662,7 +4813,6 @@ function renderNotes(){
             box.appendChild(content);
 
             messages.appendChild(box);
-
         }
     );
 }
@@ -3675,15 +4825,19 @@ function renderNotes(){
 function closeMessageMenu(){
 
     messageMenu.classList.remove("open");
-
+    messageMenu.dataset.noteId = "";
     messageMenu.style.display = "none";
 }
 
 
 function openMessageMenu(x,y){
 
-    messageMenu.classList.add("open");
+    const noteId =
+        AppState.notes[AppState.selectedIndex]?.id || "";
 
+    messageMenu.dataset.noteId = noteId;
+
+    messageMenu.classList.add("open");
     messageMenu.style.display = "block";
 
     const width =
@@ -3695,27 +4849,21 @@ function openMessageMenu(x,y){
     let left = x - width;
     let top = y;
 
-    left =
-        Math.max(
-            5,
-            Math.min(
-                left,
-                window.innerWidth -
-                width -
-                5
-            )
-        );
+    left = Math.max(
+        5,
+        Math.min(
+            left,
+            window.innerWidth - width - 5
+        )
+    );
 
-    top =
-        Math.max(
-            5,
-            Math.min(
-                top,
-                window.innerHeight -
-                height -
-                5
-            )
-        );
+    top = Math.max(
+        5,
+        Math.min(
+            top,
+            window.innerHeight - height - 5
+        )
+    );
 
     messageMenu.style.left = left + "px";
     messageMenu.style.top = top + "px";
@@ -3727,13 +4875,12 @@ document.addEventListener(
     event => {
 
         if(
-            !event.target.closest(".menu") &&
+            !event.target.closest("#messageMenu") &&
             !event.target.closest(".note-menu")
         ){
 
             closeMessageMenu();
         }
-
     }
 );
 
@@ -3745,6 +4892,8 @@ document.addEventListener(
 function resetEditor(){
 
     AppState.editingIndex = -1;
+    AppState.editingId = null;
+    AppState.selectedIndex = -1;
 
     AppState.savedRange = null;
 
@@ -3753,8 +4902,7 @@ function resetEditor(){
     state.textContent =
         "رسالة جديدة";
 
-    AppState.fontSize = 16;
-
+    AppState.fontSize = 8;
     AppState.alignment = "right";
 
     closeSubToolbars();
@@ -3764,7 +4912,6 @@ function resetEditor(){
         .forEach(button => {
 
             button.classList.remove("active");
-
         });
 
     updateFontSizeButtons();
@@ -3822,32 +4969,34 @@ $("sendButton").addEventListener(
                 .trim();
 
         if(!html){
-
             return;
         }
 
+        const editingId =
+            AppState.editingId;
+
         const index =
-            AppState.editingIndex;
+            editingId
+                ? AppState.notes.findIndex(
+                    note => note.id === editingId
+                  )
+                : -1;
 
 
-        if(
-            index >= 0 &&
-            index < AppState.notes.length
-        ){
+        if(index >= 0){
 
             AppState.notes[index].html = html;
 
         }else{
 
             AppState.notes.push({
+                id:createNoteId(),
                 html:html
             });
-
         }
 
 
         if(!saveNotes()){
-
             return;
         }
 
@@ -3868,7 +5017,6 @@ $("sendButton").addEventListener(
             },
             30
         );
-
     }
 );
 
@@ -3879,22 +5027,29 @@ $("sendButton").addEventListener(
 
 $("editButton").addEventListener(
     "click",
-    () => {
+    event => {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const noteId =
+            messageMenu.dataset.noteId || "";
 
         const index =
-            AppState.selectedIndex;
+            AppState.notes.findIndex(
+                note => note.id === noteId
+            );
 
-        if(
-            index < 0 ||
-            index >= AppState.notes.length
-        ){
+        if(index < 0){
 
             closeMessageMenu();
 
             return;
         }
 
+        AppState.selectedIndex = index;
         AppState.editingIndex = index;
+        AppState.editingId = noteId;
 
         editor.innerHTML =
             AppState.notes[index].html || "";
@@ -3903,7 +5058,6 @@ $("editButton").addEventListener(
             "✎ تعديل الملاحظة";
 
         closeMessageMenu();
-
         closeSubToolbars();
 
         editor.focus();
@@ -3917,7 +5071,6 @@ $("editButton").addEventListener(
             },
             50
         );
-
     }
 );
 
@@ -3928,21 +5081,27 @@ $("editButton").addEventListener(
 
 $("deleteButton").addEventListener(
     "click",
-    () => {
+    event => {
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        const noteId =
+            messageMenu.dataset.noteId || "";
 
         const index =
-            AppState.selectedIndex;
+            AppState.notes.findIndex(
+                note => note.id === noteId
+            );
 
-        if(
-            index < 0 ||
-            index >= AppState.notes.length
-        ){
+        if(index < 0){
 
             closeMessageMenu();
 
             return;
         }
 
+        AppState.selectedIndex = index;
 
         const confirmed =
             window.confirm(
@@ -3956,13 +5115,25 @@ $("deleteButton").addEventListener(
             return;
         }
 
+        const removed =
+            AppState.notes.splice(index,1)[0];
 
-        AppState.notes.splice(index,1);
+        if(!saveNotes()){
+
+            AppState.notes.splice(
+                index,
+                0,
+                removed
+            );
+
+            renderNotes();
+            closeMessageMenu();
+
+            return;
+        }
 
 
-        if(
-            AppState.editingIndex === index
-        ){
+        if(AppState.editingId === noteId){
 
             resetEditor();
 
@@ -3976,12 +5147,9 @@ $("deleteButton").addEventListener(
 
         AppState.selectedIndex = -1;
 
-        saveNotes();
-
         renderNotes();
 
         closeMessageMenu();
-
     }
 );
 
@@ -3995,7 +5163,6 @@ $("cancelButton").addEventListener(
     () => {
 
         resetEditor();
-
     }
 );
 
@@ -4007,7 +5174,6 @@ $("newButton").addEventListener(
         resetEditor();
 
         editor.focus();
-
     }
 );
 
@@ -4028,10 +5194,8 @@ document
 
                     closeOverlay(overlay);
                 }
-
             }
         );
-
     });
 
 
@@ -4044,7 +5208,6 @@ document.addEventListener(
     event => {
 
         if(event.key !== "Escape"){
-
             return;
         }
 
@@ -4055,7 +5218,6 @@ document.addEventListener(
         closeMessageMenu();
 
         closeSubToolbars();
-
     }
 );
 
@@ -4086,7 +5248,6 @@ editor.addEventListener(
         }
 
         if(!restoreSelection()){
-
             focusEditorEnd();
         }
 
@@ -4130,13 +5291,11 @@ editor.addEventListener(
                     fragment.appendChild(
                         document.createElement("br")
                     );
-
                 }
 
                 fragment.appendChild(
                     document.createTextNode(line)
                 );
-
             }
         );
 
@@ -4150,7 +5309,6 @@ editor.addEventListener(
 
         AppState.savedRange =
             range.cloneRange();
-
     }
 );
 
@@ -4216,7 +5374,6 @@ editor.addEventListener(
 
         AppState.savedRange =
             range.cloneRange();
-
     }
 );
 
@@ -4224,13 +5381,6 @@ editor.addEventListener(
 /* =====================================================
    TOOLBAR SELECTION FIX
 ===================================================== */
-
-/*
-   مهم:
-   لا نضع preventDefault على أزرار الـtoolbar.
-   الضغط على الزر يجب أن ينتج click طبيعي.
-   وفي الوقت نفسه نحفظ الـselection قبل فقدان التركيز.
-*/
 
 document
     .querySelectorAll(".toolbar button")
@@ -4241,10 +5391,8 @@ document
             () => {
 
                 saveSelection();
-
             }
         );
-
     });
 
 
@@ -4263,8 +5411,3 @@ updateAlignmentButtons();
 updateTableInfo();
 
 closeSubToolbars();
-
-</script>
-
-</body>
-</html>
