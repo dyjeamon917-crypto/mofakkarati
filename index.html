@@ -542,31 +542,67 @@ button{
 
 
 /* =====================================================
-   TABLE
+   TABLE — ملائم للنص ومتجاوب مع الموبايل
 ===================================================== */
 
 .editor-table{
-    width:100%;
+    width:max-content;
     max-width:100%;
     margin:8px 0;
     border-collapse:collapse;
-    table-layout:fixed;
+    table-layout:auto;
+    display:table;
+}
+
+.editor-table tbody{
+    width:100%;
+}
+
+.editor-table tr{
+    height:auto;
 }
 
 .editor-table td,
 .editor-table th{
-    min-width:0;
-    padding:7px;
+    min-width:60px;
+    max-width:260px;
+    padding:7px 9px;
     border:1px solid #697386;
-    word-break:break-word;
-    overflow-wrap:anywhere;
+
+    /* يجعل عرض الخلية مناسبًا للنص */
+    width:auto;
+
+    /* يسمح للنص الطويل بالنزول لأسطر */
     white-space:normal;
+    word-break:normal;
+    overflow-wrap:anywhere;
+
     vertical-align:top;
+    line-height:1.6;
+
+    /* يمنع الخلية من التمدد خارج الشاشة */
+    overflow:hidden;
 }
 
 .editor-table td:focus,
 .editor-table th:focus{
     outline:1px solid #527df5;
+}
+
+/* الموبايل */
+@media(max-width:600px){
+
+    .editor-table{
+        max-width:100%;
+    }
+
+    .editor-table td,
+    .editor-table th{
+        min-width:50px;
+        max-width:180px;
+        padding:6px 7px;
+        font-size:inherit;
+    }
 }
 
 
