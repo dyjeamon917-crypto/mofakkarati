@@ -4469,23 +4469,15 @@ function createMindMap(branches){
 
 
     deleteButton.addEventListener(
-        "click",
-        event => {
+    "click",
+    event => {
 
-            event.preventDefault();
-            event.stopPropagation();
+        event.preventDefault();
+        event.stopPropagation();
 
-            wrapper.remove();
-
-AppState.savedRange = null;
-
-editor.focus({
-    preventScroll:true
-});
-
-saveSelection();
-        }
-    );
+        deleteMindMap(wrapper);
+    }
+);
 
 
     const center =
@@ -4718,22 +4710,15 @@ function createMindTree(branches){
     );
 
     deleteButton.addEventListener(
-        "click",
-        event => {
-            event.preventDefault();
-            event.stopPropagation();
+    "click",
+    event => {
 
-            wrapper.remove();
+        event.preventDefault();
+        event.stopPropagation();
 
-AppState.savedRange = null;
-
-editor.focus({
-    preventScroll:true
-});
-
-saveSelection();
-        }
-    );
+        deleteMindTree(wrapper);
+    }
+);
 
 
     const root =
