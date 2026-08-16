@@ -5573,38 +5573,6 @@ function setupMindMap(){
         }
     );
 
-
-    on(
-        "mindBranchPlus",
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            AppState.mindBranches =
-                Math.min(
-                    15,
-                    AppState.mindBranches + 1
-                );
-
-            updateMindBranchInfo();
-        }
-    );
-
-
-    on(
-        "mindBranchMinus",
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            AppState.mindBranches =
-                Math.max(
-                    1,
-                    AppState.mindBranches - 1
-                );
-
             updateMindBranchInfo();
         }
     );
