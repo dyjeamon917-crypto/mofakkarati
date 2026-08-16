@@ -6164,11 +6164,12 @@ function setupKeyboard(){
 
 /* =====================================================
    MIND MAP / MIND TREE DELETE — EVENT DELEGATION
+   يعمل في التعديل + الملاحظة المرسلة
 ===================================================== */
 
 function setupMindDeleteDelegation(){
 
-    editor.addEventListener(
+    document.addEventListener(
         "click",
         event => {
 
@@ -6190,7 +6191,7 @@ function setupMindDeleteDelegation(){
 
             if(map){
 
-                deleteMindMap(map);
+                map.remove();
 
                 return;
             }
@@ -6201,7 +6202,9 @@ function setupMindDeleteDelegation(){
 
             if(tree){
 
-                deleteMindTree(tree);
+                tree.remove();
+
+                return;
             }
         }
     );
