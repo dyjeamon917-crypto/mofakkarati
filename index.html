@@ -5981,6 +5981,231 @@ function setupMindDeleteDelegation(){
     );
 }
       
+ /* =====================================================
+   MIND MAP SETUP
+===================================================== */
+
+function updateMindBranchInfo(){
+
+    const element =
+        $("mindBranchInfo");
+
+    if(element){
+
+        element.textContent =
+            AppState.mindBranches;
+    }
+}
+
+
+function setupMindMap(){
+
+    on(
+        "mindMapButton",
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+        }
+    );
+
+
+    on(
+        "mindMapButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+
+            AppState.mindBranches = 2;
+
+            updateMindBranchInfo();
+
+            openOverlay(
+                mindMapOverlay
+            );
+        }
+    );
+
+
+    on(
+        "mindBranchPlus",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            AppState.mindBranches =
+                Math.min(
+                    15,
+                    AppState.mindBranches + 1
+                );
+
+            updateMindBranchInfo();
+        }
+    );
+
+
+    on(
+        "mindBranchMinus",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            AppState.mindBranches =
+                Math.max(
+                    1,
+                    AppState.mindBranches - 1
+                );
+
+            updateMindBranchInfo();
+        }
+    );
+
+
+    on(
+        "mindDone",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            const map =
+                createMindMap(
+                    AppState.mindBranches
+                );
+
+            insertElement(map);
+
+            closeOverlay(
+                mindMapOverlay
+            );
+
+            editor.focus({
+                preventScroll:true
+            });
+        }
+    );
+}
+
+
+/* =====================================================
+   MIND TREE SETUP
+===================================================== */
+
+function updateTreeBranchInfo(){
+
+    const element =
+        $("treeBranchInfo");
+
+    if(element){
+
+        element.textContent =
+            AppState.treeBranches;
+    }
+}
+
+
+function setupTree(){
+
+    on(
+        "mindTreeButton",
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+        }
+    );
+
+
+    on(
+        "mindTreeButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+
+            AppState.treeBranches = 2;
+
+            updateTreeBranchInfo();
+
+            openOverlay(
+                mindTreeOverlay
+            );
+        }
+    );
+
+
+    on(
+        "treeBranchPlus",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            AppState.treeBranches =
+                Math.min(
+                    15,
+                    AppState.treeBranches + 1
+                );
+
+            updateTreeBranchInfo();
+        }
+    );
+
+
+    on(
+        "treeBranchMinus",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            AppState.treeBranches =
+                Math.max(
+                    1,
+                    AppState.treeBranches - 1
+                );
+
+            updateTreeBranchInfo();
+        }
+    );
+
+
+    on(
+        "treeDone",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            const tree =
+                createMindTree(
+                    AppState.treeBranches
+                );
+
+            insertElement(tree);
+
+            closeOverlay(
+                mindTreeOverlay
+            );
+
+            editor.focus({
+                preventScroll:true
+            });
+        }
+    );
+}
+      
 /* =====================================================
    INIT
 ===================================================== */
@@ -6015,6 +6240,10 @@ function init(){
 
     setupMessageMenu();
 
+    setupMindMap();
+      
+    setupTree();
+      
     setupSearch();
 
     setupNewButtons();
