@@ -4340,25 +4340,22 @@ function deleteMindTree(tree){
 /* =====================================================
    MIND MAP
 ===================================================== */
-
-function createMindMap(branches){
+      function createMindMap(branches){
 
     const wrapper =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     wrapper.className =
         "mind-map";
 
-    wrapper.contentEditable =
-        "false";
+    wrapper.setAttribute(
+        "contenteditable",
+        "false"
+    );
 
 
     const deleteButton =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
     deleteButton.type =
         "button";
@@ -4371,34 +4368,32 @@ function createMindMap(branches){
         "حذف الخريطة"
     );
 
-    deleteButton.title =
-        "حذف الخريطة";
+    deleteButton.setAttribute(
+        "contenteditable",
+        "false"
+    );
 
     deleteButton.textContent =
         "×";
 
-    deleteButton.contentEditable =
-        "false";
 
     const center =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     center.className =
         "mind-map-center";
 
-    center.contentEditable =
-        "true";
+    center.setAttribute(
+        "contenteditable",
+        "true"
+    );
 
     center.textContent =
         "الفكرة";
 
 
     const branchBox =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     branchBox.className =
         "mind-map-branches";
@@ -4411,15 +4406,15 @@ function createMindMap(branches){
     ){
 
         const branch =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
         branch.className =
             "mind-map-branch";
 
-        branch.contentEditable =
-            "true";
+        branch.setAttribute(
+            "contenteditable",
+            "true"
+        );
 
         branch.textContent =
             "فرع " + i;
@@ -4446,133 +4441,25 @@ function createMindMap(branches){
     return wrapper;
 }
 
-function setupMindMap(){
-
-    on(
-        "mindMapButton",
-        "pointerdown",
-        event => {
-
-            event.preventDefault();
-
-            saveSelection();
-        }
-    );
-
-
-    on(
-        "mindMapButton",
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-            saveSelection();
-
-            AppState.mindBranches = 2;
-
-            updateMindBranchInfo();
-
-            openOverlay(
-                mindMapOverlay
-            );
-        }
-    );
-
-
-    on(
-        "mindBranchPlus",
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-            AppState.mindBranches =
-                Math.min(
-                    12,
-                    AppState.mindBranches + 1
-                );
-
-            updateMindBranchInfo();
-        }
-    );
-
-
-    on(
-        "mindBranchMinus",
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-            AppState.mindBranches =
-                Math.max(
-                    1,
-                    AppState.mindBranches - 1
-                );
-
-            updateMindBranchInfo();
-        }
-    );
-
-
-    on(
-        "mindDone",
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-            const map =
-                createMindMap(
-                    AppState.mindBranches
-                );
-
-            insertElement(
-                map
-            );
-
-            closeOverlay(
-                mindMapOverlay
-            );
-
-            editor.focus({
-                preventScroll:true
-            });
-        }
-    );
-}
-
 /* =====================================================
    MIND TREE
 ===================================================== */
-
-function createMindTree(branches){
+      function createMindTree(branches){
 
     const wrapper =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     wrapper.className =
         "mind-tree";
 
-    wrapper.contentEditable =
-        "false";
+    wrapper.setAttribute(
+        "contenteditable",
+        "false"
+    );
 
 
     const deleteButton =
-        document.createElement(
-            "button"
-        );
+        document.createElement("button");
 
     deleteButton.type =
         "button";
@@ -4585,34 +4472,32 @@ function createMindTree(branches){
         "حذف الشجرة"
     );
 
-    deleteButton.title =
-        "حذف الشجرة";
+    deleteButton.setAttribute(
+        "contenteditable",
+        "false"
+    );
 
     deleteButton.textContent =
         "×";
 
-    deleteButton.contentEditable =
-        "false";
 
     const root =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     root.className =
         "mind-tree-root";
 
-    root.contentEditable =
-        "true";
+    root.setAttribute(
+        "contenteditable",
+        "true"
+    );
 
     root.textContent =
         "الفكرة";
 
 
     const branchesBox =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     branchesBox.className =
         "mind-tree-branches";
@@ -4625,15 +4510,15 @@ function createMindTree(branches){
     ){
 
         const branch =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
         branch.className =
             "mind-tree-branch";
 
-        branch.contentEditable =
-            "true";
+        branch.setAttribute(
+            "contenteditable",
+            "true"
+        );
 
         branch.textContent =
             "فرع " + i;
@@ -4659,121 +4544,7 @@ function createMindTree(branches){
 
     return wrapper;
 }
-
-function updateTreeBranchInfo(){
-
-    $("treeBranchInfo").textContent =
-        AppState.treeBranches;
-}
-
-
-function setupTree(){
-
-    on(
-        "mindTreeButton",
-        "pointerdown",
-        event => {
-
-            event.preventDefault();
-
-            saveSelection();
-        }
-    );
-
-
-    on(
-        "mindTreeButton",
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-            saveSelection();
-
-            AppState.treeBranches =
-                2;
-
-            updateTreeBranchInfo();
-
-            openOverlay(
-                mindTreeOverlay
-            );
-        }
-    );
-
-
-    on(
-        "treeBranchPlus",
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-            AppState.treeBranches =
-                Math.min(
-                    12,
-                    AppState.treeBranches + 1
-                );
-
-            updateTreeBranchInfo();
-        }
-    );
-
-
-    on(
-        "treeBranchMinus",
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-            AppState.treeBranches =
-                Math.max(
-                    1,
-                    AppState.treeBranches - 1
-                );
-
-            updateTreeBranchInfo();
-        }
-    );
-
-
-    on(
-        "treeDone",
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-            const tree =
-                createMindTree(
-                    AppState.treeBranches
-                );
-
-            insertElement(
-                tree
-            );
-
-            closeOverlay(
-                mindTreeOverlay
-            );
-
-            editor.focus({
-                preventScroll:true
-            });
-        }
-    );
-}
-
-
+      
 /* =====================================================
    PASTE
 ===================================================== */
