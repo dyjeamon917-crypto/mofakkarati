@@ -564,114 +564,6 @@ button{
 }
 
 /* =====================================================
-   COUNTER BUTTONS — عام لكل العدادات
-===================================================== */
-
-function setupCounterButtons(){
-
-    const counters = [
-
-        {
-            plus: "tableRowsPlus",
-            minus: "tableRowsMinus",
-            info: "tableRowsInfo",
-            get: () => AppState.tableRows,
-            set: value => AppState.tableRows = value,
-            min: 1,
-            max: 15
-        },
-
-        {
-            plus: "tableColsPlus",
-            minus: "tableColsMinus",
-            info: "tableColsInfo",
-            get: () => AppState.tableCols,
-            set: value => AppState.tableCols = value,
-            min: 1,
-            max: 10
-        },
-
-        {
-            plus: "mindBranchPlus",
-            minus: "mindBranchMinus",
-            info: "mindBranchInfo",
-            get: () => AppState.mindBranches,
-            set: value => AppState.mindBranches = value,
-            min: 1,
-            max: 15
-        },
-
-        {
-            plus: "treeBranchPlus",
-            minus: "treeBranchMinus",
-            info: "treeBranchInfo",
-            get: () => AppState.treeBranches,
-            set: value => AppState.treeBranches = value,
-            min: 1,
-            max: 15
-        }
-    ];
-
-
-    counters.forEach(counter => {
-
-        const update = () => {
-
-            const info =
-                $(counter.info);
-
-            if(info){
-
-                info.textContent =
-                    counter.get();
-            }
-        };
-
-
-        on(
-            counter.plus,
-            "click",
-            event => {
-
-                event.preventDefault();
-
-                counter.set(
-                    Math.min(
-                        counter.max,
-                        counter.get() + 1
-                    )
-                );
-
-                update();
-            }
-        );
-
-
-        on(
-            counter.minus,
-            "click",
-            event => {
-
-                event.preventDefault();
-
-                counter.set(
-                    Math.max(
-                        counter.min,
-                        counter.get() - 1
-                    )
-                );
-
-                update();
-            }
-        );
-
-
-        update();
-    });
-}
-
-
-/* =====================================================
    TABLE — ملائم للنص ومتجاوب مع الموبايل
 ===================================================== */
 
@@ -5405,6 +5297,112 @@ function setupOutside(){
     );
 }
 
+/* =====================================================
+   COUNTER BUTTONS — عام لكل العدادات
+===================================================== */
+
+function setupCounterButtons(){
+
+    const counters = [
+
+        {
+            plus: "tableRowsPlus",
+            minus: "tableRowsMinus",
+            info: "tableRowsInfo",
+            get: () => AppState.tableRows,
+            set: value => AppState.tableRows = value,
+            min: 1,
+            max: 15
+        },
+
+        {
+            plus: "tableColsPlus",
+            minus: "tableColsMinus",
+            info: "tableColsInfo",
+            get: () => AppState.tableCols,
+            set: value => AppState.tableCols = value,
+            min: 1,
+            max: 10
+        },
+
+        {
+            plus: "mindBranchPlus",
+            minus: "mindBranchMinus",
+            info: "mindBranchInfo",
+            get: () => AppState.mindBranches,
+            set: value => AppState.mindBranches = value,
+            min: 1,
+            max: 15
+        },
+
+        {
+            plus: "treeBranchPlus",
+            minus: "treeBranchMinus",
+            info: "treeBranchInfo",
+            get: () => AppState.treeBranches,
+            set: value => AppState.treeBranches = value,
+            min: 1,
+            max: 15
+        }
+    ];
+
+
+    counters.forEach(counter => {
+
+        const update = () => {
+
+            const info =
+                $(counter.info);
+
+            if(info){
+
+                info.textContent =
+                    counter.get();
+            }
+        };
+
+
+        on(
+            counter.plus,
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                counter.set(
+                    Math.min(
+                        counter.max,
+                        counter.get() + 1
+                    )
+                );
+
+                update();
+            }
+        );
+
+
+        on(
+            counter.minus,
+            "click",
+            event => {
+
+                event.preventDefault();
+
+                counter.set(
+                    Math.max(
+                        counter.min,
+                        counter.get() - 1
+                    )
+                );
+
+                update();
+            }
+        );
+
+
+        update();
+    });
+}
 
 /* =====================================================
    TABLE TAB
