@@ -2240,75 +2240,134 @@ function toggleUnderline(){
             }catch(error){}
 
         }else{
+              
+const active =
+    getParentUnderline(
+        range.startContainer
+    );
 
-            const active =
-                getParentUnderline(
-                    range.startContainer
-                );
+if(active){
 
-            if(active){
-                unwrap(active);
-            }else{
+    /*
+       المؤشر داخل نص مُسطّر.
+       لا نحذف التسطير القديم،
+       بل نفصل الكتابة الجديدة عنه.
+    */
 
-                const span =
-                    document.createElement(
-                        "span"
-                    );
+    const afterRange =
+        document.createRange();
 
-                span.setAttribute(
-                    "data-underline",
-                    "true"
-                );
+    try{
 
-                span.style.textDecorationLine =
-                    "underline";
+        afterRange.setStart(
+            range.startContainer,
+            range.startOffset
+        );
 
-                span.style.textUnderlineOffset =
-                    "5.08px";
+        afterRange.setEndAfter(
+            active
+        );
 
-                const text =
-                    document.createTextNode(
-                        "\u200B"
-                    );
+        const afterContent =
+            afterRange.extractContents();
 
-                span.appendChild(
-                    text
-                );
+        const newUnderline =
+            active.cloneNode(false);
 
-                range.insertNode(
-                    span
-                );
+        newUnderline.appendChild(
+            afterContent
+        );
 
-                const newRange =
-                    document.createRange();
+        if(newUnderline.hasChildNodes()){
 
-                newRange.setStart(
-                    text,
-                    1
-                );
-
-                newRange.collapse(true);
-
-                selection.removeAllRanges();
-                selection.addRange(
-                    newRange
-                );
-            }
+            active.parentNode.insertBefore(
+                newUnderline,
+                active.nextSibling
+            );
         }
 
-        saveSelection();
-        updateToolbar();
+        const normalText =
+            document.createTextNode(
+                "\u200B"
+            );
+
+        active.parentNode.insertBefore(
+            normalText,
+            newUnderline || active.nextSibling
+        );
+
+        const newRange =
+            document.createRange();
+
+        newRange.setStart(
+            normalText,
+            1
+        );
+
+        newRange.collapse(true);
+
+        selection.removeAllRanges();
+
+        selection.addRange(
+            newRange
+        );
 
     }catch(error){
 
         console.error(
-            "underline",
+            "stop underline",
             error
         );
     }
+
+}else{
+
+    const span =
+        document.createElement(
+            "span"
+        );
+
+    span.setAttribute(
+        "data-underline",
+        "true"
+    );
+
+    span.style.textDecorationLine =
+        "underline";
+
+    span.style.textUnderlineOffset =
+        "5.08px";
+
+    const text =
+        document.createTextNode(
+            "\u200B"
+        );
+
+    span.appendChild(
+        text
+    );
+
+    range.insertNode(
+        span
+    );
+
+    const newRange =
+        document.createRange();
+
+    newRange.setStart(
+        text,
+        1
+    );
+
+    newRange.collapse(true);
+
+    selection.removeAllRanges();
+
+    selection.addRange(
+        newRange
+    );
 }
-
-
+              
 /* =====================================================
    TOOLBAR STATE
 ===================================================== */
