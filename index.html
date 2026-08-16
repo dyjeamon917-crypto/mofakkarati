@@ -4354,29 +4354,6 @@ function createMindMap(branches){
     deleteButton.contentEditable =
         "false";
 
-
-    deleteButton.addEventListener(
-        "pointerdown",
-        event => {
-
-            event.preventDefault();
-            event.stopPropagation();
-        }
-    );
-
-
-    deleteButton.addEventListener(
-    "click",
-    event => {
-
-        event.preventDefault();
-        event.stopPropagation();
-
-        deleteMindMap(wrapper);
-    }
-);
-
-
     const center =
         document.createElement(
             "div"
@@ -4590,26 +4567,6 @@ function createMindTree(branches){
 
     deleteButton.contentEditable =
         "false";
-
-    deleteButton.addEventListener(
-        "pointerdown",
-        event => {
-            event.preventDefault();
-            event.stopPropagation();
-        }
-    );
-
-    deleteButton.addEventListener(
-    "click",
-    event => {
-
-        event.preventDefault();
-        event.stopPropagation();
-
-        deleteMindTree(wrapper);
-    }
-);
-
 
     const root =
         document.createElement(
