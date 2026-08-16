@@ -665,7 +665,110 @@ button{
     word-break:break-word;
     overflow-wrap:anywhere;
 }
+function updateMindBranchInfo(){
 
+    $("mindBranchInfo").textContent =
+        AppState.mindBranches;
+}
+
+
+function setupMindMap(){
+
+    on(
+        "mindMapButton",
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+            saveSelection();
+        }
+    );
+
+
+    on(
+        "mindMapButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            saveSelection();
+
+            AppState.mindBranches = 2;
+
+            updateMindBranchInfo();
+
+            openOverlay(
+                mindMapOverlay
+            );
+        }
+    );
+
+
+    on(
+        "mindBranchPlus",
+        "click",
+        event => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            AppState.mindBranches =
+                Math.min(
+                    12,
+                    AppState.mindBranches + 1
+                );
+
+            updateMindBranchInfo();
+        }
+    );
+
+
+    on(
+        "mindBranchMinus",
+        "click",
+        event => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            AppState.mindBranches =
+                Math.max(
+                    1,
+                    AppState.mindBranches - 1
+                );
+
+            updateMindBranchInfo();
+        }
+    );
+
+
+    on(
+        "mindDone",
+        "click",
+        event => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            const map =
+                createMindMap(
+                    AppState.mindBranches
+                );
+
+            insertElement(map);
+
+            closeOverlay(
+                mindMapOverlay
+            );
+
+            editor.focus({
+                preventScroll:true
+            });
+        }
+    );
+}
 /* =====================================================
    MIND TREE — فروع بجوار بعضها + أسهم + حذف الشجرة
 ===================================================== */
