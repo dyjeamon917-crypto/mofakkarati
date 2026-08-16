@@ -2454,112 +2454,43 @@ function setupLists(){
 
     listBar.innerHTML = "";
 
-    const bullet =
-        document.createElement(
-            "button"
-        );
+    const lists = [
+        ["•", "insertUnorderedList"],
+        ["1.", "insertOrderedList"]
+    ];
 
-    bullet.type =
-        "button";
+    lists.forEach(([text, command]) => {
 
-    bullet.textContent =
-        "•";
+        const button =
+            document.createElement("button");
 
+        button.type = "button";
+        button.textContent = text;
 
-    const number =
-        document.createElement(
-            "button"
-        );
+        button.onclick = () => {
 
-    number.type =
-        "button";
+            prepareSelection();
 
-    number.textContent =
-        "1.";
-
-
-    listBar.append(
-        bullet,
-        number
-    );
-
-
-    bullet.addEventListener(
-        "pointerdown",
-        event => {
-
-            event.preventDefault();
-
-            saveSelection();
-        }
-    );
-
-
-    bullet.addEventListener(
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            toggleCommand(
-                "insertUnorderedList"
+            document.execCommand(
+                command,
+                false,
+                null
             );
 
-            closeSubToolbars();
-        }
-    );
-
-
-    number.addEventListener(
-        "pointerdown",
-        event => {
-
-            event.preventDefault();
-
             saveSelection();
-        }
-    );
+            updateToolbar();
+        };
+
+        listBar.appendChild(button);
+    });
 
 
-    number.addEventListener(
-        "click",
-        event => {
+    $("listButton").onclick = () => {
 
-            event.preventDefault();
+        saveSelection();
 
-            toggleCommand(
-                "insertOrderedList"
-            );
-
-            closeSubToolbars();
-        }
-    );
-
-
-    on(
-        "listButton",
-        "pointerdown",
-        event => {
-
-            event.preventDefault();
-
-            saveSelection();
-        }
-    );
-
-
-    on(
-        "listButton",
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            toggleSubToolbar(
-                listBar
-            );
-        }
-    );
+        toggleSubToolbar(listBar);
+    };
 }
 
 
