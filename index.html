@@ -4436,11 +4436,13 @@ function createMindMap(branches){
 
             wrapper.remove();
 
-            saveSelection();
+AppState.savedRange = null;
 
-            editor.focus({
-                preventScroll:true
-            });
+editor.focus({
+    preventScroll:true
+});
+
+saveSelection();
         }
     );
 
@@ -4682,10 +4684,13 @@ function createMindTree(branches){
 
             wrapper.remove();
 
-            saveSelection();
-            editor.focus({
-                preventScroll:true
-            });
+AppState.savedRange = null;
+
+editor.focus({
+    preventScroll:true
+});
+
+saveSelection();
         }
     );
 
