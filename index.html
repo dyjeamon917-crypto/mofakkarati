@@ -777,7 +777,7 @@ button{
 .mind-map-delete:active{
     transform:scale(.92);
 }
-      
+
 /* =====================================================
    SEARCH
 ===================================================== */
@@ -1024,21 +1024,23 @@ body.keyboard-open .editor-area{
             </button>
 
             <!-- أزرار بداية السطر -->
-<button
-    id="newLineDownButton"
-    class="tool"
-    type="button"
-    aria-label="بداية سطر جديد لأسفل">
-    ⇩
-</button>
+            <button
+                id="newLineDownButton"
+                class="tool"
+                type="button"
+                aria-label="بداية سطر جديد لأسفل">
+                ⇩
+            </button>
 
-<button
-    id="newLineUpButton"
-    class="tool"
-    type="button"
-    aria-label="بداية سطر جديد لأعلى">
-    ⇧
-</button>
+            <button
+                id="newLineUpButton"
+                class="tool"
+                type="button"
+                aria-label="بداية سطر جديد لأعلى">
+                ⇧
+            </button>
+
+        </div>
 
 
         <!-- FONT SIZE -->
@@ -2240,135 +2242,75 @@ function toggleUnderline(){
             }catch(error){}
 
         }else{
-              
-const active =
-    getParentUnderline(
-        range.startContainer
-    );
 
-if(active){
+            const active =
+                getParentUnderline(
+                    range.startContainer
+                );
 
-    /*
-       المؤشر داخل نص مُسطّر.
-       لا نحذف التسطير القديم،
-       بل نفصل الكتابة الجديدة عنه.
-    */
+            if(active){
+                unwrap(active);
+            }else{
 
-    const afterRange =
-        document.createRange();
+                const span =
+                    document.createElement(
+                        "span"
+                    );
 
-    try{
+                span.setAttribute(
+                    "data-underline",
+                    "true"
+                );
 
-        afterRange.setStart(
-            range.startContainer,
-            range.startOffset
-        );
+                span.style.textDecorationLine =
+                    "underline";
 
-        afterRange.setEndAfter(
-            active
-        );
+                span.style.textUnderlineOffset =
+                    "5.08px";
 
-        const afterContent =
-            afterRange.extractContents();
+                const text =
+                    document.createTextNode(
+                        "\u200B"
+                    );
 
-        const newUnderline =
-            active.cloneNode(false);
+                span.appendChild(
+                    text
+                );
 
-        newUnderline.appendChild(
-            afterContent
-        );
+                range.insertNode(
+                    span
+                );
 
-        if(newUnderline.hasChildNodes()){
+                const newRange =
+                    document.createRange();
 
-            active.parentNode.insertBefore(
-                newUnderline,
-                active.nextSibling
-            );
+                newRange.setStart(
+                    text,
+                    1
+                );
+
+                newRange.collapse(true);
+
+                selection.removeAllRanges();
+                selection.addRange(
+                    newRange
+                );
+            }
         }
 
-        const normalText =
-            document.createTextNode(
-                "\u200B"
-            );
-
-        active.parentNode.insertBefore(
-            normalText,
-            newUnderline || active.nextSibling
-        );
-
-        const newRange =
-            document.createRange();
-
-        newRange.setStart(
-            normalText,
-            1
-        );
-
-        newRange.collapse(true);
-
-        selection.removeAllRanges();
-
-        selection.addRange(
-            newRange
-        );
+        saveSelection();
+        updateToolbar();
 
     }catch(error){
 
         console.error(
-            "stop underline",
+            "underline",
             error
         );
     }
-
-}else{
-
-    const span =
-        document.createElement(
-            "span"
-        );
-
-    span.setAttribute(
-        "data-underline",
-        "true"
-    );
-
-    span.style.textDecorationLine =
-        "underline";
-
-    span.style.textUnderlineOffset =
-        "5.08px";
-
-    const text =
-        document.createTextNode(
-            "\u200B"
-        );
-
-    span.appendChild(
-        text
-    );
-
-    range.insertNode(
-        span
-    );
-
-    const newRange =
-        document.createRange();
-
-    newRange.setStart(
-        text,
-        1
-    );
-
-    newRange.collapse(true);
-
-    selection.removeAllRanges();
-
-    selection.addRange(
-        newRange
-      );
 }
-}
-      }
+
+
 /* =====================================================
    TOOLBAR STATE
 ===================================================== */
@@ -3522,7 +3464,7 @@ function setupColorWheel(
 
     update();
 }
-      
+
 function setupColor(){
 
     const wheel =
@@ -4259,7 +4201,7 @@ function insertElement(element){
 /* =====================================================
    MIND MAP
 ===================================================== */
-      function createMindMap(branches){
+function createMindMap(branches){
 
     const wrapper =
         document.createElement("div");
@@ -4363,7 +4305,7 @@ function insertElement(element){
 /* =====================================================
    MIND TREE
 ===================================================== */
-      function createMindTree(branches){
+function createMindTree(branches){
 
     const wrapper =
         document.createElement("div");
@@ -4463,7 +4405,7 @@ function insertElement(element){
 
     return wrapper;
 }
-      
+
 /* =====================================================
    PASTE
 ===================================================== */
@@ -5899,7 +5841,7 @@ function setupMindDeleteDelegation(){
         }
     );
 }
-      
+
  /* =====================================================
    MIND MAP SETUP
 ===================================================== */
@@ -6124,7 +6066,7 @@ function setupTree(){
         }
     );
 }
-      
+
 /* =====================================================
    INIT
 ===================================================== */
@@ -6154,15 +6096,15 @@ function init(){
     setupHighlight();
 
     setupTable();
-      
+
     setupSave();
 
     setupMessageMenu();
 
     setupMindMap();
-      
+
     setupTree();
-      
+
     setupSearch();
 
     setupNewButtons();
@@ -6178,9 +6120,9 @@ function init(){
     setupKeyboard();
 
     updateTableCounters();
-      
+
     setupMindDeleteDelegation();
-      
+
     renderNotes();
 
     updateToolbar();
