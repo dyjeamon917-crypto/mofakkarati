@@ -2114,40 +2114,37 @@ function unwrap(element){
     element.remove();
 }
 
-
+                    );
 function toggleUnderline(){
 
     prepareSelection();
 
-    const range =
-        getRange();
+    const range = getRange();
 
     if(!range){
         return;
     }
 
-    const selection =
-        window.getSelection();
+    const selection = window.getSelection();
 
     try{
 
-        if(
-            !range.collapsed &&
-            selection.toString()
-        ){
+        /* =========================================
+           لو فيه نص متحدد
+        ========================================= */
+
+        if(!range.collapsed && selection.toString()){
 
             let hasUnderline = false;
 
-            const walker =
-                document.createTreeWalker(
-                    range.commonAncestorContainer,
-                    NodeFilter.SHOW_TEXT
-                );
+            const walker = document.createTreeWalker(
+                range.commonAncestorContainer,
+                NodeFilter.SHOW_TEXT
+            );
 
             while(walker.nextNode()){
 
-                const node =
-                    walker.currentNode;
+                const node = walker.currentNode;
 
                 if(!range.intersectsNode(node)){
                     continue;
@@ -2159,8 +2156,7 @@ function toggleUnderline(){
                 }
             }
 
-            const fragment =
-                range.extractContents();
+            const fragment = range.extractContents();
 
             if(hasUnderline){
 
@@ -2168,18 +2164,14 @@ function toggleUnderline(){
                     .querySelectorAll?.(
                         '[data-underline="true"]'
                     )
-                    .forEach(
-                        element => {
-                            unwrap(element);
-                        }
-                    );
+                    .forEach(element => {
+                        unwrap(element);
+                    });
 
             }else{
 
                 const wrapper =
-                    document.createElement(
-                        "span"
-                    );
+                    document.createElement("span");
 
                 wrapper.setAttribute(
                     "data-underline",
@@ -2192,111 +2184,199 @@ function toggleUnderline(){
                 wrapper.style.textUnderlineOffset =
                     "5.08px";
 
-                wrapper.appendChild(
-                    fragment
-                );
+                wrapper.appendChild(fragment);
 
-                range.insertNode(
-                    wrapper
-                );
+                range.insertNode(wrapper);
 
                 const newRange =
                     document.createRange();
 
-                newRange.selectNodeContents(
-                    wrapper
-                );
+                newRange.selectNodeContents(wrapper);
 
                 selection.removeAllRanges();
-                selection.addRange(
-                    newRange
-                );
+                selection.addRange(newRange);
 
                 saveSelection();
                 updateToolbar();
+
                 return;
             }
 
-            range.insertNode(
-                fragment
+            range.insertNode(fragment);
+
+            saveSelection();
+            updateToolbar();
+
+            return;
+        }
+
+
+        /* =========================================
+           المؤشر فقط — بدون تحديد نص
+        ========================================= */
+
+        const active =
+            getParentUnderline(
+                range.startContainer
             );
+
+        if(active){
+
+            /*
+             * المؤشر داخل تسطير موجود.
+             *
+             * نقسم الـ span عند مكان المؤشر:
+             *
+             * قبل المؤشر  = يظل مسطرًا
+             * بعد المؤشر   = يظل مسطرًا
+             * المؤشر نفسه  = يصبح خارج التسطير
+             */
+
+            const container =
+                range.startContainer;
+
+            const offset =
+                range.startOffset;
+
+            const beforeRange =
+                document.createRange();
+
+            const afterRange =
+                document.createRange();
+
+            beforeRange.setStart(
+                active,
+                0
+            );
+
+            beforeRange.setEnd(
+                container,
+                offset
+            );
+
+            afterRange.setStart(
+                container,
+                offset
+            );
+
+            afterRange.setEnd(
+                active,
+                active.childNodes.length
+            );
+
+            const beforeContent =
+                beforeRange.cloneContents();
+
+            const afterContent =
+                afterRange.cloneContents();
+
+
+            const parent =
+                active.parentNode;
+
+
+            const beforeSpan =
+                active.cloneNode(false);
+
+            beforeSpan.appendChild(
+                beforeContent
+            );
+
+
+            const afterSpan =
+                active.cloneNode(false);
+
+            afterSpan.appendChild(
+                afterContent
+            );
+
+
+            const marker =
+                document.createTextNode(
+                    "\u200B"
+                );
+
+
+            parent.insertBefore(
+                beforeSpan,
+                active
+            );
+
+            parent.insertBefore(
+                marker,
+                active
+            );
+
+            parent.insertBefore(
+                afterSpan,
+                active
+            );
+
+            active.remove();
+
 
             const newRange =
                 document.createRange();
 
-            try{
-                newRange.setStart(
-                    range.startContainer,
-                    range.startOffset
-                );
+            newRange.setStart(
+                marker,
+                1
+            );
 
-                newRange.setEnd(
-                    range.endContainer,
-                    range.endOffset
-                );
+            newRange.collapse(true);
 
-                selection.removeAllRanges();
-                selection.addRange(
-                    newRange
-                );
-            }catch(error){}
+            selection.removeAllRanges();
+            selection.addRange(newRange);
 
-        }else{
+            saveSelection();
+            updateToolbar();
 
-            const active =
-                getParentUnderline(
-                    range.startContainer
-                );
-
-            if(active){
-                unwrap(active);
-            }else{
-
-                const span =
-                    document.createElement(
-                        "span"
-                    );
-
-                span.setAttribute(
-                    "data-underline",
-                    "true"
-                );
-
-                span.style.textDecorationLine =
-                    "underline";
-
-                span.style.textUnderlineOffset =
-                    "5.08px";
-
-                const text =
-                    document.createTextNode(
-                        "\u200B"
-                    );
-
-                span.appendChild(
-                    text
-                );
-
-                range.insertNode(
-                    span
-                );
-
-                const newRange =
-                    document.createRange();
-
-                newRange.setStart(
-                    text,
-                    1
-                );
-
-                newRange.collapse(true);
-
-                selection.removeAllRanges();
-                selection.addRange(
-                    newRange
-                );
-            }
+            return;
         }
+
+
+        /* =========================================
+           لا يوجد تسطير حالي
+           يبدأ تسطير جديد من المؤشر
+        ========================================= */
+
+        const span =
+            document.createElement("span");
+
+        span.setAttribute(
+            "data-underline",
+            "true"
+        );
+
+        span.style.textDecorationLine =
+            "underline";
+
+        span.style.textUnderlineOffset =
+            "5.08px";
+
+
+        const text =
+            document.createTextNode(
+                "\u200B"
+            );
+
+        span.appendChild(text);
+
+        range.insertNode(span);
+
+
+        const newRange =
+            document.createRange();
+
+        newRange.setStart(
+            text,
+            1
+        );
+
+        newRange.collapse(true);
+
+        selection.removeAllRanges();
+        selection.addRange(newRange);
 
         saveSelection();
         updateToolbar();
@@ -2304,12 +2384,11 @@ function toggleUnderline(){
     }catch(error){
 
         console.error(
-            "underline",
+            "toggle underline",
             error
         );
     }
 }
-
 
 /* =====================================================
    TOOLBAR STATE
