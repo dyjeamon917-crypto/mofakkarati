@@ -6179,7 +6179,82 @@ function setupKeyboard(){
     update();
 }
 
+/* =====================================================
+   MIND MAP / MIND TREE DELETE — EVENT DELEGATION
+===================================================== */
 
+function setupMindDeleteDelegation(){
+
+    editor.addEventListener(
+        "click",
+        event => {
+
+            const button =
+                event.target.closest(
+                    ".mind-map-delete, .mind-tree-delete"
+                );
+
+            if(!button){
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            /* حذف الخريطة الذهنية */
+            if(
+                button.classList.contains(
+                    "mind-map-delete"
+                )
+            ){
+
+                const map =
+                    button.closest(
+                        ".mind-map"
+                    );
+
+                deleteMindMap(map);
+
+                return;
+            }
+
+            /* حذف الشجرة */
+            if(
+                button.classList.contains(
+                    "mind-tree-delete"
+                )
+            ){
+
+                const tree =
+                    button.closest(
+                        ".mind-tree"
+                    );
+
+                deleteMindTree(tree);
+            }
+        }
+    );
+
+
+    editor.addEventListener(
+        "pointerdown",
+        event => {
+
+            const button =
+                event.target.closest(
+                    ".mind-map-delete, .mind-tree-delete"
+                );
+
+            if(!button){
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    );
+}
+      
 /* =====================================================
    INIT
 ===================================================== */
@@ -6237,7 +6312,9 @@ function init(){
     updateMindBranchInfo();
 
     updateTreeBranchInfo();
-
+      
+    setupMindDeleteDelegation();
+      
     renderNotes();
 
     updateToolbar();
