@@ -1,0 +1,6038 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=yes,viewport-fit=cover">
+
+<meta name="theme-color" content="#10131a">
+
+<title>ملاحظاتي</title>
+
+<style>
+
+/* =====================================================
+   RESET
+===================================================== */
+
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    background:#10131a;
+    color:#fff;
+    font-family:Arial,"Noto Sans Arabic",sans-serif;
+}
+
+button,
+input,
+textarea{
+    font:inherit;
+}
+
+button{
+    border:0;
+    cursor:pointer;
+    touch-action:manipulation;
+}
+
+:root{
+    --app-height:100dvh;
+}
+
+
+/* =====================================================
+   APP
+===================================================== */
+
+.app{
+    width:100%;
+    max-width:900px;
+    height:var(--app-height);
+    margin:auto;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    background:#10131a;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header{
+    flex:0 0 auto;
+    min-height:56px;
+    padding:8px 12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#171b24;
+    border-bottom:1px solid #292e3a;
+}
+
+.title{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.header-actions{
+    display:flex;
+    gap:6px;
+}
+
+.header-actions button{
+    width:40px;
+    height:40px;
+    border-radius:12px;
+    background:#252b36;
+    color:#fff;
+    font-size:21px;
+}
+
+.header-actions button:active{
+    transform:scale(.94);
+}
+
+
+/* =====================================================
+   MESSAGES
+===================================================== */
+
+.messages{
+    flex:1 1 auto;
+    min-height:0;
+    overflow-y:auto;
+    overflow-x:hidden;
+    padding:14px;
+    scroll-behavior:smooth;
+}
+
+.empty{
+    padding:50px 20px;
+    text-align:center;
+    color:#7f8795;
+}
+
+.note{
+    position:relative;
+    max-width:92%;
+    margin:0 0 12px auto;
+    padding:14px 44px 14px 14px;
+    background:#202631;
+    border:1px solid #2c3441;
+    border-radius:16px;
+    box-shadow:0 3px 12px rgba(0,0,0,.18);
+}
+
+.note.editing{
+    border-color:#527df5;
+}
+
+.note-content{
+    min-width:0;
+    line-height:1.8;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+}
+
+.note-menu{
+    position:absolute;
+    top:8px;
+    right:7px;
+    width:32px;
+    height:32px;
+    border-radius:9px;
+    background:#2b323e;
+    color:#fff;
+    font-size:21px;
+}
+
+.note-menu:active{
+    transform:scale(.94);
+}
+
+
+/* =====================================================
+   EDITOR AREA
+===================================================== */
+
+.editor-area{
+    flex:0 0 auto;
+    padding:8px 10px 10px;
+    background:#151922;
+    border-top:1px solid #292e3a;
+}
+
+.editor-state{
+    margin:0 5px 6px;
+    color:#8e98a8;
+    font-size:12px;
+}
+
+
+/* =====================================================
+   EDITOR
+===================================================== */
+
+.editor{
+    min-height:95px;
+    max-height:30vh;
+    overflow-y:auto;
+    padding:13px;
+    border:1px solid #303745;
+    border-radius:14px;
+    background:#1c212b;
+    color:#fff;
+    outline:none;
+
+    direction:rtl;
+    text-align:right;
+
+    white-space:pre-wrap;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+
+    line-height:1.8;
+}
+
+.editor:empty::before{
+    content:"اكتبي ملاحظتك هنا…";
+    color:#737d8e;
+    pointer-events:none;
+}
+
+.editor:focus{
+    border-color:#527df5;
+}
+
+
+/* =====================================================
+   TOOLBAR
+===================================================== */
+
+.toolbar{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    overflow-x:auto;
+    padding:7px 0 2px;
+    scrollbar-width:none;
+}
+
+.toolbar::-webkit-scrollbar{
+    display:none;
+}
+
+.tool{
+    flex:0 0 auto;
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    background:#252c38;
+    color:#fff;
+    font-size:17px;
+    font-weight:bold;
+    transition:transform .08s,background .12s;
+}
+
+.tool.active{
+    background:#4169d8;
+}
+
+.tool:active{
+    transform:scale(.90);
+}
+
+
+/* =====================================================
+   SUB TOOLBAR
+===================================================== */
+
+.sub-toolbar{
+    display:none;
+    align-items:center;
+    gap:5px;
+    overflow-x:auto;
+    padding:5px 0;
+    scrollbar-width:none;
+}
+
+.sub-toolbar::-webkit-scrollbar{
+    display:none;
+}
+
+.sub-toolbar button{
+    flex:0 0 auto;
+    min-width:40px;
+    height:36px;
+    padding:0 8px;
+    border-radius:9px;
+    background:#292f3b;
+    color:#fff;
+}
+
+.sub-toolbar button.active{
+    background:#4169d8;
+}
+
+.sub-toolbar button:active{
+    transform:scale(.94);
+}
+
+
+/* =====================================================
+   ACTIONS
+===================================================== */
+
+.editor-actions{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    margin-top:6px;
+}
+
+.send-button{
+    flex:0 0 46px;
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    background:#3867dc;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+}
+
+.cancel-button{
+    flex:1;
+    height:42px;
+    border-radius:11px;
+    background:#303744;
+    color:#fff;
+}
+
+/* =====================================================
+   UNDO BUTTON
+===================================================== */
+
+.undo-button{
+    flex:0 0 46px;
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    background:#303744;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:27px;
+    font-weight:normal;
+    line-height:1;
+}
+
+.undo-button:active{
+    transform:scale(.92);
+}
+
+.send-button:active,
+.cancel-button:active{
+    transform:scale(.96);
+}
+
+
+/* =====================================================
+   MESSAGE MENU
+===================================================== */
+
+.message-menu{
+    position:fixed;
+    z-index:2000;
+    display:none;
+    min-width:140px;
+    padding:5px;
+    background:#252b36;
+    border:1px solid #3a4250;
+    border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+
+.message-menu.open{
+    display:block;
+}
+
+.message-menu button{
+    display:block;
+    width:100%;
+    padding:11px;
+    border-radius:8px;
+    background:transparent;
+    color:#fff;
+    text-align:right;
+}
+
+.message-menu button:active{
+    background:#343c4a;
+}
+
+
+/* =====================================================
+   OVERLAY
+===================================================== */
+
+.overlay{
+    position:fixed;
+    inset:0;
+    z-index:1500;
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    background:rgba(0,0,0,.62);
+}
+
+.overlay.open{
+    display:flex;
+}
+
+.overlay-box{
+    width:min(600px,100%);
+    max-height:90dvh;
+    overflow-y:auto;
+    padding:18px;
+    background:#191e27;
+    border:1px solid #343b48;
+    border-radius:22px 22px 0 0;
+}
+
+.overlay-title{
+    margin-bottom:15px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.overlay-actions{
+    display:flex;
+    gap:7px;
+    margin-top:15px;
+}
+
+.overlay-actions button{
+    flex:1;
+    min-height:42px;
+    border-radius:11px;
+    background:#303744;
+    color:#fff;
+}
+
+.overlay-actions .primary{
+    background:#3867dc;
+}
+
+
+/* =====================================================
+   COLOR WHEEL
+===================================================== */
+
+.color-wheel{
+    position:relative;
+    width:min(300px,80vw);
+    aspect-ratio:1;
+    margin:12px auto;
+    border-radius:50%;
+    overflow:hidden;
+    touch-action:none;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #fff 0%,
+            rgba(255,255,255,0) 58%
+        ),
+        radial-gradient(
+            circle at center,
+            rgba(0,0,0,0) 35%,
+            rgba(0,0,0,.9) 100%
+        ),
+        conic-gradient(
+            red,
+            yellow,
+            lime,
+            cyan,
+            blue,
+            magenta,
+            red
+        );
+}
+
+.color-marker{
+    position:absolute;
+    z-index:5;
+    width:18px;
+    height:18px;
+    margin:-9px;
+    border:2px solid #fff;
+    border-radius:50%;
+    box-shadow:0 1px 5px #000;
+    pointer-events:none;
+}
+
+
+/* =====================================================
+   COLOR PRESETS
+===================================================== */
+
+.color-presets{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    margin-top:10px;
+}
+
+.color-preset{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    border:2px solid #fff;
+}
+
+#blackText{
+    background:#000;
+}
+
+#whiteText{
+    background:#fff;
+}
+
+
+/* =====================================================
+   OPACITY
+===================================================== */
+
+.range-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:12px;
+}
+
+.range-row span{
+    white-space:nowrap;
+}
+
+.range-row input{
+    flex:1;
+}
+
+
+/* =====================================================
+   COUNTERS
+===================================================== */
+
+.counter-box{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    margin:20px 0;
+}
+
+.counter-box button{
+    width:42px;
+    height:42px;
+    border-radius:10px;
+    background:#303744;
+    color:#fff;
+    font-size:22px;
+}
+
+.counter-box strong{
+    min-width:55px;
+    text-align:center;
+    font-size:19px;
+}
+
+
+/* =====================================================
+   TABLE — ملائم للنص ومتجاوب مع الموبايل
+===================================================== */
+
+.editor-table{
+    width:max-content;
+    max-width:100%;
+    margin:8px 0;
+    border-collapse:collapse;
+    table-layout:auto;
+    display:table;
+}
+
+.editor-table td,
+.editor-table th{
+    min-width:60px;
+    max-width:260px;
+    padding:7px 9px;
+    border:1px solid #697386;
+    width:auto;
+    white-space:normal;
+    word-break:normal;
+    overflow-wrap:anywhere;
+    vertical-align:top;
+    line-height:1.6;
+    overflow:hidden;
+}
+
+.editor-table td:focus,
+.editor-table th:focus{
+    outline:1px solid #527df5;
+}
+
+@media(max-width:600px){
+
+    .editor-table{
+        max-width:100%;
+    }
+
+    .editor-table td,
+    .editor-table th{
+        min-width:50px;
+        max-width:180px;
+        padding:6px 7px;
+        font-size:inherit;
+    }
+}
+
+
+/* =====================================================
+   MIND MAP
+===================================================== */
+
+.mind-map{
+    width:100%;
+    max-width:100%;
+    margin:12px 0;
+    padding:12px;
+    border:1px solid #485263;
+    border-radius:14px;
+    overflow:hidden;
+}
+
+.mind-map-center{
+    width:fit-content;
+    max-width:90%;
+    margin:auto;
+    padding:9px 14px;
+    border-radius:12px;
+    background:#3867dc;
+    text-align:center;
+    word-break:break-word;
+}
+
+.mind-map-branches{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    gap:8px;
+    margin-top:12px;
+}
+
+.mind-map-branch{
+    flex:1 1 100px;
+    min-width:70px;
+    max-width:180px;
+    padding:8px;
+    border-radius:10px;
+    background:#303744;
+    text-align:center;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+}
+
+/* =====================================================
+   MIND TREE — فروع بجوار بعضها + أسهم + حذف الشجرة
+===================================================== */
+
+.mind-tree{
+    position:relative;
+    width:100%;
+    max-width:100%;
+    margin:12px 0;
+    padding:34px 10px 14px;
+    border:1px solid #485263;
+    border-radius:14px;
+    overflow:hidden;
+    box-sizing:border-box;
+}
+
+.mind-tree-root{
+    width:fit-content;
+    max-width:80%;
+    margin:0 auto;
+    padding:9px 14px;
+    border-radius:12px;
+    background:#3867dc;
+    text-align:center;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+    position:relative;
+    z-index:2;
+}
+
+.mind-tree-branches{
+    display:flex;
+    flex-direction:row;
+    flex-wrap:wrap;
+    align-items:flex-start;
+    justify-content:center;
+    gap:28px 12px;
+    margin-top:28px;
+    width:100%;
+}
+
+.mind-tree-branch{
+    position:relative;
+    flex:0 1 auto;
+    width:fit-content;
+    min-width:70px;
+    max-width:220px;
+    padding:8px 10px;
+    border-radius:10px;
+    background:#303744;
+    text-align:center;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+    line-height:1.6;
+    box-sizing:border-box;
+}
+
+.mind-tree-branch::before{
+    content:"↓";
+    position:absolute;
+    top:-27px;
+    left:50%;
+    transform:translateX(-50%);
+    color:#8fa8ff;
+    font-size:22px;
+    line-height:1;
+    font-weight:bold;
+    pointer-events:none;
+}
+
+.mind-tree-delete{
+    position:absolute;
+    top:7px;
+    left:7px;
+    width:28px;
+    height:28px;
+    padding:0;
+    border:1px solid #8e98a8;
+    border-radius:50%;
+    background:transparent;
+    color:#c9d0dc;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:17px;
+    line-height:1;
+    z-index:10;
+}
+
+.mind-tree-delete:active{
+    transform:scale(.92);
+}
+
+.mind-map{
+    position:relative;
+}
+
+.mind-map-delete{
+    position:absolute;
+    top:7px;
+    left:7px;
+    width:28px;
+    height:28px;
+    padding:0;
+    border:1px solid #8e98a8;
+    border-radius:50%;
+    background:transparent;
+    color:#c9d0dc;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:17px;
+    line-height:1;
+    z-index:10;
+}
+
+.mind-map-delete:active{
+    transform:scale(.92);
+}
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.search-input{
+    width:100%;
+    height:44px;
+    padding:0 12px;
+    border:1px solid #3a4250;
+    border-radius:11px;
+    outline:none;
+    background:#202631;
+    color:#fff;
+    direction:rtl;
+}
+
+.search-input:focus{
+    border-color:#527df5;
+}
+
+.search-result{
+    margin-top:12px;
+    color:#aab3c2;
+}
+
+.search-word{
+    background:#ffe600;
+    color:#111;
+    border-radius:3px;
+    padding:0 2px;
+}
+
+.search-highlight{
+    outline:2px solid #ffc107;
+    outline-offset:2px;
+}
+
+
+/* =====================================================
+   UNDERLINE
+===================================================== */
+
+.editor u,
+.editor [data-underline="true"]{
+    text-decoration-line:underline;
+    text-decoration-thickness:auto;
+    text-underline-offset:5.08px;
+}
+
+
+/* =====================================================
+   HIGHLIGHT
+===================================================== */
+
+.word-text-highlight{
+    -webkit-box-decoration-break:clone;
+    box-decoration-break:clone;
+}
+
+
+/* =====================================================
+   MOBILE KEYBOARD
+===================================================== */
+
+body.keyboard-open .editor-area{
+    padding-bottom:max(
+        8px,
+        env(safe-area-inset-bottom)
+    );
+}
+
+
+@media(max-width:600px){
+
+    .note{
+        max-width:96%;
+    }
+
+    .editor{
+        max-height:32vh;
+    }
+
+    .overlay-box{
+        padding:15px;
+    }
+
+    .mind-map-branch{
+        flex-basis:80px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="title">
+            ملاحظاتي
+        </div>
+
+        <div class="header-actions">
+
+            <button
+                id="newButton"
+                type="button"
+                aria-label="جديد">
+                ＋
+            </button>
+
+            <button
+                id="searchButton"
+                type="button"
+                aria-label="بحث">
+                ⌕
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- NOTES -->
+
+    <main
+        id="messages"
+        class="messages">
+    </main>
+
+
+    <!-- EDITOR -->
+
+    <section class="editor-area">
+
+        <div
+            id="state"
+            class="editor-state">
+            رسالة جديدة
+        </div>
+
+        <div
+            id="editor"
+            class="editor"
+            contenteditable="true"
+            spellcheck="true">
+        </div>
+
+
+        <!-- TOOLBAR -->
+
+        <div class="toolbar">
+
+            <button
+                id="boldButton"
+                class="tool"
+                type="button"
+                aria-label="عريض">
+                <b>B</b>
+            </button>
+
+            <button
+                id="italicButton"
+                class="tool"
+                type="button"
+                aria-label="مائل">
+                <i>I</i>
+            </button>
+
+            <button
+                id="underlineButton"
+                class="tool"
+                type="button"
+                aria-label="تسطير">
+                <u>U</u>
+            </button>
+
+            <button
+                id="sizeButton"
+                class="tool"
+                type="button"
+                aria-label="حجم">
+                A
+            </button>
+
+            <button
+                id="listButton"
+                class="tool"
+                type="button"
+                aria-label="قائمة">
+                ≡
+            </button>
+
+            <button
+                id="alignmentButton"
+                class="tool"
+                type="button"
+                aria-label="محاذاة">
+                ≡
+            </button>
+
+            <button
+                id="colorButton"
+                class="tool"
+                type="button"
+                aria-label="لون">
+                ◉
+            </button>
+
+            <button
+                id="highlightButton"
+                class="tool"
+                type="button"
+                aria-label="تمييز">
+                ▰
+            </button>
+
+            <button
+                id="tableButton"
+                class="tool"
+                type="button"
+                aria-label="جدول">
+                ▦
+            </button>
+
+            <button
+                id="mindMapButton"
+                class="tool"
+                type="button"
+                aria-label="خريطة">
+                ⌗
+            </button>
+
+            <button
+                id="mindTreeButton"
+                class="tool"
+                type="button"
+                aria-label="شجرة">
+                🌳
+            </button>
+
+            <!-- أزرار بداية السطر -->
+            <button
+                id="newLineDownButton"
+                class="tool"
+                type="button"
+                aria-label="بداية سطر جديد لأسفل">
+                ⇩
+            </button>
+
+            <button
+                id="newLineUpButton"
+                class="tool"
+                type="button"
+                aria-label="بداية سطر جديد لأعلى">
+                ⇧
+            </button>
+
+        </div>
+
+
+        <!-- FONT SIZE -->
+
+        <div
+            id="fontSizeBar"
+            class="sub-toolbar">
+        </div>
+
+
+        <!-- LIST -->
+
+        <div
+            id="listBar"
+            class="sub-toolbar">
+        </div>
+
+
+        <!-- ALIGNMENT -->
+
+        <div
+            id="alignmentBar"
+            class="sub-toolbar">
+
+            <button
+                type="button"
+                data-align="right">
+                ≫
+            </button>
+
+            <button
+                type="button"
+                data-align="center">
+                ≡
+            </button>
+
+            <button
+                type="button"
+                data-align="left">
+                ≪
+            </button>
+
+            <button
+                type="button"
+                data-align="justify">
+                ▤
+            </button>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+
+        <div class="editor-actions">
+
+            <button
+                id="sendButton"
+                class="send-button"
+                type="button"
+                aria-label="حفظ">
+                ➤
+            </button>
+
+            <!-- زر التراجع -->
+            <button
+                id="undoButton"
+                class="undo-button"
+                type="button"
+                aria-label="تراجع">
+                ↶
+            </button>
+
+            <button
+                id="cancelButton"
+                class="cancel-button"
+                type="button"
+                aria-label="إلغاء">
+                ✕
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- =====================================================
+   MESSAGE MENU
+===================================================== -->
+
+<div
+    id="messageMenu"
+    class="message-menu">
+
+    <button
+        id="editButton"
+        type="button"
+        aria-label="تعديل">
+        ✎
+    </button>
+
+    <button
+        id="deleteButton"
+        type="button"
+        aria-label="حذف">
+        🗑
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+   COLOR
+===================================================== -->
+
+<div
+    id="colorOverlay"
+    class="overlay">
+
+    <div class="overlay-box">
+
+        <div class="overlay-title">
+            ◉
+        </div>
+
+        <div
+            id="textColorWheel"
+            class="color-wheel">
+
+            <span
+                id="textColorMarker"
+                class="color-marker">
+            </span>
+
+        </div>
+
+        <div class="color-presets">
+
+            <button
+                id="blackText"
+                class="color-preset"
+                type="button"
+                aria-label="أسود">
+            </button>
+
+            <button
+                id="whiteText"
+                class="color-preset"
+                type="button"
+                aria-label="أبيض">
+            </button>
+
+        </div>
+
+        <div class="overlay-actions">
+
+            <button
+                id="colorDone"
+                class="primary"
+                type="button">
+                ✓
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+   HIGHLIGHT
+===================================================== -->
+
+<div
+    id="highlightOverlay"
+    class="overlay">
+
+    <div class="overlay-box">
+
+        <div class="overlay-title">
+            ▰
+        </div>
+
+        <div
+            id="highlightColorWheel"
+            class="color-wheel">
+
+            <span
+                id="highlightColorMarker"
+                class="color-marker">
+            </span>
+
+        </div>
+
+        <div class="range-row">
+
+            <span>◉</span>
+
+            <input
+                id="opacityRange"
+                type="range"
+                min="0"
+                max="100"
+                value="60">
+
+        </div>
+
+        <div class="overlay-actions">
+
+            <button
+                id="highlightDone"
+                class="primary"
+                type="button">
+                ✓
+            </button>
+
+            <button
+                id="removeHighlight"
+                type="button">
+                ⌫
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+   TABLE
+===================================================== -->
+
+<div
+    id="tableOverlay"
+    class="overlay">
+
+    <div class="overlay-box">
+
+        <div class="overlay-title">
+            ▦
+        </div>
+
+        <div class="counter-box">
+
+            <button
+                id="tableRowsMinus"
+                type="button">
+                −
+            </button>
+
+            <strong id="tableRowsInfo">
+                3
+            </strong>
+
+            <button
+                id="tableRowsPlus"
+                type="button">
+                ＋
+            </button>
+
+        </div>
+
+        <div class="counter-box">
+
+            <button
+                id="tableColsMinus"
+                type="button">
+                −
+            </button>
+
+            <strong id="tableColsInfo">
+                3
+            </strong>
+
+            <button
+                id="tableColsPlus"
+                type="button">
+                ＋
+            </button>
+
+        </div>
+
+        <div class="overlay-actions">
+
+            <button
+                id="tableDone"
+                class="primary"
+                type="button">
+                ✓
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+   MIND MAP
+===================================================== -->
+
+<div
+    id="mindMapOverlay"
+    class="overlay">
+
+    <div class="overlay-box">
+
+        <div class="overlay-title">
+            ⌗
+        </div>
+
+        <div class="counter-box">
+
+            <button
+                id="mindBranchMinus"
+                type="button">
+                −
+            </button>
+
+            <strong id="mindBranchInfo">
+                2
+            </strong>
+
+            <button
+                id="mindBranchPlus"
+                type="button">
+                ＋
+            </button>
+
+        </div>
+
+        <div class="overlay-actions">
+
+            <button
+                id="mindDone"
+                class="primary"
+                type="button">
+                ✓
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+   MIND TREE
+===================================================== -->
+
+<div
+    id="mindTreeOverlay"
+    class="overlay">
+
+    <div class="overlay-box">
+
+        <div class="overlay-title">
+            🌳
+        </div>
+
+        <div class="counter-box">
+
+            <button
+                id="treeBranchMinus"
+                type="button">
+                −
+            </button>
+
+            <strong id="treeBranchInfo">
+                2
+            </strong>
+
+            <button
+                id="treeBranchPlus"
+                type="button">
+                ＋
+            </button>
+
+        </div>
+
+        <div class="overlay-actions">
+
+            <button
+                id="treeDone"
+                class="primary"
+                type="button">
+                ✓
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<!-- =====================================================
+   SEARCH
+===================================================== -->
+
+<div
+    id="searchOverlay"
+    class="overlay">
+
+    <div class="overlay-box">
+
+        <div class="overlay-title">
+            ⌕
+        </div>
+
+        <input
+            id="searchInput"
+            class="search-input"
+            type="search"
+            autocomplete="off">
+
+        <div
+            id="searchResult"
+            class="search-result">
+        </div>
+
+        <div class="overlay-actions">
+
+            <button
+                id="searchDone"
+                class="primary"
+                type="button">
+                ✕
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+"use strict";
+
+/* =====================================================
+   CONFIG
+===================================================== */
+
+const STORAGE_KEY = "notes_from_zero_v1";
+
+const FONT_SIZES = [
+    8,9,10,11,12,14,16,18,20,22,
+    24,26,28,32,36,40,48,56,64,72
+];
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+const AppState = {
+
+    notes: [],
+
+    editingId: null,
+    selectedNoteId: null,
+
+    savedRange: null,
+
+    fontSize: 8,
+    alignment: "right",
+
+    textColor: "rgb(255,255,255)",
+
+    highlightColor: "rgb(255,255,0)",
+    highlightOpacity: .60,
+
+    tableRows: 3,
+    tableCols: 3,
+
+    mindBranches: 2,
+    treeBranches: 2
+};
+
+
+/* =====================================================
+   DOM
+===================================================== */
+
+let editor;
+let messages;
+let state;
+let messageMenu;
+
+let fontSizeBar;
+let listBar;
+let alignmentBar;
+
+let colorOverlay;
+let highlightOverlay;
+let tableOverlay;
+let mindMapOverlay;
+let mindTreeOverlay;
+let searchOverlay;
+
+let searchInput;
+let searchResult;
+
+
+/* =====================================================
+   HELPERS
+===================================================== */
+
+const $ = id =>
+    document.getElementById(id);
+
+
+function on(
+    id,
+    event,
+    handler,
+    options
+){
+
+    const element = $(id);
+
+    if(element){
+
+        element.addEventListener(
+            event,
+            handler,
+            options
+        );
+    }
+}
+
+
+/* =====================================================
+   INIT DOM
+===================================================== */
+
+function initDOM(){
+
+    editor = $("editor");
+    messages = $("messages");
+    state = $("state");
+    messageMenu = $("messageMenu");
+
+    fontSizeBar = $("fontSizeBar");
+    listBar = $("listBar");
+    alignmentBar = $("alignmentBar");
+
+    colorOverlay = $("colorOverlay");
+    highlightOverlay = $("highlightOverlay");
+    tableOverlay = $("tableOverlay");
+    mindMapOverlay = $("mindMapOverlay");
+    mindTreeOverlay = $("mindTreeOverlay");
+    searchOverlay = $("searchOverlay");
+
+    searchInput = $("searchInput");
+    searchResult = $("searchResult");
+}
+
+
+/* =====================================================
+   ID
+===================================================== */
+
+function createId(){
+
+    if(
+        window.crypto &&
+        typeof crypto.randomUUID === "function"
+    ){
+
+        return crypto.randomUUID();
+    }
+
+    return (
+        "note_" +
+        Date.now().toString(36) +
+        "_" +
+        Math.random().toString(36).slice(2)
+    );
+}
+
+
+/* =====================================================
+   STORAGE
+===================================================== */
+
+function loadNotes(){
+
+    try{
+
+        const raw =
+            localStorage.getItem(
+                STORAGE_KEY
+            );
+
+        if(!raw){
+
+            AppState.notes = [];
+
+            return;
+        }
+
+        const data =
+            JSON.parse(raw);
+
+        if(!Array.isArray(data)){
+
+            AppState.notes = [];
+
+            return;
+        }
+
+        AppState.notes =
+            data
+                .filter(
+                    note =>
+                        note &&
+                        typeof note === "object" &&
+                        typeof note.html === "string"
+                )
+                .map(
+                    note => ({
+
+                        id:
+                            typeof note.id === "string"
+                                ? note.id
+                                : createId(),
+
+                        html: note.html
+                    })
+                );
+
+    }catch(error){
+
+        console.error(error);
+
+        AppState.notes = [];
+    }
+}
+
+
+function saveNotes(){
+
+    try{
+
+        localStorage.setItem(
+            STORAGE_KEY,
+            JSON.stringify(
+                AppState.notes
+            )
+        );
+
+        return true;
+
+    }catch(error){
+
+        console.error(error);
+
+        alert(
+            "تعذر حفظ الملاحظات."
+        );
+
+        return false;
+    }
+}
+
+
+/* =====================================================
+   SELECTION
+===================================================== */
+
+function insideEditor(node){
+
+    return Boolean(
+        node &&
+        editor &&
+        (
+            node === editor ||
+            editor.contains(node)
+        )
+    );
+}
+
+
+function getRange(){
+
+    const selection =
+        window.getSelection();
+
+    if(
+        !selection ||
+        !selection.rangeCount
+    ){
+
+        return null;
+    }
+
+    const range =
+        selection.getRangeAt(0);
+
+    if(
+        !insideEditor(
+            range.startContainer
+        ) ||
+        !insideEditor(
+            range.endContainer
+        )
+    ){
+
+        return null;
+    }
+
+    return range;
+}
+
+
+function saveSelection(){
+
+    const range =
+        getRange();
+
+    if(!range){
+
+        return false;
+    }
+
+    AppState.savedRange =
+        range.cloneRange();
+
+    return true;
+}
+
+
+function restoreSelection(){
+
+    const range =
+        AppState.savedRange;
+
+    if(!range){
+
+        return false;
+    }
+
+    if(
+        !insideEditor(
+            range.startContainer
+        ) ||
+        !insideEditor(
+            range.endContainer
+        )
+    ){
+
+        return false;
+    }
+
+    try{
+
+        const selection =
+            window.getSelection();
+
+        selection.removeAllRanges();
+
+        selection.addRange(
+            range.cloneRange()
+        );
+
+        return true;
+
+    }catch(error){
+
+        return false;
+    }
+}
+
+
+function focusEnd(){
+
+    editor.focus({
+        preventScroll:true
+    });
+
+    const range =
+        document.createRange();
+
+    range.selectNodeContents(
+        editor
+    );
+
+    range.collapse(false);
+
+    const selection =
+        window.getSelection();
+
+    selection.removeAllRanges();
+
+    selection.addRange(
+        range
+    );
+
+    saveSelection();
+}
+
+
+function prepareSelection(){
+
+    if(
+        restoreSelection()
+    ){
+
+        return true;
+    }
+
+    focusEnd();
+
+    return true;
+}
+
+
+/* =====================================================
+   SELECTION EVENTS
+===================================================== */
+
+function setupSelection(){
+
+    editor.addEventListener(
+        "mouseup",
+        () => {
+
+            saveSelection();
+
+            updateToolbar();
+        }
+    );
+
+
+    editor.addEventListener(
+        "keyup",
+        () => {
+
+            saveSelection();
+
+            updateToolbar();
+        }
+    );
+
+
+    editor.addEventListener(
+        "touchend",
+        () => {
+
+            setTimeout(
+                () => {
+
+                    saveSelection();
+
+                    updateToolbar();
+
+                },
+                80
+            );
+        },
+        {
+            passive:true
+        }
+    );
+
+
+    editor.addEventListener(
+        "focus",
+        () => {
+
+            setTimeout(
+                () => {
+
+                    if(
+                        !getRange()
+                    ){
+
+                        focusEnd();
+                    }
+
+                    updateToolbar();
+
+                },
+                30
+            );
+        }
+    );
+
+
+    document.addEventListener(
+        "selectionchange",
+        () => {
+
+            if(
+                document.activeElement === editor ||
+                editor.contains(
+                    document.activeElement
+                )
+            ){
+
+                saveSelection();
+
+                updateToolbar();
+            }
+        }
+    );
+}
+
+
+/* =====================================================
+   BASIC COMMANDS
+===================================================== */
+
+function toggleCommand(command){
+
+    prepareSelection();
+
+    editor.focus({
+        preventScroll:true
+    });
+
+    try{
+
+        document.execCommand(
+            command,
+            false,
+            null
+        );
+
+        saveSelection();
+
+        updateToolbar();
+
+    }catch(error){
+
+        console.error(
+            "toggle:",
+            command,
+            error
+        );
+    }
+}
+
+
+function setupBasicButtons(){
+
+    ["boldButton",
+     "italicButton",
+     "underlineButton"]
+    .forEach(
+        id => {
+
+            on(
+                id,
+                "pointerdown",
+                event => {
+
+                    event.preventDefault();
+
+                    saveSelection();
+                }
+            );
+        }
+    );
+
+
+    on(
+        "boldButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            toggleCommand(
+                "bold"
+            );
+        }
+    );
+
+
+    on(
+        "italicButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            toggleCommand(
+                "italic"
+            );
+        }
+    );
+
+
+    on(
+        "underlineButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            toggleUnderline();
+        }
+    );
+}
+
+
+/* =====================================================
+   UNDERLINE
+===================================================== */
+
+function getParentUnderline(node){
+
+    let current =
+        node.nodeType === Node.ELEMENT_NODE
+            ? node
+            : node.parentElement;
+
+    while(
+        current &&
+        current !== editor
+    ){
+
+        if(
+            current.matches?.(
+                '[data-underline="true"]'
+            )
+        ){
+
+            return current;
+        }
+
+        current =
+            current.parentElement;
+    }
+
+    return null;
+}
+
+
+function unwrap(element){
+
+    if(
+        !element ||
+        !element.parentNode
+    ){
+
+        return;
+    }
+
+    const parent =
+        element.parentNode;
+
+    while(
+        element.firstChild
+    ){
+
+        parent.insertBefore(
+            element.firstChild,
+            element
+        );
+    }
+
+    element.remove();
+}
+
+  function toggleUnderline(){
+
+    prepareSelection();
+
+    editor.focus({
+        preventScroll:true
+    });
+
+    try{
+
+        document.execCommand(
+            "underline",
+            false,
+            null
+        );
+
+        saveSelection();
+        updateToolbar();
+
+    }catch(error){
+
+        console.error(
+            "underline:",
+            error
+        );
+    }
+  }
+        /* =========================================
+           لا يوجد تسطير حالي
+           يبدأ تسطير جديد من المؤشر
+        ========================================= */
+
+        const span =
+            document.createElement("span");
+
+        span.setAttribute(
+            "data-underline",
+            "true"
+        );
+
+        span.style.textDecorationLine =
+            "underline";
+
+        span.style.textUnderlineOffset =
+            "5.08px";
+
+
+        const text =
+            document.createTextNode(
+                "\u200B"
+            );
+
+        span.appendChild(text);
+
+        range.insertNode(span);
+
+
+        const newRange =
+            document.createRange();
+
+        newRange.setStart(
+            text,
+            1
+        );
+
+        newRange.collapse(true);
+
+        selection.removeAllRanges();
+        selection.addRange(newRange);
+
+        saveSelection();
+        updateToolbar();
+
+    }catch(error){
+
+        console.error(
+            "toggle underline",
+            error
+        );
+    }
+}
+
+/* =====================================================
+   TOOLBAR STATE
+===================================================== */
+
+function commandState(command){
+
+    try{
+
+        return document.queryCommandState(
+            command
+        );
+
+    }catch(error){
+
+        return false;
+    }
+}
+
+
+function updateToolbar(){
+
+    $("boldButton")?.classList.toggle(
+        "active",
+        commandState("bold")
+    );
+
+    $("italicButton")?.classList.toggle(
+        "active",
+        commandState("italic")
+    );
+
+    const range =
+        getRange();
+
+    const underline =
+        Boolean(
+            range &&
+            getParentUnderline(
+                range.startContainer
+            )
+        );
+
+    $("underlineButton")?.classList.toggle(
+        "active",
+        underline ||
+        commandState("underline")
+    );
+
+    updateFontSizeButtons();
+
+    updateAlignmentButtons();
+}
+
+
+/* =====================================================
+   SUB TOOLBARS
+===================================================== */
+
+function closeSubToolbars(){
+
+    [
+        fontSizeBar,
+        listBar,
+        alignmentBar
+    ].forEach(
+        element => {
+
+            if(element){
+
+                element.style.display =
+                    "none";
+            }
+        }
+    );
+}
+
+
+function toggleSubToolbar(element){
+
+    if(!element){
+
+        return;
+    }
+
+    const opened =
+        element.style.display === "flex";
+
+    closeSubToolbars();
+
+    if(!opened){
+
+        element.style.display =
+            "flex";
+    }
+}
+
+
+/* =====================================================
+   FONT SIZE
+===================================================== */
+
+function setupFontSize(){
+
+    fontSizeBar.innerHTML = "";
+
+    FONT_SIZES.forEach(
+        size => {
+
+            const button =
+                document.createElement(
+                    "button"
+                );
+
+            button.type =
+                "button";
+
+            button.textContent =
+                size;
+
+            button.addEventListener(
+                "pointerdown",
+                event => {
+
+                    event.preventDefault();
+
+                    saveSelection();
+                }
+            );
+
+            button.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+
+                    applyFontSize(
+                        size
+                    );
+                }
+            );
+
+            fontSizeBar.appendChild(
+                button
+            );
+        }
+    );
+
+
+    on(
+        "sizeButton",
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+        }
+    );
+
+
+    on(
+        "sizeButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            toggleSubToolbar(
+                fontSizeBar
+            );
+        }
+    );
+}
+
+
+function applyFontSize(size){
+
+    prepareSelection();
+
+    const range =
+        getRange();
+
+    if(!range){
+
+        return;
+    }
+
+    try{
+
+        const selection =
+            window.getSelection();
+
+        if(range.collapsed){
+
+            const span =
+                document.createElement(
+                    "span"
+                );
+
+            span.style.fontSize =
+                size + "px";
+
+            const text =
+                document.createTextNode(
+                    "\u200B"
+                );
+
+            span.appendChild(
+                text
+            );
+
+            range.insertNode(
+                span
+            );
+
+            const newRange =
+                document.createRange();
+
+            newRange.setStart(
+                text,
+                1
+            );
+
+            newRange.collapse(true);
+
+            selection.removeAllRanges();
+
+            selection.addRange(
+                newRange
+            );
+
+        }else{
+
+            const fragment =
+                range.extractContents();
+
+            const span =
+                document.createElement(
+                    "span"
+                );
+
+            span.style.fontSize =
+                size + "px";
+
+            span.appendChild(
+                fragment
+            );
+
+            range.insertNode(
+                span
+            );
+
+            const newRange =
+                document.createRange();
+
+            newRange.selectNodeContents(
+                span
+            );
+
+            selection.removeAllRanges();
+
+            selection.addRange(
+                newRange
+            );
+        }
+
+        AppState.fontSize =
+            size;
+
+        saveSelection();
+
+        closeSubToolbars();
+
+        updateToolbar();
+
+    }catch(error){
+
+        console.error(
+            "font-size",
+            error
+        );
+    }
+}
+
+
+function updateFontSizeButtons(){
+
+    fontSizeBar?.querySelectorAll(
+        "button"
+    ).forEach(
+        button => {
+
+            button.classList.toggle(
+                "active",
+                Number(
+                    button.textContent
+                ) ===
+                AppState.fontSize
+            );
+        }
+    );
+}
+
+
+/* =====================================================
+   LISTS
+===================================================== */
+
+function setupLists(){
+
+    listBar.innerHTML = "";
+
+    const bullet =
+        document.createElement(
+            "button"
+        );
+
+    bullet.type =
+        "button";
+
+    bullet.textContent =
+        "•";
+
+
+    const number =
+        document.createElement(
+            "button"
+        );
+
+    number.type =
+        "button";
+
+    number.textContent =
+        "1.";
+
+
+    listBar.append(
+        bullet,
+        number
+    );
+
+
+    bullet.addEventListener(
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+        }
+    );
+
+
+    bullet.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            toggleCommand(
+                "insertUnorderedList"
+            );
+
+            closeSubToolbars();
+        }
+    );
+
+
+    number.addEventListener(
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+        }
+    );
+
+
+    number.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            toggleCommand(
+                "insertOrderedList"
+            );
+
+            closeSubToolbars();
+        }
+    );
+
+
+    on(
+        "listButton",
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+        }
+    );
+
+
+    on(
+        "listButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            toggleSubToolbar(
+                listBar
+            );
+        }
+    );
+}
+
+
+/* =====================================================
+   ALIGNMENT
+===================================================== */
+
+function setupAlignment(){
+
+    alignmentBar
+        .querySelectorAll(
+            "button"
+        )
+        .forEach(
+            button => {
+
+                button.addEventListener(
+                    "pointerdown",
+                    event => {
+
+                        event.preventDefault();
+
+                        saveSelection();
+                    }
+                );
+
+
+                button.addEventListener(
+                    "click",
+                    event => {
+
+                        event.preventDefault();
+
+                        const align =
+                            button.dataset.align;
+
+                        const commands = {
+
+                            right:
+                                "justifyRight",
+
+                            center:
+                                "justifyCenter",
+
+                            left:
+                                "justifyLeft",
+
+                            justify:
+                                "justifyFull"
+                        };
+
+
+                        if(
+                            commands[align]
+                        ){
+
+                            prepareSelection();
+
+                            document.execCommand(
+                                commands[align],
+                                false,
+                                null
+                            );
+
+                            AppState.alignment =
+                                align;
+
+                            saveSelection();
+
+                            updateToolbar();
+                        }
+
+                        closeSubToolbars();
+                    }
+                );
+            }
+        );
+
+
+    on(
+        "alignmentButton",
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+        }
+    );
+
+
+    on(
+        "alignmentButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            toggleSubToolbar(
+                alignmentBar
+            );
+        }
+    );
+}
+
+
+function updateAlignmentButtons(){
+
+    alignmentBar?.querySelectorAll(
+        "button"
+    ).forEach(
+        button => {
+
+            button.classList.toggle(
+                "active",
+                button.dataset.align ===
+                AppState.alignment
+            );
+        }
+    );
+}
+
+
+/* =====================================================
+   NEW LINE
+===================================================== */
+
+function setupNewLine(){
+
+    function insertLineBreak(direction){
+
+        prepareSelection();
+
+        const range =
+            getRange();
+
+        if(!range){
+            return;
+        }
+
+        try{
+
+            const selection =
+                window.getSelection();
+
+            range.deleteContents();
+
+            const br =
+                document.createElement(
+                    "br"
+                );
+
+            if(direction === "down"){
+
+                range.insertNode(
+                    br
+                );
+
+                const newRange =
+                    document.createRange();
+
+                newRange.setStartAfter(
+                    br
+                );
+
+                newRange.collapse(true);
+
+                selection.removeAllRanges();
+
+                selection.addRange(
+                    newRange
+                );
+
+            }else{
+
+                range.insertNode(
+                    br
+                );
+
+                const newRange =
+                    document.createRange();
+
+                newRange.setStartBefore(
+                    br
+                );
+
+                newRange.collapse(true);
+
+                selection.removeAllRanges();
+
+                selection.addRange(
+                    newRange
+                );
+            }
+
+            saveSelection();
+
+            editor.focus({
+                preventScroll:true
+            });
+
+        }catch(error){
+
+            console.error(
+                "new-line",
+                error
+            );
+        }
+    }
+
+
+    on(
+        "newLineDownButton",
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+        }
+    );
+
+
+    on(
+        "newLineDownButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            insertLineBreak(
+                "down"
+            );
+        }
+    );
+
+
+    on(
+        "newLineUpButton",
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+        }
+    );
+
+
+    on(
+        "newLineUpButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            insertLineBreak(
+                "up"
+            );
+        }
+    );
+}
+
+
+/* =====================================================
+   UNDO
+===================================================== */
+
+function setupUndo(){
+
+    on(
+        "undoButton",
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+        }
+    );
+
+
+    on(
+        "undoButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            try{
+
+                editor.focus({
+                    preventScroll:true
+                });
+
+                restoreSelection();
+
+                document.execCommand(
+                    "undo",
+                    false,
+                    null
+                );
+
+                saveSelection();
+
+                updateToolbar();
+
+            }catch(error){
+
+                console.error(
+                    "undo",
+                    error
+                );
+            }
+        }
+    );
+}
+
+
+/* =====================================================
+   OVERLAYS
+===================================================== */
+
+function openOverlay(element){
+
+    closeSubToolbars();
+
+    document
+        .querySelectorAll(
+            ".overlay.open"
+        )
+        .forEach(
+            overlay => {
+
+                if(
+                    overlay !== element
+                ){
+
+                    overlay.classList.remove(
+                        "open"
+                    );
+                }
+            }
+        );
+
+    element?.classList.add(
+        "open"
+    );
+}
+
+
+function closeOverlay(element){
+
+    element?.classList.remove(
+        "open"
+    );
+
+    setTimeout(
+        restoreSelection,
+        30
+    );
+}
+
+
+function closeAllOverlays(){
+
+    document
+        .querySelectorAll(
+            ".overlay.open"
+        )
+        .forEach(
+            element =>
+                element.classList.remove(
+                    "open"
+                )
+        );
+}
+
+
+/* =====================================================
+   COLOR
+===================================================== */
+
+function hsvToRgb(
+    h,
+    s,
+    v
+){
+
+    s /= 100;
+    v /= 100;
+
+    const c =
+        v * s;
+
+    const x =
+        c *
+        (
+            1 -
+            Math.abs(
+                (h / 60) % 2 - 1
+            )
+        );
+
+    const m =
+        v - c;
+
+    let r = 0;
+    let g = 0;
+    let b = 0;
+
+
+    if(h < 60){
+
+        r = c;
+        g = x;
+
+    }else if(h < 120){
+
+        r = x;
+        g = c;
+
+    }else if(h < 180){
+
+        g = c;
+        b = x;
+
+    }else if(h < 240){
+
+        g = x;
+        b = c;
+
+    }else if(h < 300){
+
+        r = x;
+        b = c;
+
+    }else{
+
+        r = c;
+        b = x;
+    }
+
+
+    return {
+
+        r:
+            Math.round(
+                (r + m) * 255
+            ),
+
+        g:
+            Math.round(
+                (g + m) * 255
+            ),
+
+        b:
+            Math.round(
+                (b + m) * 255
+            )
+    };
+}
+
+
+function rgbString(rgb){
+
+    return (
+        "rgb(" +
+        rgb.r +
+        "," +
+        rgb.g +
+        "," +
+        rgb.b +
+        ")"
+    );
+}
+
+
+function setupColorWheel(
+    wheel,
+    marker,
+    initialHue,
+    callback
+){
+
+    let hue =
+        initialHue;
+
+    let saturation =
+        100;
+
+    let value =
+        100;
+
+    let dragging =
+        false;
+
+
+    function update(){
+
+        const color =
+            rgbString(
+                hsvToRgb(
+                    hue,
+                    saturation,
+                    value
+                )
+            );
+
+        marker.style.background =
+            color;
+
+
+        const rect =
+            wheel.getBoundingClientRect();
+
+        if(!rect.width){
+
+            callback(color);
+
+            return;
+        }
+
+
+        const centerX =
+            rect.width / 2;
+
+        const centerY =
+            rect.height / 2;
+
+
+        const radius =
+            Math.max(
+                1,
+                Math.min(
+                    rect.width,
+                    rect.height
+                ) / 2 - 10
+            );
+
+
+        const distance =
+            radius *
+            (saturation / 100);
+
+
+        const angle =
+            hue *
+            Math.PI /
+            180;
+
+
+        let x =
+            centerX +
+            Math.sin(angle) *
+            distance;
+
+
+        let y =
+            centerY -
+            Math.cos(angle) *
+            distance;
+
+
+        const markerRadius =
+            9;
+
+
+        x =
+            Math.max(
+                markerRadius,
+                Math.min(
+                    rect.width -
+                    markerRadius,
+                    x
+                )
+            );
+
+
+        y =
+            Math.max(
+                markerRadius,
+                Math.min(
+                    rect.height -
+                    markerRadius,
+                    y
+                )
+            );
+
+
+        marker.style.left =
+            x + "px";
+
+        marker.style.top =
+            y + "px";
+
+
+        callback(color);
+    }
+
+
+    function point(event){
+
+        const rect =
+            wheel.getBoundingClientRect();
+
+
+        const cx =
+            rect.left +
+            rect.width / 2;
+
+        const cy =
+            rect.top +
+            rect.height / 2;
+
+
+        const dx =
+            event.clientX - cx;
+
+        const dy =
+            event.clientY - cy;
+
+
+        const radius =
+            Math.min(
+                rect.width,
+                rect.height
+            ) / 2 - 10;
+
+
+        const distance =
+            Math.min(
+                radius,
+                Math.hypot(
+                    dx,
+                    dy
+                )
+            );
+
+
+        saturation =
+            radius > 0
+                ? distance / radius * 100
+                : 0;
+
+
+        value =
+            100;
+
+
+        let angle =
+            Math.atan2(
+                dx,
+                -dy
+            ) *
+            180 /
+            Math.PI;
+
+
+        if(angle < 0){
+
+            angle += 360;
+        }
+
+
+        hue =
+            angle;
+
+
+        update();
+    }
+
+
+    wheel.addEventListener(
+        "pointerdown",
+        event => {
+
+            dragging =
+                true;
+
+            try{
+
+                wheel.setPointerCapture(
+                    event.pointerId
+                );
+
+            }catch(_){}
+
+            point(event);
+
+            event.preventDefault();
+        }
+    );
+
+
+    wheel.addEventListener(
+        "pointermove",
+        event => {
+
+            if(dragging){
+
+                point(event);
+            }
+        }
+    );
+
+
+    wheel.addEventListener(
+        "pointerup",
+        () => {
+
+            dragging =
+                false;
+        }
+    );
+
+
+    wheel.addEventListener(
+        "pointercancel",
+        () => {
+
+            dragging =
+                false;
+        }
+    );
+
+
+    window.addEventListener(
+        "resize",
+        update
+    );
+
+
+    update();
+}
+
+function setupColor(){
+
+    const wheel =
+        $("textColorWheel");
+
+    const marker =
+        $("textColorMarker");
+
+
+    setupColorWheel(
+        wheel,
+        marker,
+        0,
+        color => {
+
+            AppState.textColor =
+                color;
+        }
+    );
+
+
+    on(
+        "colorButton",
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+        }
+    );
+
+
+    on(
+        "colorButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+
+            openOverlay(
+                colorOverlay
+            );
+        }
+    );
+
+
+    on(
+        "blackText",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            AppState.textColor =
+                "rgb(0,0,0)";
+        }
+    );
+
+
+    on(
+        "whiteText",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            AppState.textColor =
+                "rgb(255,255,255)";
+        }
+    );
+
+
+    on(
+        "colorDone",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            applyTextColor();
+
+            closeOverlay(
+                colorOverlay
+            );
+        }
+    );
+}
+
+
+function applyTextColor(){
+
+    prepareSelection();
+
+    const range =
+        getRange();
+
+    if(!range){
+
+        return;
+    }
+
+    const selection =
+        window.getSelection();
+
+
+    try{
+
+        if(range.collapsed){
+
+            document.execCommand(
+                "foreColor",
+                false,
+                AppState.textColor
+            );
+
+        }else{
+
+            const fragment =
+                range.extractContents();
+
+            const span =
+                document.createElement(
+                    "span"
+                );
+
+            span.style.color =
+                AppState.textColor;
+
+            span.appendChild(
+                fragment
+            );
+
+            range.insertNode(
+                span
+            );
+
+
+            const newRange =
+                document.createRange();
+
+            newRange.selectNodeContents(
+                span
+            );
+
+            selection.removeAllRanges();
+
+            selection.addRange(
+                newRange
+            );
+        }
+
+
+        saveSelection();
+
+        editor.focus({
+            preventScroll:true
+        });
+
+    }catch(error){
+
+        console.error(
+            "color",
+            error
+        );
+    }
+}
+
+
+/* =====================================================
+   HIGHLIGHT
+===================================================== */
+
+function colorToRgb(color){
+
+    const temp =
+        document.createElement(
+            "span"
+        );
+
+    temp.style.color =
+        color;
+
+    document.body.appendChild(
+        temp
+    );
+
+    const computed =
+        getComputedStyle(
+            temp
+        ).color;
+
+    temp.remove();
+
+
+    const numbers =
+        computed.match(
+            /\d+/g
+        );
+
+
+    if(!numbers){
+
+        return {
+
+            r:255,
+            g:255,
+            b:0
+        };
+    }
+
+
+    return {
+
+        r:Number(
+            numbers[0]
+        ),
+
+        g:Number(
+            numbers[1]
+        ),
+
+        b:Number(
+            numbers[2]
+        )
+    };
+}
+
+
+function highlightRGBA(){
+
+    const rgb =
+        colorToRgb(
+            AppState.highlightColor
+        );
+
+
+    return (
+        "rgba(" +
+        rgb.r +
+        "," +
+        rgb.g +
+        "," +
+        rgb.b +
+        "," +
+        AppState.highlightOpacity +
+        ")"
+    );
+}
+
+
+function setupHighlight(){
+
+    setupColorWheel(
+        $("highlightColorWheel"),
+        $("highlightColorMarker"),
+        60,
+        color => {
+
+            AppState.highlightColor =
+                color;
+        }
+    );
+
+
+    on(
+        "highlightButton",
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+        }
+    );
+
+
+    on(
+        "highlightButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+
+            openOverlay(
+                highlightOverlay
+            );
+        }
+    );
+
+
+    on(
+        "opacityRange",
+        "input",
+        event => {
+
+            AppState.highlightOpacity =
+                Number(
+                    event.target.value
+                ) / 100;
+        }
+    );
+
+
+    on(
+        "highlightDone",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            applyHighlight();
+
+            closeOverlay(
+                highlightOverlay
+            );
+        }
+    );
+
+
+    on(
+        "removeHighlight",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            removeHighlight();
+
+            closeOverlay(
+                highlightOverlay
+            );
+        }
+    );
+}
+
+
+function applyHighlight(){
+
+    prepareSelection();
+
+    const range =
+        getRange();
+
+    if(
+        !range ||
+        range.collapsed
+    ){
+
+        return;
+    }
+
+
+    const fragment =
+        range.extractContents();
+
+
+    const span =
+        document.createElement(
+            "span"
+        );
+
+
+    span.className =
+        "word-text-highlight";
+
+
+    span.style.backgroundColor =
+        highlightRGBA();
+
+
+    span.appendChild(
+        fragment
+    );
+
+
+    range.insertNode(
+        span
+    );
+
+
+    const selection =
+        window.getSelection();
+
+
+    const newRange =
+        document.createRange();
+
+
+    newRange.selectNodeContents(
+        span
+    );
+
+
+    selection.removeAllRanges();
+
+    selection.addRange(
+        newRange
+    );
+
+
+    saveSelection();
+}
+
+
+function removeHighlight(){
+
+    const range =
+        getRange();
+
+    if(!range){
+
+        return;
+    }
+
+
+    editor
+        .querySelectorAll(
+            ".word-text-highlight"
+        )
+        .forEach(
+            element => {
+
+                try{
+
+                    if(
+                        range.intersectsNode(
+                            element
+                        )
+                    ){
+
+                        unwrap(element);
+                    }
+
+                }catch(_){}
+            }
+        );
+
+
+    saveSelection();
+}
+
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+function createTable(
+    rows,
+    cols
+){
+
+    const table =
+        document.createElement(
+            "table"
+        );
+
+    table.className =
+        "editor-table";
+
+
+    const tbody =
+        document.createElement(
+            "tbody"
+        );
+
+
+    for(
+        let r = 0;
+        r < rows;
+        r++
+    ){
+
+        const tr =
+            document.createElement(
+                "tr"
+            );
+
+
+        for(
+            let c = 0;
+            c < cols;
+            c++
+        ){
+
+            const td =
+                document.createElement(
+                    "td"
+                );
+
+            td.contentEditable =
+                "true";
+
+            td.innerHTML =
+                "<br>";
+
+            tr.appendChild(
+                td
+            );
+        }
+
+
+        tbody.appendChild(
+            tr
+        );
+    }
+
+
+    table.appendChild(
+        tbody
+    );
+
+
+    return table;
+}
+
+
+function updateTableCounters(){
+
+    $("tableRowsInfo").textContent =
+        AppState.tableRows;
+
+    $("tableColsInfo").textContent =
+        AppState.tableCols;
+}
+
+
+function setupTable(){
+
+    on(
+        "tableButton",
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+        }
+    );
+
+
+    on(
+        "tableButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            saveSelection();
+
+            AppState.tableRows =
+                3;
+
+            AppState.tableCols =
+                3;
+
+            updateTableCounters();
+
+            openOverlay(
+                tableOverlay
+            );
+        }
+    );
+
+
+    on(
+        "tableRowsPlus",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            AppState.tableRows =
+                Math.min(
+                    15,
+                    AppState.tableRows + 1
+                );
+
+            updateTableCounters();
+        }
+    );
+
+
+    on(
+        "tableRowsMinus",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            AppState.tableRows =
+                Math.max(
+                    1,
+                    AppState.tableRows - 1
+                );
+
+            updateTableCounters();
+        }
+    );
+
+
+    on(
+        "tableColsPlus",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            AppState.tableCols =
+                Math.min(
+                    10,
+                    AppState.tableCols + 1
+                );
+
+            updateTableCounters();
+        }
+    );
+
+
+    on(
+        "tableColsMinus",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            AppState.tableCols =
+                Math.max(
+                    1,
+                    AppState.tableCols - 1
+                );
+
+            updateTableCounters();
+        }
+    );
+
+
+    on(
+        "tableDone",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            const table =
+                createTable(
+                    AppState.tableRows,
+                    AppState.tableCols
+                );
+
+            insertElement(
+                table
+            );
+
+            closeOverlay(
+                tableOverlay
+            );
+
+            editor.focus({
+                preventScroll:true
+            });
+        }
+    );
+}
+
+
+/* =====================================================
+   INSERT ELEMENT
+===================================================== */
+
+function insertElement(element){
+
+    prepareSelection();
+
+    const range =
+        getRange();
+
+    if(!range){
+
+        editor.appendChild(
+            element
+        );
+
+    }else{
+
+        range.deleteContents();
+
+        range.insertNode(
+            element
+        );
+    }
+
+
+    const newRange =
+        document.createRange();
+
+
+    newRange.setStartAfter(
+        element
+    );
+
+    newRange.collapse(true);
+
+
+    const selection =
+        window.getSelection();
+
+    selection.removeAllRanges();
+
+    selection.addRange(
+        newRange
+    );
+
+
+    saveSelection();
+}
+
+/* =====================================================
+   MIND MAP
+===================================================== */
+function createMindMap(branches){
+
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.className =
+        "mind-map";
+
+    wrapper.setAttribute(
+        "contenteditable",
+        "false"
+    );
+
+
+    const deleteButton =
+        document.createElement("button");
+
+    deleteButton.type =
+        "button";
+
+    deleteButton.className =
+        "mind-map-delete";
+
+    deleteButton.setAttribute(
+        "aria-label",
+        "حذف الخريطة"
+    );
+
+    deleteButton.setAttribute(
+        "contenteditable",
+        "false"
+    );
+
+    deleteButton.textContent =
+        "×";
+
+
+    const center =
+        document.createElement("div");
+
+    center.className =
+        "mind-map-center";
+
+    center.setAttribute(
+        "contenteditable",
+        "true"
+    );
+
+    center.textContent =
+        "الفكرة";
+
+
+    const branchBox =
+        document.createElement("div");
+
+    branchBox.className =
+        "mind-map-branches";
+
+
+    for(
+        let i = 1;
+        i <= branches;
+        i++
+    ){
+
+        const branch =
+            document.createElement("div");
+
+        branch.className =
+            "mind-map-branch";
+
+        branch.setAttribute(
+            "contenteditable",
+            "true"
+        );
+
+        branch.textContent =
+            "فرع " + i;
+
+        branchBox.appendChild(
+            branch
+        );
+    }
+
+
+    wrapper.appendChild(
+        deleteButton
+    );
+
+    wrapper.appendChild(
+        center
+    );
+
+    wrapper.appendChild(
+        branchBox
+    );
+
+
+    return wrapper;
+}
+
+/* =====================================================
+   MIND TREE
+===================================================== */
+function createMindTree(branches){
+
+    const wrapper =
+        document.createElement("div");
+
+    wrapper.className =
+        "mind-tree";
+
+    wrapper.setAttribute(
+        "contenteditable",
+        "false"
+    );
+
+
+    const deleteButton =
+        document.createElement("button");
+
+    deleteButton.type =
+        "button";
+
+    deleteButton.className =
+        "mind-tree-delete";
+
+    deleteButton.setAttribute(
+        "aria-label",
+        "حذف الشجرة"
+    );
+
+    deleteButton.setAttribute(
+        "contenteditable",
+        "false"
+    );
+
+    deleteButton.textContent =
+        "×";
+
+
+    const root =
+        document.createElement("div");
+
+    root.className =
+        "mind-tree-root";
+
+    root.setAttribute(
+        "contenteditable",
+        "true"
+    );
+
+    root.textContent =
+        "الفكرة";
+
+
+    const branchesBox =
+        document.createElement("div");
+
+    branchesBox.className =
+        "mind-tree-branches";
+
+
+    for(
+        let i = 1;
+        i <= branches;
+        i++
+    ){
+
+        const branch =
+            document.createElement("div");
+
+        branch.className =
+            "mind-tree-branch";
+
+        branch.setAttribute(
+            "contenteditable",
+            "true"
+        );
+
+        branch.textContent =
+            "فرع " + i;
+
+        branchesBox.appendChild(
+            branch
+        );
+    }
+
+
+    wrapper.appendChild(
+        deleteButton
+    );
+
+    wrapper.appendChild(
+        root
+    );
+
+    wrapper.appendChild(
+        branchesBox
+    );
+
+
+    return wrapper;
+}
+
+/* =====================================================
+   PASTE
+===================================================== */
+
+function setupPaste(){
+
+    editor.addEventListener(
+        "paste",
+        event => {
+
+            event.preventDefault();
+
+            const data =
+                event.clipboardData;
+
+            const text =
+                data?.getData(
+                    "text/plain"
+                ) || "";
+
+
+            prepareSelection();
+
+            const range =
+                getRange();
+
+            if(!range){
+
+                return;
+            }
+
+
+            range.deleteContents();
+
+
+            const fragment =
+                document.createDocumentFragment();
+
+
+            text
+                .replace(
+                    /\r\n/g,
+                    "\n"
+                )
+                .replace(
+                    /\r/g,
+                    "\n"
+                )
+                .split("\n")
+                .forEach(
+                    (line,index) => {
+
+                        if(index > 0){
+
+                            fragment.appendChild(
+                                document.createElement(
+                                    "br"
+                                )
+                            );
+                        }
+
+                        fragment.appendChild(
+                            document.createTextNode(
+                                line
+                            )
+                        );
+                    }
+                );
+
+
+            range.insertNode(
+                fragment
+            );
+
+            range.collapse(false);
+
+            saveSelection();
+        }
+    );
+}
+
+
+/* =====================================================
+   CONTENT CHECK
+===================================================== */
+
+function hasContent(){
+
+    const clone =
+        editor.cloneNode(true);
+
+
+    clone.querySelectorAll(
+        "br"
+    ).forEach(
+        br =>
+            br.replaceWith(" ")
+    );
+
+
+    const text =
+        (
+            clone.textContent ||
+            ""
+        )
+        .replace(
+            /[\u200B\uFEFF]/g,
+            ""
+        )
+        .trim();
+
+
+    return Boolean(
+        text ||
+        clone.querySelector(
+            ".editor-table"
+        ) ||
+        clone.querySelector(
+            ".mind-map"
+        ) ||
+        clone.querySelector(
+            ".mind-tree"
+        )
+    );
+}
+
+
+/* =====================================================
+   SAVE
+===================================================== */
+
+function setupSave(){
+
+    on(
+        "sendButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            if(!hasContent()){
+
+                editor.focus();
+
+                return;
+            }
+
+
+            const html =
+                editor.innerHTML
+                    .replace(
+                        /\u200B/g,
+                        ""
+                    )
+                    .trim();
+
+
+            if(!html){
+
+                return;
+            }
+
+
+            if(AppState.editingId){
+
+                const index =
+                    AppState.notes.findIndex(
+                        note =>
+                            note.id ===
+                            AppState.editingId
+                    );
+
+
+                if(index < 0){
+
+                    return;
+                }
+
+
+                const old =
+                    AppState.notes[index].html;
+
+
+                AppState.notes[index].html =
+                    html;
+
+
+                if(!saveNotes()){
+
+                    AppState.notes[index].html =
+                        old;
+
+                    return;
+                }
+
+            }else{
+
+                const note = {
+
+                    id:
+                        createId(),
+
+                    html:
+                        html
+                };
+
+
+                AppState.notes.push(
+                    note
+                );
+
+
+                if(!saveNotes()){
+
+                    AppState.notes.pop();
+
+                    return;
+                }
+            }
+
+
+            renderNotes();
+
+            resetEditor();
+
+
+            setTimeout(
+                () => {
+
+                    messages.scrollTop =
+                        messages.scrollHeight;
+
+                },
+                30
+            );
+        }
+    );
+}
+
+
+/* =====================================================
+   RESET
+===================================================== */
+
+function resetEditor(){
+
+    AppState.editingId =
+        null;
+
+    AppState.selectedNoteId =
+        null;
+
+    AppState.savedRange =
+        null;
+
+
+    editor.innerHTML =
+        "";
+
+
+    state.textContent =
+        "رسالة جديدة";
+
+
+    AppState.fontSize =
+        8;
+
+    AppState.alignment =
+        "right";
+
+
+    closeSubToolbars();
+
+
+    document
+        .querySelectorAll(
+            ".tool"
+        )
+        .forEach(
+            button =>
+                button.classList.remove(
+                    "active"
+                )
+        );
+
+
+    updateToolbar();
+
+    renderNotes();
+}
+
+
+/* =====================================================
+   NEW / CANCEL
+===================================================== */
+
+function setupNewButtons(){
+
+    on(
+        "newButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            resetEditor();
+
+            editor.focus();
+        }
+    );
+
+
+    on(
+        "cancelButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            resetEditor();
+        }
+    );
+}
+
+
+/* =====================================================
+   RENDER
+===================================================== */
+
+function renderNotes(){
+
+    messages.innerHTML =
+        "";
+
+
+    if(!AppState.notes.length){
+
+        const empty =
+            document.createElement(
+                "div"
+            );
+
+        empty.className =
+            "empty";
+
+        empty.textContent =
+            "لا توجد ملاحظات بعد";
+
+        messages.appendChild(
+            empty
+        );
+
+        return;
+    }
+
+
+    AppState.notes.forEach(
+        note => {
+
+            const box =
+                document.createElement(
+                    "article"
+                );
+
+            box.className =
+                "note";
+
+
+            if(
+                note.id ===
+                AppState.editingId
+            ){
+
+                box.classList.add(
+                    "editing"
+                );
+            }
+
+
+            const menu =
+                document.createElement(
+                    "button"
+                );
+
+            menu.type =
+                "button";
+
+            menu.className =
+                "note-menu";
+
+            menu.textContent =
+                "⋮";
+
+
+            menu.addEventListener(
+                "click",
+                event => {
+
+                    event.preventDefault();
+
+                    event.stopPropagation();
+
+                    AppState.selectedNoteId =
+                        note.id;
+
+
+                    openMessageMenu(
+                        event.clientX,
+                        event.clientY,
+                        note.id
+                    );
+                }
+            );
+
+
+            const content =
+                document.createElement(
+                    "div"
+                );
+
+            content.className =
+                "note-content";
+
+            content.innerHTML =
+                note.html || "";
+
+
+            box.append(
+                menu,
+                content
+            );
+
+
+            messages.appendChild(
+                box
+            );
+        }
+    );
+}
+
+
+/* =====================================================
+   MESSAGE MENU
+===================================================== */
+
+function openMessageMenu(
+    x,
+    y,
+    id
+){
+
+    messageMenu.dataset.noteId =
+        id;
+
+    messageMenu.classList.add(
+        "open"
+    );
+
+
+    const width =
+        messageMenu.offsetWidth ||
+        140;
+
+    const height =
+        messageMenu.offsetHeight ||
+        90;
+
+
+    let left =
+        Number(x) -
+        width;
+
+    let top =
+        Number(y);
+
+
+    left =
+        Math.max(
+            5,
+            Math.min(
+                left,
+                window.innerWidth -
+                width -
+                5
+            )
+        );
+
+
+    top =
+        Math.max(
+            5,
+            Math.min(
+                top,
+                window.innerHeight -
+                height -
+                5
+            )
+        );
+
+
+    messageMenu.style.left =
+        left + "px";
+
+    messageMenu.style.top =
+        top + "px";
+}
+
+
+function closeMessageMenu(){
+
+    messageMenu.classList.remove(
+        "open"
+    );
+
+    messageMenu.dataset.noteId =
+        "";
+}
+
+
+function setupMessageMenu(){
+
+    on(
+        "editButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            const id =
+                messageMenu.dataset.noteId;
+
+
+            const note =
+                AppState.notes.find(
+                    item =>
+                        item.id === id
+                );
+
+
+            if(!note){
+
+                return;
+            }
+
+
+            AppState.editingId =
+                note.id;
+
+            AppState.selectedNoteId =
+                note.id;
+
+            AppState.savedRange =
+                null;
+
+
+            editor.innerHTML =
+                note.html;
+
+
+            state.textContent =
+                "✎";
+
+
+            closeMessageMenu();
+
+            renderNotes();
+
+            editor.focus();
+
+
+            setTimeout(
+                () => {
+
+                    focusEnd();
+
+                    updateToolbar();
+
+                },
+                50
+            );
+        }
+    );
+
+
+    on(
+        "deleteButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            const id =
+                messageMenu.dataset.noteId;
+
+
+            const index =
+                AppState.notes.findIndex(
+                    note =>
+                        note.id === id
+                );
+
+
+            if(index < 0){
+
+                return;
+            }
+
+
+            const removed =
+                AppState.notes[index];
+
+
+            AppState.notes.splice(
+                index,
+                1
+            );
+
+
+            if(!saveNotes()){
+
+                AppState.notes.splice(
+                    index,
+                    0,
+                    removed
+                );
+
+                return;
+            }
+
+
+            if(
+                AppState.editingId === id
+            ){
+
+                resetEditor();
+
+            }else{
+
+                renderNotes();
+            }
+
+
+            closeMessageMenu();
+        }
+    );
+
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            if(
+                !event.target.closest(
+                    "#messageMenu"
+                ) &&
+                !event.target.closest(
+                    ".note-menu"
+                )
+            ){
+
+                closeMessageMenu();
+            }
+        }
+    );
+}
+
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+function clearSearchHighlights(){
+
+    if(!messages){
+
+        return;
+    }
+
+
+    messages
+        .querySelectorAll(
+            ".search-word"
+        )
+        .forEach(
+            element => {
+
+                const parent =
+                    element.parentNode;
+
+                if(!parent){
+
+                    return;
+                }
+
+                while(
+                    element.firstChild
+                ){
+
+                    parent.insertBefore(
+                        element.firstChild,
+                        element
+                    );
+                }
+
+                element.remove();
+            }
+        );
+
+
+    messages
+        .querySelectorAll(
+            ".search-highlight"
+        )
+        .forEach(
+            element => {
+
+                element.classList.remove(
+                    "search-highlight"
+                );
+            }
+        );
+}
+
+
+function highlightTextNode(
+    node,
+    query
+){
+
+    if(
+        !node ||
+        !node.nodeValue ||
+        !query
+    ){
+
+        return 0;
+    }
+
+
+    const text =
+        node.nodeValue;
+
+    const lower =
+        text.toLocaleLowerCase();
+
+    const q =
+        query.toLocaleLowerCase();
+
+
+    let index =
+        lower.indexOf(q);
+
+
+    if(index === -1){
+
+        return 0;
+    }
+
+
+    const fragment =
+        document.createDocumentFragment();
+
+
+    let last =
+        0;
+
+    let count =
+        0;
+
+
+    while(index !== -1){
+
+        fragment.appendChild(
+            document.createTextNode(
+                text.slice(
+                    last,
+                    index
+                )
+            )
+        );
+
+
+        const mark =
+            document.createElement(
+                "span"
+            );
+
+        mark.className =
+            "search-word";
+
+        mark.textContent =
+            text.slice(
+                index,
+                index + query.length
+            );
+
+
+        fragment.appendChild(
+            mark
+        );
+
+
+        count++;
+
+
+        last =
+            index +
+            query.length;
+
+
+        index =
+            lower.indexOf(
+                q,
+                last
+            );
+    }
+
+
+    fragment.appendChild(
+        document.createTextNode(
+            text.slice(last)
+        )
+    );
+
+
+    if(node.parentNode){
+
+        node.parentNode.replaceChild(
+            fragment,
+            node
+        );
+    }
+
+
+    return count;
+}
+
+
+function highlightNote(
+    content,
+    query
+){
+
+    if(
+        !content ||
+        !query
+    ){
+
+        return 0;
+    }
+
+
+    let count =
+        0;
+
+
+    const walker =
+        document.createTreeWalker(
+            content,
+            NodeFilter.SHOW_TEXT
+        );
+
+
+    const nodes =
+        [];
+
+
+    let node;
+
+
+    while(
+        (node = walker.nextNode())
+    ){
+
+        if(
+            node.parentElement &&
+            node.parentElement.closest(
+                ".search-word"
+            )
+        ){
+
+            continue;
+        }
+
+
+        if(
+            node.nodeValue &&
+            node.nodeValue
+                .toLocaleLowerCase()
+                .includes(
+                    query.toLocaleLowerCase()
+                )
+        ){
+
+            nodes.push(
+                node
+            );
+        }
+    }
+
+
+    nodes.forEach(
+        textNode => {
+
+            count +=
+                highlightTextNode(
+                    textNode,
+                    query
+                );
+        }
+    );
+
+
+    return count;
+}
+
+
+function performSearch(){
+
+    clearSearchHighlights();
+
+
+    const query =
+        searchInput
+            ? searchInput.value.trim()
+            : "";
+
+
+    if(!query){
+
+        if(searchResult){
+
+            searchResult.textContent =
+                "";
+        }
+
+        return;
+    }
+
+
+    const notes =
+        messages
+            ? messages.querySelectorAll(
+                ".note"
+            )
+            : [];
+
+
+    let noteCount =
+        0;
+
+    let matchCount =
+        0;
+
+    let first =
+        null;
+
+
+    notes.forEach(
+        note => {
+
+            const content =
+                note.querySelector(
+                    ".note-content"
+                );
+
+
+            if(!content){
+
+                return;
+            }
+
+
+            const text =
+                content.textContent
+                    .toLocaleLowerCase();
+
+
+            if(
+                text.includes(
+                    query.toLocaleLowerCase()
+                )
+            ){
+
+                noteCount++;
+
+
+                if(!first){
+
+                    first =
+                        note;
+                }
+            }
+        }
+    );
+
+
+    if(!first){
+
+        if(searchResult){
+
+            searchResult.textContent =
+                "لم يتم العثور على النص";
+        }
+
+        return;
+    }
+
+
+    notes.forEach(
+        note => {
+
+            const content =
+                note.querySelector(
+                    ".note-content"
+                );
+
+
+            if(content){
+
+                matchCount +=
+                    highlightNote(
+                        content,
+                        query
+                    );
+            }
+        }
+    );
+
+
+    first.classList.add(
+        "search-highlight"
+    );
+
+
+    first.scrollIntoView({
+        behavior:"smooth",
+        block:"center"
+    });
+
+
+    if(searchResult){
+
+        searchResult.textContent =
+            "تم العثور على " +
+            matchCount +
+            " نتيجة في " +
+            noteCount +
+            " ملاحظة";
+    }
+}
+
+
+function setupSearch(){
+
+    on(
+        "searchButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            clearSearchHighlights();
+
+
+            if(searchInput){
+
+                searchInput.value =
+                    "";
+            }
+
+
+            if(searchResult){
+
+                searchResult.textContent =
+                    "";
+            }
+
+
+            openOverlay(
+                searchOverlay
+            );
+
+
+            setTimeout(
+                () => {
+
+                    searchInput?.focus();
+
+                },
+                80
+            );
+        }
+    );
+
+
+    if(searchInput){
+
+        searchInput.addEventListener(
+            "input",
+            performSearch
+        );
+    }
+
+
+    on(
+        "searchDone",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            event.stopPropagation();
+
+            clearSearchHighlights();
+
+            closeOverlay(
+                searchOverlay
+            );
+        }
+    );
+}
+
+
+/* =====================================================
+   OVERLAY BACKDROP
+===================================================== */
+
+function setupOverlay(){
+
+    document
+        .querySelectorAll(
+            ".overlay"
+        )
+        .forEach(
+            overlay => {
+
+                overlay.addEventListener(
+                    "click",
+                    event => {
+
+                        if(
+                            event.target ===
+                            overlay
+                        ){
+
+                            closeOverlay(
+                                overlay
+                            );
+                        }
+                    }
+                );
+            }
+        );
+}
+
+
+/* =====================================================
+   OUTSIDE / ESC
+===================================================== */
+
+function setupOutside(){
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            if(
+                !event.target.closest(
+                    ".toolbar"
+                ) &&
+                !event.target.closest(
+                    ".sub-toolbar"
+                ) &&
+                !event.target.closest(
+                    ".overlay"
+                )
+            ){
+
+                closeSubToolbars();
+            }
+        }
+    );
+
+
+    document.addEventListener(
+        "keydown",
+        event => {
+
+            if(
+                event.key ===
+                "Escape"
+            ){
+
+                closeAllOverlays();
+
+                closeSubToolbars();
+
+                closeMessageMenu();
+
+                setTimeout(
+                    restoreSelection,
+                    30
+                );
+            }
+        }
+    );
+}
+
+
+/* =====================================================
+   TABLE TAB
+===================================================== */
+
+function setupTableTab(){
+
+    editor.addEventListener(
+        "keydown",
+        event => {
+
+            if(
+                event.key !==
+                "Tab"
+            ){
+
+                return;
+            }
+
+
+            const cell =
+                event.target.closest?.(
+                    "td,th"
+                );
+
+
+            if(!cell){
+
+                return;
+            }
+
+
+            event.preventDefault();
+
+
+            const cells =
+                Array.from(
+                    editor.querySelectorAll(
+                        "table td, table th"
+                    )
+                );
+
+
+            const index =
+                cells.indexOf(
+                    cell
+                );
+
+
+            if(index < 0){
+
+                return;
+            }
+
+
+            let next =
+                event.shiftKey
+                    ? index - 1
+                    : index + 1;
+
+
+            if(next < 0){
+
+                next =
+                    cells.length - 1;
+            }
+
+
+            if(
+                next >=
+                cells.length
+            ){
+
+                next =
+                    0;
+            }
+
+
+            const target =
+                cells[next];
+
+
+            target.focus();
+
+
+            const range =
+                document.createRange();
+
+
+            range.selectNodeContents(
+                target
+            );
+
+            range.collapse(false);
+
+
+            const selection =
+                window.getSelection();
+
+
+            selection.removeAllRanges();
+
+            selection.addRange(
+                range
+            );
+
+
+            saveSelection();
+        }
+    );
+}
+
+
+/* =====================================================
+   KEYBOARD / VIEWPORT
+===================================================== */
+
+function setupKeyboard(){
+
+    if(!window.visualViewport){
+
+        return;
+    }
+
+
+    const viewport =
+        window.visualViewport;
+
+    const root =
+        document.documentElement;
+
+
+    function update(){
+
+        const height =
+            Math.round(
+                viewport.height
+            );
+
+
+        root.style.setProperty(
+            "--app-height",
+            height + "px"
+        );
+    }
+
+
+    viewport.addEventListener(
+        "resize",
+        update,
+        {
+            passive:true
+        }
+    );
+
+
+    viewport.addEventListener(
+        "scroll",
+        update,
+        {
+            passive:true
+        }
+    );
+
+
+    window.addEventListener(
+        "resize",
+        update,
+        {
+            passive:true
+        }
+    );
+
+
+    update();
+}
+
+/* =====================================================
+   MIND MAP / MIND TREE DELETE — EVENT DELEGATION
+   يعمل في التعديل + الملاحظة المرسلة
+===================================================== */
+
+function setupMindDeleteDelegation(){
+
+    document.addEventListener(
+        "click",
+        event => {
+
+            const button =
+                event.target.closest(
+                    ".mind-map-delete, .mind-tree-delete"
+                );
+
+            if(!button){
+                return;
+            }
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            /* حذف الخريطة الذهنية */
+            const map =
+                button.closest(".mind-map");
+
+            if(map){
+
+                map.remove();
+
+                return;
+            }
+
+            /* حذف الشجرة */
+            const tree =
+                button.closest(".mind-tree");
+
+            if(tree){
+
+                tree.remove();
+
+                return;
+            }
+        }
+    );
+}
+
+ /* =====================================================
+   MIND MAP SETUP
+===================================================== */
+
+function updateMindBranchInfo(){
+
+    const element =
+        $("mindBranchInfo");
+
+    if(element){
+
+        element.textContent =
+            AppState.mindBranches;
+    }
+}
+
+
+function setupMindMap(){
+
+    on(
+        "mindMapButton",
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+        }
+    );
+
+
+    on(
+        "mindMapButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+
+            AppState.mindBranches = 2;
+
+            updateMindBranchInfo();
+
+            openOverlay(
+                mindMapOverlay
+            );
+        }
+    );
+
+
+    on(
+        "mindBranchPlus",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            AppState.mindBranches =
+                Math.min(
+                    15,
+                    AppState.mindBranches + 1
+                );
+
+            updateMindBranchInfo();
+        }
+    );
+
+
+    on(
+        "mindBranchMinus",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            AppState.mindBranches =
+                Math.max(
+                    1,
+                    AppState.mindBranches - 1
+                );
+
+            updateMindBranchInfo();
+        }
+    );
+
+
+    on(
+        "mindDone",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            const map =
+                createMindMap(
+                    AppState.mindBranches
+                );
+
+            insertElement(map);
+
+            closeOverlay(
+                mindMapOverlay
+            );
+
+            editor.focus({
+                preventScroll:true
+            });
+        }
+    );
+}
+
+
+/* =====================================================
+   MIND TREE SETUP
+===================================================== */
+
+function updateTreeBranchInfo(){
+
+    const element =
+        $("treeBranchInfo");
+
+    if(element){
+
+        element.textContent =
+            AppState.treeBranches;
+    }
+}
+
+
+function setupTree(){
+
+    on(
+        "mindTreeButton",
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+        }
+    );
+
+
+    on(
+        "mindTreeButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+
+            AppState.treeBranches = 2;
+
+            updateTreeBranchInfo();
+
+            openOverlay(
+                mindTreeOverlay
+            );
+        }
+    );
+
+
+    on(
+        "treeBranchPlus",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            AppState.treeBranches =
+                Math.min(
+                    15,
+                    AppState.treeBranches + 1
+                );
+
+            updateTreeBranchInfo();
+        }
+    );
+
+
+    on(
+        "treeBranchMinus",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            AppState.treeBranches =
+                Math.max(
+                    1,
+                    AppState.treeBranches - 1
+                );
+
+            updateTreeBranchInfo();
+        }
+    );
+
+
+    on(
+        "treeDone",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            const tree =
+                createMindTree(
+                    AppState.treeBranches
+                );
+
+            insertElement(tree);
+
+            closeOverlay(
+                mindTreeOverlay
+            );
+
+            editor.focus({
+                preventScroll:true
+            });
+        }
+    );
+}
+
+/* =====================================================
+   INIT
+===================================================== */
+
+function init(){
+
+    initDOM();
+
+    loadNotes();
+
+    setupSelection();
+
+    setupBasicButtons();
+
+    setupNewLine();
+
+    setupUndo();
+
+    setupFontSize();
+
+    setupLists();
+
+    setupAlignment();
+
+    setupColor();
+
+    setupHighlight();
+
+    setupTable();
+
+    setupSave();
+
+    setupMessageMenu();
+
+    setupMindMap();
+
+    setupTree();
+
+    setupSearch();
+
+    setupNewButtons();
+
+    setupPaste();
+
+    setupTableTab();
+
+    setupOverlay();
+
+    setupOutside();
+
+    setupKeyboard();
+
+    updateTableCounters();
+
+    setupMindDeleteDelegation();
+
+    renderNotes();
+
+    updateToolbar();
+}
+
+
+if(
+    document.readyState ===
+    "loading"
+){
+
+    document.addEventListener(
+        "DOMContentLoaded",
+        init,
+        {
+            once:true
+        }
+    );
+
+}else{
+
+    init();
+}
+
+</script>
+
+</body>
+</html>
