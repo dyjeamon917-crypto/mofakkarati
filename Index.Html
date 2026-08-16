@@ -5654,38 +5654,6 @@ function setupTree(){
         }
     );
 
-
-    on(
-        "treeBranchPlus",
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            AppState.treeBranches =
-                Math.min(
-                    15,
-                    AppState.treeBranches + 1
-                );
-
-            updateTreeBranchInfo();
-        }
-    );
-
-
-    on(
-        "treeBranchMinus",
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            AppState.treeBranches =
-                Math.max(
-                    1,
-                    AppState.treeBranches - 1
-                );
-
             updateTreeBranchInfo();
         }
     );
