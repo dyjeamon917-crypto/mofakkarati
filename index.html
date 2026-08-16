@@ -4315,6 +4315,60 @@ function createMindMap(branches){
         "false";
 
 
+    const deleteButton =
+        document.createElement(
+            "button"
+        );
+
+    deleteButton.type =
+        "button";
+
+    deleteButton.className =
+        "mind-map-delete";
+
+    deleteButton.setAttribute(
+        "aria-label",
+        "حذف الخريطة"
+    );
+
+    deleteButton.title =
+        "حذف الخريطة";
+
+    deleteButton.textContent =
+        "×";
+
+    deleteButton.contentEditable =
+        "false";
+
+
+    deleteButton.addEventListener(
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    );
+
+
+    deleteButton.addEventListener(
+        "click",
+        event => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            wrapper.remove();
+
+            saveSelection();
+
+            editor.focus({
+                preventScroll:true
+            });
+        }
+    );
+
+
     const center =
         document.createElement(
             "div"
@@ -4366,6 +4420,10 @@ function createMindMap(branches){
 
 
     wrapper.appendChild(
+        deleteButton
+    );
+
+    wrapper.appendChild(
         center
     );
 
@@ -4377,119 +4435,6 @@ function createMindMap(branches){
     return wrapper;
 }
 
-
-function updateMindBranchInfo(){
-
-    $("mindBranchInfo").textContent =
-        AppState.mindBranches;
-}
-
-
-function setupMindMap(){
-
-    on(
-        "mindMapButton",
-        "pointerdown",
-        event => {
-
-            event.preventDefault();
-
-            saveSelection();
-        }
-    );
-
-
-    on(
-        "mindMapButton",
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-            saveSelection();
-
-            AppState.mindBranches =
-                2;
-
-            updateMindBranchInfo();
-
-            openOverlay(
-                mindMapOverlay
-            );
-        }
-    );
-
-
-    on(
-        "mindBranchPlus",
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-            AppState.mindBranches =
-                Math.min(
-                    12,
-                    AppState.mindBranches + 1
-                );
-
-            updateMindBranchInfo();
-        }
-    );
-
-
-    on(
-        "mindBranchMinus",
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-            AppState.mindBranches =
-                Math.max(
-                    1,
-                    AppState.mindBranches - 1
-                );
-
-            updateMindBranchInfo();
-        }
-    );
-
-
-    on(
-        "mindDone",
-        "click",
-        event => {
-
-            event.preventDefault();
-
-            event.stopPropagation();
-
-            const map =
-                createMindMap(
-                    AppState.mindBranches
-                );
-
-            insertElement(
-                map
-            );
-
-            closeOverlay(
-                mindMapOverlay
-            );
-
-            editor.focus({
-                preventScroll:true
-            });
-        }
-    );
-}
 
 
 /* =====================================================
