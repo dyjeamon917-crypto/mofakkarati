@@ -2054,7 +2054,6 @@ function setupBasicButtons(){
     );
 }
 
-
 /* =====================================================
    UNDERLINE
 ===================================================== */
@@ -2114,7 +2113,8 @@ function unwrap(element){
     element.remove();
 }
 
-  function toggleUnderline(){
+
+function toggleUnderline(){
 
     prepareSelection();
 
@@ -2137,60 +2137,6 @@ function unwrap(element){
 
         console.error(
             "underline:",
-            error
-        );
-    }
-  }
-        /* =========================================
-           لا يوجد تسطير حالي
-           يبدأ تسطير جديد من المؤشر
-        ========================================= */
-
-        const span =
-            document.createElement("span");
-
-        span.setAttribute(
-            "data-underline",
-            "true"
-        );
-
-        span.style.textDecorationLine =
-            "underline";
-
-        span.style.textUnderlineOffset =
-            "5.08px";
-
-
-        const text =
-            document.createTextNode(
-                "\u200B"
-            );
-
-        span.appendChild(text);
-
-        range.insertNode(span);
-
-
-        const newRange =
-            document.createRange();
-
-        newRange.setStart(
-            text,
-            1
-        );
-
-        newRange.collapse(true);
-
-        selection.removeAllRanges();
-        selection.addRange(newRange);
-
-        saveSelection();
-        updateToolbar();
-
-    }catch(error){
-
-        console.error(
-            "toggle underline",
             error
         );
     }
