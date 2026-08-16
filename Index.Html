@@ -1972,13 +1972,97 @@ function toggleCommand(command){
 
         restoreSelection();
 
-        document.execCommand(
-            command,
-            false,
-            null
-        );
+        const range =
+            getRange();
+
+        if(!range){
+            return;
+        }
+
+        /*
+         * لو المؤشر فاضي، نضع علامة مخفية
+         * حتى يحافظ المتصفح على التنسيق
+         * قبل كتابة أول حرف.
+         */
+
+        if(range.collapsed){
+
+            const marker =
+                document.createElement("span");
+
+            marker.setAttribute(
+                "data-format-marker",
+                "true"
+            );
+
+            const text =
+                document.createTextNode(
+                    "\u200B"
+                );
+
+            marker.appendChild(text);
+
+            range.insertNode(marker);
+
+            const newRange =
+                document.createRange();
+
+            newRange.setStart(
+                text,
+                0
+            );
+
+            newRange.setEnd(
+                text,
+                1
+            );
+
+            const selection =
+                window.getSelection();
+
+            selection.removeAllRanges();
+
+            selection.addRange(
+                newRange
+            );
+
+            document.execCommand(
+                command,
+                false,
+                null
+            );
+
+            /*
+             * نضع المؤشر بعد العلامة
+             * مع الاحتفاظ بالتنسيق.
+             */
+
+            const afterRange =
+                document.createRange();
+
+            afterRange.setStartAfter(
+                marker
+            );
+
+            afterRange.collapse(true);
+
+            selection.removeAllRanges();
+
+            selection.addRange(
+                afterRange
+            );
+
+        }else{
+
+            document.execCommand(
+                command,
+                false,
+                null
+            );
+        }
 
         saveSelection();
+
         updateToolbar();
 
     }catch(error){
@@ -1994,22 +2078,26 @@ function toggleCommand(command){
 
 function setupBasicButtons(){
 
-    ["boldButton",
-     "italicButton",
-     "underlineButton"]
-    .forEach(id => {
+    [
+        "boldButton",
+        "italicButton",
+        "underlineButton"
+    ]
+    .forEach(
+        id => {
 
-        on(
-            id,
-            "pointerdown",
-            event => {
+            on(
+                id,
+                "pointerdown",
+                event => {
 
-                event.preventDefault();
+                    event.preventDefault();
 
-                saveSelection();
-            }
-        );
-    });
+                    saveSelection();
+                }
+            );
+        }
+    );
 
 
     on(
@@ -2019,7 +2107,9 @@ function setupBasicButtons(){
 
             event.preventDefault();
 
-            toggleCommand("bold");
+            toggleCommand(
+                "bold"
+            );
         }
     );
 
@@ -2031,7 +2121,9 @@ function setupBasicButtons(){
 
             event.preventDefault();
 
-            toggleCommand("italic");
+            toggleCommand(
+                "italic"
+            );
         }
     );
 
@@ -2043,7 +2135,9 @@ function setupBasicButtons(){
 
             event.preventDefault();
 
-            toggleCommand("underline");
+            toggleCommand(
+                "underline"
+            );
         }
     );
 }
