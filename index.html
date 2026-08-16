@@ -6159,16 +6159,10 @@ function setupMindDeleteDelegation(){
             event.stopPropagation();
 
             /* حذف الخريطة الذهنية */
-            if(
-                button.classList.contains(
-                    "mind-map-delete"
-                )
-            ){
+            const map =
+                button.closest(".mind-map");
 
-                const map =
-                    button.closest(
-                        ".mind-map"
-                    );
+            if(map){
 
                 deleteMindMap(map);
 
@@ -6176,38 +6170,13 @@ function setupMindDeleteDelegation(){
             }
 
             /* حذف الشجرة */
-            if(
-                button.classList.contains(
-                    "mind-tree-delete"
-                )
-            ){
+            const tree =
+                button.closest(".mind-tree");
 
-                const tree =
-                    button.closest(
-                        ".mind-tree"
-                    );
+            if(tree){
 
                 deleteMindTree(tree);
             }
-        }
-    );
-
-
-    editor.addEventListener(
-        "pointerdown",
-        event => {
-
-            const button =
-                event.target.closest(
-                    ".mind-map-delete, .mind-tree-delete"
-                );
-
-            if(!button){
-                return;
-            }
-
-            event.preventDefault();
-            event.stopPropagation();
         }
     );
 }
