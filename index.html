@@ -324,6 +324,29 @@ button{
     color:#fff;
 }
 
+/* =====================================================
+   UNDO BUTTON
+===================================================== */
+
+.undo-button{
+    flex:0 0 46px;
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    background:#303744;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:27px;
+    font-weight:normal;
+    line-height:1;
+}
+
+.undo-button:active{
+    transform:scale(.92);
+}
+
 .send-button:active,
 .cancel-button:active{
     transform:scale(.96);
@@ -568,19 +591,12 @@ button{
     max-width:260px;
     padding:7px 9px;
     border:1px solid #697386;
-
-    /* يجعل عرض الخلية مناسبًا للنص */
     width:auto;
-
-    /* يسمح للنص الطويل بالنزول لأسطر */
     white-space:normal;
     word-break:normal;
     overflow-wrap:anywhere;
-
     vertical-align:top;
     line-height:1.6;
-
-    /* يمنع الخلية من التمدد خارج الشاشة */
     overflow:hidden;
 }
 
@@ -589,7 +605,6 @@ button{
     outline:1px solid #527df5;
 }
 
-/* الموبايل */
 @media(max-width:600px){
 
     .editor-table{
@@ -653,46 +668,96 @@ button{
 
 
 /* =====================================================
-   MIND TREE
+   MIND TREE — فروع بجوار بعضها + أسهم + حذف الشجرة
 ===================================================== */
 
 .mind-tree{
+    position:relative;
     width:100%;
     max-width:100%;
     margin:12px 0;
-    padding:12px;
+    padding:34px 10px 14px;
     border:1px solid #485263;
     border-radius:14px;
     overflow:hidden;
+    box-sizing:border-box;
 }
 
 .mind-tree-root{
     width:fit-content;
-    max-width:90%;
-    margin:auto;
+    max-width:80%;
+    margin:0 auto;
     padding:9px 14px;
     border-radius:12px;
     background:#3867dc;
     text-align:center;
     word-break:break-word;
+    overflow-wrap:anywhere;
+    position:relative;
+    z-index:2;
 }
 
 .mind-tree-branches{
     display:flex;
-    flex-direction:column;
-    align-items:center;
-    gap:8px;
-    margin-top:12px;
+    flex-direction:row;
+    flex-wrap:wrap;
+    align-items:flex-start;
+    justify-content:center;
+    gap:28px 12px;
+    margin-top:28px;
+    width:100%;
 }
 
 .mind-tree-branch{
-    width:min(100%,260px);
-    padding:8px;
+    position:relative;
+    flex:0 1 auto;
+    width:fit-content;
+    min-width:70px;
+    max-width:220px;
+    padding:8px 10px;
     border-radius:10px;
     background:#303744;
     text-align:center;
     word-break:break-word;
     overflow-wrap:anywhere;
+    line-height:1.6;
+    box-sizing:border-box;
+}
+
+.mind-tree-branch::before{
+    content:"↓";
+    position:absolute;
+    top:-27px;
+    left:50%;
+    transform:translateX(-50%);
+    color:#8fa8ff;
+    font-size:22px;
+    line-height:1;
+    font-weight:bold;
+    pointer-events:none;
+}
+
+.mind-tree-delete{
+    position:absolute;
+    top:7px;
+    left:7px;
+    width:28px;
+    height:28px;
+    padding:0;
+    border:1px solid #8e98a8;
+    border-radius:50%;
+    background:transparent;
+    color:#c9d0dc;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:17px;
+    line-height:1;
+    z-index:10;
+}
+
+.mind-tree-delete:active{
+    transform:scale(.92);
 }
 
 
@@ -736,7 +801,6 @@ button{
 
 /* =====================================================
    UNDERLINE
-   0.08 بوصة = 5.08px
 ===================================================== */
 
 .editor u,
@@ -891,7 +955,7 @@ body.keyboard-open .editor-area{
                 class="tool"
                 type="button"
                 aria-label="قائمة">
-                ☷
+                ≡
             </button>
 
             <button
@@ -931,7 +995,7 @@ body.keyboard-open .editor-area{
                 class="tool"
                 type="button"
                 aria-label="خريطة">
-                ⌘
+                ⌗
             </button>
 
             <button
@@ -940,6 +1004,15 @@ body.keyboard-open .editor-area{
                 type="button"
                 aria-label="شجرة">
                 🌳
+            </button>
+
+            <!-- زر بداية سطر جديد -->
+            <button
+                id="newLineButton"
+                class="tool"
+                type="button"
+                aria-label="بداية سطر جديد">
+                ↵
             </button>
 
         </div>
@@ -988,7 +1061,7 @@ body.keyboard-open .editor-area{
             <button
                 type="button"
                 data-align="justify">
-                ☰
+                ▤
             </button>
 
         </div>
@@ -1004,6 +1077,15 @@ body.keyboard-open .editor-area{
                 type="button"
                 aria-label="حفظ">
                 ➤
+            </button>
+
+            <!-- زر التراجع -->
+            <button
+                id="undoButton"
+                class="undo-button"
+                type="button"
+                aria-label="تراجع">
+                ↶
             </button>
 
             <button
@@ -1132,7 +1214,7 @@ body.keyboard-open .editor-area{
 
         <div class="range-row">
 
-            <span>◐</span>
+            <span>◉</span>
 
             <input
                 id="opacityRange"
@@ -1155,7 +1237,7 @@ body.keyboard-open .editor-area{
             <button
                 id="removeHighlight"
                 type="button">
-                ✕
+                ⌫
             </button>
 
         </div>
@@ -1246,7 +1328,7 @@ body.keyboard-open .editor-area{
     <div class="overlay-box">
 
         <div class="overlay-title">
-            ⌘
+            ⌗
         </div>
 
         <div class="counter-box">
@@ -2016,7 +2098,6 @@ function toggleUnderline(){
         getRange();
 
     if(!range){
-
         return;
     }
 
@@ -2030,45 +2111,110 @@ function toggleUnderline(){
             selection.toString()
         ){
 
+            let hasUnderline = false;
+
+            const walker =
+                document.createTreeWalker(
+                    range.commonAncestorContainer,
+                    NodeFilter.SHOW_TEXT
+                );
+
+            while(walker.nextNode()){
+
+                const node =
+                    walker.currentNode;
+
+                if(!range.intersectsNode(node)){
+                    continue;
+                }
+
+                if(getParentUnderline(node)){
+                    hasUnderline = true;
+                    break;
+                }
+            }
+
             const fragment =
                 range.extractContents();
 
-            const wrapper =
-                document.createElement(
-                    "span"
+            if(hasUnderline){
+
+                fragment
+                    .querySelectorAll?.(
+                        '[data-underline="true"]'
+                    )
+                    .forEach(
+                        element => {
+                            unwrap(element);
+                        }
+                    );
+
+            }else{
+
+                const wrapper =
+                    document.createElement(
+                        "span"
+                    );
+
+                wrapper.setAttribute(
+                    "data-underline",
+                    "true"
                 );
 
-            wrapper.setAttribute(
-                "data-underline",
-                "true"
-            );
+                wrapper.style.textDecorationLine =
+                    "underline";
 
-            wrapper.style.textDecorationLine =
-                "underline";
+                wrapper.style.textUnderlineOffset =
+                    "5.08px";
 
-            wrapper.style.textUnderlineOffset =
-                "5.08px";
+                wrapper.appendChild(
+                    fragment
+                );
 
-            wrapper.appendChild(
-                fragment
-            );
+                range.insertNode(
+                    wrapper
+                );
+
+                const newRange =
+                    document.createRange();
+
+                newRange.selectNodeContents(
+                    wrapper
+                );
+
+                selection.removeAllRanges();
+                selection.addRange(
+                    newRange
+                );
+
+                saveSelection();
+                updateToolbar();
+                return;
+            }
 
             range.insertNode(
-                wrapper
+                fragment
             );
 
             const newRange =
                 document.createRange();
 
-            newRange.selectNodeContents(
-                wrapper
-            );
+            try{
+                newRange.setStart(
+                    range.startContainer,
+                    range.startOffset
+                );
 
-            selection.removeAllRanges();
+                newRange.setEnd(
+                    range.endContainer,
+                    range.endOffset
+                );
 
-            selection.addRange(
-                newRange
-            );
+                selection.removeAllRanges();
+                selection.addRange(
+                    newRange
+                );
+            }catch(error){}
 
         }else{
 
@@ -2078,9 +2224,7 @@ function toggleUnderline(){
                 );
 
             if(active){
-
                 unwrap(active);
-
             }else{
 
                 const span =
@@ -2123,7 +2267,6 @@ function toggleUnderline(){
                 newRange.collapse(true);
 
                 selection.removeAllRanges();
-
                 selection.addRange(
                     newRange
                 );
@@ -2131,7 +2274,6 @@ function toggleUnderline(){
         }
 
         saveSelection();
-
         updateToolbar();
 
     }catch(error){
@@ -2680,6 +2822,152 @@ function updateAlignmentButtons(){
                 button.dataset.align ===
                 AppState.alignment
             );
+        }
+    );
+}
+
+
+/* =====================================================
+   NEW LINE
+===================================================== */
+
+function setupNewLine(){
+
+    on(
+        "newLineButton",
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+        }
+    );
+
+
+    on(
+        "newLineButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            prepareSelection();
+
+            const range =
+                getRange();
+
+            if(!range){
+
+                return;
+            }
+
+
+            try{
+
+                const selection =
+                    window.getSelection();
+
+                range.deleteContents();
+
+
+                const br =
+                    document.createElement(
+                        "br"
+                    );
+
+
+                range.insertNode(
+                    br
+                );
+
+
+                const newRange =
+                    document.createRange();
+
+
+                newRange.setStartAfter(
+                    br
+                );
+
+                newRange.collapse(true);
+
+
+                selection.removeAllRanges();
+
+                selection.addRange(
+                    newRange
+                );
+
+
+                saveSelection();
+
+                editor.focus({
+                    preventScroll:true
+                });
+
+            }catch(error){
+
+                console.error(
+                    "new-line",
+                    error
+                );
+            }
+        }
+    );
+}
+
+
+/* =====================================================
+   UNDO
+===================================================== */
+
+function setupUndo(){
+
+    on(
+        "undoButton",
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            saveSelection();
+        }
+    );
+
+
+    on(
+        "undoButton",
+        "click",
+        event => {
+
+            event.preventDefault();
+
+            try{
+
+                editor.focus({
+                    preventScroll:true
+                });
+
+                restoreSelection();
+
+                document.execCommand(
+                    "undo",
+                    false,
+                    null
+                );
+
+                saveSelection();
+
+                updateToolbar();
+
+            }catch(error){
+
+                console.error(
+                    "undo",
+                    error
+                );
+            }
         }
     );
 }
@@ -4140,6 +4428,55 @@ function createMindTree(branches){
         "false";
 
 
+    const deleteButton =
+        document.createElement(
+            "button"
+        );
+
+    deleteButton.type =
+        "button";
+
+    deleteButton.className =
+        "mind-tree-delete";
+
+    deleteButton.setAttribute(
+        "aria-label",
+        "حذف الشجرة"
+    );
+
+    deleteButton.title =
+        "حذف الشجرة";
+
+    deleteButton.textContent =
+        "×";
+
+    deleteButton.contentEditable =
+        "false";
+
+    deleteButton.addEventListener(
+        "pointerdown",
+        event => {
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    );
+
+    deleteButton.addEventListener(
+        "click",
+        event => {
+            event.preventDefault();
+            event.stopPropagation();
+
+            wrapper.remove();
+
+            saveSelection();
+            editor.focus({
+                preventScroll:true
+            });
+        }
+    );
+
+
     const root =
         document.createElement(
             "div"
@@ -4191,6 +4528,10 @@ function createMindTree(branches){
 
 
     wrapper.appendChild(
+        deleteButton
+    );
+
+    wrapper.appendChild(
         root
     );
 
@@ -4201,7 +4542,6 @@ function createMindTree(branches){
 
     return wrapper;
 }
-
 
 function updateTreeBranchInfo(){
 
@@ -5719,6 +6059,10 @@ function init(){
     setupSelection();
 
     setupBasicButtons();
+
+    setupNewLine();
+
+    setupUndo();
 
     setupFontSize();
 
