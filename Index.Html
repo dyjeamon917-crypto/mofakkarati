@@ -2055,35 +2055,6 @@ function setupBasicButtons(){
    UNDERLINE
 ===================================================== */
 
-function getParentUnderline(node){
-
-    let current =
-        node.nodeType === Node.ELEMENT_NODE
-            ? node
-            : node.parentElement;
-
-    while(
-        current &&
-        current !== editor
-    ){
-
-        if(
-            current.matches?.(
-                '[data-underline="true"]'
-            )
-        ){
-
-            return current;
-        }
-
-        current =
-            current.parentElement;
-    }
-
-    return null;
-}
-
-
 function unwrap(element){
 
     if(
@@ -2173,19 +2144,10 @@ function updateToolbar(){
     const range =
         getRange();
 
-    const underline =
-        Boolean(
-            range &&
-            getParentUnderline(
-                range.startContainer
-            )
-        );
-
     $("underlineButton")?.classList.toggle(
-        "active",
-        underline ||
-        commandState("underline")
-    );
+    "active",
+    commandState("underline")
+);
 
     updateFontSizeButtons();
 
