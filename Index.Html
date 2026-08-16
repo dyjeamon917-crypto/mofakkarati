@@ -1960,13 +1960,17 @@ function setupSelection(){
 
 function toggleCommand(command){
 
-    prepareSelection();
-
-    editor.focus({
-        preventScroll:true
-    });
+    if(!prepareSelection()){
+        return;
+    }
 
     try{
+
+        editor.focus({
+            preventScroll:true
+        });
+
+        restoreSelection();
 
         document.execCommand(
             command,
@@ -1975,7 +1979,6 @@ function toggleCommand(command){
         );
 
         saveSelection();
-
         updateToolbar();
 
     }catch(error){
@@ -1994,21 +1997,19 @@ function setupBasicButtons(){
     ["boldButton",
      "italicButton",
      "underlineButton"]
-    .forEach(
-        id => {
+    .forEach(id => {
 
-            on(
-                id,
-                "pointerdown",
-                event => {
+        on(
+            id,
+            "pointerdown",
+            event => {
 
-                    event.preventDefault();
+                event.preventDefault();
 
-                    saveSelection();
-                }
-            );
-        }
-    );
+                saveSelection();
+            }
+        );
+    });
 
 
     on(
@@ -2018,9 +2019,7 @@ function setupBasicButtons(){
 
             event.preventDefault();
 
-            toggleCommand(
-                "bold"
-            );
+            toggleCommand("bold");
         }
     );
 
@@ -2032,9 +2031,7 @@ function setupBasicButtons(){
 
             event.preventDefault();
 
-            toggleCommand(
-                "italic"
-            );
+            toggleCommand("italic");
         }
     );
 
@@ -2046,69 +2043,21 @@ function setupBasicButtons(){
 
             event.preventDefault();
 
-            toggleUnderline();
+            toggleCommand("underline");
         }
     );
 }
+
 
 /* =====================================================
    UNDERLINE
 ===================================================== */
 
-function unwrap(element){
-
-    if(
-        !element ||
-        !element.parentNode
-    ){
-
-        return;
-    }
-
-    const parent =
-        element.parentNode;
-
-    while(
-        element.firstChild
-    ){
-
-        parent.insertBefore(
-            element.firstChild,
-            element
-        );
-    }
-
-    element.remove();
-}
-
-
 function toggleUnderline(){
 
-    prepareSelection();
-
-    editor.focus({
-        preventScroll:true
-    });
-
-    try{
-
-        document.execCommand(
-            "underline",
-            false,
-            null
-        );
-
-        saveSelection();
-        updateToolbar();
-
-    }catch(error){
-
-        console.error(
-            "underline:",
-            error
-        );
-    }
+    toggleCommand("underline");
 }
+
 
 /* =====================================================
    TOOLBAR STATE
@@ -2140,9 +2089,6 @@ function updateToolbar(){
         "active",
         commandState("italic")
     );
-
-    const range =
-        getRange();
 
     $("underlineButton")?.classList.toggle(
     "active",
