@@ -4294,48 +4294,6 @@ function insertElement(element){
 
     saveSelection();
 }
-/* =====================================================
-   DELETE MIND MAP
-===================================================== */
-
-function deleteMindMap(map){
-
-    if(!map){
-        return;
-    }
-
-    map.remove();
-
-    AppState.savedRange = null;
-
-    editor.focus({
-        preventScroll:true
-    });
-
-    saveSelection();
-}
-
-
-/* =====================================================
-   DELETE MIND TREE
-===================================================== */
-
-function deleteMindTree(tree){
-
-    if(!tree){
-        return;
-    }
-
-    tree.remove();
-
-    AppState.savedRange = null;
-
-    editor.focus({
-        preventScroll:true
-    });
-
-    saveSelection();
-}
 
 /* =====================================================
    MIND MAP
