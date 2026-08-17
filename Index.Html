@@ -448,10 +448,18 @@ button{
 }
 
 #colorOverlay{
+    position:absolute;
+    inset:auto 0 100% 0;
+    z-index:3000;
+    display:none;
     align-items:flex-end;
     justify-content:center;
+    padding:0 10px 10px;
     background:transparent;
-    padding:0 10px 145px;
+}
+
+#colorOverlay.open{
+    display:flex;
 }
 
 #colorOverlay .overlay-box{
@@ -466,7 +474,6 @@ button{
     width:min(240px,68vw);
     margin:0 auto 12px;
 }
-
 
 /* =====================================================
    COLOR WHEEL
@@ -824,6 +831,84 @@ body.keyboard-open .editor-area{
     ➤
 </button>
 
+<div
+    id="colorOverlay"
+    class="overlay">
+
+    <div class="overlay-box">
+
+        <div class="overlay-title">
+            ◉
+        </div>
+
+        <div
+            id="textColorWheel"
+            class="color-wheel">
+
+            <span
+                id="textColorMarker"
+                class="color-marker">
+            </span>
+
+        </div>
+
+        <div class="color-presets">
+
+            <button
+                id="blackText"
+                class="color-preset"
+                type="button"
+                aria-label="أسود">
+            </button>
+
+            <button
+                id="whiteText"
+                class="color-preset"
+                type="button"
+                aria-label="أبيض">
+            </button>
+
+        </div>
+<div class="range-row">
+
+    <span>◉</span>
+
+    <input
+        id="opacityRange"
+        type="range"
+        min="0"
+        max="100"
+        value="60">
+
+</div>
+
+        <div class="overlay-actions">
+
+            <button
+                id="colorTextMode"
+                type="button"
+                class="primary">
+                خط
+            </button>
+
+            <button
+                id="colorHighlightMode"
+                type="button">
+                تمييز
+            </button>
+
+            <button
+                id="colorDone"
+                type="button">
+                ✓
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
         <!-- TOOLBAR -->
 
         <div class="toolbar">
@@ -1034,83 +1119,7 @@ body.keyboard-open .editor-area{
    COLOR
 ===================================================== -->
 
-<div
-    id="colorOverlay"
-    class="overlay">
 
-    <div class="overlay-box">
-
-        <div class="overlay-title">
-            ◉
-        </div>
-
-        <div
-            id="textColorWheel"
-            class="color-wheel">
-
-            <span
-                id="textColorMarker"
-                class="color-marker">
-            </span>
-
-        </div>
-
-        <div class="color-presets">
-
-            <button
-                id="blackText"
-                class="color-preset"
-                type="button"
-                aria-label="أسود">
-            </button>
-
-            <button
-                id="whiteText"
-                class="color-preset"
-                type="button"
-                aria-label="أبيض">
-            </button>
-
-        </div>
-<div class="range-row">
-
-    <span>◉</span>
-
-    <input
-        id="opacityRange"
-        type="range"
-        min="0"
-        max="100"
-        value="60">
-
-</div>
-
-        <div class="overlay-actions">
-
-            <button
-                id="colorTextMode"
-                type="button"
-                class="primary">
-                خط
-            </button>
-
-            <button
-                id="colorHighlightMode"
-                type="button">
-                تمييز
-            </button>
-
-            <button
-                id="colorDone"
-                type="button">
-                ✓
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
 
 
 <!-- =====================================================
