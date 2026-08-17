@@ -1480,6 +1480,10 @@ const tableButton = document.getElementById("tableButton");
 const textColorWheel = document.getElementById("textColorWheel");
 const textColorMarker = document.getElementById("textColorMarker");
 
+const opacityRange = document.getElementById("opacityRange");
+
+let colorMode = "text";
+
 textColorWheel.addEventListener("pointerdown", (event) => {
 
     const rect = textColorWheel.getBoundingClientRect();
@@ -1515,6 +1519,7 @@ textColorWheel.addEventListener("pointerdown", (event) => {
 
     applyColor(color);
 });
+
 
 function applyColor(color){
 
@@ -1553,13 +1558,6 @@ function applyColor(color){
     );
 }
 
-        document.execCommand(
-            "hiliteColor",
-            false,
-            color
-        );
-    }
-}
 
 document.getElementById("blackText").addEventListener("click", () => {
     applyColor("#000000");
@@ -1569,16 +1567,41 @@ document.getElementById("whiteText").addEventListener("click", () => {
     applyColor("#ffffff");
 });
 
-document.getElementById("colorDone").addEventListener("click", () => {
-    colorOverlay.classList.remove("open");
-});
 
 document.getElementById("colorTextMode").addEventListener("click", () => {
+
     colorMode = "text";
+
+    document.getElementById("colorTextMode")
+        .classList.add("primary");
+
+    document.getElementById("colorHighlightMode")
+        .classList.remove("primary");
 });
 
+
 document.getElementById("colorHighlightMode").addEventListener("click", () => {
+
     colorMode = "highlight";
+
+    document.getElementById("colorHighlightMode")
+        .classList.add("primary");
+
+    document.getElementById("colorTextMode")
+        .classList.remove("primary");
+});
+
+
+opacityRange.addEventListener("input", () => {
+
+    if(colorMode !== "highlight"){
+        return;
+    }
+});
+
+
+document.getElementById("colorDone").addEventListener("click", () => {
+    colorOverlay.classList.remove("open");
 });
 
 const tableButton = document.getElementById("tableButton");
