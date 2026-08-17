@@ -1516,22 +1516,6 @@ textColorWheel.addEventListener("pointerdown", (event) => {
     applyColor(color);
 });
 
-const highlightButton = document.getElementById("highlightButton");
-
-let colorMode = "text";
-
-colorButton.addEventListener("click", () => {
-    colorMode = "text";
-    colorOverlay.classList.add("open");
-});
-
-highlightButton.addEventListener("click", () => {
-    colorMode = "highlight";
-    colorOverlay.classList.add("open");
-});
-
-const opacityRange = document.getElementById("opacityRange");
-
 function applyColor(color){
 
     editor.focus();
@@ -1544,23 +1528,30 @@ function applyColor(color){
             color
         );
 
-    }else{
+        return;
+    }
 
-        const opacity = Number(opacityRange.value) / 100;
+    const opacity =
+        Number(opacityRange.value) / 100;
 
-        const match = color.match(
-            /hsl\(\s*([\d.]+)[,\s]+([\d.]+)%[,\s]+([\d.]+)%\s*\)/
-        );
+    if(color.startsWith("#")){
 
-        if(match){
+        const hex = color.replace("#", "");
 
-            const h = match[1];
-            const s = match[2];
-            const l = match[3];
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const b = parseInt(hex.substring(4, 6), 16);
 
-            color =
-                `hsla(${h}, ${s}%, ${l}%, ${opacity})`;
-        }
+        color =
+            `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    }
+
+    document.execCommand(
+        "hiliteColor",
+        false,
+        color
+    );
+}
 
         document.execCommand(
             "hiliteColor",
@@ -1569,14 +1560,6 @@ function applyColor(color){
         );
     }
 }
-
-opacityRange.addEventListener("input", () => {
-
-    if(colorMode !== "highlight"){
-        return;
-    }
-
-});
 
 document.getElementById("blackText").addEventListener("click", () => {
     applyColor("#000000");
