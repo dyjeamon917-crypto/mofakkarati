@@ -1466,26 +1466,60 @@ body.keyboard-open .editor-area{
 <script>
 
 const editor = document.getElementById("editor");
+
 const boldButton = document.getElementById("boldButton");
-
-boldButton.addEventListener("click", () => {
-    editor.focus();
-    document.execCommand("bold");
-});
-
 const italicButton = document.getElementById("italicButton");
-
-italicButton.addEventListener("click", () => {
-    editor.focus();
-    document.execCommand("italic");
-});
-
 const underlineButton = document.getElementById("underlineButton");
 
-underlineButton.addEventListener("click", () => {
+function updateFormatButtons(){
+
+    boldButton.classList.toggle(
+        "active",
+        document.queryCommandState("bold")
+    );
+
+    italicButton.classList.toggle(
+        "active",
+        document.queryCommandState("italic")
+    );
+
+    underlineButton.classList.toggle(
+        "active",
+        document.queryCommandState("underline")
+    );
+}
+
+boldButton.addEventListener("click", () => {
+
     editor.focus();
-    document.execCommand("underline");
+
+    document.execCommand("bold");
+
+    updateFormatButtons();
 });
+
+italicButton.addEventListener("click", () => {
+
+    editor.focus();
+
+    document.execCommand("italic");
+
+    updateFormatButtons();
+});
+
+underlineButton.addEventListener("click", () => {
+
+    editor.focus();
+
+    document.execCommand("underline");
+
+    updateFormatButtons();
+});
+
+editor.addEventListener("keyup", updateFormatButtons);
+editor.addEventListener("mouseup", updateFormatButtons);
+editor.addEventListener("input", updateFormatButtons);
+editor.addEventListener("click", updateFormatButtons);
 
 const sizeButton = document.getElementById("sizeButton");
 const fontSizeBar = document.getElementById("fontSizeBar");
