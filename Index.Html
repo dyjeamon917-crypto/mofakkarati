@@ -1705,10 +1705,15 @@ undoButton.addEventListener("click", () => {
 const cancelButton = document.getElementById("cancelButton");
 
 cancelButton.addEventListener("click", () => {
+
     editor.innerHTML = "";
+
+    selectedNote = null;
+
+    messageMenu.classList.remove("open");
+
     editor.focus();
 });
-
 
 const newButton = document.getElementById("newButton");
 
