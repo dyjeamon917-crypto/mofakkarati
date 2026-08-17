@@ -1620,10 +1620,29 @@ alignmentBar.querySelectorAll("button").forEach(button => {
 
         editor.focus();
 
+        const align = button.dataset.align;
+
         document.execCommand(
-            "justify" + button.dataset.align.charAt(0).toUpperCase()
-            + button.dataset.align.slice(1)
+            "justify" +
+            align.charAt(0).toUpperCase() +
+            align.slice(1)
         );
+
+        const selection = window.getSelection();
+
+        if(selection.rangeCount){
+
+            let element =
+                selection.anchorNode.nodeType === 1
+                    ? selection.anchorNode
+                    : selection.anchorNode.parentElement;
+
+            const list = element?.closest("ul, ol");
+
+            if(list){
+                list.style.textAlign = align;
+            }
+        }
 
     });
 
