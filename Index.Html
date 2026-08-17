@@ -570,7 +570,7 @@ button{
 }
 
 /* =====================================================
-   TABLE — ملائم للنص ومتجاوب مع الموبايل
+   TABLE
 ===================================================== */
 
 .editor-table{
@@ -579,22 +579,19 @@ button{
     margin:8px 0;
     border-collapse:collapse;
     table-layout:auto;
-    display:table;
 }
 
 .editor-table td,
 .editor-table th{
-    min-width:60px;
-    max-width:260px;
-    padding:7px 9px;
+    min-width:90px;
+    max-width:300px;
+    padding:8px 12px;
     border:1px solid #697386;
-    width:auto;
     white-space:normal;
-    word-break:normal;
+    word-break:break-word;
     overflow-wrap:anywhere;
     vertical-align:top;
     line-height:1.6;
-    overflow:hidden;
 }
 
 .editor-table td:focus,
@@ -605,14 +602,15 @@ button{
 @media(max-width:600px){
 
     .editor-table{
+        width:max-content;
         max-width:100%;
     }
 
     .editor-table td,
     .editor-table th{
-        min-width:50px;
-        max-width:180px;
-        padding:6px 7px;
+        min-width:80px;
+        max-width:240px;
+        padding:7px 10px;
         font-size:inherit;
     }
 }
