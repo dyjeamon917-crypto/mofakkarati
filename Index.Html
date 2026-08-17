@@ -1848,8 +1848,6 @@ editButton.addEventListener("click", () => {
 
    editor.innerHTML = noteContent.innerHTML.replace(/^(<div><br><\/div>|<br>)+|(<div><br><\/div>|<br>)+$/g, "");
 
-    selectedNote = null;
-
     messageMenu.classList.remove("open");
 
     editor.focus();
