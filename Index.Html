@@ -1056,70 +1056,22 @@ body.keyboard-open .editor-area{
         <div class="overlay-actions">
 
             <button
+                id="colorTextMode"
+                type="button"
+                class="primary">
+                خط
+            </button>
+
+            <button
+                id="colorHighlightMode"
+                type="button">
+                تمييز
+            </button>
+
+            <button
                 id="colorDone"
-                class="primary"
                 type="button">
                 ✓
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =====================================================
-   HIGHLIGHT
-===================================================== -->
-
-<div
-    id="highlightOverlay"
-    class="overlay">
-
-    <div class="overlay-box">
-
-        <div class="overlay-title">
-            ▰
-        </div>
-
-        <div
-            id="highlightColorWheel"
-            class="color-wheel">
-
-            <span
-                id="highlightColorMarker"
-                class="color-marker">
-            </span>
-
-        </div>
-
-        <div class="range-row">
-
-            <span>◉</span>
-
-            <input
-                id="opacityRange"
-                type="range"
-                min="0"
-                max="100"
-                value="60">
-
-        </div>
-
-        <div class="overlay-actions">
-
-            <button
-                id="highlightDone"
-                class="primary"
-                type="button">
-                ✓
-            </button>
-
-            <button
-                id="removeHighlight"
-                type="button">
-                ⌫
             </button>
 
         </div>
@@ -1511,35 +1463,101 @@ document.getElementById("colorDone").addEventListener("click", () => {
     colorOverlay.classList.remove("open");
 });
 
+const tableButton = document.getElementById("tableButton");
+
+const textColorWheel = document.getElementById("textColorWheel");
+const textColorMarker = document.getElementById("textColorMarker");
+
+textColorWheel.addEventListener("pointerdown", (event) => {
+
+    const rect = textColorWheel.getBoundingClientRect();
+
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const dx = x - centerX;
+    const dy = y - centerY;
+
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const radius = Math.min(centerX, centerY);
+
+    const angle = Math.atan2(dy, dx);
+
+    const hue =
+        ((angle * 180 / Math.PI) + 360 + 90) % 360;
+
+    const saturation =
+        Math.min(distance / radius, 1) * 100;
+
+    const lightness =
+        100 - Math.min(distance / radius, 1) * 50;
+
+    const color =
+        `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+
+    textColorMarker.style.left = x + "px";
+    textColorMarker.style.top = y + "px";
+
+    applyColor(color);
+});
+
 const highlightButton = document.getElementById("highlightButton");
-const highlightOverlay = document.getElementById("highlightOverlay");
+
+let colorMode = "text";
+
+colorButton.addEventListener("click", () => {
+    colorMode = "text";
+    colorOverlay.classList.add("open");
+});
 
 highlightButton.addEventListener("click", () => {
-    highlightOverlay.classList.add("open");
+    colorMode = "highlight";
+    colorOverlay.classList.add("open");
 });
 
-document.getElementById("highlightDone").addEventListener("click", () => {
+function applyColor(color){
+
     editor.focus();
 
-    document.execCommand(
-        "hiliteColor",
-        false,
-        "#ffff00"
-    );
+    if(colorMode === "text"){
 
-    highlightOverlay.classList.remove("open");
+        document.execCommand(
+            "foreColor",
+            false,
+            color
+        );
+
+    }else{
+
+        document.execCommand(
+            "hiliteColor",
+            false,
+            color
+        );
+    }
+}
+
+document.getElementById("blackText").addEventListener("click", () => {
+    applyColor("#000000");
 });
 
-document.getElementById("removeHighlight").addEventListener("click", () => {
-    editor.focus();
+document.getElementById("whiteText").addEventListener("click", () => {
+    applyColor("#ffffff");
+});
 
-    document.execCommand(
-        "hiliteColor",
-        false,
-        "transparent"
-    );
+document.getElementById("colorDone").addEventListener("click", () => {
+    colorOverlay.classList.remove("open");
+});
 
-    highlightOverlay.classList.remove("open");
+document.getElementById("colorTextMode").addEventListener("click", () => {
+    colorMode = "text";
+});
+
+document.getElementById("colorHighlightMode").addEventListener("click", () => {
+    colorMode = "highlight";
 });
 
 const tableButton = document.getElementById("tableButton");
