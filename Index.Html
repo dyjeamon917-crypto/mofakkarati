@@ -1525,7 +1525,9 @@ editor.addEventListener("click", updateFormatButtons);
 const sizeButton = document.getElementById("sizeButton");
 const fontSizeBar = document.getElementById("fontSizeBar");
 
-for(let size = 8; size <= 20; size++){
+const fontSizes = [12, 14, 16, 18, 20, 24, 30];
+
+fontSizes.forEach(size => {
 
     const button = document.createElement("button");
 
@@ -1538,7 +1540,7 @@ for(let size = 8; size <= 20; size++){
     });
 
     fontSizeBar.appendChild(button);
-}
+});
 
 sizeButton.addEventListener("click", () => {
     fontSizeBar.style.display =
