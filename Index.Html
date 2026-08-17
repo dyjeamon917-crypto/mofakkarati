@@ -1755,9 +1755,19 @@ document.getElementById("searchDone").addEventListener("click", () => {
     searchResult.textContent = "";
 });
 
+const sendButton = document.getElementById("sendButton");
 
+sendButton.addEventListener("click", () => {
 
-const content = savedContent.innerHTML.trim();
+    const savedContent = editor.cloneNode(true);
+
+    savedContent
+        .querySelectorAll('[contenteditable="true"]')
+        .forEach(element => {
+            element.removeAttribute("contenteditable");
+        });
+
+    const content = savedContent.innerHTML.trim();
 
     if(!content){
         return;
