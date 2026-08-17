@@ -1052,6 +1052,18 @@ body.keyboard-open .editor-area{
             </button>
 
         </div>
+<div class="range-row">
+
+    <span>◉</span>
+
+    <input
+        id="opacityRange"
+        type="range"
+        min="0"
+        max="100"
+        value="60">
+
+</div>
 
         <div class="overlay-actions">
 
@@ -1518,6 +1530,8 @@ highlightButton.addEventListener("click", () => {
     colorOverlay.classList.add("open");
 });
 
+const opacityRange = document.getElementById("opacityRange");
+
 function applyColor(color){
 
     editor.focus();
@@ -1531,6 +1545,22 @@ function applyColor(color){
         );
 
     }else{
+
+        const opacity = Number(opacityRange.value) / 100;
+
+        const match = color.match(
+            /hsl\(\s*([\d.]+)[,\s]+([\d.]+)%[,\s]+([\d.]+)%\s*\)/
+        );
+
+        if(match){
+
+            const h = match[1];
+            const s = match[2];
+            const l = match[3];
+
+            color =
+                `hsla(${h}, ${s}%, ${l}%, ${opacity})`;
+        }
 
         document.execCommand(
             "hiliteColor",
