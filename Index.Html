@@ -316,6 +316,11 @@ button{
     font-size:21px;
 }
 
+position:absolute;
+top:8px;
+left:8px;
+z-index:10;
+
 .cancel-button{
     flex:1;
     height:42px;
@@ -926,7 +931,13 @@ body.keyboard-open .editor-area{
             contenteditable="true"
             spellcheck="true">
         </div>
-
+<button
+    id="sendButton"
+    class="send-button"
+    type="button"
+    aria-label="حفظ">
+    ➤
+</button>
 
         <!-- TOOLBAR -->
 
@@ -1092,14 +1103,6 @@ body.keyboard-open .editor-area{
         <!-- ACTIONS -->
 
         <div class="editor-actions">
-
-            <button
-                id="sendButton"
-                class="send-button"
-                type="button"
-                aria-label="حفظ">
-                ➤
-            </button>
 
             <!-- زر التراجع -->
             <button
