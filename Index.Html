@@ -1452,13 +1452,35 @@ alignmentButton.addEventListener("click", () => {
             : "flex";
 
 });
-        
 
 const colorButton = document.getElementById("colorButton");
+const highlightButton = document.getElementById("highlightButton");
 const colorOverlay = document.getElementById("colorOverlay");
 
 colorButton.addEventListener("click", () => {
+
+    colorMode = "text";
+
     colorOverlay.classList.add("open");
+
+    document.getElementById("colorTextMode")
+        .classList.add("primary");
+
+    document.getElementById("colorHighlightMode")
+        .classList.remove("primary");
+});
+
+highlightButton.addEventListener("click", () => {
+
+    colorMode = "highlight";
+
+    colorOverlay.classList.add("open");
+
+    document.getElementById("colorHighlightMode")
+        .classList.add("primary");
+
+    document.getElementById("colorTextMode")
+        .classList.remove("primary");
 });
 
 const textColorWheel = document.getElementById("textColorWheel");
