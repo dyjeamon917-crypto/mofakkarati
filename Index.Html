@@ -599,168 +599,56 @@ button{
 }
 
 /* =====================================================
-   MIND MAP
+   MIND MAP BOX
 ===================================================== */
 
-.mind-map{
-    width:100%;
+.mind-box{
+    width:fit-content;
     max-width:100%;
-    margin:12px 0;
-    padding:12px;
-    border:1px solid #485263;
+    margin:12px auto;
+    padding:14px;
+    border:2px solid #fff;
     border-radius:14px;
+    background:transparent;
     overflow:hidden;
 }
 
-.mind-map-center{
+.mind-box-root{
     width:fit-content;
     max-width:90%;
-    margin:auto;
-    padding:9px 14px;
-    border-radius:12px;
-    background:#3867dc;
-    text-align:center;
-    word-break:break-word;
-}
-
-.mind-map-branches{
-    display:flex;
-    flex-wrap:wrap;
-    justify-content:center;
-    gap:8px;
-    margin-top:12px;
-}
-
-.mind-map-branch{
-    flex:1 1 100px;
-    min-width:70px;
-    max-width:180px;
-    padding:8px;
-    border-radius:10px;
-    background:#303744;
-    text-align:center;
-    word-break:break-word;
-    overflow-wrap:anywhere;
-}
-
-/* =====================================================
-   MIND TREE — فروع بجوار بعضها + أسهم + حذف الشجرة
-===================================================== */
-
-.mind-tree{
-    position:relative;
-    width:100%;
-    max-width:100%;
-    margin:12px 0;
-    padding:34px 10px 14px;
-    border:1px solid #485263;
-    border-radius:14px;
-    overflow:hidden;
-    box-sizing:border-box;
-}
-
-.mind-tree-root{
-    width:fit-content;
-    max-width:80%;
     margin:0 auto;
-    padding:9px 14px;
-    border-radius:12px;
-    background:#3867dc;
-    text-align:center;
-    word-break:break-word;
-    overflow-wrap:anywhere;
-    position:relative;
-    z-index:2;
-}
-
-.mind-tree-branches{
-    display:flex;
-    flex-direction:row;
-    flex-wrap:wrap;
-    align-items:flex-start;
-    justify-content:center;
-    gap:28px 12px;
-    margin-top:28px;
-    width:100%;
-}
-
-.mind-tree-branch{
-    position:relative;
-    flex:0 1 auto;
-    width:fit-content;
-    min-width:70px;
-    max-width:220px;
-    padding:8px 10px;
+    padding:8px 12px;
+    border:2px solid #fff;
     border-radius:10px;
-    background:#303744;
+    background:transparent;
     text-align:center;
     word-break:break-word;
     overflow-wrap:anywhere;
     line-height:1.6;
-    box-sizing:border-box;
 }
 
-.mind-tree-branch::before{
-    content:"↓";
-    position:absolute;
-    top:-27px;
-    left:50%;
-    transform:translateX(-50%);
-    color:#8fa8ff;
-    font-size:22px;
-    line-height:1;
-    font-weight:bold;
-    pointer-events:none;
-}
-
-.mind-tree-delete{
-    position:absolute;
-    top:7px;
-    left:7px;
-    width:28px;
-    height:28px;
-    padding:0;
-    border:1px solid #8e98a8;
-    border-radius:50%;
-    background:transparent;
-    color:#c9d0dc;
+.mind-box-branches{
     display:flex;
-    align-items:center;
+    flex-wrap:wrap;
     justify-content:center;
-    font-size:17px;
-    line-height:1;
-    z-index:10;
+    align-items:flex-start;
+    gap:10px;
+    margin-top:16px;
 }
 
-.mind-tree-delete:active{
-    transform:scale(.92);
-}
-
-.mind-map{
-    position:relative;
-}
-
-.mind-map-delete{
-    position:absolute;
-    top:7px;
-    left:7px;
-    width:28px;
-    height:28px;
-    padding:0;
-    border:1px solid #8e98a8;
-    border-radius:50%;
+.mind-box-branch{
+    flex:0 1 auto;
+    width:fit-content;
+    max-width:220px;
+    min-width:50px;
+    padding:7px 10px;
+    border:2px solid #fff;
+    border-radius:10px;
     background:transparent;
-    color:#c9d0dc;
-    display:flex;
-    align-items:center;
-    justify-content:center;
-    font-size:17px;
-    line-height:1;
-    z-index:10;
-}
-
-.mind-map-delete:active{
-    transform:scale(.92);
+    text-align:center;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+    line-height:1.6;
 }
 
 /* =====================================================
@@ -995,22 +883,14 @@ body.keyboard-open .editor-area{
                 aria-label="جدول">
                 ▦
             </button>
-
+            
             <button
                 id="mindMapButton"
-                class="tool"
+                 class="tool"
                 type="button"
-                aria-label="خريطة">
-                ⌗
-            </button>
-
-            <button
-                id="mindTreeButton"
-                class="tool"
-                type="button"
-                aria-label="شجرة">
-                🌳
-            </button>
+                aria-label="مربع">
+                ▣
+            </button>      
 
             <!-- أزرار بداية السطر -->
             <button
@@ -1361,56 +1241,6 @@ body.keyboard-open .editor-area{
 
             <button
                 id="mindDone"
-                class="primary"
-                type="button">
-                ✓
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
-<!-- =====================================================
-   MIND TREE
-===================================================== -->
-
-<div
-    id="mindTreeOverlay"
-    class="overlay">
-
-    <div class="overlay-box">
-
-        <div class="overlay-title">
-            🌳
-        </div>
-
-        <div class="counter-box">
-
-            <button
-                id="treeBranchMinus"
-                type="button">
-                −
-            </button>
-
-            <strong id="treeBranchInfo">
-                2
-            </strong>
-
-            <button
-                id="treeBranchPlus"
-                type="button">
-                ＋
-            </button>
-
-        </div>
-
-        <div class="overlay-actions">
-
-            <button
-                id="treeDone"
                 class="primary"
                 type="button">
                 ✓
@@ -1783,126 +1613,6 @@ document.getElementById("tableDone").addEventListener("click", () => {
     editor.appendChild(table);
 
     tableOverlay.classList.remove("open");
-});
-
-const mindMapButton = document.getElementById("mindMapButton");
-const mindMapOverlay = document.getElementById("mindMapOverlay");
-
-let mindBranches = 2;
-
-function updateMindInfo(){
-    document.getElementById("mindBranchInfo").textContent = mindBranches;
-}
-
-mindMapButton.addEventListener("click", () => {
-    updateMindInfo();
-    mindMapOverlay.classList.add("open");
-});
-
-document.getElementById("mindBranchPlus").addEventListener("click", () => {
-    mindBranches++;
-    updateMindInfo();
-});
-
-document.getElementById("mindBranchMinus").addEventListener("click", () => {
-    if(mindBranches > 1){
-        mindBranches--;
-        updateMindInfo();
-    }
-});
-
-document.getElementById("mindDone").addEventListener("click", () => {
-
-    editor.focus();
-
-    const map = document.createElement("div");
-    map.className = "mind-map";
-
-    const center = document.createElement("div");
-    center.className = "mind-map-center";
-    center.contentEditable = "true";
-    center.textContent = "الفكرة الرئيسية";
-
-    const branches = document.createElement("div");
-    branches.className = "mind-map-branches";
-
-    for(let i = 0; i < mindBranches; i++){
-
-        const branch = document.createElement("div");
-
-        branch.className = "mind-map-branch";
-        branch.contentEditable = "true";
-        branch.textContent = "فرع " + (i + 1);
-
-        branches.appendChild(branch);
-    }
-
-    map.appendChild(center);
-    map.appendChild(branches);
-
-    editor.appendChild(map);
-
-    mindMapOverlay.classList.remove("open");
-});
-
-const mindTreeButton = document.getElementById("mindTreeButton");
-const mindTreeOverlay = document.getElementById("mindTreeOverlay");
-
-let treeBranches = 2;
-
-function updateTreeInfo(){
-    document.getElementById("treeBranchInfo").textContent = treeBranches;
-}
-
-mindTreeButton.addEventListener("click", () => {
-    updateTreeInfo();
-    mindTreeOverlay.classList.add("open");
-});
-
-document.getElementById("treeBranchPlus").addEventListener("click", () => {
-    treeBranches++;
-    updateTreeInfo();
-});
-
-document.getElementById("treeBranchMinus").addEventListener("click", () => {
-    if(treeBranches > 1){
-        treeBranches--;
-        updateTreeInfo();
-    }
-});
-
-document.getElementById("treeDone").addEventListener("click", () => {
-
-    editor.focus();
-
-    const tree = document.createElement("div");
-    tree.className = "mind-tree";
-
-    const root = document.createElement("div");
-    root.className = "mind-tree-root";
-    root.contentEditable = "true";
-    root.textContent = "الفكرة الرئيسية";
-
-    const branches = document.createElement("div");
-    branches.className = "mind-tree-branches";
-
-    for(let i = 0; i < treeBranches; i++){
-
-        const branch = document.createElement("div");
-
-        branch.className = "mind-tree-branch";
-        branch.contentEditable = "true";
-        branch.textContent = "فرع " + (i + 1);
-
-        branches.appendChild(branch);
-    }
-
-    tree.appendChild(root);
-    tree.appendChild(branches);
-
-    editor.appendChild(tree);
-
-    mindTreeOverlay.classList.remove("open");
 });
 
 const undoButton = document.getElementById("undoButton");
