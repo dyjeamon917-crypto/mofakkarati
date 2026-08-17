@@ -1641,6 +1641,9 @@ alignmentBar.querySelectorAll("button").forEach(button => {
 
             if(list){
                 list.style.textAlign = align;
+
+list.querySelectorAll("li").forEach(li => li.style.textAlign = align);
+
             }
         }
 
