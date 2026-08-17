@@ -1769,6 +1769,22 @@ sendButton.addEventListener("click", () => {
         return;
     }
 
+if(selectedNote){
+
+    const noteContent =
+        selectedNote.querySelector(".note-content");
+
+    if(noteContent){
+        noteContent.innerHTML = content;
+    }
+
+    selectedNote = null;
+    editor.innerHTML = "";
+    editor.focus();
+
+    return;
+}
+
     const note = document.createElement("div");
     note.className = "note";
 
@@ -1830,9 +1846,7 @@ editButton.addEventListener("click", () => {
         return;
     }
 
-    editor.innerHTML = noteContent.innerHTML.replace(/^(<div><br><\/div>|<br>)+|(<div><br><\/div>|<br>)+$/g, "");
-
-    selectedNote.remove();
+   editor.innerHTML = noteContent.innerHTML.replace(/^(<div><br><\/div>|<br>)+|(<div><br><\/div>|<br>)+$/g, "");
 
     selectedNote = null;
 
