@@ -1821,15 +1821,24 @@ messages.addEventListener("click", (event) => {
     messageMenu.classList.add("open");
 });
 
-
 editButton.addEventListener("click", () => {
 
     if(!selectedNote){
         return;
     }
 
-    editor.innerHTML =
-        selectedNote.querySelector(".note-content").innerHTML;
+    const savedContent =
+        selectedNote
+            .querySelector(".note-content")
+            .cloneNode(true);
+
+    savedContent
+        .querySelectorAll('[contenteditable="true"]')
+        .forEach(element => {
+            element.removeAttribute("contenteditable");
+        });
+
+    editor.innerHTML = savedContent.innerHTML.trim();
 
     selectedNote.remove();
 
@@ -1837,7 +1846,6 @@ editButton.addEventListener("click", () => {
 
     editor.focus();
 });
-
 
 deleteButton.addEventListener("click", () => {
 
