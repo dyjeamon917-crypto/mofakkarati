@@ -1827,14 +1827,24 @@ editButton.addEventListener("click", () => {
         return;
     }
 
+    const noteContent =
+        selectedNote.querySelector(".note-content");
 
-    editor.innerHTML = savedContent.innerHTML.trim();
+    if(!noteContent){
+        return;
+    }
+
+    editor.innerHTML = noteContent.innerHTML;
 
     selectedNote.remove();
+
+    selectedNote = null;
 
     messageMenu.classList.remove("open");
 
     editor.focus();
+
+    updateFormatButtons();
 });
 
 deleteButton.addEventListener("click", () => {
