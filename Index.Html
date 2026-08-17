@@ -1830,7 +1830,7 @@ editButton.addEventListener("click", () => {
         return;
     }
 
-    editor.innerHTML = noteContent.innerHTML;
+    editor.innerHTML = noteContent.innerHTML.replace(/^(<div><br><\/div>|<br>)+|(<div><br><\/div>|<br>)+$/g, "");
 
     selectedNote.remove();
 
