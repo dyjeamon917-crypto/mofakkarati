@@ -1570,6 +1570,14 @@ function applyColor(color){
     }
 }
 
+opacityRange.addEventListener("input", () => {
+
+    if(colorMode !== "highlight"){
+        return;
+    }
+
+});
+
 document.getElementById("blackText").addEventListener("click", () => {
     applyColor("#000000");
 });
