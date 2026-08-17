@@ -1461,22 +1461,6 @@ colorButton.addEventListener("click", () => {
     colorOverlay.classList.add("open");
 });
 
-document.getElementById("blackText").addEventListener("click", () => {
-    editor.focus();
-    document.execCommand("foreColor", false, "#000000");
-});
-
-document.getElementById("whiteText").addEventListener("click", () => {
-    editor.focus();
-    document.execCommand("foreColor", false, "#ffffff");
-});
-
-document.getElementById("colorDone").addEventListener("click", () => {
-    colorOverlay.classList.remove("open");
-});
-
-const tableButton = document.getElementById("tableButton");
-
 const textColorWheel = document.getElementById("textColorWheel");
 const textColorMarker = document.getElementById("textColorMarker");
 
