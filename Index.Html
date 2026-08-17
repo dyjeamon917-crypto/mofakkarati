@@ -1639,17 +1639,14 @@ alignmentBar.querySelectorAll("button").forEach(button => {
 
             const list = element?.closest("ul, ol");
 
-            if(list){
-                list.style.textAlign = align;
+           if(list){
+    list.style.textAlign = align;
 
-list.querySelectorAll("li").forEach(li => li.style.textAlign = align);
-
-            }
-        }
-
+    list.querySelectorAll("li").forEach(li => {
+        li.style.textAlign = align;
+        li.style.listStylePosition = "inside";
     });
-
-});
+} 
 
 alignmentButton.addEventListener("click", () => {
 
