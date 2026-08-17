@@ -1827,16 +1827,6 @@ editButton.addEventListener("click", () => {
         return;
     }
 
-    const savedContent =
-        selectedNote
-            .querySelector(".note-content")
-            .cloneNode(true);
-
-    savedContent
-        .querySelectorAll('[contenteditable="true"]')
-        .forEach(element => {
-            element.removeAttribute("contenteditable");
-        });
 
     editor.innerHTML = savedContent.innerHTML.trim();
 
