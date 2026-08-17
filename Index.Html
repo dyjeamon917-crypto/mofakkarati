@@ -583,14 +583,11 @@ button{
 
 .editor-table td,
 .editor-table th{
-    min-width:90px;
-    max-width:300px;
+    min-width:80px;
     padding:8px 12px;
     border:1px solid #697386;
-    white-space:normal;
-    word-break:break-word;
-    overflow-wrap:anywhere;
-    vertical-align:top;
+    white-space:nowrap;
+    vertical-align:middle;
     line-height:1.6;
 }
 
@@ -602,19 +599,16 @@ button{
 @media(max-width:600px){
 
     .editor-table{
-        width:max-content;
         max-width:100%;
+        overflow:hidden;
     }
 
     .editor-table td,
     .editor-table th{
-        min-width:80px;
-        max-width:240px;
+        min-width:70px;
         padding:7px 10px;
-        font-size:inherit;
     }
 }
-
 
 /* =====================================================
    MIND MAP
