@@ -1614,6 +1614,7 @@ listButton.addEventListener("click", () => {
 const alignmentButton = document.getElementById("alignmentButton");
 const alignmentBar = document.getElementById("alignmentBar");
 
+
 alignmentBar.querySelectorAll("button").forEach(button => {
 
     button.addEventListener("click", () => {
@@ -1639,14 +1640,19 @@ alignmentBar.querySelectorAll("button").forEach(button => {
 
             const list = element?.closest("ul, ol");
 
-           if(list){
-    list.style.textAlign = align;
+            if(list){
+                list.style.textAlign = align;
 
-    list.querySelectorAll("li").forEach(li => {
-        li.style.textAlign = align;
-        li.style.listStylePosition = "inside";
+                list.querySelectorAll("li").forEach(li => {
+                    li.style.textAlign = align;
+                    li.style.listStylePosition = "inside";
+                });
+            }
+        }
+
     });
-} 
+
+});
 
 alignmentButton.addEventListener("click", () => {
 
@@ -1656,6 +1662,7 @@ alignmentButton.addEventListener("click", () => {
             : "flex";
 
 });
+        
 
 const colorButton = document.getElementById("colorButton");
 const colorOverlay = document.getElementById("colorOverlay");
