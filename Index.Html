@@ -1760,7 +1760,15 @@ const messages = document.getElementById("messages");
 
 sendButton.addEventListener("click", () => {
 
-    const content = editor.innerHTML.trim();
+    const savedContent = editor.cloneNode(true);
+
+savedContent
+    .querySelectorAll('[contenteditable="true"]')
+    .forEach(element => {
+        element.removeAttribute("contenteditable");
+    });
+
+const content = savedContent.innerHTML.trim();
 
     if(!content){
         return;
