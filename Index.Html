@@ -1695,6 +1695,45 @@ const deleteTableColumnButton =
 
 addMindLeftButton.addEventListener("click", () => {
 
+deleteTableColumnButton.addEventListener("click", () => {
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount){
+        return;
+    }
+
+    let element =
+        selection.anchorNode.nodeType === 1
+            ? selection.anchorNode
+            : selection.anchorNode.parentElement;
+
+    const tableCell =
+        element.closest(".editor-table td, .editor-table th");
+
+    if(!tableCell){
+        return;
+    }
+
+    const columnIndex = tableCell.cellIndex;
+
+    const table =
+        tableCell.closest(".editor-table");
+
+    if(!table){
+        return;
+    }
+
+    Array.from(table.rows).forEach(row => {
+
+        if(row.cells[columnIndex]){
+            row.deleteCell(columnIndex);
+        }
+
+    });
+
+});
+
     const selection = window.getSelection();
 
     if(!selection.rangeCount){
@@ -1748,45 +1787,6 @@ if(tableCell){
             "afterend",
             newBranch
         );
-
-deleteTableColumnButton.addEventListener("click", () => {
-
-    const selection = window.getSelection();
-
-    if(!selection.rangeCount){
-        return;
-    }
-
-    let element =
-        selection.anchorNode.nodeType === 1
-            ? selection.anchorNode
-            : selection.anchorNode.parentElement;
-
-    const tableCell =
-        element.closest(".editor-table td, .editor-table th");
-
-    if(!tableCell){
-        return;
-    }
-
-    const columnIndex = tableCell.cellIndex;
-
-    const table =
-        tableCell.closest(".editor-table");
-
-    if(!table){
-        return;
-    }
-
-    Array.from(table.rows).forEach(row => {
-
-        if(row.cells[columnIndex]){
-            row.deleteCell(columnIndex);
-        }
-
-    });
-
-});
 
         newBranch.focus();
 
