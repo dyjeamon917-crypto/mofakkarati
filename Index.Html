@@ -1191,57 +1191,6 @@ body.keyboard-open #colorOverlay{
 
 </div>
 
-
-<!-- =====================================================
-   MIND MAP
-===================================================== -->
-
-<div
-    id="mindMapOverlay"
-    class="overlay">
-
-    <div class="overlay-box">
-
-        <div class="overlay-title">
-            ⌗
-        </div>
-
-        <div class="counter-box">
-
-            <button
-                id="mindBranchMinus"
-                type="button">
-                −
-            </button>
-
-            <strong id="mindBranchInfo">
-                2
-            </strong>
-
-            <button
-                id="mindBranchPlus"
-                type="button">
-                ＋
-            </button>
-
-        </div>
-
-        <div class="overlay-actions">
-
-            <button
-                id="mindDone"
-                class="primary"
-                type="button">
-                ✓
-            </button>
-
-        </div>
-
-    </div>
-
-</div>
-
-
 <!-- =====================================================
    SEARCH
 ===================================================== -->
@@ -1686,85 +1635,36 @@ document.getElementById("tableDone").addEventListener("click", () => {
 });
 
 const mindMapButton = document.getElementById("mindMapButton");
-const mindMapOverlay = document.getElementById("mindMapOverlay");
-
-let mindBranches = 2;
-
-function updateMindInfo(){
-    document.getElementById("mindBranchInfo").textContent =
-        mindBranches;
-}
 
 mindMapButton.addEventListener("click", () => {
-
-    updateMindInfo();
-
-    mindMapOverlay.classList.add("open");
-});
-
-document.getElementById("mindBranchPlus").addEventListener("click", () => {
-
-    mindBranches++;
-
-    updateMindInfo();
-});
-
-document.getElementById("mindBranchMinus").addEventListener("click", () => {
-
-    if(mindBranches > 1){
-
-        mindBranches--;
-
-        updateMindInfo();
-    }
-});
-
-document.getElementById("mindDone").addEventListener("click", () => {
 
     editor.focus();
 
     const box = document.createElement("div");
-
     box.className = "mind-box";
 
-
     const root = document.createElement("div");
-
     root.className = "mind-box-root";
-
     root.contentEditable = "true";
-
     root.textContent = "الفكرة الرئيسية";
 
-
     const branches = document.createElement("div");
-
     branches.className = "mind-box-branches";
 
-
-    for(let i = 0; i < mindBranches; i++){
+    for(let i = 0; i < 4; i++){
 
         const branch = document.createElement("div");
-
         branch.className = "mind-box-branch";
-
         branch.contentEditable = "true";
-
         branch.textContent = "فرع " + (i + 1);
 
         branches.appendChild(branch);
     }
 
-
     box.appendChild(root);
-
     box.appendChild(branches);
 
-
     editor.appendChild(box);
-
-
-    mindMapOverlay.classList.remove("open");
 
     root.focus();
 });
