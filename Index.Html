@@ -1436,6 +1436,7 @@ const textColorMarker = document.getElementById("textColorMarker");
 const opacityRange = document.getElementById("opacityRange");
 
 let colorMode = "text";
+let selectedColor = null;
 
 textColorWheel.addEventListener("pointerdown", (event) => {
 
@@ -1474,6 +1475,8 @@ textColorWheel.addEventListener("pointerdown", (event) => {
 });
 
 function applyColor(color){
+
+selectedColor = color;
 
     editor.focus();
 
