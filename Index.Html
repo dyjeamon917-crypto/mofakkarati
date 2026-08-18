@@ -1500,10 +1500,10 @@ highlightButton.addEventListener("click", () => {
 
     colorActive = false;
 
-    document.getElementById("highlightOpacity").style.display = "flex";
+highlightOpacity.style.display = "flex";
 
-document.getElementById("removeHighlight").style.display = "block";
-
+removeHighlight.style.display = "block";
+    
     saveSelection();
 
     colorOverlay.classList.add("open");
@@ -1515,10 +1515,10 @@ colorButton.addEventListener("click", () => {
 
     colorActive = true;
 
-    document.getElementById("highlightOpacity").style.display = "none";
+highlightOpacity.style.display = "none";
 
-document.getElementById("removeHighlight").style.display = "none";
-
+removeHighlight.style.display = "none";
+    
     saveSelection();
 
     colorOverlay.classList.add("open");
@@ -1529,6 +1529,12 @@ const textColorWheel = document.getElementById("textColorWheel");
 const textColorMarker = document.getElementById("textColorMarker");
 
 const opacityRange = document.getElementById("opacityRange");
+
+const highlightOpacity =
+    document.getElementById("highlightOpacity");
+
+const removeHighlight =
+    document.getElementById("removeHighlight");
 
 let colorMode = "text";
 let selectedColor = null;
