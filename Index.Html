@@ -1648,6 +1648,16 @@ mindMapButton.addEventListener("click", () => {
     root.contentEditable = "true";
     root.textContent = "الفكرة الرئيسية";
 
+root.addEventListener("keydown", (event) => {
+
+    if(event.key === " "){
+        event.preventDefault();
+
+        document.execCommand("insertText", false, " ");
+    }
+
+});
+
     const branches = document.createElement("div");
     branches.className = "mind-box-branches";
 
