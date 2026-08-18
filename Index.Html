@@ -1626,39 +1626,22 @@ document.getElementById("tableDone").addEventListener("click", () => {
     tableOverlay.classList.remove("open");
 });
 
-const mindMapButton = document.getElementById("mindMapButton");
-
 mindMapButton.addEventListener("click", () => {
 
-    editor.focus();
+    editor.innerHTML += `
+        <div class="mind-box">
+            <div class="mind-box-root" contenteditable="true">
+                الفكرة الرئيسية
+            </div>
 
-    const box = document.createElement("div");
-    box.className = "mind-box";
-
-    const root = document.createElement("div");
-    root.className = "mind-box-root";
-    root.contentEditable = "true";
-    root.textContent = "الفكرة الرئيسية";
-
-    const branches = document.createElement("div");
-    branches.className = "mind-box-branches";
-
-    for(let i = 0; i < 4; i++){
-
-        const branch = document.createElement("div");
-        branch.className = "mind-box-branch";
-        branch.contentEditable = "true";
-        branch.textContent = "فرع " + (i + 1);
-
-        branches.appendChild(branch);
-    }
-
-    box.appendChild(root);
-    box.appendChild(branches);
-
-    editor.appendChild(box);
-
-    root.focus();
+            <div class="mind-box-branches">
+                <div class="mind-box-branch" contenteditable="true">فرع 1</div>
+                <div class="mind-box-branch" contenteditable="true">فرع 2</div>
+                <div class="mind-box-branch" contenteditable="true">فرع 3</div>
+                <div class="mind-box-branch" contenteditable="true">فرع 4</div>
+            </div>
+        </div>
+    `;
 });
 
 const undoButton = document.getElementById("undoButton");
