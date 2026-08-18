@@ -1940,6 +1940,14 @@ editor.addEventListener("keydown", (event) => {
             ? selection.anchorNode
             : selection.anchorNode.parentElement;
 
+    /* السماح للقوائم المنقطة والمرقمة بالعمل طبيعيًا */
+    const listItem =
+        element.closest("li");
+
+    if(listItem){
+        return;
+    }
+
     const mindElement =
         element.closest(
             ".mind-box-root, .mind-box-branch"
