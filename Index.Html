@@ -1350,13 +1350,6 @@ function applyActiveColor(){
 /* تطبيق اللون قبل كتابة الحرف */
 editor.addEventListener("beforeinput", applyActiveColor);
 
-
-/* تحديث أزرار التنسيق */
-editor.addEventListener("keyup", updateFormatButtons);
-editor.addEventListener("mouseup", updateFormatButtons);
-editor.addEventListener("input", updateFormatButtons);
-editor.addEventListener("click", updateFormatButtons);
-
 const sizeButton = document.getElementById("sizeButton");
 const fontSizeBar = document.getElementById("fontSizeBar");
 
