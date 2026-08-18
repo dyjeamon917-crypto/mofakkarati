@@ -1640,15 +1640,39 @@ mindMapButton.addEventListener("click", () => {
     root.contentEditable = "true";
     root.textContent = "الفكرة الرئيسية";
 
-root.addEventListener("keydown", (event) => {
+function enableDoubleSpaceNewLine(element){
 
-    if(event.key === " "){
-        event.preventDefault();
+    let lastSpace = false;
 
-        document.execCommand("insertText", false, " ");
-    }
+    element.addEventListener("keydown", (event) => {
 
-});
+        if(event.key === " "){
+
+            if(lastSpace){
+
+                event.preventDefault();
+
+                document.execCommand("insertLineBreak");
+
+                lastSpace = false;
+
+            }else{
+
+                lastSpace = true;
+
+            }
+
+        }else{
+
+            lastSpace = false;
+
+        }
+
+    });
+
+}
+
+enableDoubleSpaceNewLine(root);
 
     const branches = document.createElement("div");
     branches.className = "mind-box-branches";
@@ -1659,6 +1683,7 @@ root.addEventListener("keydown", (event) => {
         branch.className = "mind-box-branch";
         branch.contentEditable = "true";
         branch.textContent = "فرع " + (i + 1);
+enableDoubleSpaceNewLine(branch);
 
         branches.appendChild(branch);
     }
