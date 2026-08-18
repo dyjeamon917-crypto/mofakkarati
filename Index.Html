@@ -1279,21 +1279,9 @@ editor.addEventListener("mouseup", updateFormatButtons);
 editor.addEventListener("input", updateFormatButtons);
 editor.addEventListener("click", updateFormatButtons);
 
-editor.addEventListener("input", () => {
+function applyActiveColor(){
 
     if(!colorActive || !selectedColor){
-        return;
-    }
-
-    const selection = window.getSelection();
-
-    if(!selection.rangeCount){
-        return;
-    }
-
-    const range = selection.getRangeAt(0);
-
-    if(!range.collapsed){
         return;
     }
 
@@ -1329,8 +1317,18 @@ editor.addEventListener("input", () => {
             color
         );
     }
+}
 
-});
+
+/* تطبيق اللون قبل كتابة الحرف */
+editor.addEventListener("beforeinput", applyActiveColor);
+
+
+/* تحديث أزرار التنسيق */
+editor.addEventListener("keyup", updateFormatButtons);
+editor.addEventListener("mouseup", updateFormatButtons);
+editor.addEventListener("input", updateFormatButtons);
+editor.addEventListener("click", updateFormatButtons);
 
 const sizeButton = document.getElementById("sizeButton");
 const fontSizeBar = document.getElementById("fontSizeBar");
