@@ -1451,6 +1451,7 @@ const opacityRange = document.getElementById("opacityRange");
 
 let colorMode = "text";
 let selectedColor = null;
+let colorActive = false;
 
 textColorWheel.addEventListener("pointerdown", (event) => {
 
@@ -1592,6 +1593,10 @@ document.getElementById("whiteText").addEventListener("click", () => {
 document.getElementById("colorDone").addEventListener("click", () => {
 
     colorOverlay.classList.remove("open");
+
+    if(selectedColor){
+        colorActive = true;
+    }
 
     editor.focus();
 });
