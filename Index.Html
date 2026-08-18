@@ -1762,7 +1762,8 @@ const mindMapButton = document.getElementById("mindMapButton");
 
 mindMapButton.addEventListener("click", () => {
 
-    editor.innerHTML += `
+editor.insertAdjacentHTML("beforeend", `
+
         <div class="mind-box">
             <div class="mind-box-root" contenteditable="true">
                 الفكرة الرئيسية
