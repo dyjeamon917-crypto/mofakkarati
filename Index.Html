@@ -1954,19 +1954,27 @@ const mindMapButton = document.getElementById("mindMapButton");
 mindMapButton.addEventListener("click", () => {
 
     editor.insertAdjacentHTML(
-        "beforeend",
-        '<div class="mind-box">' +
-            '<div class="mind-box-root">الفكرة الرئيسية</div>' +
-            '<div class="mind-box-branches">' +
-                '<div class="mind-box-branch">فرع 1</div>' +
-                '<div class="mind-box-branch">فرع 2</div>' +
-                '<div class="mind-box-branch">فرع 3</div>' +
-                '<div class="mind-box-branch">فرع 4</div>' +
+    "beforeend",
+    '<div class="mind-box">' +
+        '<div class="mind-box-root" contenteditable="true">' +
+            'الفكرة الرئيسية' +
+        '</div>' +
+        '<div class="mind-box-branches">' +
+            '<div class="mind-box-branch" contenteditable="true">' +
+                'فرع 1' +
             '</div>' +
-        '</div>'
-    );
-
-});
+            '<div class="mind-box-branch" contenteditable="true">' +
+                'فرع 2' +
+            '</div>' +
+            '<div class="mind-box-branch" contenteditable="true">' +
+                'فرع 3' +
+            '</div>' +
+            '<div class="mind-box-branch" contenteditable="true">' +
+                'فرع 4' +
+            '</div>' +
+        '</div>' +
+    '</div>'
+);
 
 const undoButton = document.getElementById("undoButton");
 
