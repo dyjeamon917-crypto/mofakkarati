@@ -1859,19 +1859,33 @@ editor.addEventListener("keydown", (event) => {
         return;
     }
 
-    const target = event.target;
+    const selection = window.getSelection();
 
-    if(
-        !target.classList.contains("mind-box-root") &&
-        !target.classList.contains("mind-box-branch")
-    ){
+    if(!selection.rangeCount){
+        return;
+    }
+
+    const node = selection.anchorNode;
+
+    const element =
+        node.nodeType === 1
+            ? node
+            : node.parentElement;
+
+    const mindItem =
+        element?.closest(
+            ".mind-box-root, .mind-box-branch"
+        );
+
+    if(!mindItem){
         return;
     }
 
     event.preventDefault();
 
-    document.execCommand("insertLineBreak");
-
+    document.execCommand(
+        "insertLineBreak"
+    );
 });
 
 const mindMapButton = document.getElementById("mindMapButton");
