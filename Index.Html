@@ -1693,8 +1693,6 @@ const addTableRowButton =
 const deleteTableColumnButton =
     document.getElementById("deleteTableColumnButton");
 
-addMindLeftButton.addEventListener("click", () => {
-
 deleteTableColumnButton.addEventListener("click", () => {
 
     const selection = window.getSelection();
@@ -1715,14 +1713,14 @@ deleteTableColumnButton.addEventListener("click", () => {
         return;
     }
 
-    const columnIndex = tableCell.cellIndex;
-
     const table =
         tableCell.closest(".editor-table");
 
     if(!table){
         return;
     }
+
+    const columnIndex = tableCell.cellIndex;
 
     Array.from(table.rows).forEach(row => {
 
@@ -1733,6 +1731,8 @@ deleteTableColumnButton.addEventListener("click", () => {
     });
 
 });
+
+addMindLeftButton.addEventListener("click", () => {
 
     const selection = window.getSelection();
 
@@ -1828,6 +1828,8 @@ if(tableCell){
             .focus();
     }
 });
+
+
 
 addTableRowButton.addEventListener("click", () => {
 
