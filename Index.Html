@@ -1642,46 +1642,45 @@ mindMapButton.addEventListener("click", () => {
 
 function enableDoubleSpaceNewLine(element){
 
-    let lastWasSpace = false;
-
     element.addEventListener("keydown", (event) => {
 
-        if(event.key === " "){
+        if(event.key !== " "){
+            return;
+        }
 
-            if(lastWasSpace){
+        const selection = window.getSelection();
 
-                event.preventDefault();
+        if(!selection.rangeCount){
+            return;
+        }
 
-                const selection = window.getSelection();
+        const range = selection.getRangeAt(0);
 
-                if(!selection.rangeCount){
-                    return;
-                }
+        const beforeRange = range.cloneRange();
+        beforeRange.selectNodeContents(element);
+        beforeRange.setEnd(range.startContainer, range.startOffset);
 
-                const range = selection.getRangeAt(0);
+        const textBefore = beforeRange.toString();
 
-                const br = document.createElement("br");
+        if(textBefore.endsWith("  ")){
 
-                range.insertNode(br);
+            event.preventDefault();
 
-                range.setStartAfter(br);
-                range.collapse(true);
+            const deleteRange = range.cloneRange();
+            deleteRange.setStart(
+                range.startContainer,
+                Math.max(0, range.startOffset - 2)
+            );
+            deleteRange.deleteContents();
 
-                selection.removeAllRanges();
-                selection.addRange(range);
+            const br = document.createElement("br");
+            deleteRange.insertNode(br);
 
-                lastWasSpace = false;
+            deleteRange.setStartAfter(br);
+            deleteRange.collapse(true);
 
-            }else{
-
-                lastWasSpace = true;
-
-            }
-
-        }else{
-
-            lastWasSpace = false;
-
+            selection.removeAllRanges();
+            selection.addRange(deleteRange);
         }
 
     });
