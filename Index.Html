@@ -1460,8 +1460,19 @@ alignmentButton.addEventListener("click", () => {
 
 const colorButton = document.getElementById("colorButton");
 const colorOverlay = document.getElementById("colorOverlay");
+const highlightButton = document.getElementById("highlightButton");
+highlightButton.addEventListener("click", () => {
 
+    colorMode = "highlight";
+
+    saveSelection();
+
+    colorOverlay.classList.add("open");
+});
 colorButton.addEventListener("click", () => {
+
+    saveSelection();
+
     colorOverlay.classList.add("open");
 });
 
@@ -1475,7 +1486,20 @@ let selectedColor = null;
 
 textColorWheel.addEventListener("pointerdown", (event) => {
 
+function restoreSelection(){
+
+    if(!savedRange){
+        return;
+    }
+
+    const selection = window.getSelection();
+
+    selection.removeAllRanges();
+    selection.addRange(savedRange);
+}
+
     const rect = textColorWheel.getBoundingClientRect();
+restoreSelection();
 
     const x = event.clientX - rect.left;
     const y = event.clientY - rect.top;
@@ -1509,11 +1533,28 @@ textColorWheel.addEventListener("pointerdown", (event) => {
     applyColor(color);
 });
 
+let savedRange = null;
+
+function saveSelection(){
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount){
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    if(editor.contains(range.commonAncestorContainer)){
+        savedRange = range.cloneRange();
+    }
+}
+
 function applyColor(color){
 
 selectedColor = color;
 
-    editor.focus();
+saveSelection();
 
     if(colorMode === "text"){
 
@@ -1566,6 +1607,9 @@ document.getElementById("whiteText").addEventListener("click", () => {
     applyColor("#ffffff");
 });
 
+colorMode = "text";
+
+saveSelection();
 
 document.getElementById("colorTextMode").addEventListener("click", () => {
 
