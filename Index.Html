@@ -1868,19 +1868,8 @@ editor.addEventListener("keydown", (event) => {
 
     event.preventDefault();
 
-    const range = window.getSelection().getRangeAt(0);
+    document.execCommand("insertLineBreak");
 
-    const br = document.createElement("br");
-
-    range.deleteContents();
-    range.insertNode(br);
-
-    range.setStartAfter(br);
-    range.setEndAfter(br);
-
-    const selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
 });
 
 const mindMapButton = document.getElementById("mindMapButton");
