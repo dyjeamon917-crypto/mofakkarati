@@ -622,17 +622,19 @@ margin:0 auto 12px;
 ===================================================== */
 
 .editor-table{
-    width:100%;
+    width:auto;
     max-width:100%;
     margin:8px 0;
     border-collapse:collapse;
-    table-layout:fixed;
+    table-layout:auto;
 }
 
 .editor-table td,
 .editor-table th{
-    padding:9px 10px;
-    border:1px solid #697386;
+        padding:8px;
+    min-width:50px;
+    height:50px;
+    border:3px solid #697386;
     vertical-align:top;
     line-height:1.6;
     white-space:normal;
@@ -1705,19 +1707,32 @@ document.getElementById("closeColorOverlay").addEventListener("click", () => {
 });
 
 const tableButton = document.getElementById("tableButton");
-const tableOverlay = document.getElementById("tableOverlay");
-
-let tableRows = 3;
-let tableCols = 3;
-
-function updateTableInfo(){
-    document.getElementById("tableRowsInfo").textContent = tableRows;
-    document.getElementById("tableColsInfo").textContent = tableCols;
-}
 
 tableButton.addEventListener("click", () => {
-    updateTableInfo();
-    tableOverlay.classList.add("open");
+
+    const table = document.createElement("table");
+
+    table.className = "editor-table";
+
+    for(let r = 0; r < 2; r++){
+
+        const row = document.createElement("tr");
+
+        for(let c = 0; c < 2; c++){
+
+            const cell = document.createElement("td");
+
+            cell.contentEditable = "true";
+            cell.innerHTML = "";
+
+            row.appendChild(cell);
+        }
+
+        table.appendChild(row);
+    }
+
+    editor.appendChild(table);
+
 });
 
 document.getElementById("tableRowsPlus").addEventListener("click", () => {
