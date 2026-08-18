@@ -670,6 +670,7 @@ margin:0 auto 12px;
     word-break:break-word;
     overflow-wrap:anywhere;
     line-height:1.6;
+white-space:pre-wrap;
 }
 
 .mind-box-branches{
@@ -694,6 +695,7 @@ margin:0 auto 12px;
     word-break:break-word;
     overflow-wrap:anywhere;
     line-height:1.6;
+white-space:pre-wrap;
 }
 
 /* =====================================================
@@ -1868,24 +1870,8 @@ editor.addEventListener("keydown", (event) => {
 
     event.preventDefault();
 
-    const selection = window.getSelection();
+    document.execCommand("insertLineBreak");
 
-    if(!selection.rangeCount){
-        return;
-    }
-
-    const range = selection.getRangeAt(0);
-
-    const br = document.createElement("br");
-
-    range.deleteContents();
-    range.insertNode(br);
-
-    range.setStartAfter(br);
-    range.collapse(true);
-
-    selection.removeAllRanges();
-    selection.addRange(range);
 });
 
 const mindMapButton = document.getElementById("mindMapButton");
@@ -1895,12 +1881,12 @@ mindMapButton.addEventListener("click", () => {
     editor.insertAdjacentHTML(
         "beforeend",
         '<div class="mind-box">' +
-            '<div class="mind-box-root" contenteditable="true">الفكرة الرئيسية</div>' +
+            '<div class="mind-box-root">الفكرة الرئيسية</div>' +
             '<div class="mind-box-branches">' +
-                '<div class="mind-box-branch" contenteditable="true">فرع 1</div>' +
-                '<div class="mind-box-branch" contenteditable="true">فرع 2</div>' +
-                '<div class="mind-box-branch" contenteditable="true">فرع 3</div>' +
-                '<div class="mind-box-branch" contenteditable="true">فرع 4</div>' +
+                '<div class="mind-box-branch">فرع 1</div>' +
+                '<div class="mind-box-branch">فرع 2</div>' +
+                '<div class="mind-box-branch">فرع 3</div>' +
+                '<div class="mind-box-branch">فرع 4</div>' +
             '</div>' +
         '</div>'
     );
