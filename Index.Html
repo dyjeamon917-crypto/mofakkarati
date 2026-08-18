@@ -1350,6 +1350,13 @@ function applyActiveColor(){
 /* تطبيق اللون قبل كتابة الحرف */
 editor.addEventListener("beforeinput", applyActiveColor);
 
+function toggleSubToolbar(bar){
+
+    bar.style.display =
+        bar.style.display === "flex"
+            ? "none"
+            : "flex";
+}
 const sizeButton = document.getElementById("sizeButton");
 const fontSizeBar = document.getElementById("fontSizeBar");
 
@@ -1398,10 +1405,8 @@ fontSizes.forEach(size => {
 
 sizeButton.addEventListener("click", () => {
 
-    fontSizeBar.style.display =
-        fontSizeBar.style.display === "flex"
-            ? "none"
-            : "flex";
+    toggleSubToolbar(fontSizeBar);
+
 });
 
 const listButton = document.getElementById("listButton");
@@ -1432,10 +1437,7 @@ listBar.querySelectorAll("button").forEach(button => {
 
 listButton.addEventListener("click", () => {
 
-    listBar.style.display =
-        listBar.style.display === "flex"
-            ? "none"
-            : "flex";
+    toggleSubToolbar(listBar);
 
 });
 
@@ -1484,10 +1486,7 @@ alignmentBar.querySelectorAll("button").forEach(button => {
 
 alignmentButton.addEventListener("click", () => {
 
-    alignmentBar.style.display =
-        alignmentBar.style.display === "flex"
-            ? "none"
-            : "flex";
+    toggleSubToolbar(alignmentBar);
 
 });
 
