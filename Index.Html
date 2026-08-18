@@ -1278,41 +1278,6 @@ editor.addEventListener("keyup", updateFormatButtons);
 editor.addEventListener("mouseup", updateFormatButtons);
 editor.addEventListener("input", updateFormatButtons);
 editor.addEventListener("click", updateFormatButtons);
-editor.addEventListener("input", () => {
-
-    if(!selectedColor){
-        return;
-    }
-
-    if(colorMode === "text"){
-        document.execCommand(
-            "foreColor",
-            false,
-            selectedColor
-        );
-    }
-else if(colorMode === "highlight"){
-
-    const opacity =
-        Number(opacityRange.value) / 100;
-
-    let highlightColor = selectedColor;
-
-    if(highlightColor.startsWith("hsl")){
-
-        highlightColor = highlightColor
-            .replace("hsl(", "hsla(")
-            .replace(")", `, ${opacity})`);
-    }
-
-    document.execCommand(
-        "hiliteColor",
-        false,
-        highlightColor
-    );
-}
-
-});
 
 const sizeButton = document.getElementById("sizeButton");
 const fontSizeBar = document.getElementById("fontSizeBar");
