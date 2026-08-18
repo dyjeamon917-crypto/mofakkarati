@@ -1473,7 +1473,6 @@ textColorWheel.addEventListener("pointerdown", (event) => {
     applyColor(color);
 });
 
-
 function applyColor(color){
 
     editor.focus();
@@ -1502,6 +1501,16 @@ function applyColor(color){
 
         color =
             `rgba(${r}, ${g}, ${b}, ${opacity})`;
+
+    }else if(color.startsWith("hsl")){
+
+        color = color.replace(
+            "hsl(",
+            "hsla("
+        ).replace(
+            ")",
+            `, ${opacity})`
+        );
     }
 
     document.execCommand(
@@ -1510,7 +1519,6 @@ function applyColor(color){
         color
     );
 }
-
 
 document.getElementById("blackText").addEventListener("click", () => {
     applyColor("#000000");
