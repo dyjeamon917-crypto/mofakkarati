@@ -463,6 +463,9 @@ button{
 }
 
 #colorOverlay .overlay-box{
+
+position:relative;
+
     width:min(360px,92vw);
     max-height:none;
     padding:14px;
@@ -474,6 +477,23 @@ button{
     width:min(240px,68vw);
 margin:0 auto 12px;
 }
+
+.close-color-overlay{
+    position:absolute;
+    top:10px;
+    left:10px;
+    width:36px;
+    height:36px;
+    border-radius:10px;
+    background:#303744;
+    color:#fff;
+    font-size:20px;
+}
+
+.close-color-overlay:active{
+    transform:scale(.94);
+}
+
 
 /* =====================================================
    COLOR WHEEL
@@ -836,6 +856,13 @@ body.keyboard-open #colorOverlay{
     class="overlay">
 
     <div class="overlay-box">
+
+<button
+    id="closeColorOverlay"
+    class="close-color-overlay"
+    type="button">
+    ✕
+</button>
 
         <div class="overlay-title">
             ◉
@@ -1483,6 +1510,8 @@ highlightButton.addEventListener("click", () => {
 
     document.getElementById("highlightOpacity").style.display = "flex";
 
+document.getElementById("removeHighlight").style.display = "block";
+
     saveSelection();
 
     colorOverlay.classList.add("open");
@@ -1495,6 +1524,8 @@ colorButton.addEventListener("click", () => {
     colorActive = true;
 
     document.getElementById("highlightOpacity").style.display = "none";
+
+document.getElementById("removeHighlight").style.display = "none";
 
     saveSelection();
 
@@ -1657,6 +1688,12 @@ document.getElementById("colorDone").addEventListener("click", () => {
     }
 
     editor.focus();
+});
+
+document.getElementById("closeColorOverlay").addEventListener("click", () => {
+
+    colorOverlay.classList.remove("open");
+
 });
 
 const tableButton = document.getElementById("tableButton");
