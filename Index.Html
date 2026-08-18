@@ -1281,6 +1281,21 @@ editor.addEventListener("keyup", updateFormatButtons);
 editor.addEventListener("mouseup", updateFormatButtons);
 editor.addEventListener("input", updateFormatButtons);
 editor.addEventListener("click", updateFormatButtons);
+editor.addEventListener("input", () => {
+
+    if(!selectedColor){
+        return;
+    }
+
+    if(colorMode === "text"){
+        document.execCommand(
+            "foreColor",
+            false,
+            selectedColor
+        );
+    }
+
+});
 
 const sizeButton = document.getElementById("sizeButton");
 const fontSizeBar = document.getElementById("fontSizeBar");
