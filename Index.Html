@@ -1279,6 +1279,59 @@ editor.addEventListener("mouseup", updateFormatButtons);
 editor.addEventListener("input", updateFormatButtons);
 editor.addEventListener("click", updateFormatButtons);
 
+editor.addEventListener("input", () => {
+
+    if(!colorActive || !selectedColor){
+        return;
+    }
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount){
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    if(!range.collapsed){
+        return;
+    }
+
+    if(colorMode === "text"){
+
+        document.execCommand(
+            "foreColor",
+            false,
+            selectedColor
+        );
+
+    }else if(colorMode === "highlight"){
+
+        const opacity =
+            Number(opacityRange.value) / 100;
+
+        let color = selectedColor;
+
+        if(color.startsWith("hsl")){
+
+            color = color.replace(
+                "hsl(",
+                "hsla("
+            ).replace(
+                ")",
+                `, ${opacity})`
+            );
+        }
+
+        document.execCommand(
+            "hiliteColor",
+            false,
+            color
+        );
+    }
+
+});
+
 const sizeButton = document.getElementById("sizeButton");
 const fontSizeBar = document.getElementById("fontSizeBar");
 
@@ -1428,6 +1481,8 @@ highlightButton.addEventListener("click", () => {
 
     colorMode = "highlight";
 
+    colorActive = false;
+
     document.getElementById("highlightOpacity").style.display = "flex";
 
     saveSelection();
@@ -1439,10 +1494,15 @@ colorButton.addEventListener("click", () => {
 
     colorMode = "text";
 
+    colorActive = false;
+
+    document.getElementById("highlightOpacity").style.display = "none";
+
     saveSelection();
 
     colorOverlay.classList.add("open");
 });
+
 
 const textColorWheel = document.getElementById("textColorWheel");
 const textColorMarker = document.getElementById("textColorMarker");
