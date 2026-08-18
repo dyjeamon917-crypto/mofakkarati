@@ -1865,19 +1865,17 @@ editor.addEventListener("keydown", (event) => {
         return;
     }
 
-    const node = selection.anchorNode;
+    let element =
+        selection.anchorNode.nodeType === 1
+            ? selection.anchorNode
+            : selection.anchorNode.parentElement;
 
-    const element =
-        node.nodeType === 1
-            ? node
-            : node.parentElement;
-
-    const mindItem =
-        element?.closest(
+    const mindElement =
+        element.closest(
             ".mind-box-root, .mind-box-branch"
         );
 
-    if(!mindItem){
+    if(!mindElement){
         return;
     }
 
