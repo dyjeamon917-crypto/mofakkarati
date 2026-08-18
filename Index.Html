@@ -1030,6 +1030,14 @@ body.keyboard-open #colorOverlay{
 </button>
 
 <button
+    id="deleteTableColumnButton"
+    class="tool"
+    type="button"
+    aria-label="حذف العمود الحالي">
+    ➡️
+</button>
+
+<button
     id="addTableRowButton"
     class="tool"
     type="button"
@@ -1682,6 +1690,9 @@ const addMindLeftButton =
 const addTableRowButton =
     document.getElementById("addTableRowButton");
 
+const deleteTableColumnButton =
+    document.getElementById("deleteTableColumnButton");
+
 addMindLeftButton.addEventListener("click", () => {
 
     const selection = window.getSelection();
@@ -1737,6 +1748,45 @@ if(tableCell){
             "afterend",
             newBranch
         );
+
+deleteTableColumnButton.addEventListener("click", () => {
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount){
+        return;
+    }
+
+    let element =
+        selection.anchorNode.nodeType === 1
+            ? selection.anchorNode
+            : selection.anchorNode.parentElement;
+
+    const tableCell =
+        element.closest(".editor-table td, .editor-table th");
+
+    if(!tableCell){
+        return;
+    }
+
+    const columnIndex = tableCell.cellIndex;
+
+    const table =
+        tableCell.closest(".editor-table");
+
+    if(!table){
+        return;
+    }
+
+    Array.from(table.rows).forEach(row => {
+
+        if(row.cells[columnIndex]){
+            row.deleteCell(columnIndex);
+        }
+
+    });
+
+});
 
         newBranch.focus();
 
