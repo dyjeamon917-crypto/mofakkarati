@@ -1640,8 +1640,6 @@ mindMapButton.addEventListener("click", () => {
     root.contentEditable = "true";
     root.textContent = "الفكرة الرئيسية";
 
-enableDoubleSpaceNewLine(root);
-
     const branches = document.createElement("div");
     branches.className = "mind-box-branches";
 
@@ -1651,8 +1649,6 @@ enableDoubleSpaceNewLine(root);
         branch.className = "mind-box-branch";
         branch.contentEditable = "true";
         branch.textContent = "فرع " + (i + 1);
-
-        enableDoubleSpaceNewLine(branch);
 
         branches.appendChild(branch);
     }
