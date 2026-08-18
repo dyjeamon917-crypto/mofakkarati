@@ -1294,6 +1294,26 @@ editor.addEventListener("input", () => {
             selectedColor
         );
     }
+else if(colorMode === "highlight"){
+
+    const opacity =
+        Number(opacityRange.value) / 100;
+
+    let highlightColor = selectedColor;
+
+    if(highlightColor.startsWith("hsl")){
+
+        highlightColor = highlightColor
+            .replace("hsl(", "hsla(")
+            .replace(")", `, ${opacity})`);
+    }
+
+    document.execCommand(
+        "hiliteColor",
+        false,
+        highlightColor
+    );
+}
 
 });
 
