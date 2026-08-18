@@ -1017,6 +1017,14 @@ body.keyboard-open #colorOverlay{
                 ▣
             </button>      
 
+<button
+    id="addMindLeftButton"
+    class="tool"
+    type="button"
+    aria-label="إضافة فكرة أو فرع">
+    ⬅️
+</button>
+
             <!-- أزرار بداية السطر -->
             <button
                 id="newLineDownButton"
@@ -1793,6 +1801,84 @@ editor.addEventListener("keydown", (event) => {
     const selection = window.getSelection();
     selection.removeAllRanges();
     selection.addRange(range);
+});
+
+const addMindLeftButton =
+    document.getElementById("addMindLeftButton");
+
+addMindLeftButton.addEventListener("click", () => {
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount){
+        return;
+    }
+
+    let element =
+        selection.anchorNode.nodeType === 1
+            ? selection.anchorNode
+            : selection.anchorNode.parentElement;
+
+    const branch =
+        element.closest(".mind-box-branch");
+
+    const root =
+        element.closest(".mind-box-root");
+
+    /* فرع جديد بجانب الفرع الحالي */
+    if(branch){
+
+        const newBranch =
+            document.createElement("div");
+
+        newBranch.className = "mind-box-branch";
+        newBranch.contentEditable = "true";
+        newBranch.textContent = "فرع جديد";
+
+        branch.insertAdjacentElement(
+            "afterend",
+            newBranch
+        );
+
+        newBranch.focus();
+
+        return;
+    }
+
+    /* فكرة رئيسية جديدة بجانب الفكرة الحالية */
+    if(root){
+
+        const mindBox =
+            root.closest(".mind-box");
+
+        if(!mindBox){
+            return;
+        }
+
+        const newMindBox =
+            document.createElement("div");
+
+        newMindBox.className = "mind-box";
+
+        newMindBox.innerHTML =
+            '<div class="mind-box-root" contenteditable="true">' +
+                'فكرة رئيسية جديدة' +
+            '</div>' +
+            '<div class="mind-box-branches">' +
+                '<div class="mind-box-branch" contenteditable="true">' +
+                    'فرع 1' +
+                '</div>' +
+            '</div>';
+
+        mindBox.insertAdjacentElement(
+            "afterend",
+            newMindBox
+        );
+
+        newMindBox
+            .querySelector(".mind-box-root")
+            .focus();
+    }
 });
 
 const mindMapButton = document.getElementById("mindMapButton");
