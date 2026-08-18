@@ -869,7 +869,10 @@ body.keyboard-open #colorOverlay{
             </button>
 
         </div>
-<div class="range-row">
+<div
+    id="highlightOpacity"
+    class="range-row"
+    style="display:none;">
 
     <span>◉</span>
 
@@ -882,28 +885,22 @@ body.keyboard-open #colorOverlay{
 
 </div>
 
-        <div class="overlay-actions">
+<div class="overlay-actions">
 
-            <button
-                id="colorTextMode"
-                type="button"
-                class="primary">
-                خط
-            </button>
+    <button
+        id="removeHighlight"
+        type="button">
+        إزالة التمييز
+    </button>
 
-            <button
-                id="colorHighlightMode"
-                type="button">
-                تمييز
-            </button>
+    <button
+        id="colorDone"
+        type="button"
+        class="primary">
+        ✓
+    </button>
 
-            <button
-                id="colorDone"
-                type="button">
-                ✓
-            </button>
-
-        </div>
+</div>
 
     </div>
 
@@ -1461,15 +1458,21 @@ alignmentButton.addEventListener("click", () => {
 const colorButton = document.getElementById("colorButton");
 const colorOverlay = document.getElementById("colorOverlay");
 const highlightButton = document.getElementById("highlightButton");
+
 highlightButton.addEventListener("click", () => {
 
     colorMode = "highlight";
+
+    document.getElementById("highlightOpacity").style.display = "flex";
 
     saveSelection();
 
     colorOverlay.classList.add("open");
 });
+
 colorButton.addEventListener("click", () => {
+
+    colorMode = "text";
 
     saveSelection();
 
@@ -1601,6 +1604,19 @@ saveSelection();
 
 document.getElementById("blackText").addEventListener("click", () => {
     applyColor("#000000");
+});
+
+document.getElementById("removeHighlight").addEventListener("click", () => {
+
+    colorMode = "highlight";
+
+    saveSelection();
+
+    document.execCommand(
+        "hiliteColor",
+        false,
+        "transparent"
+    );
 });
 
 document.getElementById("whiteText").addEventListener("click", () => {
