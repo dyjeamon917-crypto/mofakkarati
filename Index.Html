@@ -1640,53 +1640,6 @@ mindMapButton.addEventListener("click", () => {
     root.contentEditable = "true";
     root.textContent = "الفكرة الرئيسية";
 
-function enableDoubleSpaceNewLine(element){
-
-    element.addEventListener("keydown", (event) => {
-
-        if(event.key !== " "){
-            return;
-        }
-
-        const selection = window.getSelection();
-
-        if(!selection.rangeCount){
-            return;
-        }
-
-        const range = selection.getRangeAt(0);
-
-        const beforeRange = range.cloneRange();
-        beforeRange.selectNodeContents(element);
-        beforeRange.setEnd(range.startContainer, range.startOffset);
-
-        const textBefore = beforeRange.toString();
-
-        if(textBefore.endsWith("  ")){
-
-            event.preventDefault();
-
-            const deleteRange = range.cloneRange();
-            deleteRange.setStart(
-                range.startContainer,
-                Math.max(0, range.startOffset - 2)
-            );
-            deleteRange.deleteContents();
-
-            const br = document.createElement("br");
-            deleteRange.insertNode(br);
-
-            deleteRange.setStartAfter(br);
-            deleteRange.collapse(true);
-
-            selection.removeAllRanges();
-            selection.addRange(deleteRange);
-        }
-
-    });
-
-}
-
 enableDoubleSpaceNewLine(root);
 
     const branches = document.createElement("div");
