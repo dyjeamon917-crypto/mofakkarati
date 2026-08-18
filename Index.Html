@@ -1679,6 +1679,9 @@ tableButton.addEventListener("click", () => {
 const addMindLeftButton =
     document.getElementById("addMindLeftButton");
 
+const addTableRowButton =
+    document.getElementById("addTableRowButton");
+
 addMindLeftButton.addEventListener("click", () => {
 
     const selection = window.getSelection();
@@ -1774,6 +1777,46 @@ if(tableCell){
             .querySelector(".mind-box-root")
             .focus();
     }
+});
+
+addTableRowButton.addEventListener("click", () => {
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount){
+        return;
+    }
+
+    let element =
+        selection.anchorNode.nodeType === 1
+            ? selection.anchorNode
+            : selection.anchorNode.parentElement;
+
+    const tableCell =
+        element.closest(".editor-table td, .editor-table th");
+
+    if(!tableCell){
+        return;
+    }
+
+    const row = tableCell.closest("tr");
+    const table = tableCell.closest(".editor-table");
+
+    if(!row || !table){
+        return;
+    }
+
+    const newRow = table.insertRow(row.rowIndex + 1);
+
+    for(let i = 0; i < row.cells.length; i++){
+
+        const newCell = newRow.insertCell(i);
+
+        newCell.contentEditable = "true";
+        newCell.innerHTML = "";
+    }
+
+    newRow.cells[0].focus();
 });
 
 editor.addEventListener("keydown", (event) => {
