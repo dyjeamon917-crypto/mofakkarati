@@ -1489,17 +1489,7 @@ let selectedColor = null;
 
 textColorWheel.addEventListener("pointerdown", (event) => {
 
-function restoreSelection(){
 
-    if(!savedRange){
-        return;
-    }
-
-    const selection = window.getSelection();
-
-    selection.removeAllRanges();
-    selection.addRange(savedRange);
-}
 
     const rect = textColorWheel.getBoundingClientRect();
 restoreSelection();
@@ -1551,6 +1541,18 @@ function saveSelection(){
     if(editor.contains(range.commonAncestorContainer)){
         savedRange = range.cloneRange();
     }
+}
+
+function restoreSelection(){
+
+    if(!savedRange){
+        return;
+    }
+
+    const selection = window.getSelection();
+
+    selection.removeAllRanges();
+    selection.addRange(savedRange);
 }
 
 function applyColor(color){
@@ -1608,50 +1610,26 @@ document.getElementById("blackText").addEventListener("click", () => {
 
 document.getElementById("removeHighlight").addEventListener("click", () => {
 
-    colorMode = "highlight";
-
-    saveSelection();
+    restoreSelection();
 
     document.execCommand(
         "hiliteColor",
         false,
         "transparent"
     );
+
+    selectedColor = null;
 });
 
 document.getElementById("whiteText").addEventListener("click", () => {
     applyColor("#ffffff");
 });
 
-colorMode = "text";
-
-saveSelection();
-
-document.getElementById("colorTextMode").addEventListener("click", () => {
-
-    colorMode = "text";
-
-    document.getElementById("colorTextMode")
-        .classList.add("primary");
-
-    document.getElementById("colorHighlightMode")
-        .classList.remove("primary");
-});
-
-
-document.getElementById("colorHighlightMode").addEventListener("click", () => {
-
-    colorMode = "highlight";
-
-    document.getElementById("colorHighlightMode")
-        .classList.add("primary");
-
-    document.getElementById("colorTextMode")
-        .classList.remove("primary");
-});
-
 document.getElementById("colorDone").addEventListener("click", () => {
+
     colorOverlay.classList.remove("open");
+
+    editor.focus();
 });
 
 const tableButton = document.getElementById("tableButton");
