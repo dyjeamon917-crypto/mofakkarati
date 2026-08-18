@@ -1642,30 +1642,27 @@ mindMapButton.addEventListener("click", () => {
 
 function enableDoubleSpaceNewLine(element){
 
-    let lastSpace = false;
+    let spaceCount = 0;
 
-    element.addEventListener("keydown", (event) => {
+    element.addEventListener("input", () => {
 
-        if(event.key === " "){
+        const text = element.innerText;
 
-            if(lastSpace){
+        if(text.endsWith("  ")){
 
-                event.preventDefault();
+            element.innerHTML =
+                element.innerHTML.replace(/ {2}$/, "<br>");
 
-                document.execCommand("insertLineBreak");
+            const range = document.createRange();
+            const selection = window.getSelection();
 
-                lastSpace = false;
+            range.selectNodeContents(element);
+            range.collapse(false);
 
-            }else{
+            selection.removeAllRanges();
+            selection.addRange(range);
 
-                lastSpace = true;
-
-            }
-
-        }else{
-
-            lastSpace = false;
-
+            spaceCount = 0;
         }
 
     });
