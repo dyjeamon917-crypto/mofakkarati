@@ -1806,6 +1806,28 @@ addMindLeftButton.addEventListener("click", () => {
             ? selection.anchorNode
             : selection.anchorNode.parentElement;
 
+const tableCell =
+    element.closest(".editor-table td, .editor-table th");
+
+if(tableCell){
+
+    const table =
+        tableCell.closest(".editor-table");
+
+    const rows = table.rows;
+
+    for(let i = 0; i < rows.length; i++){
+
+        const newCell =
+            rows[i].insertCell(-1);
+
+        newCell.contentEditable = "true";
+        newCell.innerHTML = "";
+    }
+
+    return;
+}
+
     const branch =
         element.closest(".mind-box-branch");
 
