@@ -4280,12 +4280,15 @@ window.addEventListener(
     }
 );
 
-
 /* =====================================================
    INITIAL STATE
 ===================================================== */
 
-updateFormatButtons();
+try {
+    updateFormatButtons();
+} catch(error) {
+    console.error("ERROR:", error);
+}
 
 </script>
 
