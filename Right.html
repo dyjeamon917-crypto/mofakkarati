@@ -1298,31 +1298,42 @@ function updateFormatButtons(){
     );
 }
 
-boldButton.addEventListener("click", () => {
+boldButton.addEventListener("mousedown", (event) => {
+    event.preventDefault();
+});
 
-    editor.focus();
+boldButton.addEventListener("click", () => {
 
     document.execCommand("bold");
 
     updateFormatButtons();
+
+});
+
+
+italicButton.addEventListener("mousedown", (event) => {
+    event.preventDefault();
 });
 
 italicButton.addEventListener("click", () => {
 
-    editor.focus();
-
     document.execCommand("italic");
 
     updateFormatButtons();
+
+});
+
+
+underlineButton.addEventListener("mousedown", (event) => {
+    event.preventDefault();
 });
 
 underlineButton.addEventListener("click", () => {
 
-    editor.focus();
-
     document.execCommand("underline");
 
     updateFormatButtons();
+
 });
 
 editor.addEventListener("keyup", updateFormatButtons);
@@ -1393,36 +1404,41 @@ fontSizes.forEach(size => {
     button.type = "button";
     button.textContent = size;
 
-    button.addEventListener("click", () => {
+    button.addEventListener("mousedown", (event) => {
+    event.preventDefault();
+});
 
-        editor.focus();
+button.addEventListener("click", () => {
 
-        const selection = window.getSelection();
+    const selection = window.getSelection();
 
-        if(!selection.rangeCount){
-            return;
-        }
+    if(!selection || !selection.rangeCount){
+        return;
+    }
 
-        const range = selection.getRangeAt(0);
+    const range = selection.getRangeAt(0);
 
-        if(range.collapsed){
-            return;
-        }
+    if(range.collapsed){
+        return;
+    }
 
-        const span = document.createElement("span");
+    const span = document.createElement("span");
 
-        span.style.fontSize = size + "px";
+    span.style.fontSize = size + "px";
 
-        span.appendChild(range.extractContents());
+    span.appendChild(range.extractContents());
 
-        range.insertNode(span);
+    range.insertNode(span);
 
-        selection.removeAllRanges();
+    selection.removeAllRanges();
 
-        const newRange = document.createRange();
-        newRange.selectNodeContents(span);
-        selection.addRange(newRange);
-    });
+    const newRange = document.createRange();
+
+    newRange.selectNodeContents(span);
+
+    selection.addRange(newRange);
+
+});
 
     fontSizeBar.appendChild(button);
 });
@@ -1443,16 +1459,26 @@ listBar.innerHTML = `
 
 listBar.querySelectorAll("button").forEach(button => {
 
+    button.addEventListener("mousedown", (event) => {
+        event.preventDefault();
+    });
+
     button.addEventListener("click", () => {
 
-        editor.focus();
-
         if(button.dataset.list === "ul"){
-            document.execCommand("insertUnorderedList");
+
+            document.execCommand(
+                "insertUnorderedList"
+            );
+
         }
 
         if(button.dataset.list === "ol"){
-            document.execCommand("insertOrderedList");
+
+            document.execCommand(
+                "insertOrderedList"
+            );
+
         }
 
     });
@@ -1471,9 +1497,17 @@ const alignmentBar = document.getElementById("alignmentBar");
 
 alignmentBar.querySelectorAll("button").forEach(button => {
 
+    button.addEventListener("mousedown", (event) => {
+        event.preventDefault();
+    });
+
     button.addEventListener("click", () => {
 
-        editor.focus();
+        const selection = window.getSelection();
+
+        if(!selection || !selection.rangeCount){
+            return;
+        }
 
         const align = button.dataset.align;
 
@@ -1483,24 +1517,28 @@ alignmentBar.querySelectorAll("button").forEach(button => {
             align.slice(1)
         );
 
-        const selection = window.getSelection();
+        const currentSelection = window.getSelection();
 
-        if(selection.rangeCount){
+        if(currentSelection.rangeCount){
 
             let element =
-                selection.anchorNode.nodeType === 1
-                    ? selection.anchorNode
-                    : selection.anchorNode.parentElement;
+                currentSelection.anchorNode.nodeType === 1
+                    ? currentSelection.anchorNode
+                    : currentSelection.anchorNode.parentElement;
 
             const list = element?.closest("ul, ol");
 
             if(list){
+
                 list.style.textAlign = align;
 
                 list.querySelectorAll("li").forEach(li => {
+
                     li.style.textAlign = align;
                     li.style.listStylePosition = "inside";
+
                 });
+
             }
         }
 
