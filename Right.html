@@ -2296,9 +2296,116 @@ document.getElementById("searchDone").addEventListener("click", () => {
     searchResult.textContent = "";
 });
 
+      function cleanTextSpans(){
+
+    let changed = true;
+
+    while(changed){
+
+        changed = false;
+
+        const spans = Array.from(
+            editor.querySelectorAll("span")
+        );
+
+        spans.reverse().forEach(span => {
+
+            if(
+                span.textContent === "" &&
+                !span.querySelector("br")
+            ){
+                span.remove();
+                changed = true;
+                return;
+            }
+
+            const parent = span.parentElement;
+
+            if(
+                parent &&
+                parent.tagName === "SPAN"
+            ){
+
+                const parentStyle =
+                    parent.getAttribute("style") || "";
+
+                const spanStyle =
+                    span.getAttribute("style") || "";
+
+                if(spanStyle){
+
+                    parent.setAttribute(
+                        "style",
+                        parentStyle +
+                        (parentStyle ? ";" : "") +
+                        spanStyle
+                    );
+                }
+
+                while(span.firstChild){
+
+                    parent.insertBefore(
+                        span.firstChild,
+                        span
+                    );
+                }
+
+                span.remove();
+
+                changed = true;
+            }
+
+        });
+
+    }
+
+    changed = true;
+
+    while(changed){
+
+        changed = false;
+
+        const spans = Array.from(
+            editor.querySelectorAll("span")
+        );
+
+        spans.forEach(span => {
+
+            const next = span.nextSibling;
+
+            if(
+                next &&
+                next.nodeType === 1 &&
+                next.tagName === "SPAN" &&
+                (span.getAttribute("style") || "") ===
+                (next.getAttribute("style") || "")
+            ){
+
+                while(next.firstChild){
+
+                    span.appendChild(
+                        next.firstChild
+                    );
+                }
+
+                next.remove();
+
+                changed = true;
+            }
+
+        });
+
+    }
+
+}
+
+const sendButton = document.getElementById("sendButton");
+
 const sendButton = document.getElementById("sendButton");
 
 sendButton.addEventListener("click", () => {
+
+      cleanTextSpans();
 
     const savedContent = editor.cloneNode(true);
 
