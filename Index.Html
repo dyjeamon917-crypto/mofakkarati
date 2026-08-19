@@ -2910,7 +2910,9 @@ function insertAtCursor(element){
    TABLE
 ===================================================== */
 
-tableButton.addEventListener("click", function(event){
+tableButton.addEventListener(
+
+"click", function(event){
 
     event.preventDefault();
 
@@ -3398,9 +3400,7 @@ editor.addEventListener(
    MIND MAP
 ===================================================== */
 
-mindMapButton.addEventListener(
-    "pointerdown",
-    event => {
+mindMapButton.addEventListener( "click", function(event){
 
         event.preventDefault();
 event.stopImmediatePropagation();
