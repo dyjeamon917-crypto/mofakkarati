@@ -1862,7 +1862,7 @@ function removeFormatFromFragment(
    TOGGLE FORMAT
 ===================================================== */
 
-function toggleFormat(command){
+function toggleFormat(command, button){
 
     if(savedRange){
 
@@ -1882,6 +1882,11 @@ function toggleFormat(command){
         null
     );
 
+    button.classList.toggle(
+        "active",
+        document.queryCommandState(command)
+    );
+
     saveSelection();
 
     updateFormatButtons();
@@ -1897,7 +1902,7 @@ boldButton.addEventListener(
 
         event.preventDefault();
 
-        toggleFormat("bold");
+        toggleFormat("bold", boldButton);
 
     }
 );
@@ -1913,7 +1918,7 @@ italicButton.addEventListener(
 
         event.preventDefault();
 
-        toggleFormat("italic");
+        toggleFormat("italic", italicButton);
 
     }
 );
@@ -1929,7 +1934,7 @@ underlineButton.addEventListener(
 
         event.preventDefault();
 
-        toggleFormat("underline");
+        toggleFormat("underline", underlineButton);
 
     }
 );
