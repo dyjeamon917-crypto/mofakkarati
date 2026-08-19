@@ -1521,63 +1521,13 @@ function clearSavedSelection(){
    RESTORE SELECTION FOR ALL TOOL BUTTONS
 ===================================================== */
 
-function restoreEditorSelection(){
-
-    if(!savedRange){
-        return false;
-    }
-
-    const selection =
-        window.getSelection();
-
-    try{
-
-        selection.removeAllRanges();
-
-        selection.addRange(
-            savedRange.cloneRange()
-        );
-
-        editor.focus();
-
-        return true;
-
-    }catch(error){
-
-        savedRange = null;
-
-        return false;
-
-    }
-
-}
-
-
 /*
- * منع أزرار الأدوات من سرقة مكان المؤشر
+ * نحفظ مكان المؤشر قبل أن تأخذ أزرار الأدوات التركيز.
+ * preventDefault يمنع الزر من نقل الـ focus بعيدًا عن المحرر.
  */
 document.querySelectorAll(
     ".toolbar .tool, .sub-toolbar button"
 ).forEach(button => {
-
-    button.addEventListener(
-        "pointerdown",
-        event => {
-
-            /*
-             * نحفظ مكان المؤشر فقط
-             * بدون منع الضغط نفسه
-             */
-            saveSelection();
-
-        }
-    );
-
-});
-
-/*
- * حفظ مكان المؤشر قبل أن تأخذ أزرار الجدول والخريطة التركيز
- */
 
     button.addEventListener(
         "pointerdown",
