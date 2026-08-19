@@ -1564,9 +1564,11 @@ document.querySelectorAll(
         "pointerdown",
         event => {
 
-            event.preventDefault();
-
-            restoreEditorSelection();
+            /*
+             * نحفظ مكان المؤشر فقط
+             * بدون منع الضغط نفسه
+             */
+            saveSelection();
 
         }
     );
@@ -2905,7 +2907,7 @@ function ensureTableAfterLine(table){
 ===================================================== */
 
 tableButton.addEventListener(
-    "click",
+    "pointerdown",
     () => {
 
         const wrapper =
@@ -3541,7 +3543,7 @@ editor.addEventListener(
 ===================================================== */
 
 mindMapButton.addEventListener(
-    "click",
+    "pointerdown",
     () => {
 
         const wrapper =
