@@ -1669,6 +1669,129 @@ document.getElementById("removeHighlight").addEventListener("click", () => {
     selectedColor = null;
 });
 
+document.getElementById("whiteText").addEventListener("click", () => {
+
+    restoreSelection();
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount){
+        editor.focus();
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    /* =========================================
+       لو فيه تحديد:
+       إزالة اللون فقط
+    ========================================= */
+
+    if(!range.collapsed){
+
+        const elements = [];
+
+        const walker = document.createTreeWalker(
+            editor,
+            NodeFilter.SHOW_ELEMENT
+        );
+
+        while(walker.nextNode()){
+
+            const element = walker.currentNode;
+
+            if(range.intersectsNode(element)){
+                elements.push(element);
+            }
+        }
+
+        elements.forEach(element => {
+
+            if(element.style.color){
+                element.style.removeProperty("color");
+            }
+
+            if(
+                element.tagName === "FONT" &&
+                element.hasAttribute("color")
+            ){
+                element.removeAttribute("color");
+            }
+
+        });
+
+        cleanupColorSpans();
+
+        selectedColor = null;
+        colorActive = false;
+
+        editor.focus();
+
+        return;
+    }
+
+
+    /* =========================================
+       بدون تحديد:
+       اجعل الكتابة التالية باللون الأصلي
+    ========================================= */
+
+    let node = range.startContainer;
+
+    if(node.nodeType === Node.TEXT_NODE){
+
+        const parent = node.parentElement;
+
+        const colorElement =
+            parent?.closest(
+                '[style*="color"], font[color]'
+            );
+
+        if(colorElement && colorElement !== editor){
+
+            const offset = range.startOffset;
+
+            const text = node.textContent;
+
+            /*
+               لو المؤشر في نهاية النص الأحمر
+            */
+
+            if(offset === text.length){
+
+                const plainNode =
+                    document.createTextNode("");
+
+                colorElement.parentNode.insertBefore(
+                    plainNode,
+                    colorElement.nextSibling
+                );
+
+                const newRange =
+                    document.createRange();
+
+                newRange.setStart(
+                    plainNode,
+                    0
+                );
+
+                newRange.collapse(true);
+
+                selection.removeAllRanges();
+                selection.addRange(newRange);
+
+            }
+
+        }
+
+    }
+
+    selectedColor = null;
+    colorActive = false;
+
+    editor.focus();
+
+});
 
 
 document.getElementById("colorDone").addEventListener("click", () => {
