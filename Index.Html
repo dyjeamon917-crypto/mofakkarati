@@ -2905,7 +2905,6 @@ function insertAtCursor(element){
 
 }
 
-
 /* =====================================================
    TABLE
 ===================================================== */
@@ -2913,15 +2912,15 @@ function insertAtCursor(element){
 function createTableTextLine(){
 
     const line =
-        document.createElement(
-            "div"
-        );
+        document.createElement("div");
 
     line.className =
         "table-text-line";
 
     line.innerHTML =
         "<br>";
+
+    line.contentEditable = "true";
 
     return line;
 }
@@ -2930,9 +2929,7 @@ function createTableTextLine(){
 function ensureTableAfterLine(table){
 
     const wrapper =
-        table.closest(
-            ".table-wrapper"
-        );
+        table.closest(".table-wrapper");
 
     if(!wrapper){
         return;
@@ -2941,12 +2938,9 @@ function ensureTableAfterLine(table){
     let after =
         wrapper.nextElementSibling;
 
-
     if(
         !after ||
-        !after.classList.contains(
-            "table-text-line"
-        )
+        !after.classList.contains("table-text-line")
     ){
 
         after =
@@ -2975,9 +2969,7 @@ tableButton.addEventListener(
         restoreSelection();
 
         const wrapper =
-            document.createElement(
-                "div"
-            );
+            document.createElement("div");
 
         wrapper.className =
             "table-wrapper";
@@ -2988,36 +2980,22 @@ tableButton.addEventListener(
 
 
         const table =
-            document.createElement(
-                "table"
-            );
+            document.createElement("table");
 
         table.className =
             "editor-table";
 
 
-        for(
-            let r = 0;
-            r < 2;
-            r++
-        ){
+        for(let r = 0; r < 2; r++){
 
             const row =
-                document.createElement(
-                    "tr"
-                );
+                document.createElement("tr");
 
 
-            for(
-                let c = 0;
-                c < 2;
-                c++
-            ){
+            for(let c = 0; c < 2; c++){
 
                 const cell =
-                    document.createElement(
-                        "td"
-                    );
+                    document.createElement("td");
 
                 cell.contentEditable =
                     "true";
@@ -3025,15 +3003,11 @@ tableButton.addEventListener(
                 cell.innerHTML =
                     "<br>";
 
-                row.appendChild(
-                    cell
-                );
+                row.appendChild(cell);
 
             }
 
-            table.appendChild(
-                row
-            );
+            table.appendChild(row);
 
         }
 
@@ -3042,34 +3016,26 @@ tableButton.addEventListener(
             createTableTextLine();
 
 
-        wrapper.appendChild(
-            before
-        );
+        wrapper.appendChild(before);
 
-        wrapper.appendChild(
-            table
-        );
+        wrapper.appendChild(table);
 
-        wrapper.appendChild(
-            after
-        );
+        wrapper.appendChild(after);
 
 
-        insertAtCursor(
-            wrapper
-        );
+        insertAtCursor(wrapper);
 
 
+        /*
+         * وضع المؤشر داخل السطر الموجود
+         * أسفل الجدول
+         */
         const range =
             document.createRange();
 
-        range.selectNodeContents(
-            after
-        );
+        range.selectNodeContents(after);
 
-        range.collapse(
-            true
-        );
+        range.collapse(true);
 
 
         const selection =
@@ -3077,9 +3043,11 @@ tableButton.addEventListener(
 
         selection.removeAllRanges();
 
-        selection.addRange(
-            range
-        );
+        selection.addRange(range);
+
+        editor.focus();
+
+        saveSelection();
 
     }
 );
