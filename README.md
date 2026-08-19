@@ -1,0 +1,2364 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+
+<head>
+<meta charset="UTF-8">
+
+<meta name="viewport"
+      content="width=device-width,initial-scale=1,maximum-scale=1,user-scalable=yes,viewport-fit=cover">
+
+<meta name="theme-color" content="#10131a">
+
+<title>ملاحظاتي</title>
+
+<style>
+
+/* =====================================================
+   RESET
+===================================================== */
+
+*{
+    box-sizing:border-box;
+    -webkit-tap-highlight-color:transparent;
+}
+
+html,
+body{
+    width:100%;
+    height:100%;
+    margin:0;
+    padding:0;
+    overflow:hidden;
+    background:#10131a;
+    color:#fff;
+    font-family:Arial,"Noto Sans Arabic",sans-serif;
+}
+
+button,
+input,
+textarea{
+    font:inherit;
+}
+
+button{
+    border:0;
+    cursor:pointer;
+    touch-action:manipulation;
+}
+
+:root{
+    --app-height:100dvh;
+}
+
+
+/* =====================================================
+   APP
+===================================================== */
+
+.app{
+    width:100%;
+    max-width:900px;
+    height:var(--app-height);
+    margin:auto;
+    display:flex;
+    flex-direction:column;
+    overflow:hidden;
+    background:#10131a;
+}
+
+
+/* =====================================================
+   HEADER
+===================================================== */
+
+.header{
+    flex:0 0 auto;
+    min-height:56px;
+    padding:8px 12px;
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    background:#171b24;
+    border-bottom:1px solid #292e3a;
+}
+
+.title{
+    font-size:20px;
+    font-weight:bold;
+}
+
+.header-actions{
+    display:flex;
+    gap:6px;
+}
+
+.header-actions button{
+    width:40px;
+    height:40px;
+    border-radius:12px;
+    background:#252b36;
+    color:#fff;
+    font-size:21px;
+}
+
+.header-actions button:active{
+    transform:scale(.94);
+}
+
+
+/* =====================================================
+   MESSAGES
+===================================================== */
+
+.messages{
+    flex:1 1 auto;
+    min-height:0;
+    overflow-y:auto;
+    overflow-x:hidden;
+    padding:14px;
+    scroll-behavior:smooth;
+}
+
+.empty{
+    padding:50px 20px;
+    text-align:center;
+    color:#7f8795;
+}
+
+.note{
+    position:relative;
+    max-width:92%;
+    margin:0 0 12px auto;
+    padding:14px 44px 14px 14px;
+    background:#202631;
+    border:1px solid #2c3441;
+    border-radius:16px;
+    box-shadow:0 3px 12px rgba(0,0,0,.18);
+}
+
+.note.editing{
+    border-color:#527df5;
+}
+
+.note-content{
+    min-width:0;
+    font-size:17px;
+    line-height:1.8;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+}
+
+.note-menu{
+    position:absolute;
+    top:8px;
+    left:7px;
+    width:32px;
+    height:32px;
+    border-radius:9px;
+    background:#2b323e;
+    color:#fff;
+    font-size:21px;
+}
+
+.note-menu:active{
+    transform:scale(.94);
+}
+
+
+/* =====================================================
+   EDITOR AREA
+===================================================== */
+
+.editor-area{
+    position:relative;
+    flex:0 0 auto;
+    padding:8px 10px 10px;
+    background:#151922;
+    border-top:1px solid #292e3a;
+}
+
+.editor-state{
+    margin:0 5px 6px;
+    color:#8e98a8;
+    font-size:12px;
+}
+
+
+/* =====================================================
+   EDITOR
+===================================================== */
+
+.editor{
+    min-height:95px;
+    max-height:30vh;
+    overflow-y:auto;
+    padding:13px;
+    border:1px solid #303745;
+    border-radius:14px;
+    background:#1c212b;
+    color:#fff;
+    outline:none;
+
+    direction:rtl;
+    text-align:right;
+
+    white-space:pre-wrap;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+
+    line-height:1.8;
+}
+
+.editor:empty::before{
+    content:"اكتبي ملاحظتك هنا…";
+    color:#737d8e;
+    pointer-events:none;
+}
+
+.editor:focus{
+    border-color:#527df5;
+}
+
+
+/* =====================================================
+   TOOLBAR
+===================================================== */
+
+.toolbar{
+    display:flex;
+    align-items:center;
+    gap:5px;
+    overflow-x:auto;
+    padding:7px 0 2px;
+    scrollbar-width:none;
+}
+
+.toolbar::-webkit-scrollbar{
+    display:none;
+}
+
+.tool{
+    flex:0 0 auto;
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    background:#252c38;
+    color:#fff;
+    font-size:17px;
+    font-weight:bold;
+    transition:transform .08s,background .12s;
+}
+
+.tool.active{
+    background:#4169d8;
+}
+
+.tool:active{
+    transform:scale(.90);
+}
+
+
+/* =====================================================
+   SUB TOOLBAR
+===================================================== */
+
+.sub-toolbar{
+    display:none;
+    align-items:center;
+    gap:5px;
+    overflow-x:auto;
+    padding:5px 0;
+    scrollbar-width:none;
+}
+
+.sub-toolbar::-webkit-scrollbar{
+    display:none;
+}
+
+.sub-toolbar button{
+    flex:0 0 auto;
+    min-width:40px;
+    height:36px;
+    padding:0 8px;
+    border-radius:9px;
+    background:#292f3b;
+    color:#fff;
+}
+
+.sub-toolbar button.active{
+    background:#4169d8;
+}
+
+.sub-toolbar button:active{
+    transform:scale(.94);
+}
+
+
+/* =====================================================
+   ACTIONS
+===================================================== */
+
+.editor-actions{
+    display:flex;
+    align-items:center;
+    gap:7px;
+    margin-top:6px;
+}
+
+.send-button{
+    position: absolute;
+    top:-54px;
+    left:10px;
+    flex:0 0 46px;
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    background:#3867dc;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:21px;
+}
+
+.cancel-button{
+    flex:0 0 38px;
+    width:38px;
+    height:38px;
+    border-radius:10px;
+    background:#252c38;
+    color:#fff;
+    font-size:17px;
+}
+
+/* =====================================================
+   UNDO BUTTON
+===================================================== */
+
+.undo-button{
+    flex:0 0 46px;
+    width:46px;
+    height:46px;
+    border-radius:50%;
+    background:#303744;
+    color:#fff;
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    font-size:27px;
+    font-weight:normal;
+    line-height:1;
+}
+
+.undo-button:active{
+    transform:scale(.92);
+}
+
+.send-button:active,
+.cancel-button:active{
+    transform:scale(.96);
+}
+
+
+/* =====================================================
+   MESSAGE MENU
+===================================================== */
+
+.message-menu{
+    position:fixed;
+    z-index:2000;
+    display:none;
+    min-width:140px;
+    padding:5px;
+    background:#252b36;
+    border:1px solid #3a4250;
+    border-radius:12px;
+    box-shadow:0 10px 30px rgba(0,0,0,.4);
+}
+
+.message-menu.open{
+    display:block;
+}
+
+.message-menu button{
+    display:block;
+    width:100%;
+    padding:11px;
+    border-radius:8px;
+    background:transparent;
+    color:#fff;
+    text-align:right;
+}
+
+.message-menu button:active{
+    background:#343c4a;
+}
+
+
+/* =====================================================
+   OVERLAY
+===================================================== */
+
+.overlay{
+    position:fixed;
+    inset:0;
+    z-index:1500;
+    display:none;
+    align-items:flex-end;
+    justify-content:center;
+    background:rgba(0,0,0,.62);
+}
+
+.overlay.open{
+    display:flex;
+}
+
+.overlay-box{
+    width:min(600px,100%);
+    max-height:90dvh;
+    overflow-y:auto;
+    padding:18px;
+    background:#191e27;
+    border:1px solid #343b48;
+    border-radius:22px 22px 0 0;
+}
+
+.overlay-title{
+    margin-bottom:15px;
+    font-size:18px;
+    font-weight:bold;
+}
+
+.overlay-actions{
+    display:flex;
+    gap:7px;
+    margin-top:15px;
+}
+
+.overlay-actions button{
+    flex:1;
+    min-height:42px;
+    border-radius:11px;
+    background:#303744;
+    color:#fff;
+}
+
+.overlay-actions .primary{
+    background:#3867dc;
+}
+
+#colorOverlay{
+    position:fixed;
+    inset:auto 0 80px 0;
+    z-index:3000;
+    display:none;
+    align-items:center;
+    justify-content:center;
+    padding:0 10px 10px;
+    background:transparent;
+}
+
+#colorOverlay.open{
+    display:flex;
+}
+
+#colorOverlay .overlay-box{
+
+position:relative;
+
+    width:min(360px,92vw);
+    max-height:none;
+    padding:14px;
+    border-radius:18px;
+    box-shadow:0 10px 35px rgba(0,0,0,.45);
+}
+
+#colorOverlay .color-wheel{
+    width:min(240px,68vw);
+margin:0 auto 12px;
+}
+
+.close-color-overlay{
+    position:absolute;
+    top:10px;
+    left:10px;
+    width:36px;
+    height:36px;
+    border-radius:10px;
+    background:#303744;
+    color:#fff;
+    font-size:20px;
+}
+
+.close-color-overlay:active{
+    transform:scale(.94);
+}
+
+
+/* =====================================================
+   COLOR WHEEL
+===================================================== */
+
+.color-wheel{
+    position:relative;
+    width:min(300px,80vw);
+    aspect-ratio:1;
+    margin:12px auto;
+    border-radius:50%;
+    overflow:hidden;
+    touch-action:none;
+
+    background:
+        radial-gradient(
+            circle at center,
+            #fff 0%,
+            rgba(255,255,255,0) 58%
+        ),
+        radial-gradient(
+            circle at center,
+            rgba(0,0,0,0) 35%,
+            rgba(0,0,0,.9) 100%
+        ),
+        conic-gradient(
+            red,
+            yellow,
+            lime,
+            cyan,
+            blue,
+            magenta,
+            red
+        );
+}
+
+.color-marker{
+    position:absolute;
+    z-index:5;
+    width:18px;
+    height:18px;
+    margin:-9px;
+    border:2px solid #fff;
+    border-radius:50%;
+    box-shadow:0 1px 5px #000;
+    pointer-events:none;
+}
+
+
+/* =====================================================
+   COLOR PRESETS
+===================================================== */
+
+.color-presets{
+    display:flex;
+    justify-content:center;
+    gap:12px;
+    margin-top:10px;
+}
+
+.color-preset{
+    width:38px;
+    height:38px;
+    border-radius:50%;
+    border:2px solid #fff;
+}
+
+#blackText{
+    background:#000;
+}
+
+#whiteText{
+    background:#fff;
+}
+
+
+/* =====================================================
+   OPACITY
+===================================================== */
+
+.range-row{
+    display:flex;
+    align-items:center;
+    gap:10px;
+    margin-top:12px;
+}
+
+.range-row span{
+    white-space:nowrap;
+}
+
+.range-row input{
+    flex:1;
+}
+
+
+/* =====================================================
+   COUNTERS
+===================================================== */
+
+.counter-box{
+    display:flex;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    margin:20px 0;
+}
+
+.counter-box button{
+    width:42px;
+    height:42px;
+    border-radius:10px;
+    background:#303744;
+    color:#fff;
+    font-size:22px;
+}
+
+.counter-box strong{
+    min-width:55px;
+    text-align:center;
+    font-size:19px;
+}
+
+/* =====================================================
+   TABLE
+===================================================== */
+
+.editor-table{
+    width:auto;
+    max-width:100%;
+    margin:8px 0;
+    border-collapse:collapse;
+    table-layout:auto;
+}
+
+.editor-table td,
+.editor-table th{
+        padding:8px;
+    min-width:50px;
+    height:50px;
+    border:3px solid #697386;
+    vertical-align:top;
+    line-height:1.6;
+    white-space:normal;
+    overflow-wrap:anywhere;
+    word-break:break-word;
+}
+
+.editor-table td:focus,
+.editor-table th:focus{
+    outline:1px solid #527df5;
+}
+
+.table-wrapper{
+    display:block;
+    width:100%;
+}
+
+.table-text-line{
+    min-height:1.8em;
+    display:block;
+}
+
+/* =====================================================
+   MIND MAP BOX
+===================================================== */
+
+.mind-box{
+    width:fit-content;
+    max-width:100%;
+    margin:4px auto;
+    padding:4px;
+    background:transparent;
+    overflow:hidden;
+}
+
+.mind-box-root{
+    width:100%;
+min-width:140px;
+min-height:50px;
+    max-width:100%;
+    margin:0 auto;
+    padding:5px 8px;
+    border:2px solid #fff;
+    border-radius:10px;
+    background:transparent;
+    text-align:center;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+    line-height:1.6;
+white-space:pre-wrap;
+}
+
+.mind-box-branches{
+    display:flex;
+    flex-wrap:wrap;
+    justify-content:center;
+    align-items:flex-start;
+    gap:4px;
+    margin-top: 6px;
+}
+
+.mind-box-branch{
+    flex:0 1 auto;
+    width:fit-content;
+    max-width:220px;
+    min-width:90px;
+min-height:45px;
+padding:7px 9px;
+    border:2px solid #fff;
+    border-radius:10px;
+    background:transparent;
+    text-align:center;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+    line-height:1.6;
+white-space:pre-wrap;
+}
+.mind-box-root ul,
+.mind-box-root ol,
+.mind-box-branch ul,
+.mind-box-branch ol{
+    margin:0;
+    padding-inline-start:16px;
+}
+
+.mind-box-root:empty::before{
+    content:"الفكرة الرئيسية";
+    color:#737d8e;
+    pointer-events:none;
+}
+
+.mind-box-branch:empty::before{
+    content:"اكتبي الفرع";
+    color:#737d8e;
+    pointer-events:none;
+}
+
+/* =====================================================
+   SEARCH
+===================================================== */
+
+.search-input{
+    width:100%;
+    height:44px;
+    padding:0 12px;
+    border:1px solid #3a4250;
+    border-radius:11px;
+    outline:none;
+    background:#202631;
+    color:#fff;
+    direction:rtl;
+}
+
+.search-input:focus{
+    border-color:#527df5;
+}
+
+.search-result{
+    margin-top:12px;
+    color:#aab3c2;
+}
+
+.search-word{
+    background:#ffe600;
+    color:#111;
+    border-radius:3px;
+    padding:0 2px;
+}
+
+.search-highlight{
+    outline:2px solid #ffc107;
+    outline-offset:2px;
+}
+
+
+/* =====================================================
+   UNDERLINE
+===================================================== */
+
+.editor u{
+    text-decoration-line:underline;
+    text-decoration-thickness:auto;
+    text-underline-offset:5.08px;
+}
+
+/* =====================================================
+   HIGHLIGHT
+===================================================== */
+
+.word-text-highlight{
+    -webkit-box-decoration-break:clone;
+    box-decoration-break:clone;
+}
+
+
+/* =====================================================
+   MOBILE KEYBOARD
+===================================================== */
+
+body.keyboard-open .editor-area{
+    padding-bottom:max(
+        8px,
+        env(safe-area-inset-bottom)
+    );
+}
+
+body.keyboard-open #colorOverlay{
+    bottom:0;
+}
+
+@media(max-width:600px){
+
+    .note{
+        max-width:96%;
+    }
+    .editor{
+        max-height:32vh;
+    }
+
+    .overlay-box{
+        padding:15px;
+    }
+}
+
+</style>
+</head>
+
+<body>
+
+<div class="app">
+
+    <!-- HEADER -->
+
+    <header class="header">
+
+        <div class="title">
+            ملاحظاتي
+        </div>
+
+        <div class="header-actions">
+
+            <button
+                id="newButton"
+                type="button"
+                aria-label="جديد">
+                ＋
+            </button>
+
+            <button
+                id="searchButton"
+                type="button"
+                aria-label="بحث">
+                ⌕
+            </button>
+
+        </div>
+
+    </header>
+
+
+    <!-- NOTES -->
+
+    <main
+        id="messages"
+        class="messages">
+    </main>
+
+
+    <!-- EDITOR -->
+
+    <section class="editor-area">
+
+        <div
+            id="state"
+            class="editor-state">
+            رسالة جديدة
+        </div>
+
+        <div
+            id="editor"
+            class="editor"
+            contenteditable="true"
+            spellcheck="true">
+        </div>
+<button
+    id="sendButton"
+    class="send-button"
+    type="button"
+    aria-label="حفظ">
+    ➤
+</button>
+
+<div
+    id="colorOverlay"
+    class="overlay">
+
+    <div class="overlay-box">
+
+<button
+    id="closeColorOverlay"
+    class="close-color-overlay"
+    type="button">
+    ✕
+</button>
+
+        <div class="overlay-title">
+            ◉
+        </div>
+
+        <div
+            id="textColorWheel"
+            class="color-wheel">
+
+            <span
+                id="textColorMarker"
+                class="color-marker">
+            </span>
+
+        </div>
+
+        <div class="color-presets">
+
+            <button
+                id="blackText"
+                class="color-preset"
+                type="button"
+                aria-label="أسود">
+            </button>
+
+            <button
+                id="whiteText"
+                class="color-preset"
+                type="button"
+                aria-label="أبيض">
+            </button>
+
+        </div>
+<div
+    id="highlightOpacity"
+    class="range-row"
+    style="display:none;">
+
+    <span>◉</span>
+
+    <input
+        id="opacityRange"
+        type="range"
+        min="0"
+        max="100"
+        value="60">
+
+</div>
+
+<div class="overlay-actions">
+
+    <button
+        id="removeHighlight"
+        type="button">
+        إزالة التمييز
+    </button>
+
+    <button
+        id="colorDone"
+        type="button"
+        class="primary">
+        ✓
+    </button>
+
+</div>
+
+    </div>
+
+</div>
+
+        <!-- TOOLBAR -->
+
+        <div class="toolbar">
+
+            <button
+                id="boldButton"
+                class="tool"
+                type="button"
+                aria-label="عريض">
+                <b>B</b>
+            </button>
+
+            <button
+                id="italicButton"
+                class="tool"
+                type="button"
+                aria-label="مائل">
+                <i>I</i>
+            </button>
+
+            <button
+                id="underlineButton"
+                class="tool"
+                type="button"
+                aria-label="تسطير">
+                <u>U</u>
+            </button>
+
+            <button
+                id="sizeButton"
+                class="tool"
+                type="button"
+                aria-label="حجم">
+                A
+            </button>
+
+            <button
+                id="listButton"
+                class="tool"
+                type="button"
+                aria-label="قائمة">
+                ≡
+            </button>
+
+            <button
+                id="alignmentButton"
+                class="tool"
+                type="button"
+                aria-label="محاذاة">
+                ≡
+            </button>
+
+            <button
+                id="colorButton"
+                class="tool"
+                type="button"
+                aria-label="لون">
+                ◉
+            </button>
+
+            <button
+                id="highlightButton"
+                class="tool"
+                type="button"
+                aria-label="تمييز">
+                ▰
+            </button>
+
+            <button
+                id="tableButton"
+                class="tool"
+                type="button"
+                aria-label="جدول">
+                ▦
+            </button>
+            
+            <button
+                id="mindMapButton"
+                 class="tool"
+                type="button"
+                aria-label="مربع">
+                ▣
+            </button>      
+
+<button
+    id="addMindLeftButton"
+    class="tool"
+    type="button"
+    aria-label="إضافة فكرة أو فرع">
+    ⬅️
+</button>
+
+<button
+    id="deleteTableColumnButton"
+    class="tool"
+    type="button"
+    aria-label="حذف العمود الحالي">
+    ➡️
+</button>
+
+<button
+    id="addTableRowButton"
+    class="tool"
+    type="button"
+    aria-label="إضافة صف للجدول">
+    ⬇️
+</button>
+
+<button
+    id="deleteTableRowButton"
+    class="tool"
+    type="button"
+    aria-label="حذف الصف الحالي">
+    ⬆️
+</button>
+
+            <!-- أزرار بداية السطر -->
+            <button
+                id="newLineDownButton"
+                class="tool"
+                type="button"
+                aria-label="بداية سطر جديد لأسفل">
+                ⇩
+            </button>
+
+            <button
+                id="newLineUpButton"
+                class="tool"
+                type="button"
+                aria-label="بداية سطر جديد لأعلى">
+                ⇧
+            </button>
+
+        </div>
+
+
+        <!-- FONT SIZE -->
+
+        <div
+            id="fontSizeBar"
+            class="sub-toolbar">
+        </div>
+
+
+        <!-- LIST -->
+
+        <div
+            id="listBar"
+            class="sub-toolbar">
+        </div>
+
+
+        <!-- ALIGNMENT -->
+
+        <div
+            id="alignmentBar"
+            class="sub-toolbar">
+
+            <button
+                type="button"
+                data-align="right">
+                ≫
+            </button>
+
+            <button
+                type="button"
+                data-align="center">
+                ≡
+            </button>
+
+            <button
+                type="button"
+                data-align="left">
+                ≪
+            </button>
+
+            <button
+                type="button"
+                data-align="justify">
+                ▤
+            </button>
+
+        </div>
+
+
+        <!-- ACTIONS -->
+
+        <div class="editor-actions">
+
+            <!-- زر التراجع -->
+            <button
+                id="undoButton"
+                class="undo-button"
+                type="button"
+                aria-label="تراجع">
+                ↶
+            </button>
+
+            <button
+                id="cancelButton"
+                class="cancel-button"
+                type="button"
+                aria-label="إلغاء">
+                ✕
+            </button>
+
+        </div>
+
+    </section>
+
+</div>
+
+
+<!-- =====================================================
+   MESSAGE MENU
+===================================================== -->
+
+<div
+    id="messageMenu"
+    class="message-menu">
+
+    <button
+        id="editButton"
+        type="button"
+        aria-label="تعديل">
+        ✎
+    </button>
+
+    <button
+        id="deleteButton"
+        type="button"
+        aria-label="حذف">
+        🗑
+    </button>
+
+</div>
+
+
+<!-- =====================================================
+   SEARCH
+===================================================== -->
+
+<div
+    id="searchOverlay"
+    class="overlay">
+
+    <div class="overlay-box">
+
+        <div class="overlay-title">
+            ⌕
+        </div>
+
+        <input
+            id="searchInput"
+            class="search-input"
+            type="search"
+            autocomplete="off">
+
+        <div
+            id="searchResult"
+            class="search-result">
+        </div>
+
+        <div class="overlay-actions">
+
+            <button
+                id="searchDone"
+                class="primary"
+                type="button">
+                ✕
+            </button>
+
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+const editor = document.getElementById("editor");
+editor.innerHTML = "";
+
+const boldButton = document.getElementById("boldButton");
+const italicButton = document.getElementById("italicButton");
+const underlineButton = document.getElementById("underlineButton");
+
+function updateFormatButtons(){
+
+    boldButton.classList.toggle(
+        "active",
+        document.queryCommandState("bold")
+    );
+
+    italicButton.classList.toggle(
+        "active",
+        document.queryCommandState("italic")
+    );
+
+    underlineButton.classList.toggle(
+        "active",
+        document.queryCommandState("underline")
+    );
+}
+
+boldButton.addEventListener("click", () => {
+
+    editor.focus();
+
+    document.execCommand("bold");
+
+    updateFormatButtons();
+});
+
+italicButton.addEventListener("click", () => {
+
+    editor.focus();
+
+    document.execCommand("italic");
+
+    updateFormatButtons();
+});
+
+underlineButton.addEventListener("click", () => {
+
+    editor.focus();
+
+    document.execCommand("underline");
+
+    updateFormatButtons();
+});
+
+editor.addEventListener("keyup", updateFormatButtons);
+editor.addEventListener("mouseup", updateFormatButtons);
+editor.addEventListener("input", updateFormatButtons);
+editor.addEventListener("click", updateFormatButtons);
+
+function applyActiveColor(){
+
+    if(!colorActive || !selectedColor){
+        return;
+    }
+
+    if(colorMode === "text"){
+
+        document.execCommand(
+            "foreColor",
+            false,
+            selectedColor
+        );
+
+    }else if(colorMode === "highlight"){
+
+        const opacity =
+            Number(opacityRange.value) / 100;
+
+        let color = selectedColor;
+
+        if(color.startsWith("hsl")){
+
+            color = color.replace(
+                "hsl(",
+                "hsla("
+            ).replace(
+                ")",
+                `, ${opacity})`
+            );
+        }
+
+        document.execCommand(
+            "hiliteColor",
+            false,
+            color
+        );
+    }
+}
+
+
+/* تطبيق اللون قبل كتابة الحرف */
+editor.addEventListener("beforeinput", applyActiveColor);
+
+function toggleSubToolbar(bar){
+
+    bar.style.display =
+        bar.style.display === "flex"
+            ? "none"
+            : "flex";
+}
+const sizeButton = document.getElementById("sizeButton");
+const fontSizeBar = document.getElementById("fontSizeBar");
+
+const fontSizes = [12, 14, 16, 18, 20, 24, 30];
+
+fontSizes.forEach(size => {
+
+    const button = document.createElement("button");
+
+    button.type = "button";
+    button.textContent = size;
+
+    button.addEventListener("click", () => {
+
+        editor.focus();
+
+        const selection = window.getSelection();
+
+        if(!selection.rangeCount){
+            return;
+        }
+
+        const range = selection.getRangeAt(0);
+
+        if(range.collapsed){
+            return;
+        }
+
+        const span = document.createElement("span");
+
+        span.style.fontSize = size + "px";
+
+        span.appendChild(range.extractContents());
+
+        range.insertNode(span);
+
+        selection.removeAllRanges();
+
+        const newRange = document.createRange();
+        newRange.selectNodeContents(span);
+        selection.addRange(newRange);
+    });
+
+    fontSizeBar.appendChild(button);
+});
+
+sizeButton.addEventListener("click", () => {
+
+    toggleSubToolbar(fontSizeBar);
+
+});
+
+const listButton = document.getElementById("listButton");
+const listBar = document.getElementById("listBar");
+
+listBar.innerHTML = `
+    <button type="button" data-list="ul">•</button>
+    <button type="button" data-list="ol">1.</button>
+`;
+
+listBar.querySelectorAll("button").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        editor.focus();
+
+        if(button.dataset.list === "ul"){
+            document.execCommand("insertUnorderedList");
+        }
+
+        if(button.dataset.list === "ol"){
+            document.execCommand("insertOrderedList");
+        }
+
+    });
+
+});
+
+listButton.addEventListener("click", () => {
+
+    toggleSubToolbar(listBar);
+
+});
+
+const alignmentButton = document.getElementById("alignmentButton");
+const alignmentBar = document.getElementById("alignmentBar");
+
+
+alignmentBar.querySelectorAll("button").forEach(button => {
+
+    button.addEventListener("click", () => {
+
+        editor.focus();
+
+        const align = button.dataset.align;
+
+        document.execCommand(
+            "justify" +
+            align.charAt(0).toUpperCase() +
+            align.slice(1)
+        );
+
+        const selection = window.getSelection();
+
+        if(selection.rangeCount){
+
+            let element =
+                selection.anchorNode.nodeType === 1
+                    ? selection.anchorNode
+                    : selection.anchorNode.parentElement;
+
+            const list = element?.closest("ul, ol");
+
+            if(list){
+                list.style.textAlign = align;
+
+                list.querySelectorAll("li").forEach(li => {
+                    li.style.textAlign = align;
+                    li.style.listStylePosition = "inside";
+                });
+            }
+        }
+
+    });
+
+});
+
+alignmentButton.addEventListener("click", () => {
+
+    toggleSubToolbar(alignmentBar);
+
+});
+
+const colorButton = document.getElementById("colorButton");
+const colorOverlay = document.getElementById("colorOverlay");
+const highlightButton = document.getElementById("highlightButton");
+
+highlightButton.addEventListener("click", () => {
+
+    colorMode = "highlight";
+
+    colorActive = false;
+
+highlightOpacity.style.display = "flex";
+
+removeHighlight.style.display = "block";
+    
+    saveSelection();
+
+    colorOverlay.classList.add("open");
+});
+
+colorButton.addEventListener("click", () => {
+
+    colorMode = "text";
+
+    colorActive = true;
+
+highlightOpacity.style.display = "none";
+
+removeHighlight.style.display = "none";
+    
+    saveSelection();
+
+    colorOverlay.classList.add("open");
+});
+
+
+const textColorWheel = document.getElementById("textColorWheel");
+const textColorMarker = document.getElementById("textColorMarker");
+
+const opacityRange = document.getElementById("opacityRange");
+
+const highlightOpacity =
+    document.getElementById("highlightOpacity");
+
+const removeHighlight =
+    document.getElementById("removeHighlight");
+
+let colorMode = "text";
+let selectedColor = null;
+let colorActive = false;
+
+textColorWheel.addEventListener("pointerdown", (event) => {
+
+restoreSelection();
+
+    const rect = textColorWheel.getBoundingClientRect();
+
+    const x = event.clientX - rect.left;
+    const y = event.clientY - rect.top;
+
+    const centerX = rect.width / 2;
+    const centerY = rect.height / 2;
+
+    const dx = x - centerX;
+    const dy = y - centerY;
+
+    const distance = Math.sqrt(dx * dx + dy * dy);
+    const radius = Math.min(centerX, centerY);
+
+    const angle = Math.atan2(dy, dx);
+
+    const hue =
+        ((angle * 180 / Math.PI) + 360 + 90) % 360;
+
+    const saturation =
+        Math.min(distance / radius, 1) * 100;
+
+    const lightness =
+        100 - Math.min(distance / radius, 1) * 50;
+
+    const color =
+        `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+
+    textColorMarker.style.left = x + "px";
+    textColorMarker.style.top = y + "px";
+
+    applyColor(color);
+});
+
+let savedRange = null;
+
+function saveSelection(){
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount){
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    if(editor.contains(range.commonAncestorContainer)){
+        savedRange = range.cloneRange();
+    }
+}
+
+function restoreSelection(){
+
+    if(!savedRange){
+        return;
+    }
+
+    const selection = window.getSelection();
+
+    selection.removeAllRanges();
+    selection.addRange(savedRange);
+}
+
+function applyColor(color){
+
+selectedColor = color;
+
+restoreSelection();
+
+    if(colorMode === "text"){
+
+        document.execCommand(
+            "foreColor",
+            false,
+            color
+        );
+
+        return;
+    }
+
+    const opacity =
+        Number(opacityRange.value) / 100;
+
+    if(color.startsWith("#")){
+
+        const hex = color.replace("#", "");
+
+        const r = parseInt(hex.substring(0, 2), 16);
+        const g = parseInt(hex.substring(2, 4), 16);
+        const b = parseInt(hex.substring(4, 6), 16);
+
+        color =
+            `rgba(${r}, ${g}, ${b}, ${opacity})`;
+
+    }else if(color.startsWith("hsl")){
+
+        color = color.replace(
+            "hsl(",
+            "hsla("
+        ).replace(
+            ")",
+            `, ${opacity})`
+        );
+    }
+
+    document.execCommand(
+        "hiliteColor",
+        false,
+        color
+    );
+}
+
+document.getElementById("blackText").addEventListener("click", () => {
+    applyColor("#000000");
+});
+
+document.getElementById("removeHighlight").addEventListener("click", () => {
+
+    restoreSelection();
+
+    document.execCommand(
+        "hiliteColor",
+        false,
+        "transparent"
+    );
+
+    selectedColor = null;
+});
+
+document.getElementById("whiteText").addEventListener("click", () => {
+    applyColor("#ffffff");
+});
+
+document.getElementById("colorDone").addEventListener("click", () => {
+
+    colorOverlay.classList.remove("open");
+
+    if(selectedColor){
+        colorActive = true;
+    }
+
+    editor.focus();
+});
+
+document.getElementById("closeColorOverlay").addEventListener("click", () => {
+
+    colorOverlay.classList.remove("open");
+
+});
+
+function insertAtCursor(element){
+
+    editor.focus();
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount){
+        editor.appendChild(element);
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    if(!editor.contains(range.commonAncestorContainer)){
+        editor.appendChild(element);
+        return;
+    }
+
+    range.deleteContents();
+    range.insertNode(element);
+
+    selection.removeAllRanges();
+
+    const newRange = document.createRange();
+
+    newRange.setStartAfter(element);
+    newRange.collapse(true);
+
+    selection.addRange(newRange);
+}
+
+const tableButton = document.getElementById("tableButton");
+
+function createTableTextLine(){
+
+    const line = document.createElement("div");
+
+    line.className = "table-text-line";
+    line.innerHTML = "<br>";
+
+    return line;
+}
+
+function ensureTableAfterLine(table){
+
+    const wrapper = table.closest(".table-wrapper");
+
+    if(!wrapper){
+        return;
+    }
+
+    let after = table.nextElementSibling;
+
+    if(
+        !after ||
+        !after.classList.contains("table-text-line")
+    ){
+
+        after = createTableTextLine();
+
+        table.insertAdjacentElement(
+            "afterend",
+            after
+        );
+    }
+
+}
+
+tableButton.addEventListener("click", () => {
+
+    const wrapper = document.createElement("div");
+    wrapper.className = "table-wrapper";
+
+    const before = createTableTextLine();
+
+    const table = document.createElement("table");
+    table.className = "editor-table";
+
+    for(let r = 0; r < 2; r++){
+
+        const row = document.createElement("tr");
+
+        for(let c = 0; c < 2; c++){
+
+            const cell = document.createElement("td");
+
+            cell.contentEditable = "true";
+            cell.innerHTML = "<br>";
+
+            row.appendChild(cell);
+        }
+
+        table.appendChild(row);
+    }
+
+    const after = createTableTextLine();
+
+    wrapper.appendChild(before);
+    wrapper.appendChild(table);
+    wrapper.appendChild(after);
+
+    insertAtCursor(wrapper);
+
+    const range = document.createRange();
+
+    range.selectNodeContents(after);
+    range.collapse(true);
+
+    const selection = window.getSelection();
+
+    selection.removeAllRanges();
+    selection.addRange(range);
+});
+
+
+editor.addEventListener("keydown", (event) => {
+
+    if(
+        event.key !== "Backspace" &&
+        event.key !== "Delete"
+    ){
+        return;
+    }
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount){
+        return;
+    }
+
+    let element =
+        selection.anchorNode.nodeType === 1
+            ? selection.anchorNode
+            : selection.anchorNode.parentElement;
+
+    const line = element.closest(".table-text-line");
+
+    if(!line){
+        return;
+    }
+
+    const previous = line.previousElementSibling;
+
+    if(
+        previous &&
+        previous.classList.contains("editor-table") &&
+        line.textContent.trim() === ""
+    ){
+
+        event.preventDefault();
+
+        ensureTableAfterLine(previous);
+
+        const range = document.createRange();
+
+        range.selectNodeContents(line);
+        range.collapse(true);
+
+        selection.removeAllRanges();
+        selection.addRange(range);
+    }
+
+});
+
+const addMindLeftButton =
+    document.getElementById("addMindLeftButton");
+
+const addTableRowButton =
+    document.getElementById("addTableRowButton");
+
+const deleteTableColumnButton =
+    document.getElementById("deleteTableColumnButton");
+
+deleteTableColumnButton.addEventListener("click", () => {
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount){
+        return;
+    }
+
+    let element =
+        selection.anchorNode.nodeType === 1
+            ? selection.anchorNode
+            : selection.anchorNode.parentElement;
+
+    const tableCell =
+        element.closest(".editor-table td, .editor-table th");
+
+    if(!tableCell){
+        return;
+    }
+
+    const table =
+        tableCell.closest(".editor-table");
+
+    if(!table){
+        return;
+    }
+
+    const columnIndex = tableCell.cellIndex;
+
+    Array.from(table.rows).forEach(row => {
+
+        if(row.cells[columnIndex]){
+            row.deleteCell(columnIndex);
+        }
+
+    });
+
+});
+
+addMindLeftButton.addEventListener("click", () => {
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount){
+        return;
+    }
+
+    let element =
+        selection.anchorNode.nodeType === 1
+            ? selection.anchorNode
+            : selection.anchorNode.parentElement;
+
+const tableCell =
+    element.closest(".editor-table td, .editor-table th");
+
+if(tableCell){
+
+    const table =
+        tableCell.closest(".editor-table");
+
+    const rows = table.rows;
+
+    for(let i = 0; i < rows.length; i++){
+
+        const newCell =
+            rows[i].insertCell(-1);
+
+        newCell.contentEditable = "true";
+        newCell.innerHTML = "";
+    }
+
+    return;
+}
+
+    const branch =
+        element.closest(".mind-box-branch");
+
+    const root =
+        element.closest(".mind-box-root");
+
+    /* فرع جديد بجانب الفرع الحالي */
+    if(branch){
+
+        const newBranch =
+            document.createElement("div");
+
+        newBranch.className = "mind-box-branch";
+        newBranch.contentEditable = "true";
+        newBranch.innerHTML = "";
+
+        branch.insertAdjacentElement(
+            "afterend",
+            newBranch
+        );
+
+        newBranch.focus();
+
+        return;
+    }
+
+    /* فكرة رئيسية جديدة بجانب الفكرة الحالية */
+    if(root){
+
+        const mindBox =
+            root.closest(".mind-box");
+
+        if(!mindBox){
+            return;
+        }
+
+        const newMindBox =
+            document.createElement("div");
+
+        newMindBox.className = "mind-box";
+
+        newMindBox.innerHTML =
+            '<div class="mind-box-root" contenteditable="true">' +
+                'فكرة رئيسية جديدة' +
+            '</div>' +
+            '<div class="mind-box-branches">' +
+                '<div class="mind-box-branch" contenteditable="true">' +
+                    'فرع 1' +
+                '</div>' +
+            '</div>';
+
+        mindBox.insertAdjacentElement(
+            "afterend",
+            newMindBox
+        );
+
+        newMindBox
+            .querySelector(".mind-box-root")
+            .focus();
+    }
+});
+
+
+
+addTableRowButton.addEventListener("click", () => {
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount){
+        return;
+    }
+
+    let element =
+        selection.anchorNode.nodeType === 1
+            ? selection.anchorNode
+            : selection.anchorNode.parentElement;
+
+    const tableCell =
+        element.closest(".editor-table td, .editor-table th");
+
+    if(!tableCell){
+        return;
+    }
+
+    const row = tableCell.closest("tr");
+    const table = tableCell.closest(".editor-table");
+
+    if(!row || !table){
+        return;
+    }
+
+    const newRow = table.insertRow(row.rowIndex + 1);
+
+    for(let i = 0; i < row.cells.length; i++){
+
+        const newCell = newRow.insertCell(i);
+
+        newCell.contentEditable = "true";
+        newCell.innerHTML = "";
+    }
+
+    newRow.cells[0].focus();
+});
+
+const deleteTableRowButton =
+    document.getElementById("deleteTableRowButton");
+
+deleteTableRowButton.addEventListener("click", () => {
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount){
+        return;
+    }
+
+    let element =
+        selection.anchorNode.nodeType === 1
+            ? selection.anchorNode
+            : selection.anchorNode.parentElement;
+
+    const tableCell =
+        element.closest(".editor-table td, .editor-table th");
+
+    if(!tableCell){
+        return;
+    }
+
+    const row = tableCell.closest("tr");
+    const table = tableCell.closest(".editor-table");
+
+    if(!row || !table){
+        return;
+    }
+
+    if(table.rows.length <= 1){
+        return;
+    }
+
+    row.remove();
+});
+
+editor.addEventListener("keydown", (event) => {
+
+    if(event.key !== "Enter"){
+        return;
+    }
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount){
+        return;
+    }
+
+    let element =
+        selection.anchorNode.nodeType === 1
+            ? selection.anchorNode
+            : selection.anchorNode.parentElement;
+
+    /* السماح للقوائم المنقطة والمرقمة بالعمل طبيعيًا */
+    const listItem =
+        element.closest("li");
+
+    if(listItem){
+        return;
+    }
+
+    const mindElement =
+        element.closest(
+            ".mind-box-root, .mind-box-branch"
+        );
+
+    if(!mindElement){
+        return;
+    }
+
+    event.preventDefault();
+
+    document.execCommand(
+        "insertLineBreak"
+    );
+});
+
+const mindMapButton = document.getElementById("mindMapButton");
+
+mindMapButton.addEventListener("click", () => {
+
+    const wrapper = document.createElement("div");
+
+    const before = document.createElement("div");
+    before.innerHTML = "<br>";
+
+    const mindBox = document.createElement("div");
+    mindBox.className = "mind-box";
+
+    mindBox.innerHTML =
+        '<div class="mind-box-root" contenteditable="true"></div>' +
+        '<div class="mind-box-branches">' +
+            '<div class="mind-box-branch" contenteditable="true"></div>' +
+            '<div class="mind-box-branch" contenteditable="true"></div>' +
+            '<div class="mind-box-branch" contenteditable="true"></div>' +
+            '<div class="mind-box-branch" contenteditable="true"></div>' +
+        '</div>';
+
+    const after = document.createElement("div");
+    after.innerHTML = "<br>";
+
+    wrapper.appendChild(before);
+    wrapper.appendChild(mindBox);
+    wrapper.appendChild(after);
+
+    insertAtCursor(wrapper);
+
+    const range = document.createRange();
+    range.selectNodeContents(after);
+    range.collapse(true);
+
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
+});
+
+const undoButton = document.getElementById("undoButton");
+
+undoButton.addEventListener("click", () => {
+    editor.focus();
+    document.execCommand("undo");
+});
+
+const cancelButton = document.getElementById("cancelButton");
+
+cancelButton.addEventListener("click", () => {
+
+    editor.innerHTML = "";
+
+    selectedNote = null;
+
+    messageMenu.classList.remove("open");
+
+    editor.focus();
+});
+
+const newButton = document.getElementById("newButton");
+
+newButton.addEventListener("click", () => {
+    editor.innerHTML = "";
+    editor.focus();
+});
+const searchButton = document.getElementById("searchButton");
+const searchOverlay = document.getElementById("searchOverlay");
+const searchInput = document.getElementById("searchInput");
+const searchResult = document.getElementById("searchResult");
+
+searchButton.addEventListener("click", () => {
+    searchOverlay.classList.add("open");
+    searchInput.focus();
+});
+
+searchInput.addEventListener("input", () => {
+
+    const word = searchInput.value.trim();
+
+    if(!word){
+        searchResult.textContent = "";
+        return;
+    }
+
+    const text = editor.innerText;
+
+    if(text.includes(word)){
+        searchResult.textContent = "تم العثور على الكلمة ✓";
+    }else{
+        searchResult.textContent = "لم يتم العثور عليها";
+    }
+
+});
+
+document.getElementById("searchDone").addEventListener("click", () => {
+    searchOverlay.classList.remove("open");
+    searchInput.value = "";
+    searchResult.textContent = "";
+});
+
+const sendButton = document.getElementById("sendButton");
+
+sendButton.addEventListener("click", () => {
+
+    const savedContent = editor.cloneNode(true);
+
+    savedContent
+        .querySelectorAll('[contenteditable="true"]')
+        .forEach(element => {
+            element.removeAttribute("contenteditable");
+        });
+
+    const content = savedContent.innerHTML.trim();
+
+    if(!content){
+        return;
+    }
+
+if(selectedNote){
+
+    const noteContent =
+        selectedNote.querySelector(".note-content");
+
+    if(noteContent){
+        noteContent.innerHTML = content;
+    }
+
+    selectedNote = null;
+    editor.innerHTML = "";
+    editor.focus();
+
+    return;
+}
+
+    const note = document.createElement("div");
+    note.className = "note";
+
+    note.innerHTML = `
+        <div class="note-content">
+            ${content}
+        </div>
+
+        <button
+            class="note-menu"
+            type="button">
+            ⋮
+        </button>
+    `;
+
+    messages.appendChild(note);
+
+    editor.innerHTML = "";
+
+    messages.scrollTop = messages.scrollHeight;
+
+    editor.focus();
+});
+
+const messageMenu = document.getElementById("messageMenu");
+const editButton = document.getElementById("editButton");
+const deleteButton = document.getElementById("deleteButton");
+
+let selectedNote = null;
+
+messages.addEventListener("click", (event) => {
+
+    const menu = event.target.closest(".note-menu");
+
+    if(!menu){
+        return;
+    }
+
+    selectedNote = menu.closest(".note");
+
+    const rect = menu.getBoundingClientRect();
+
+    messageMenu.style.top = rect.bottom + 5 + "px";
+    messageMenu.style.left = rect.left + "px";
+
+    messageMenu.classList.add("open");
+});
+
+editButton.addEventListener("click", () => {
+
+    if(!selectedNote){
+        return;
+    }
+
+    const noteContent =
+        selectedNote.querySelector(".note-content");
+
+    if(!noteContent){
+        return;
+    }
+
+   editor.innerHTML = noteContent.innerHTML.replace(/^(<div><br><\/div>|<br>)+|(<div><br><\/div>|<br>)+$/g, "");
+
+editor
+    .querySelectorAll(".mind-box-root, .mind-box-branch")
+    .forEach(element => {
+        element.contentEditable = "true";
+    });
+
+    messageMenu.classList.remove("open");
+
+    editor.focus();
+
+    updateFormatButtons();
+});
+
+deleteButton.addEventListener("click", () => {
+
+    if(!selectedNote){
+        return;
+    }
+
+    selectedNote.remove();
+
+    selectedNote = null;
+
+    messageMenu.classList.remove("open");
+});
+
+
+document.addEventListener("click", (event) => {
+
+    if(
+        !event.target.closest(".note-menu") &&
+        !event.target.closest(".message-menu")
+    ){
+        messageMenu.classList.remove("open");
+    }
+
+});
+          
+</script>
+
+</body>
+</html>
