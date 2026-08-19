@@ -1574,7 +1574,74 @@ restoreSelection();
 
     textColorMarker.style.left = x + "px";
     textColorMarker.style.top = y + "px";
+function cleanFormatting(type){
 
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount){
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    if(range.collapsed){
+        return;
+    }
+
+    let selector = "";
+
+    if(type === "color"){
+
+        selector =
+            "span[style*='color'], font[color]";
+
+    }else if(type === "background"){
+
+        selector =
+            "span[style*='background-color'], " +
+            "span[style*='background'], mark";
+
+    }else if(type === "fontSize"){
+
+        selector =
+            "span[style*='font-size'], font[size]";
+
+    }
+
+    if(!selector){
+        return;
+    }
+
+    Array.from(
+        editor.querySelectorAll(selector)
+    ).forEach(element => {
+
+        try{
+
+            if(!range.intersectsNode(element)){
+                return;
+            }
+
+            const parent = element.parentNode;
+
+            while(element.firstChild){
+
+                parent.insertBefore(
+                    element.firstChild,
+                    element
+                );
+            }
+
+            element.remove();
+
+        }catch(error){
+
+            // تجاهل أي عنصر خارج التحديد
+        }
+
+    });
+}
+      
     applyColor(color);
 });
 
@@ -1615,14 +1682,20 @@ restoreSelection();
 
     if(colorMode === "text"){
 
-        document.execCommand(
-            "foreColor",
-            false,
-            color
-        );
+    restoreSelection();
 
-        return;
-    }
+    cleanFormatting("color");
+
+    document.execCommand(
+        "foreColor",
+        false,
+        color
+    );
+
+    selectedColor = color;
+
+    return;
+}
 
     const opacity =
         Number(opacityRange.value) / 100;
