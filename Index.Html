@@ -3403,6 +3403,7 @@ mindMapButton.addEventListener(
     event => {
 
         event.preventDefault();
+event.stopImmediatePropagation();
 
         restoreSelection();
 
