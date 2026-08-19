@@ -662,6 +662,8 @@ margin:0 auto 12px;
 
 .mind-box-root{
     width:100%;
+min-width:140px;
+min-height:50px;
     max-width:100%;
     margin:0 auto;
     padding:5px 8px;
@@ -688,8 +690,9 @@ white-space:pre-wrap;
     flex:0 1 auto;
     width:fit-content;
     max-width:220px;
-    min-width:50px;
-    padding:4px 7px;
+    min-width:90px;
+min-height:45px;
+padding:7px 9px;
     border:2px solid #fff;
     border-radius:10px;
     background:transparent;
@@ -705,6 +708,18 @@ white-space:pre-wrap;
 .mind-box-branch ol{
     margin:0;
     padding-inline-start:16px;
+}
+
+.mind-box-root:empty::before{
+    content:"الفكرة الرئيسية";
+    color:#737d8e;
+    pointer-events:none;
+}
+
+.mind-box-branch:empty::before{
+    content:"اكتبي الفرع";
+    color:#737d8e;
+    pointer-events:none;
 }
 
 /* =====================================================
@@ -1969,27 +1984,17 @@ const mindMapButton = document.getElementById("mindMapButton");
 mindMapButton.addEventListener("click", () => {
 
     editor.insertAdjacentHTML(
-    "beforeend",
-    '<div class="mind-box">' +
-        '<div class="mind-box-root" contenteditable="true">' +
-            'الفكرة الرئيسية' +
-        '</div>' +
-        '<div class="mind-box-branches">' +
-            '<div class="mind-box-branch" contenteditable="true">' +
-                'فرع 1' +
+        "beforeend",
+        '<div class="mind-box">' +
+            '<div class="mind-box-root" contenteditable="true"></div>' +
+            '<div class="mind-box-branches">' +
+                '<div class="mind-box-branch" contenteditable="true"></div>' +
+                '<div class="mind-box-branch" contenteditable="true"></div>' +
+                '<div class="mind-box-branch" contenteditable="true"></div>' +
+                '<div class="mind-box-branch" contenteditable="true"></div>' +
             '</div>' +
-            '<div class="mind-box-branch" contenteditable="true">' +
-                'فرع 2' +
-            '</div>' +
-            '<div class="mind-box-branch" contenteditable="true">' +
-                'فرع 3' +
-            '</div>' +
-            '<div class="mind-box-branch" contenteditable="true">' +
-                'فرع 4' +
-            '</div>' +
-        '</div>' +
-    '</div>'
-);
+        '</div>'
+    );
 });
 
 const undoButton = document.getElementById("undoButton");
