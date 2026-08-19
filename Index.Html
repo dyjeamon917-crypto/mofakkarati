@@ -647,6 +647,16 @@ margin:0 auto 12px;
     outline:1px solid #527df5;
 }
 
+.table-wrapper{
+    display:block;
+    width:100%;
+}
+
+.table-text-line{
+    min-height:1.8em;
+    display:block;
+}
+
 /* =====================================================
    MIND MAP BOX
 ===================================================== */
@@ -1719,7 +1729,11 @@ const tableButton = document.getElementById("tableButton");
 
 tableButton.addEventListener("click", () => {
 
-    const before = document.createElement("p");
+    const wrapper = document.createElement("div");
+    wrapper.className = "table-wrapper";
+
+    const before = document.createElement("div");
+    before.className = "table-text-line";
     before.innerHTML = "<br>";
 
     const table = document.createElement("table");
@@ -1742,15 +1756,19 @@ tableButton.addEventListener("click", () => {
         table.appendChild(row);
     }
 
-    const after = document.createElement("p");
+    const after = document.createElement("div");
+    after.className = "table-text-line";
     after.innerHTML = "<br>";
 
-    insertAtCursor(before);
-    insertAtCursor(table);
-    insertAtCursor(after);
+    wrapper.appendChild(before);
+    wrapper.appendChild(table);
+    wrapper.appendChild(after);
+
+    insertAtCursor(wrapper);
 
     const range = document.createRange();
-    range.setStart(after, 0);
+
+    range.selectNodeContents(after);
     range.collapse(true);
 
     const selection = window.getSelection();
@@ -1758,7 +1776,6 @@ tableButton.addEventListener("click", () => {
     selection.removeAllRanges();
     selection.addRange(range);
 });
-
 
 const addMindLeftButton =
     document.getElementById("addMindLeftButton");
