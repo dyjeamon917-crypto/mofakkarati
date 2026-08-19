@@ -2155,6 +2155,12 @@ editButton.addEventListener("click", () => {
 
    editor.innerHTML = noteContent.innerHTML.replace(/^(<div><br><\/div>|<br>)+|(<div><br><\/div>|<br>)+$/g, "");
 
+editor
+    .querySelectorAll(".mind-box-root, .mind-box-branch")
+    .forEach(element => {
+        element.contentEditable = "true";
+    });
+
     messageMenu.classList.remove("open");
 
     editor.focus();
