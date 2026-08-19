@@ -1959,15 +1959,11 @@ fontSizes.forEach(size => {
 
 
     button.addEventListener(
-        "pointerdown",
+        "mousedown",
         event => {
 
             event.preventDefault();
 
-
-            /*
-             * استرجاع التحديد قبل الضغط على الزر
-             */
             restoreSelection();
 
 
@@ -1985,8 +1981,8 @@ fontSizes.forEach(size => {
             const range =
                 selection.getRangeAt(0);
 
-
             if(
+                range.collapsed ||
                 !editor.contains(
                     range.commonAncestorContainer
                 )
@@ -1995,33 +1991,16 @@ fontSizes.forEach(size => {
             }
 
 
-            /*
-             * الحجم يعمل فقط للنص المحدد
-             */
-            if(range.collapsed){
-                return;
-            }
-
-
-            /*
-             * أخذ النص المحدد
-             */
             const fragment =
                 range.extractContents();
 
 
-            /*
-             * إزالة أي حجم قديم
-             */
             removeFormatFromFragment(
                 fragment,
                 "size"
             );
 
 
-            /*
-             * وضع الحجم الجديد
-             */
             const span =
                 document.createElement(
                     "span"
@@ -2034,7 +2013,6 @@ fontSizes.forEach(size => {
                 fragment
             );
 
-
             range.insertNode(
                 span
             );
@@ -2043,9 +2021,6 @@ fontSizes.forEach(size => {
             cleanFormatting();
 
 
-            /*
-             * إعادة تحديد النص بعد تغيير الحجم
-             */
             const newRange =
                 document.createRange();
 
@@ -2058,7 +2033,6 @@ fontSizes.forEach(size => {
             selection.addRange(
                 newRange
             );
-
 
             saveSelection();
 
@@ -2077,11 +2051,19 @@ sizeButton.addEventListener(
     "click",
     () => {
 
-        saveSelection();
+        if(
+            fontSizeBar.style.display === "flex"
+        ){
 
-        toggleSubToolbar(
-            fontSizeBar
-        );
+            fontSizeBar.style.display =
+                "none";
+
+        }else{
+
+            fontSizeBar.style.display =
+                "flex";
+
+        }
 
     }
 );
