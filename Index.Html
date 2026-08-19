@@ -1864,85 +1864,40 @@ function removeFormatFromFragment(
 
 function toggleFormat(command, format){
 
-    editor.focus();
+    restoreSelection();
 
     const selection =
         getSelection();
 
-    if(!selection || !selection.rangeCount){
+    if(
+        !selection ||
+        !selection.rangeCount
+    ){
         return;
     }
 
     const range =
         selection.getRangeAt(0);
 
-    if(!editor.contains(
-        range.commonAncestorContainer
-    )){
+    if(
+        !editor.contains(
+            range.commonAncestorContainer
+        )
+    ){
         return;
     }
 
+    editor.focus();
 
-    /*
-     * بدون تحديد:
-     * نترك execCommand يتحكم في الكتابة القادمة
-     */
-    if(range.collapsed){
-
-        document.execCommand(
-            command,
-            false,
-            null
-        );
-
-        updateFormatButtons();
-
-        return;
-    }
-
-
-    /*
-     * هل التنسيق موجود حاليًا؟
-     */
-    const active =
-        document.queryCommandState(
-            command
-        );
-
-
-    /*
-     * لو كان موجودًا:
-     * نشيله وننظف أثره
-     */
-    if(active){
-
-        document.execCommand(
-            command,
-            false,
-            null
-        );
-
-        cleanFormatting();
-
-    }else{
-
-        /*
-         * تشغيل التنسيق
-         */
-        document.execCommand(
-            command,
-            false,
-            null
-        );
-
-    }
-
-
-    cleanFormatting();
-
-    updateFormatButtons();
+    document.execCommand(
+        command,
+        false,
+        null
+    );
 
     saveSelection();
+
+    updateFormatButtons();
 }
 
 
