@@ -2303,21 +2303,14 @@ document.getElementById("searchDone").addEventListener("click", () => {
         const styles = {};
 
         Array.from(element.style).forEach(property => {
-
             styles[property] =
                 element.style.getPropertyValue(property);
-
         });
 
         element.removeAttribute("style");
 
         Object.entries(styles).forEach(([property, value]) => {
-
-            element.style.setProperty(
-                property,
-                value
-            );
-
+            element.style.setProperty(property, value);
         });
 
         if(!element.getAttribute("style")){
@@ -2334,40 +2327,26 @@ document.getElementById("searchDone").addEventListener("click", () => {
             return false;
         }
 
-        const parentStyles = {};
+        const styles = {};
 
         Array.from(parent.style).forEach(property => {
-
-            parentStyles[property] =
+            styles[property] =
                 parent.style.getPropertyValue(property);
-
         });
 
         Array.from(span.style).forEach(property => {
-
-            parentStyles[property] =
+            styles[property] =
                 span.style.getPropertyValue(property);
-
         });
 
         parent.removeAttribute("style");
 
-        Object.entries(parentStyles).forEach(([property, value]) => {
-
-            parent.style.setProperty(
-                property,
-                value
-            );
-
+        Object.entries(styles).forEach(([property, value]) => {
+            parent.style.setProperty(property, value);
         });
 
         while(span.firstChild){
-
-            parent.insertBefore(
-                span.firstChild,
-                span
-            );
-
+            parent.insertBefore(span.firstChild, span);
         }
 
         span.remove();
@@ -2382,41 +2361,26 @@ document.getElementById("searchDone").addEventListener("click", () => {
 
         changed = false;
 
-        const spans = Array.from(
-            editor.querySelectorAll("span")
-        ).reverse();
+        Array.from(editor.querySelectorAll("span"))
+            .reverse()
+            .forEach(span => {
 
+                normalizeStyle(span);
 
-        spans.forEach(span => {
+                if(
+                    span.textContent === "" &&
+                    !span.querySelector("br")
+                ){
+                    span.remove();
+                    changed = true;
+                    return;
+                }
 
-            normalizeStyle(span);
+                if(mergeSpanIntoParent(span)){
+                    changed = true;
+                }
 
-
-            /* حذف الـ span الفارغ */
-
-            if(
-                span.textContent === "" &&
-                !span.querySelector("br")
-            ){
-
-                span.remove();
-
-                changed = true;
-
-                return;
-            }
-
-
-            /* دمج الـ span المتداخل */
-
-            if(mergeSpanIntoParent(span)){
-
-                changed = true;
-
-            }
-
-        });
-
+            });
     }
 
 
@@ -2426,110 +2390,178 @@ document.getElementById("searchDone").addEventListener("click", () => {
 
         changed = false;
 
-        const spans = Array.from(
-            editor.querySelectorAll("span")
-        );
+        Array.from(editor.querySelectorAll("span"))
+            .forEach(span => {
 
+                const next = span.nextSibling;
 
-        spans.forEach(span => {
-
-            const next = span.nextSibling;
-
-            if(
-                !next ||
-                next.nodeType !== 1 ||
-                next.tagName !== "SPAN"
-            ){
-                return;
-            }
-
-
-            normalizeStyle(span);
-            normalizeStyle(next);
-
-
-            const spanStyle =
-                span.getAttribute("style") || "";
-
-            const nextStyle =
-                next.getAttribute("style") || "";
-
-
-            /* دمج الـ spans المتجاورة إذا كان تنسيقها متطابقًا */
-
-            if(spanStyle === nextStyle){
-
-                while(next.firstChild){
-
-                    span.appendChild(
-                        next.firstChild
-                    );
-
+                if(
+                    !next ||
+                    next.nodeType !== 1 ||
+                    next.tagName !== "SPAN"
+                ){
+                    return;
                 }
 
-                next.remove();
+                normalizeStyle(span);
+                normalizeStyle(next);
 
-                changed = true;
-            }
+                if(
+                    (span.getAttribute("style") || "") ===
+                    (next.getAttribute("style") || "")
+                ){
 
-        });
+                    while(next.firstChild){
+                        span.appendChild(next.firstChild);
+                    }
 
+                    next.remove();
+                    changed = true;
+                }
+
+            });
     }
 
 
-    /* حذف أي span أصبح بلا محتوى أو بلا تنسيق */
+    Array.from(editor.querySelectorAll("span"))
+        .reverse()
+        .forEach(span => {
 
-    Array.from(
-        editor.querySelectorAll("span")
-    ).reverse().forEach(span => {
-
-        if(
-            span.textContent === "" &&
-            !span.querySelector("br")
-        ){
-
-            span.remove();
-
-            return;
-        }
-
-
-        if(
-            !span.getAttribute("style") &&
-            !span.attributes.length
-        ){
-
-            const parent = span.parentNode;
-
-            while(span.firstChild){
-
-                parent.insertBefore(
-                    span.firstChild,
-                    span
-                );
-
+            if(
+                span.textContent === "" &&
+                !span.querySelector("br")
+            ){
+                span.remove();
+                return;
             }
 
-            span.remove();
+            if(
+                !span.getAttribute("style") &&
+                span.attributes.length === 0
+            ){
+
+                const parent = span.parentNode;
+
+                while(span.firstChild){
+                    parent.insertBefore(span.firstChild, span);
+                }
+
+                span.remove();
+            }
+
+        });
+}
+
+
+/* =====================================================
+   تطبيع نسخة المحتوى قبل الحفظ
+===================================================== */
+
+function normalizeEditorContent(root){
+
+    function isWhitespaceText(node){
+
+        return (
+            node.nodeType === Node.TEXT_NODE &&
+            node.textContent.trim() === ""
+        );
+    }
+
+
+    /*
+       إزالة النصوص البيضاء التقنية بين العناصر فقط.
+       لا نلمس النص الحقيقي.
+    */
+
+    Array.from(root.childNodes).forEach(node => {
+
+        if(isWhitespaceText(node)){
+            node.remove();
         }
 
     });
 
+
+    /*
+       إزالة الأسطر الفارغة التقنية من البداية فقط.
+       لا نلمس الأسطر الموجودة وسط المحتوى.
+    */
+
+    while(root.firstChild){
+
+        const first = root.firstChild;
+
+        if(
+            first.nodeType === Node.ELEMENT_NODE &&
+            first.tagName === "BR"
+        ){
+            first.remove();
+            continue;
+        }
+
+        if(
+            first.nodeType === Node.ELEMENT_NODE &&
+            first.tagName === "DIV" &&
+            first.textContent.trim() === "" &&
+            first.children.length <= 1
+        ){
+            first.remove();
+            continue;
+        }
+
+        break;
+    }
+
+
+    /*
+       إزالة الأسطر الفارغة التقنية من النهاية فقط.
+       لا نلمس الأسطر الموجودة وسط المحتوى.
+    */
+
+    while(root.lastChild){
+
+        const last = root.lastChild;
+
+        if(
+            last.nodeType === Node.ELEMENT_NODE &&
+            last.tagName === "BR"
+        ){
+            last.remove();
+            continue;
+        }
+
+        if(
+            last.nodeType === Node.ELEMENT_NODE &&
+            last.tagName === "DIV" &&
+            last.textContent.trim() === "" &&
+            last.children.length <= 1
+        ){
+            last.remove();
+            continue;
+        }
+
+        break;
+    }
 }
 
+      
 const sendButton = document.getElementById("sendButton");
 
 sendButton.addEventListener("click", () => {
 
     cleanTextSpans();
+      
+const savedContent = editor.cloneNode(true);
 
-    const savedContent = editor.cloneNode(true);
+normalizeEditorContent(savedContent);
 
-    savedContent
-        .querySelectorAll('[contenteditable="true"]')
-        .forEach(element => {
-            element.removeAttribute("contenteditable");
-        });
+savedContent
+    .querySelectorAll('[contenteditable="true"]')
+    .forEach(element => {
+        element.removeAttribute("contenteditable");
+    });
+
+const content = savedContent.innerHTML.trim();
 
     const content = savedContent.innerHTML.trim();
 
