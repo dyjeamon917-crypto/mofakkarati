@@ -1808,7 +1808,6 @@ tableButton.addEventListener("click", () => {
     selection.addRange(range);
 });
 
-
 editor.addEventListener("keydown", (event) => {
 
     if(
@@ -1828,6 +1827,14 @@ editor.addEventListener("keydown", (event) => {
         selection.anchorNode.nodeType === 1
             ? selection.anchorNode
             : selection.anchorNode.parentElement;
+
+    /* داخل خلية الجدول: اتركي Backspace و Delete يعملان طبيعيًا */
+    const tableCell =
+        element.closest(".editor-table td, .editor-table th");
+
+    if(tableCell){
+        return;
+    }
 
     const line = element.closest(".table-text-line");
 
