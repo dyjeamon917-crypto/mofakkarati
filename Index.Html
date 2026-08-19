@@ -1862,32 +1862,19 @@ function removeFormatFromFragment(
    TOGGLE FORMAT
 ===================================================== */
 
-function toggleFormat(command, format){
+function toggleFormat(command){
 
-    restoreSelection();
+    if(savedRange){
 
-    const selection =
-        getSelection();
+        const selection = window.getSelection();
 
-    if(
-        !selection ||
-        !selection.rangeCount
-    ){
-        return;
+        selection.removeAllRanges();
+
+        selection.addRange(
+            savedRange.cloneRange()
+        );
+
     }
-
-    const range =
-        selection.getRangeAt(0);
-
-    if(
-        !editor.contains(
-            range.commonAncestorContainer
-        )
-    ){
-        return;
-    }
-
-    editor.focus();
 
     document.execCommand(
         command,
@@ -1899,84 +1886,50 @@ function toggleFormat(command, format){
 
     updateFormatButtons();
 }
+
+/* =====================================================
+   BOLD
+===================================================== */
+
+boldButton.addEventListener(
+    "pointerdown",
+    event => {
+
+        event.preventDefault();
+
+        toggleFormat("bold");
+
+    }
+);
 
 
 /* =====================================================
-   BOLD / ITALIC / UNDERLINE
+   ITALIC
 ===================================================== */
 
-function applyFormat(command){
-
-    restoreSelection();
-
-    const selection = getSelection();
-
-    if(
-        !selection ||
-        !selection.rangeCount
-    ){
-        return;
-    }
-
-    const range = selection.getRangeAt(0);
-
-    if(
-        !editor.contains(
-            range.commonAncestorContainer
-        )
-    ){
-        return;
-    }
-
-    document.execCommand(
-        command,
-        false,
-        null
-    );
-
-    saveSelection();
-
-    updateFormatButtons();
-}
-
-
-/* BOLD */
-
-boldButton.addEventListener(
-    "mousedown",
-    event => {
-
-        event.preventDefault();
-
-        applyFormat("bold");
-
-    }
-);
-
-
-/* ITALIC */
-
 italicButton.addEventListener(
-    "mousedown",
+    "pointerdown",
     event => {
 
         event.preventDefault();
 
-        applyFormat("italic");
+        toggleFormat("italic");
 
     }
 );
 
 
-/* UNDERLINE */
+/* =====================================================
+   UNDERLINE
+===================================================== */
 
 underlineButton.addEventListener(
-    "mousedown",
+    "pointerdown",
     event => {
 
         event.preventDefault();
 
-        applyFormat("underline");
+        toggleFormat("underline");
 
     }
 );
