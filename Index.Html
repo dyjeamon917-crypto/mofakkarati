@@ -1959,10 +1959,17 @@ fontSizes.forEach(size => {
 
 
     button.addEventListener(
-        "click",
-        () => {
+        "pointerdown",
+        event => {
 
-            editor.focus();
+            event.preventDefault();
+
+
+            /*
+             * استرجاع التحديد قبل الضغط على الزر
+             */
+            restoreSelection();
+
 
             const selection =
                 getSelection();
@@ -1974,26 +1981,37 @@ fontSizes.forEach(size => {
                 return;
             }
 
+
             const range =
                 selection.getRangeAt(0);
 
+
             if(
-                range.collapsed
+                !editor.contains(
+                    range.commonAncestorContainer
+                )
             ){
                 return;
             }
 
 
             /*
-             * أخذ التحديد
+             * الحجم يعمل فقط للنص المحدد
+             */
+            if(range.collapsed){
+                return;
+            }
+
+
+            /*
+             * أخذ النص المحدد
              */
             const fragment =
                 range.extractContents();
 
 
             /*
-             * إزالة حجم الخط القديم
-             * فقط
+             * إزالة أي حجم قديم
              */
             removeFormatFromFragment(
                 fragment,
@@ -2002,8 +2020,7 @@ fontSizes.forEach(size => {
 
 
             /*
-             * إنشاء span واحد
-             * للحجم الجديد
+             * وضع الحجم الجديد
              */
             const span =
                 document.createElement(
@@ -2027,10 +2044,8 @@ fontSizes.forEach(size => {
 
 
             /*
-             * إعادة التحديد
+             * إعادة تحديد النص بعد تغيير الحجم
              */
-            selection.removeAllRanges();
-
             const newRange =
                 document.createRange();
 
@@ -2038,9 +2053,12 @@ fontSizes.forEach(size => {
                 span
             );
 
+            selection.removeAllRanges();
+
             selection.addRange(
                 newRange
             );
+
 
             saveSelection();
 
@@ -2056,8 +2074,12 @@ fontSizes.forEach(size => {
 
 
 sizeButton.addEventListener(
-    "click",
-    () => {
+    "pointerdown",
+    event => {
+
+        event.preventDefault();
+
+        saveSelection();
 
         toggleSubToolbar(
             fontSizeBar
