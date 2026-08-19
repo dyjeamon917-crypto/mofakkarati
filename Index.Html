@@ -2048,22 +2048,16 @@ fontSizes.forEach(size => {
 
 
 sizeButton.addEventListener(
-    "click",
-    () => {
+    "pointerdown",
+    event => {
 
-        if(
-            fontSizeBar.style.display === "flex"
-        ){
+        event.preventDefault();
 
-            fontSizeBar.style.display =
-                "none";
+        saveSelection();
 
-        }else{
-
-            fontSizeBar.style.display =
-                "flex";
-
-        }
+        toggleSubToolbar(
+            fontSizeBar
+        );
 
     }
 );
