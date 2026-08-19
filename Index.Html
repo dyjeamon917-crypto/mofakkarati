@@ -1517,6 +1517,61 @@ function clearSavedSelection(){
     savedRange = null;
 }
 
+/* =====================================================
+   RESTORE SELECTION FOR ALL TOOL BUTTONS
+===================================================== */
+
+function restoreEditorSelection(){
+
+    if(!savedRange){
+        return false;
+    }
+
+    const selection =
+        window.getSelection();
+
+    try{
+
+        selection.removeAllRanges();
+
+        selection.addRange(
+            savedRange.cloneRange()
+        );
+
+        editor.focus();
+
+        return true;
+
+    }catch(error){
+
+        savedRange = null;
+
+        return false;
+
+    }
+
+}
+
+
+/*
+ * منع أزرار الأدوات من سرقة مكان المؤشر
+ */
+document.querySelectorAll(
+    ".toolbar .tool, .sub-toolbar button"
+).forEach(button => {
+
+    button.addEventListener(
+        "pointerdown",
+        event => {
+
+            event.preventDefault();
+
+            restoreEditorSelection();
+
+        }
+    );
+
+});
 
 /* =====================================================
    FORMAT STATE
@@ -1857,24 +1912,13 @@ function removeFormatFromFragment(
 
 }
 
-
 /* =====================================================
    TOGGLE FORMAT
 ===================================================== */
 
 function toggleFormat(command, button){
 
-    if(savedRange){
-
-        const selection = window.getSelection();
-
-        selection.removeAllRanges();
-
-        selection.addRange(
-            savedRange.cloneRange()
-        );
-
-    }
+    restoreEditorSelection();
 
     document.execCommand(
         command,
@@ -1882,15 +1926,21 @@ function toggleFormat(command, button){
         null
     );
 
-    button.classList.toggle(
-        "active",
-        document.queryCommandState(command)
-    );
+    if(button){
+
+        button.classList.toggle(
+            "active",
+            document.queryCommandState(command)
+        );
+
+    }
 
     saveSelection();
 
     updateFormatButtons();
+
 }
+
 
 /* =====================================================
    BOLD
@@ -4162,9 +4212,9 @@ editor.addEventListener(
             event.preventDefault();
 
             toggleFormat(
-                "bold",
-                "bold"
-            );
+    "bold",
+    boldButton
+);
 
             return;
         }
@@ -4180,10 +4230,10 @@ editor.addEventListener(
 
             event.preventDefault();
 
-            toggleFormat(
-                "italic",
-                "italic"
-            );
+          toggleFormat(
+    "italic",
+    italicButton
+);  
 
             return;
         }
@@ -4200,9 +4250,9 @@ editor.addEventListener(
             event.preventDefault();
 
             toggleFormat(
-                "underline",
-                "underline"
-            );
+    "underline",
+    underlineButton
+);
 
             return;
         }
