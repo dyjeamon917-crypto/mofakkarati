@@ -1249,14 +1249,284 @@ body.keyboard-open #colorOverlay{
 
 <script>
 
+<script>
+
+/* =====================================================
+   ELEMENTS
+===================================================== */
+
 const editor = document.getElementById("editor");
-editor.innerHTML = "";
+const messages = document.getElementById("messages");
 
 const boldButton = document.getElementById("boldButton");
 const italicButton = document.getElementById("italicButton");
 const underlineButton = document.getElementById("underlineButton");
 
+const sizeButton = document.getElementById("sizeButton");
+const fontSizeBar = document.getElementById("fontSizeBar");
+
+const listButton = document.getElementById("listButton");
+const listBar = document.getElementById("listBar");
+
+const alignmentButton =
+    document.getElementById("alignmentButton");
+
+const alignmentBar =
+    document.getElementById("alignmentBar");
+
+const colorButton =
+    document.getElementById("colorButton");
+
+const highlightButton =
+    document.getElementById("highlightButton");
+
+const colorOverlay =
+    document.getElementById("colorOverlay");
+
+const closeColorOverlay =
+    document.getElementById("closeColorOverlay");
+
+const colorDone =
+    document.getElementById("colorDone");
+
+const textColorWheel =
+    document.getElementById("textColorWheel");
+
+const textColorMarker =
+    document.getElementById("textColorMarker");
+
+const blackText =
+    document.getElementById("blackText");
+
+const whiteText =
+    document.getElementById("whiteText");
+
+const highlightOpacity =
+    document.getElementById("highlightOpacity");
+
+const opacityRange =
+    document.getElementById("opacityRange");
+
+const removeHighlight =
+    document.getElementById("removeHighlight");
+
+const tableButton =
+    document.getElementById("tableButton");
+
+const mindMapButton =
+    document.getElementById("mindMapButton");
+
+const addMindLeftButton =
+    document.getElementById("addMindLeftButton");
+
+const deleteTableColumnButton =
+    document.getElementById("deleteTableColumnButton");
+
+const addTableRowButton =
+    document.getElementById("addTableRowButton");
+
+const deleteTableRowButton =
+    document.getElementById("deleteTableRowButton");
+
+const newLineDownButton =
+    document.getElementById("newLineDownButton");
+
+const newLineUpButton =
+    document.getElementById("newLineUpButton");
+
+const undoButton =
+    document.getElementById("undoButton");
+
+const cancelButton =
+    document.getElementById("cancelButton");
+
+const newButton =
+    document.getElementById("newButton");
+
+const sendButton =
+    document.getElementById("sendButton");
+
+const searchButton =
+    document.getElementById("searchButton");
+
+const searchOverlay =
+    document.getElementById("searchOverlay");
+
+const searchInput =
+    document.getElementById("searchInput");
+
+const searchResult =
+    document.getElementById("searchResult");
+
+const searchDone =
+    document.getElementById("searchDone");
+
+const messageMenu =
+    document.getElementById("messageMenu");
+
+const editButton =
+    document.getElementById("editButton");
+
+const deleteButton =
+    document.getElementById("deleteButton");
+
+const state =
+    document.getElementById("state");
+
+
+/* =====================================================
+   STATE
+===================================================== */
+
+let selectedNote = null;
+
+let savedRange = null;
+
+let colorMode = "text";
+
+let selectedColor = null;
+
+let colorActive = false;
+
+let lastEditorHTML = "";
+
+
+/* =====================================================
+   INITIAL EDITOR
+===================================================== */
+
+editor.innerHTML = "";
+
+lastEditorHTML = editor.innerHTML;
+
+
+/* =====================================================
+   BASIC HELPERS
+===================================================== */
+
+function getSelection(){
+
+    const selection =
+        window.getSelection();
+
+    if(!selection || !selection.rangeCount){
+        return null;
+    }
+
+    return selection;
+}
+
+
+function getSelectionElement(){
+
+    const selection =
+        getSelection();
+
+    if(!selection){
+        return null;
+    }
+
+    const node =
+        selection.anchorNode;
+
+    if(!node){
+        return null;
+    }
+
+    return node.nodeType === Node.ELEMENT_NODE
+        ? node
+        : node.parentElement;
+}
+
+
+function isSelectionInsideEditor(){
+
+    const selection =
+        getSelection();
+
+    if(!selection || !selection.rangeCount){
+        return false;
+    }
+
+    const range =
+        selection.getRangeAt(0);
+
+    return editor.contains(
+        range.commonAncestorContainer
+    );
+}
+
+
+/* =====================================================
+   SELECTION SAVE / RESTORE
+===================================================== */
+
+function saveSelection(){
+
+    const selection =
+        getSelection();
+
+    if(!selection){
+        return;
+    }
+
+    const range =
+        selection.getRangeAt(0);
+
+    if(
+        editor.contains(
+            range.commonAncestorContainer
+        )
+    ){
+
+        savedRange =
+            range.cloneRange();
+
+    }
+}
+
+
+function restoreSelection(){
+
+    if(!savedRange){
+        return false;
+    }
+
+    const selection =
+        window.getSelection();
+
+    try{
+
+        selection.removeAllRanges();
+
+        selection.addRange(
+            savedRange
+        );
+
+        return true;
+
+    }catch(error){
+
+        savedRange = null;
+
+        return false;
+    }
+}
+
+
+function clearSavedSelection(){
+
+    savedRange = null;
+}
+
+
+/* =====================================================
+   FORMAT STATE
+===================================================== */
+
 function updateFormatButtons(){
+
+    editor.focus();
 
     boldButton.classList.toggle(
         "active",
@@ -1274,77 +1544,581 @@ function updateFormatButtons(){
     );
 }
 
-boldButton.addEventListener("click", () => {
+
+/* =====================================================
+   SPAN CLEANER
+===================================================== */
+
+function cleanFormatting(root = editor){
+
+    /*
+     * إزالة span ليس له أي style
+     */
+    root.querySelectorAll("span").forEach(span => {
+
+        const style =
+            span.getAttribute("style");
+
+        if(
+            !style ||
+            !style.trim()
+        ){
+
+            span.replaceWith(
+                ...Array.from(
+                    span.childNodes
+                )
+            );
+
+            return;
+        }
+
+
+        /*
+         * إزالة الخصائص الفارغة
+         */
+        [
+            "color",
+            "background-color",
+            "font-size",
+            "font-weight",
+            "font-style",
+            "text-decoration",
+            "text-decoration-line"
+        ].forEach(property => {
+
+            if(
+                !span.style.getPropertyValue(
+                    property
+                ).trim()
+            ){
+
+                span.style.removeProperty(
+                    property
+                );
+
+            }
+
+        });
+
+
+        /*
+         * إذا أصبح span بلا style
+         */
+        if(
+            !span.getAttribute("style") ||
+            !span.getAttribute("style").trim()
+        ){
+
+            span.replaceWith(
+                ...Array.from(
+                    span.childNodes
+                )
+            );
+
+        }
+
+    });
+
+
+    /*
+     * إزالة b / i / u فارغة
+     */
+    root.querySelectorAll(
+        "b,i,u,strong,em"
+    ).forEach(element => {
+
+        if(!element.textContent.trim()){
+
+            element.remove();
+
+        }
+
+    });
+}
+
+
+/* =====================================================
+   REMOVE SPECIFIC FORMAT FROM FRAGMENT
+===================================================== */
+
+function removeFormatFromFragment(
+    fragment,
+    format
+){
+
+    if(format === "bold"){
+
+        fragment
+            .querySelectorAll(
+                "b,strong"
+            )
+            .forEach(element => {
+
+                element.replaceWith(
+                    ...Array.from(
+                        element.childNodes
+                    )
+                );
+
+            });
+
+
+        fragment
+            .querySelectorAll("span")
+            .forEach(span => {
+
+                span.style.removeProperty(
+                    "font-weight"
+                );
+
+                if(
+                    !span.getAttribute("style") ||
+                    !span.getAttribute("style").trim()
+                ){
+
+                    span.replaceWith(
+                        ...Array.from(
+                            span.childNodes
+                        )
+                    );
+
+                }
+
+            });
+    }
+
+
+    if(format === "italic"){
+
+        fragment
+            .querySelectorAll(
+                "i,em"
+            )
+            .forEach(element => {
+
+                element.replaceWith(
+                    ...Array.from(
+                        element.childNodes
+                    )
+                );
+
+            });
+
+
+        fragment
+            .querySelectorAll("span")
+            .forEach(span => {
+
+                span.style.removeProperty(
+                    "font-style"
+                );
+
+                if(
+                    !span.getAttribute("style") ||
+                    !span.getAttribute("style").trim()
+                ){
+
+                    span.replaceWith(
+                        ...Array.from(
+                            span.childNodes
+                        )
+                    );
+
+                }
+
+            });
+    }
+
+
+    if(format === "underline"){
+
+        fragment
+            .querySelectorAll("u")
+            .forEach(element => {
+
+                element.replaceWith(
+                    ...Array.from(
+                        element.childNodes
+                    )
+                );
+
+            });
+
+
+        fragment
+            .querySelectorAll("span")
+            .forEach(span => {
+
+                span.style.removeProperty(
+                    "text-decoration"
+                );
+
+                span.style.removeProperty(
+                    "text-decoration-line"
+                );
+
+                if(
+                    !span.getAttribute("style") ||
+                    !span.getAttribute("style").trim()
+                ){
+
+                    span.replaceWith(
+                        ...Array.from(
+                            span.childNodes
+                        )
+                    );
+
+                }
+
+            });
+    }
+
+
+    if(format === "color"){
+
+        fragment
+            .querySelectorAll("span")
+            .forEach(span => {
+
+                span.style.removeProperty(
+                    "color"
+                );
+
+                if(
+                    !span.getAttribute("style") ||
+                    !span.getAttribute("style").trim()
+                ){
+
+                    span.replaceWith(
+                        ...Array.from(
+                            span.childNodes
+                        )
+                    );
+
+                }
+
+            });
+
+
+        fragment
+            .querySelectorAll("font[color]")
+            .forEach(font => {
+
+                font.removeAttribute("color");
+
+                if(!font.attributes.length){
+
+                    font.replaceWith(
+                        ...Array.from(
+                            font.childNodes
+                        )
+                    );
+
+                }
+
+            });
+    }
+
+
+    if(format === "size"){
+
+        fragment
+            .querySelectorAll("span")
+            .forEach(span => {
+
+                span.style.removeProperty(
+                    "font-size"
+                );
+
+                if(
+                    !span.getAttribute("style") ||
+                    !span.getAttribute("style").trim()
+                ){
+
+                    span.replaceWith(
+                        ...Array.from(
+                            span.childNodes
+                        )
+                    );
+
+                }
+
+            });
+    }
+
+}
+
+
+/* =====================================================
+   TOGGLE FORMAT
+===================================================== */
+
+function toggleFormat(command, format){
 
     editor.focus();
 
-    document.execCommand("bold");
+    const selection =
+        getSelection();
 
-    updateFormatButtons();
-});
-
-italicButton.addEventListener("click", () => {
-
-    editor.focus();
-
-    document.execCommand("italic");
-
-    updateFormatButtons();
-});
-
-underlineButton.addEventListener("click", () => {
-
-    editor.focus();
-
-    document.execCommand("underline");
-
-    updateFormatButtons();
-});
-
-editor.addEventListener("keyup", updateFormatButtons);
-editor.addEventListener("mouseup", updateFormatButtons);
-editor.addEventListener("input", updateFormatButtons);
-editor.addEventListener("click", updateFormatButtons);
-
-function applyActiveColor(){
-
-    if(!colorActive || !selectedColor){
+    if(!selection || !selection.rangeCount){
         return;
     }
 
-    if(colorMode === "text"){
+    const range =
+        selection.getRangeAt(0);
 
-        document.execCommand(
-            "foreColor",
-            false,
-            selectedColor
-        );
-
-    }else if(colorMode === "highlight"){
-
-        const opacity =
-            Number(opacityRange.value) / 100;
-
-        let color = selectedColor;
-
-        if(color.startsWith("hsl")){
-
-            color = color.replace(
-                "hsl(",
-                "hsla("
-            ).replace(
-                ")",
-                `, ${opacity})`
-            );
-        }
-
-        document.execCommand(
-            "hiliteColor",
-            false,
-            color
-        );
+    if(!editor.contains(
+        range.commonAncestorContainer
+    )){
+        return;
     }
+
+
+    /*
+     * بدون تحديد:
+     * نترك execCommand يتحكم في الكتابة القادمة
+     */
+    if(range.collapsed){
+
+        document.execCommand(
+            command,
+            false,
+            null
+        );
+
+        updateFormatButtons();
+
+        return;
+    }
+
+
+    /*
+     * هل التنسيق موجود حاليًا؟
+     */
+    const active =
+        document.queryCommandState(
+            command
+        );
+
+
+    /*
+     * لو كان موجودًا:
+     * نشيله وننظف أثره
+     */
+    if(active){
+
+        document.execCommand(
+            command,
+            false,
+            null
+        );
+
+        cleanFormatting();
+
+    }else{
+
+        /*
+         * تشغيل التنسيق
+         */
+        document.execCommand(
+            command,
+            false,
+            null
+        );
+
+    }
+
+
+    cleanFormatting();
+
+    updateFormatButtons();
+
+    saveSelection();
 }
+
+
+/* =====================================================
+   BOLD
+===================================================== */
+
+boldButton.addEventListener(
+    "click",
+    () => {
+
+        toggleFormat(
+            "bold",
+            "bold"
+        );
+
+    }
+);
+
+
+/* =====================================================
+   ITALIC
+===================================================== */
+
+italicButton.addEventListener(
+    "click",
+    () => {
+
+        toggleFormat(
+            "italic",
+            "italic"
+        );
+
+    }
+);
+
+
+/* =====================================================
+   UNDERLINE
+===================================================== */
+
+underlineButton.addEventListener(
+    "click",
+    () => {
+
+        toggleFormat(
+            "underline",
+            "underline"
+        );
+
+    }
+);
+
+
+/* =====================================================
+   FONT SIZE
+===================================================== */
+
+const fontSizes =
+    [12,14,16,18,20,24,30];
+
+
+fontSizes.forEach(size => {
+
+    const button =
+        document.createElement("button");
+
+    button.type = "button";
+
+    button.textContent = size;
+
+
+    button.addEventListener(
+        "click",
+        () => {
+
+            editor.focus();
+
+            const selection =
+                getSelection();
+
+            if(
+                !selection ||
+                !selection.rangeCount
+            ){
+                return;
+            }
+
+            const range =
+                selection.getRangeAt(0);
+
+            if(
+                range.collapsed
+            ){
+                return;
+            }
+
+
+            /*
+             * أخذ التحديد
+             */
+            const fragment =
+                range.extractContents();
+
+
+            /*
+             * إزالة حجم الخط القديم
+             * فقط
+             */
+            removeFormatFromFragment(
+                fragment,
+                "size"
+            );
+
+
+            /*
+             * إنشاء span واحد
+             * للحجم الجديد
+             */
+            const span =
+                document.createElement(
+                    "span"
+                );
+
+            span.style.fontSize =
+                size + "px";
+
+            span.appendChild(
+                fragment
+            );
+
+
+            range.insertNode(
+                span
+            );
+
+
+            cleanFormatting();
+
+
+            /*
+             * إعادة التحديد
+             */
+            selection.removeAllRanges();
+
+            const newRange =
+                document.createRange();
+
+            newRange.selectNodeContents(
+                span
+            );
+
+            selection.addRange(
+                newRange
+            );
+
+            saveSelection();
+
+        }
+    );
+
+
+    fontSizeBar.appendChild(
+        button
+    );
+
+});
+
+
+sizeButton.addEventListener(
+    "click",
+    () => {
+
+        toggleSubToolbar(
+            fontSizeBar
+        );
+
+    }
+);
+
+
+/* =====================================================
+   SUB TOOLBARS
+===================================================== */
 
 function toggleSubToolbar(bar){
 
@@ -1352,1158 +2126,2170 @@ function toggleSubToolbar(bar){
         bar.style.display === "flex"
             ? "none"
             : "flex";
+
 }
-const sizeButton = document.getElementById("sizeButton");
-const fontSizeBar = document.getElementById("fontSizeBar");
 
-const fontSizes = [12, 14, 16, 18, 20, 24, 30];
 
-fontSizes.forEach(size => {
-
-    const button = document.createElement("button");
-
-    button.type = "button";
-    button.textContent = size;
-
-    button.addEventListener("click", () => {
-
-        editor.focus();
-
-        const selection = window.getSelection();
-
-        if(!selection.rangeCount){
-            return;
-        }
-
-        const range = selection.getRangeAt(0);
-
-        if(range.collapsed){
-            return;
-        }
-
-        const span = document.createElement("span");
-
-        span.style.fontSize = size + "px";
-
-        span.appendChild(range.extractContents());
-
-        range.insertNode(span);
-
-        selection.removeAllRanges();
-
-        const newRange = document.createRange();
-        newRange.selectNodeContents(span);
-        selection.addRange(newRange);
-    });
-
-    fontSizeBar.appendChild(button);
-});
-
-sizeButton.addEventListener("click", () => {
-
-    toggleSubToolbar(fontSizeBar);
-
-});
-
-const listButton = document.getElementById("listButton");
-const listBar = document.getElementById("listBar");
+/* =====================================================
+   LIST
+===================================================== */
 
 listBar.innerHTML = `
-    <button type="button" data-list="ul">•</button>
-    <button type="button" data-list="ol">1.</button>
+    <button
+        type="button"
+        data-list="ul">
+        •
+    </button>
+
+    <button
+        type="button"
+        data-list="ol">
+        1.
+    </button>
 `;
 
-listBar.querySelectorAll("button").forEach(button => {
 
-    button.addEventListener("click", () => {
+listBar
+    .querySelectorAll("button")
+    .forEach(button => {
 
-        editor.focus();
+        button.addEventListener(
+            "click",
+            () => {
 
-        if(button.dataset.list === "ul"){
-            document.execCommand("insertUnorderedList");
-        }
+                editor.focus();
 
-        if(button.dataset.list === "ol"){
-            document.execCommand("insertOrderedList");
-        }
+                if(
+                    button.dataset.list === "ul"
+                ){
 
-    });
+                    document.execCommand(
+                        "insertUnorderedList"
+                    );
 
-});
+                }
 
-listButton.addEventListener("click", () => {
+                if(
+                    button.dataset.list === "ol"
+                ){
 
-    toggleSubToolbar(listBar);
+                    document.execCommand(
+                        "insertOrderedList"
+                    );
 
-});
+                }
 
-const alignmentButton = document.getElementById("alignmentButton");
-const alignmentBar = document.getElementById("alignmentBar");
+                cleanFormatting();
 
+                updateFormatButtons();
 
-alignmentBar.querySelectorAll("button").forEach(button => {
-
-    button.addEventListener("click", () => {
-
-        editor.focus();
-
-        const align = button.dataset.align;
-
-        document.execCommand(
-            "justify" +
-            align.charAt(0).toUpperCase() +
-            align.slice(1)
+            }
         );
 
-        const selection = window.getSelection();
+    });
 
-        if(selection.rangeCount){
 
-            let element =
-                selection.anchorNode.nodeType === 1
-                    ? selection.anchorNode
-                    : selection.anchorNode.parentElement;
+listButton.addEventListener(
+    "click",
+    () => {
 
-            const list = element?.closest("ul, ol");
+        toggleSubToolbar(
+            listBar
+        );
 
-            if(list){
-                list.style.textAlign = align;
+    }
+);
 
-                list.querySelectorAll("li").forEach(li => {
-                    li.style.textAlign = align;
-                    li.style.listStylePosition = "inside";
-                });
+
+/* =====================================================
+   ALIGNMENT
+===================================================== */
+
+alignmentBar
+    .querySelectorAll("button")
+    .forEach(button => {
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                editor.focus();
+
+                const align =
+                    button.dataset.align;
+
+                const command =
+                    "justify" +
+                    align.charAt(0).toUpperCase() +
+                    align.slice(1);
+
+                document.execCommand(
+                    command
+                );
+
+
+                const element =
+                    getSelectionElement();
+
+                const list =
+                    element?.closest(
+                        "ul,ol"
+                    );
+
+                if(list){
+
+                    list.style.textAlign =
+                        align;
+
+                    list
+                        .querySelectorAll("li")
+                        .forEach(li => {
+
+                            li.style.textAlign =
+                                align;
+
+                            li.style.listStylePosition =
+                                "inside";
+
+                        });
+
+                }
+
             }
-        }
+        );
 
     });
 
-});
 
-alignmentButton.addEventListener("click", () => {
+alignmentButton.addEventListener(
+    "click",
+    () => {
 
-    toggleSubToolbar(alignmentBar);
+        toggleSubToolbar(
+            alignmentBar
+        );
 
-});
-
-const colorButton = document.getElementById("colorButton");
-const colorOverlay = document.getElementById("colorOverlay");
-const highlightButton = document.getElementById("highlightButton");
-
-highlightButton.addEventListener("click", () => {
-
-    colorMode = "highlight";
-
-    colorActive = false;
-
-highlightOpacity.style.display = "flex";
-
-removeHighlight.style.display = "block";
-    
-    saveSelection();
-
-    colorOverlay.classList.add("open");
-});
-
-colorButton.addEventListener("click", () => {
-
-    colorMode = "text";
-
-    colorActive = true;
-
-highlightOpacity.style.display = "none";
-
-removeHighlight.style.display = "none";
-    
-    saveSelection();
-
-    colorOverlay.classList.add("open");
-});
+    }
+);
 
 
-const textColorWheel = document.getElementById("textColorWheel");
-const textColorMarker = document.getElementById("textColorMarker");
+/* =====================================================
+   COLOR MODE
+===================================================== */
 
-const opacityRange = document.getElementById("opacityRange");
+colorButton.addEventListener(
+    "click",
+    () => {
 
-const highlightOpacity =
-    document.getElementById("highlightOpacity");
+        colorMode = "text";
 
-const removeHighlight =
-    document.getElementById("removeHighlight");
+        colorActive = true;
 
-let colorMode = "text";
-let selectedColor = null;
-let colorActive = false;
+        highlightOpacity.style.display =
+            "none";
 
-textColorWheel.addEventListener("pointerdown", (event) => {
+        removeHighlight.style.display =
+            "none";
 
-restoreSelection();
+        saveSelection();
 
-    const rect = textColorWheel.getBoundingClientRect();
+        colorOverlay.classList.add(
+            "open"
+        );
 
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    }
+);
 
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
 
-    const dx = x - centerX;
-    const dy = y - centerY;
+highlightButton.addEventListener(
+    "click",
+    () => {
 
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    const radius = Math.min(centerX, centerY);
+        colorMode = "highlight";
 
-    const angle = Math.atan2(dy, dx);
+        colorActive = false;
 
-    const hue =
-        ((angle * 180 / Math.PI) + 360 + 90) % 360;
+        highlightOpacity.style.display =
+            "flex";
 
-    const saturation =
-        Math.min(distance / radius, 1) * 100;
+        removeHighlight.style.display =
+            "block";
 
-    const lightness =
-        100 - Math.min(distance / radius, 1) * 50;
+        saveSelection();
 
-    const color =
-        `hsl(${hue}, ${saturation}%, ${lightness}%)`;
+        colorOverlay.classList.add(
+            "open"
+        );
 
-    textColorMarker.style.left = x + "px";
-    textColorMarker.style.top = y + "px";
+    }
+);
 
-    applyColor(color);
-});
 
-let savedRange = null;
+/* =====================================================
+   APPLY TEXT COLOR
+===================================================== */
 
-function saveSelection(){
+function applyTextColor(color){
 
-    const selection = window.getSelection();
+    selectedColor = color;
 
-    if(!selection.rangeCount){
+    restoreSelection();
+
+    const selection =
+        getSelection();
+
+    if(!selection || !selection.rangeCount){
         return;
     }
 
-    const range = selection.getRangeAt(0);
+    const range =
+        selection.getRangeAt(0);
 
-    if(editor.contains(range.commonAncestorContainer)){
-        savedRange = range.cloneRange();
-    }
-}
 
-function restoreSelection(){
+    /*
+     * لا يوجد تحديد
+     */
+    if(range.collapsed){
 
-    if(!savedRange){
-        return;
-    }
-
-    const selection = window.getSelection();
-
-    selection.removeAllRanges();
-    selection.addRange(savedRange);
-}
-
-function applyColor(color){
-
-selectedColor = color;
-
-restoreSelection();
-
-    if(colorMode === "text"){
-
+        /*
+         * اللون سيطبق على الكتابة القادمة
+         */
         document.execCommand(
             "foreColor",
             false,
             color
         );
 
+        colorActive = true;
+
+        saveSelection();
+
         return;
     }
 
+
+    /*
+     * أخذ النص
+     */
+    const fragment =
+        range.extractContents();
+
+
+    /*
+     * إزالة اللون القديم فقط
+     */
+    removeFormatFromFragment(
+        fragment,
+        "color"
+    );
+
+
+    /*
+     * إضافة اللون الجديد
+     */
+    const span =
+        document.createElement(
+            "span"
+        );
+
+    span.style.color =
+        color;
+
+    span.appendChild(
+        fragment
+    );
+
+
+    range.insertNode(
+        span
+    );
+
+
+    cleanFormatting();
+
+
+    /*
+     * إعادة التحديد
+     */
+    selection.removeAllRanges();
+
+    const newRange =
+        document.createRange();
+
+    newRange.selectNodeContents(
+        span
+    );
+
+    selection.addRange(
+        newRange
+    );
+
+    saveSelection();
+
+}
+
+
+/* =====================================================
+   APPLY HIGHLIGHT
+===================================================== */
+
+function applyHighlight(color){
+
+    selectedColor = color;
+
+    restoreSelection();
+
+    const selection =
+        getSelection();
+
+    if(!selection || !selection.rangeCount){
+        return;
+    }
+
+    const range =
+        selection.getRangeAt(0);
+
+    if(range.collapsed){
+        return;
+    }
+
+
     const opacity =
-        Number(opacityRange.value) / 100;
+        Number(
+            opacityRange.value
+        ) / 100;
+
+
+    let finalColor =
+        color;
+
 
     if(color.startsWith("#")){
 
-        const hex = color.replace("#", "");
+        const hex =
+            color.replace("#","");
 
-        const r = parseInt(hex.substring(0, 2), 16);
-        const g = parseInt(hex.substring(2, 4), 16);
-        const b = parseInt(hex.substring(4, 6), 16);
-
-        color =
-            `rgba(${r}, ${g}, ${b}, ${opacity})`;
-
-    }else if(color.startsWith("hsl")){
-
-        color = color.replace(
-            "hsl(",
-            "hsla("
-        ).replace(
-            ")",
-            `, ${opacity})`
-        );
-    }
-
-    document.execCommand(
-        "hiliteColor",
-        false,
-        color
-    );
-}
-
-document.getElementById("blackText").addEventListener("click", () => {
-    applyColor("#000000");
-});
-
-document.getElementById("removeHighlight").addEventListener("click", () => {
-
-    restoreSelection();
-
-    document.execCommand(
-        "hiliteColor",
-        false,
-        "transparent"
-    );
-
-    selectedColor = null;
-});
-
-document.getElementById("whiteText").addEventListener("click", () => {
-
-    restoreSelection();
-
-    const selection = window.getSelection();
-
-    if(!selection.rangeCount){
-        editor.focus();
-        return;
-    }
-
-    const range = selection.getRangeAt(0);
-
-    /* لو فيه تحديد: نشيل اللون */
-    if(!range.collapsed){
-
-        document.execCommand(
-            "foreColor",
-            false,
-            "#ffffff"
-        );
-
-        selectedColor = null;
-        colorActive = false;
-
-        editor.focus();
-
-        return;
-    }
-
-    /* =====================================
-       بدون تحديد:
-       إلغاء اللون من الكتابة القادمة
-    ===================================== */
-
-    let node = range.startContainer;
-
-    if(node.nodeType === Node.TEXT_NODE){
-
-        const parent = node.parentElement;
-
-        const colored =
-            parent?.closest(
-                '[style*="color"], font[color]'
+        const r =
+            parseInt(
+                hex.substring(0,2),
+                16
             );
 
-        if(colored && colored !== editor){
+        const g =
+            parseInt(
+                hex.substring(2,4),
+                16
+            );
 
-            const offset = range.startOffset;
+        const b =
+            parseInt(
+                hex.substring(4,6),
+                16
+            );
 
-            const text = node.textContent;
+        finalColor =
+            `rgba(${r},${g},${b},${opacity})`;
 
-            /* نضع المؤشر خارج العنصر الملون */
-
-            if(offset === text.length){
-
-                const newNode =
-                    document.createTextNode("");
-
-                colored.parentNode.insertBefore(
-                    newNode,
-                    colored.nextSibling
-                );
-
-                const newRange =
-                    document.createRange();
-
-                newRange.setStart(
-                    newNode,
-                    0
-                );
-
-                newRange.collapse(true);
-
-                selection.removeAllRanges();
-                selection.addRange(newRange);
-
-            }
-        }
     }
 
-    selectedColor = null;
-    colorActive = false;
 
-    editor.focus();
+    if(color.startsWith("hsl")){
 
-});
+        finalColor =
+            color
+                .replace(
+                    "hsl(",
+                    "hsla("
+                )
+                .replace(
+                    ")",
+                    `,${opacity})`
+                );
 
-document.getElementById("colorDone").addEventListener("click", () => {
+    }
 
-    colorOverlay.classList.remove("open");
 
-    editor.focus();
+    /*
+     * التمييز يستخدم execCommand
+     * حتى يعمل على أجزاء النص
+     */
+    document.execCommand(
+        "hiliteColor",
+        false,
+        finalColor
+    );
 
-});
 
-document.getElementById("closeColorOverlay").addEventListener("click", () => {
+    cleanFormatting();
 
-    colorOverlay.classList.remove("open");
+}
 
-});
+
+/* =====================================================
+   COLOR WHEEL
+===================================================== */
+
+textColorWheel.addEventListener(
+    "pointerdown",
+    event => {
+
+        restoreSelection();
+
+        const rect =
+            textColorWheel.getBoundingClientRect();
+
+        const x =
+            event.clientX -
+            rect.left;
+
+        const y =
+            event.clientY -
+            rect.top;
+
+        const centerX =
+            rect.width / 2;
+
+        const centerY =
+            rect.height / 2;
+
+        const dx =
+            x - centerX;
+
+        const dy =
+            y - centerY;
+
+        const distance =
+            Math.sqrt(
+                dx * dx +
+                dy * dy
+            );
+
+        const radius =
+            Math.min(
+                centerX,
+                centerY
+            );
+
+        const angle =
+            Math.atan2(
+                dy,
+                dx
+            );
+
+        const hue =
+            (
+                angle * 180 / Math.PI +
+                360 +
+                90
+            ) % 360;
+
+        const saturation =
+            Math.min(
+                distance / radius,
+                1
+            ) * 100;
+
+        const lightness =
+            100 -
+            Math.min(
+                distance / radius,
+                1
+            ) * 50;
+
+        const color =
+            `hsl(${hue},${saturation}%,${lightness}%)`;
+
+
+        textColorMarker.style.left =
+            x + "px";
+
+        textColorMarker.style.top =
+            y + "px";
+
+
+        if(colorMode === "text"){
+
+            applyTextColor(
+                color
+            );
+
+        }else{
+
+            applyHighlight(
+                color
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   BLACK
+===================================================== */
+
+blackText.addEventListener(
+    "click",
+    () => {
+
+        if(colorMode === "text"){
+
+            applyTextColor(
+                "#000000"
+            );
+
+        }else{
+
+            applyHighlight(
+                "#000000"
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   WHITE
+===================================================== */
+
+whiteText.addEventListener(
+    "click",
+    () => {
+
+        restoreSelection();
+
+        const selection =
+            getSelection();
+
+        if(
+            !selection ||
+            !selection.rangeCount
+        ){
+
+            editor.focus();
+
+            return;
+        }
+
+        const range =
+            selection.getRangeAt(0);
+
+
+        /*
+         * لو التحديد موجود
+         */
+        if(!range.collapsed){
+
+            if(colorMode === "text"){
+
+                applyTextColor(
+                    "#ffffff"
+                );
+
+            }else{
+
+                applyHighlight(
+                    "#ffffff"
+                );
+
+            }
+
+            return;
+        }
+
+
+        /*
+         * بدون تحديد:
+         * اللون الجديد للكتابة القادمة
+         */
+        if(colorMode === "text"){
+
+            applyTextColor(
+                "#ffffff"
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   REMOVE HIGHLIGHT
+===================================================== */
+
+removeHighlight.addEventListener(
+    "click",
+    () => {
+
+        restoreSelection();
+
+        const selection =
+            getSelection();
+
+        if(
+            !selection ||
+            !selection.rangeCount
+        ){
+            return;
+        }
+
+        document.execCommand(
+            "hiliteColor",
+            false,
+            "transparent"
+        );
+
+        cleanFormatting();
+
+        selectedColor = null;
+
+    }
+);
+
+
+/* =====================================================
+   COLOR OVERLAY
+===================================================== */
+
+colorDone.addEventListener(
+    "click",
+    () => {
+
+        colorOverlay.classList.remove(
+            "open"
+        );
+
+        editor.focus();
+
+    }
+);
+
+
+closeColorOverlay.addEventListener(
+    "click",
+    () => {
+
+        colorOverlay.classList.remove(
+            "open"
+        );
+
+        editor.focus();
+
+    }
+);
+
+
+/* =====================================================
+   INSERT AT CURSOR
+===================================================== */
 
 function insertAtCursor(element){
 
     editor.focus();
 
-    const selection = window.getSelection();
+    const selection =
+        getSelection();
 
-    if(!selection.rangeCount){
-        editor.appendChild(element);
+    if(
+        !selection ||
+        !selection.rangeCount
+    ){
+
+        editor.appendChild(
+            element
+        );
+
         return;
     }
 
-    const range = selection.getRangeAt(0);
+    const range =
+        selection.getRangeAt(0);
 
-    if(!editor.contains(range.commonAncestorContainer)){
-        editor.appendChild(element);
+    if(
+        !editor.contains(
+            range.commonAncestorContainer
+        )
+    ){
+
+        editor.appendChild(
+            element
+        );
+
         return;
     }
+
 
     range.deleteContents();
-    range.insertNode(element);
+
+    range.insertNode(
+        element
+    );
+
 
     selection.removeAllRanges();
 
-    const newRange = document.createRange();
+    const newRange =
+        document.createRange();
 
-    newRange.setStartAfter(element);
-    newRange.collapse(true);
+    newRange.setStartAfter(
+        element
+    );
 
-    selection.addRange(newRange);
+    newRange.collapse(
+        true
+    );
+
+    selection.addRange(
+        newRange
+    );
+
+    saveSelection();
+
 }
 
-const tableButton = document.getElementById("tableButton");
+
+/* =====================================================
+   TABLE
+===================================================== */
 
 function createTableTextLine(){
 
-    const line = document.createElement("div");
+    const line =
+        document.createElement(
+            "div"
+        );
 
-    line.className = "table-text-line";
-    line.innerHTML = "<br>";
+    line.className =
+        "table-text-line";
+
+    line.innerHTML =
+        "<br>";
 
     return line;
 }
 
+
 function ensureTableAfterLine(table){
 
-    const wrapper = table.closest(".table-wrapper");
+    const wrapper =
+        table.closest(
+            ".table-wrapper"
+        );
 
     if(!wrapper){
         return;
     }
 
-    let after = table.nextElementSibling;
+    let after =
+        wrapper.nextElementSibling;
+
 
     if(
         !after ||
-        !after.classList.contains("table-text-line")
+        !after.classList.contains(
+            "table-text-line"
+        )
     ){
 
-        after = createTableTextLine();
+        after =
+            createTableTextLine();
 
-        table.insertAdjacentElement(
+        wrapper.insertAdjacentElement(
             "afterend",
             after
         );
+
     }
 
 }
 
-tableButton.addEventListener("click", () => {
 
-    const wrapper = document.createElement("div");
-    wrapper.className = "table-wrapper";
+/* =====================================================
+   CREATE TABLE
+===================================================== */
 
-    const before = createTableTextLine();
+tableButton.addEventListener(
+    "click",
+    () => {
 
-    const table = document.createElement("table");
-    table.className = "editor-table";
+        const wrapper =
+            document.createElement(
+                "div"
+            );
 
-    for(let r = 0; r < 2; r++){
+        wrapper.className =
+            "table-wrapper";
 
-        const row = document.createElement("tr");
 
-        for(let c = 0; c < 2; c++){
+        const before =
+            createTableTextLine();
 
-            const cell = document.createElement("td");
 
-            cell.contentEditable = "true";
-            cell.innerHTML = "<br>";
+        const table =
+            document.createElement(
+                "table"
+            );
 
-            row.appendChild(cell);
+        table.className =
+            "editor-table";
+
+
+        for(
+            let r = 0;
+            r < 2;
+            r++
+        ){
+
+            const row =
+                document.createElement(
+                    "tr"
+                );
+
+
+            for(
+                let c = 0;
+                c < 2;
+                c++
+            ){
+
+                const cell =
+                    document.createElement(
+                        "td"
+                    );
+
+                cell.contentEditable =
+                    "true";
+
+                cell.innerHTML =
+                    "<br>";
+
+                row.appendChild(
+                    cell
+                );
+
+            }
+
+            table.appendChild(
+                row
+            );
+
         }
 
-        table.appendChild(row);
-    }
 
-    const after = createTableTextLine();
+        const after =
+            createTableTextLine();
 
-    wrapper.appendChild(before);
-    wrapper.appendChild(table);
-    wrapper.appendChild(after);
 
-    insertAtCursor(wrapper);
+        wrapper.appendChild(
+            before
+        );
 
-    const range = document.createRange();
+        wrapper.appendChild(
+            table
+        );
 
-    range.selectNodeContents(after);
-    range.collapse(true);
+        wrapper.appendChild(
+            after
+        );
 
-    const selection = window.getSelection();
 
-    selection.removeAllRanges();
-    selection.addRange(range);
-});
+        insertAtCursor(
+            wrapper
+        );
 
-editor.addEventListener("keydown", (event) => {
 
-    if(
-        event.key !== "Backspace" &&
-        event.key !== "Delete"
-    ){
-        return;
-    }
+        const range =
+            document.createRange();
 
-    const selection = window.getSelection();
+        range.selectNodeContents(
+            after
+        );
 
-    if(!selection.rangeCount){
-        return;
-    }
+        range.collapse(
+            true
+        );
 
-    let element =
-        selection.anchorNode.nodeType === 1
-            ? selection.anchorNode
-            : selection.anchorNode.parentElement;
 
-    /* داخل خلية الجدول: اتركي Backspace و Delete يعملان طبيعيًا */
-    const tableCell =
-        element.closest(".editor-table td, .editor-table th");
-
-    if(tableCell){
-        return;
-    }
-
-    const line = element.closest(".table-text-line");
-
-    if(!line){
-        return;
-    }
-
-    const previous = line.previousElementSibling;
-
-    if(
-        previous &&
-        previous.classList.contains("editor-table") &&
-        line.textContent.trim() === ""
-    ){
-
-        event.preventDefault();
-
-        ensureTableAfterLine(previous);
-
-        const range = document.createRange();
-
-        range.selectNodeContents(line);
-        range.collapse(true);
+        const selection =
+            window.getSelection();
 
         selection.removeAllRanges();
-        selection.addRange(range);
+
+        selection.addRange(
+            range
+        );
+
+    }
+);
+
+
+/* =====================================================
+   CURRENT TABLE CELL
+===================================================== */
+
+function getCurrentTableCell(){
+
+    const element =
+        getSelectionElement();
+
+    if(!element){
+        return null;
     }
 
-});
+    return element.closest(
+        ".editor-table td, .editor-table th"
+    );
 
-const addMindLeftButton =
-    document.getElementById("addMindLeftButton");
-
-const addTableRowButton =
-    document.getElementById("addTableRowButton");
-
-const deleteTableColumnButton =
-    document.getElementById("deleteTableColumnButton");
-
-deleteTableColumnButton.addEventListener("click", () => {
-
-    const selection = window.getSelection();
-
-    if(!selection.rangeCount){
-        return;
-    }
-
-    let element =
-        selection.anchorNode.nodeType === 1
-            ? selection.anchorNode
-            : selection.anchorNode.parentElement;
-
-    const tableCell =
-        element.closest(".editor-table td, .editor-table th");
-
-    if(!tableCell){
-        return;
-    }
-
-    const table =
-        tableCell.closest(".editor-table");
-
-    if(!table){
-        return;
-    }
-
-    const columnIndex = tableCell.cellIndex;
-
-    Array.from(table.rows).forEach(row => {
-
-        if(row.cells[columnIndex]){
-            row.deleteCell(columnIndex);
-        }
-
-    });
-
-});
-
-addMindLeftButton.addEventListener("click", () => {
-
-    const selection = window.getSelection();
-
-    if(!selection.rangeCount){
-        return;
-    }
-
-    let element =
-        selection.anchorNode.nodeType === 1
-            ? selection.anchorNode
-            : selection.anchorNode.parentElement;
-
-const tableCell =
-    element.closest(".editor-table td, .editor-table th");
-
-if(tableCell){
-
-    const table =
-        tableCell.closest(".editor-table");
-
-    const rows = table.rows;
-
-    for(let i = 0; i < rows.length; i++){
-
-        const newCell =
-            rows[i].insertCell(-1);
-
-        newCell.contentEditable = "true";
-        newCell.innerHTML = "";
-    }
-
-    return;
 }
 
-    const branch =
-        element.closest(".mind-box-branch");
 
-    const root =
-        element.closest(".mind-box-root");
+/* =====================================================
+   ADD COLUMN
+===================================================== */
 
-    /* فرع جديد بجانب الفرع الحالي */
-    if(branch){
+addMindLeftButton.addEventListener(
+    "click",
+    () => {
 
-        const newBranch =
-            document.createElement("div");
+        const tableCell =
+            getCurrentTableCell();
 
-        newBranch.className = "mind-box-branch";
-        newBranch.contentEditable = "true";
-        newBranch.innerHTML = "";
 
-        branch.insertAdjacentElement(
-            "afterend",
-            newBranch
-        );
+        /*
+         * داخل جدول
+         */
+        if(tableCell){
 
-        newBranch.focus();
+            const table =
+                tableCell.closest(
+                    ".editor-table"
+                );
 
-        return;
-    }
+            if(!table){
+                return;
+            }
 
-    /* فكرة رئيسية جديدة بجانب الفكرة الحالية */
-    if(root){
 
-        const mindBox =
-            root.closest(".mind-box");
+            Array.from(
+                table.rows
+            ).forEach(row => {
 
-        if(!mindBox){
+                const newCell =
+                    row.insertCell(-1);
+
+                newCell.contentEditable =
+                    "true";
+
+                newCell.innerHTML =
+                    "<br>";
+
+            });
+
             return;
         }
 
-        const newMindBox =
-            document.createElement("div");
 
-        newMindBox.className = "mind-box";
+        /*
+         * داخل فرع خريطة
+         */
+        const element =
+            getSelectionElement();
 
-        newMindBox.innerHTML =
-            '<div class="mind-box-root" contenteditable="true">' +
-                'فكرة رئيسية جديدة' +
-            '</div>' +
-            '<div class="mind-box-branches">' +
-                '<div class="mind-box-branch" contenteditable="true">' +
-                    'فرع 1' +
+        if(!element){
+            return;
+        }
+
+
+        const branch =
+            element.closest(
+                ".mind-box-branch"
+            );
+
+
+        if(branch){
+
+            const newBranch =
+                document.createElement(
+                    "div"
+                );
+
+            newBranch.className =
+                "mind-box-branch";
+
+            newBranch.contentEditable =
+                "true";
+
+            newBranch.innerHTML =
+                "";
+
+
+            branch.insertAdjacentElement(
+                "afterend",
+                newBranch
+            );
+
+
+            newBranch.focus();
+
+            return;
+        }
+
+
+        /*
+         * داخل الفكرة الرئيسية
+         */
+        const root =
+            element.closest(
+                ".mind-box-root"
+            );
+
+
+        if(root){
+
+            const mindBox =
+                root.closest(
+                    ".mind-box"
+                );
+
+            if(!mindBox){
+                return;
+            }
+
+
+            const newMindBox =
+                document.createElement(
+                    "div"
+                );
+
+            newMindBox.className =
+                "mind-box";
+
+
+            newMindBox.innerHTML =
+
+                '<div class="mind-box-root" contenteditable="true">' +
+                    '' +
                 '</div>' +
-            '</div>';
 
-        mindBox.insertAdjacentElement(
-            "afterend",
+                '<div class="mind-box-branches">' +
+
+                    '<div class="mind-box-branch" contenteditable="true">' +
+                        '' +
+                    '</div>' +
+
+                '</div>';
+
+
+            mindBox.insertAdjacentElement(
+                "afterend",
+                newMindBox
+            );
+
+
             newMindBox
-        );
+                .querySelector(
+                    ".mind-box-root"
+                )
+                .focus();
 
-        newMindBox
-            .querySelector(".mind-box-root")
-            .focus();
+        }
+
     }
-});
+);
 
 
+/* =====================================================
+   DELETE COLUMN
+===================================================== */
 
-addTableRowButton.addEventListener("click", () => {
+deleteTableColumnButton.addEventListener(
+    "click",
+    () => {
 
-    const selection = window.getSelection();
+        const tableCell =
+            getCurrentTableCell();
 
-    if(!selection.rangeCount){
-        return;
-    }
-
-    let element =
-        selection.anchorNode.nodeType === 1
-            ? selection.anchorNode
-            : selection.anchorNode.parentElement;
-
-    const tableCell =
-        element.closest(".editor-table td, .editor-table th");
-
-    if(!tableCell){
-        return;
-    }
-
-    const row = tableCell.closest("tr");
-    const table = tableCell.closest(".editor-table");
-
-    if(!row || !table){
-        return;
-    }
-
-    const newRow = table.insertRow(row.rowIndex + 1);
-
-    for(let i = 0; i < row.cells.length; i++){
-
-        const newCell = newRow.insertCell(i);
-
-        newCell.contentEditable = "true";
-        newCell.innerHTML = "";
-    }
-
-    newRow.cells[0].focus();
-});
-
-const deleteTableRowButton =
-    document.getElementById("deleteTableRowButton");
-
-deleteTableRowButton.addEventListener("click", () => {
-
-    const selection = window.getSelection();
-
-    if(!selection.rangeCount){
-        return;
-    }
-
-    let element =
-        selection.anchorNode.nodeType === 1
-            ? selection.anchorNode
-            : selection.anchorNode.parentElement;
-
-    const tableCell =
-        element.closest(".editor-table td, .editor-table th");
-
-    if(!tableCell){
-        return;
-    }
-
-    const row = tableCell.closest("tr");
-    const table = tableCell.closest(".editor-table");
-
-    if(!row || !table){
-        return;
-    }
-
-    if(table.rows.length <= 1){
-        return;
-    }
-
-    row.remove();
-});
-
-editor.addEventListener("keydown", (event) => {
-
-    if(event.key !== "Backspace"){
-        return;
-    }
-
-    const selection = window.getSelection();
-
-    if(!selection.rangeCount){
-        return;
-    }
-
-    let element =
-        selection.anchorNode.nodeType === 1
-            ? selection.anchorNode
-            : selection.anchorNode.parentElement;
-
-    const tableCell =
-        element.closest(".editor-table td, .editor-table th");
-
-    /* =========================================
-       داخل الجدول
-    ========================================= */
-
-    if(tableCell){
-
-        const row = tableCell.closest("tr");
-        const table = tableCell.closest(".editor-table");
-
-        if(!row || !table){
+        if(!tableCell){
             return;
         }
 
-        /* هل الصف كله فارغ؟ */
-        const rowIsEmpty = Array.from(row.cells).every(cell => {
 
-            return cell.textContent.trim() === "";
+        const table =
+            tableCell.closest(
+                ".editor-table"
+            );
+
+        if(!table){
+            return;
+        }
+
+
+        const columnIndex =
+            tableCell.cellIndex;
+
+
+        /*
+         * لا نسمح بحذف آخر عمود
+         */
+        if(
+            table.rows[0] &&
+            table.rows[0].cells.length <= 1
+        ){
+
+            return;
+        }
+
+
+        Array.from(
+            table.rows
+        ).forEach(row => {
+
+            if(
+                row.cells[columnIndex]
+            ){
+
+                row.deleteCell(
+                    columnIndex
+                );
+
+            }
 
         });
 
-        /* إذا كان الصف فارغًا نحذفه */
-        if(rowIsEmpty){
+    }
+);
 
-            event.preventDefault();
 
-            const rowIndex = row.rowIndex;
+/* =====================================================
+   ADD ROW
+===================================================== */
 
-            /* حذف الصف */
-            row.remove();
+addTableRowButton.addEventListener(
+    "click",
+    () => {
 
-            /* لو بقيت صفوف، انقلي المؤشر إليها */
-            if(table.rows.length > 0){
+        const tableCell =
+            getCurrentTableCell();
 
-                const targetRow =
-                    table.rows[
-                        Math.min(
-                            rowIndex,
-                            table.rows.length - 1
-                        )
-                    ];
+        if(!tableCell){
+            return;
+        }
 
-                if(targetRow && targetRow.cells.length){
 
-                    targetRow.cells[0].focus();
+        const row =
+            tableCell.closest(
+                "tr"
+            );
+
+        const table =
+            tableCell.closest(
+                ".editor-table"
+            );
+
+        if(
+            !row ||
+            !table
+        ){
+            return;
+        }
+
+
+        const newRow =
+            table.insertRow(
+                row.rowIndex + 1
+            );
+
+
+        for(
+            let i = 0;
+            i < row.cells.length;
+            i++
+        ){
+
+            const newCell =
+                newRow.insertCell(i);
+
+            newCell.contentEditable =
+                "true";
+
+            newCell.innerHTML =
+                "<br>";
+
+        }
+
+
+        if(
+            newRow.cells.length
+        ){
+
+            newRow.cells[0].focus();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   DELETE ROW
+===================================================== */
+
+deleteTableRowButton.addEventListener(
+    "click",
+    () => {
+
+        const tableCell =
+            getCurrentTableCell();
+
+        if(!tableCell){
+            return;
+        }
+
+
+        const row =
+            tableCell.closest(
+                "tr"
+            );
+
+        const table =
+            tableCell.closest(
+                ".editor-table"
+            );
+
+        if(
+            !row ||
+            !table
+        ){
+            return;
+        }
+
+
+        /*
+         * لا نحذف آخر صف
+         */
+        if(
+            table.rows.length <= 1
+        ){
+            return;
+        }
+
+
+        row.remove();
+
+    }
+);
+
+
+/* =====================================================
+   TABLE BACKSPACE
+===================================================== */
+
+editor.addEventListener(
+    "keydown",
+    event => {
+
+        if(
+            event.key !== "Backspace"
+        ){
+            return;
+        }
+
+
+        const tableCell =
+            getCurrentTableCell();
+
+
+        /*
+         * داخل الجدول
+         */
+        if(tableCell){
+
+            const row =
+                tableCell.closest(
+                    "tr"
+                );
+
+            const table =
+                tableCell.closest(
+                    ".editor-table"
+                );
+
+            if(
+                !row ||
+                !table
+            ){
+                return;
+            }
+
+
+            const rowIsEmpty =
+                Array.from(
+                    row.cells
+                ).every(
+                    cell =>
+                        cell.textContent.trim() === ""
+                );
+
+
+            /*
+             * الصف فارغ:
+             * احذفه
+             */
+            if(rowIsEmpty){
+
+                /*
+                 * لا نحذف آخر صف
+                 */
+                if(
+                    table.rows.length <= 1
+                ){
+                    return;
+                }
+
+
+                event.preventDefault();
+
+
+                const rowIndex =
+                    row.rowIndex;
+
+
+                row.remove();
+
+
+                /*
+                 * نقل المؤشر
+                 */
+                if(
+                    table.rows.length
+                ){
+
+                    const targetRow =
+                        table.rows[
+                            Math.min(
+                                rowIndex,
+                                table.rows.length - 1
+                            )
+                        ];
+
+
+                    if(
+                        targetRow &&
+                        targetRow.cells.length
+                    ){
+
+                        targetRow.cells[0].focus();
+
+                    }
 
                 }
 
             }
 
+
+            /*
+             * الصف يحتوي محتوى:
+             * Backspace طبيعي
+             */
             return;
         }
 
-        /* الصف فيه محتوى → Backspace يعمل طبيعيًا */
-        return;
+
+        /*
+         * خارج الجدول
+         */
+        const element =
+            getSelectionElement();
+
+        if(!element){
+            return;
+        }
+
+
+        const line =
+            element.closest(
+                ".table-text-line"
+            );
+
+        if(!line){
+            return;
+        }
+
+
+        const previous =
+            line.previousElementSibling;
+
+
+        if(
+            previous &&
+            previous.classList.contains(
+                "editor-table"
+            ) &&
+            line.textContent.trim() === ""
+        ){
+
+            event.preventDefault();
+
+            ensureTableAfterLine(
+                previous
+            );
+
+        }
+
     }
+);
 
-    /* =========================================
-       خارج الجدول
-    ========================================= */
 
-    const line = element.closest(".table-text-line");
+/* =====================================================
+   MIND MAP
+===================================================== */
 
-    if(!line){
-        return;
+mindMapButton.addEventListener(
+    "click",
+    () => {
+
+        const wrapper =
+            document.createElement(
+                "div"
+            );
+
+
+        const before =
+            document.createElement(
+                "div"
+            );
+
+        before.innerHTML =
+            "<br>";
+
+
+        const mindBox =
+            document.createElement(
+                "div"
+            );
+
+        mindBox.className =
+            "mind-box";
+
+
+        mindBox.innerHTML =
+
+            '<div class="mind-box-root" contenteditable="true"></div>' +
+
+            '<div class="mind-box-branches">' +
+
+                '<div class="mind-box-branch" contenteditable="true"></div>' +
+
+                '<div class="mind-box-branch" contenteditable="true"></div>' +
+
+                '<div class="mind-box-branch" contenteditable="true"></div>' +
+
+                '<div class="mind-box-branch" contenteditable="true"></div>' +
+
+            '</div>';
+
+
+        const after =
+            document.createElement(
+                "div"
+            );
+
+        after.innerHTML =
+            "<br>";
+
+
+        wrapper.appendChild(
+            before
+        );
+
+        wrapper.appendChild(
+            mindBox
+        );
+
+        wrapper.appendChild(
+            after
+        );
+
+
+        insertAtCursor(
+            wrapper
+        );
+
+
+        const range =
+            document.createRange();
+
+        range.selectNodeContents(
+            after
+        );
+
+        range.collapse(
+            true
+        );
+
+
+        const selection =
+            window.getSelection();
+
+        selection.removeAllRanges();
+
+        selection.addRange(
+            range
+        );
+
     }
+);
 
-    const previous = line.previousElementSibling;
 
-    if(
-        previous &&
-        previous.classList.contains("editor-table") &&
-        line.textContent.trim() === ""
-    ){
+/* =====================================================
+   UNDO
+===================================================== */
 
-        event.preventDefault();
+undoButton.addEventListener(
+    "click",
+    () => {
 
-        ensureTableAfterLine(previous);
+        editor.focus();
+
+        document.execCommand(
+            "undo"
+        );
+
+        cleanFormatting();
+
+        updateFormatButtons();
 
     }
+);
 
-});
 
-const mindMapButton = document.getElementById("mindMapButton");
+/* =====================================================
+   CANCEL
+===================================================== */
 
-mindMapButton.addEventListener("click", () => {
+cancelButton.addEventListener(
+    "click",
+    () => {
 
-    const wrapper = document.createElement("div");
+        editor.innerHTML =
+            "";
 
-    const before = document.createElement("div");
-    before.innerHTML = "<br>";
+        selectedNote =
+            null;
 
-    const mindBox = document.createElement("div");
-    mindBox.className = "mind-box";
+        clearSavedSelection();
 
-    mindBox.innerHTML =
-        '<div class="mind-box-root" contenteditable="true"></div>' +
-        '<div class="mind-box-branches">' +
-            '<div class="mind-box-branch" contenteditable="true"></div>' +
-            '<div class="mind-box-branch" contenteditable="true"></div>' +
-            '<div class="mind-box-branch" contenteditable="true"></div>' +
-            '<div class="mind-box-branch" contenteditable="true"></div>' +
-        '</div>';
+        messageMenu.classList.remove(
+            "open"
+        );
 
-    const after = document.createElement("div");
-    after.innerHTML = "<br>";
+        state.textContent =
+            "رسالة جديدة";
 
-    wrapper.appendChild(before);
-    wrapper.appendChild(mindBox);
-    wrapper.appendChild(after);
+        editor.focus();
 
-    insertAtCursor(wrapper);
-
-    const range = document.createRange();
-    range.selectNodeContents(after);
-    range.collapse(true);
-
-    const selection = window.getSelection();
-    selection.removeAllRanges();
-    selection.addRange(range);
-});
-
-const undoButton = document.getElementById("undoButton");
-
-undoButton.addEventListener("click", () => {
-    editor.focus();
-    document.execCommand("undo");
-});
-
-const cancelButton = document.getElementById("cancelButton");
-
-cancelButton.addEventListener("click", () => {
-
-    editor.innerHTML = "";
-
-    selectedNote = null;
-
-    messageMenu.classList.remove("open");
-
-    editor.focus();
-});
-
-const newButton = document.getElementById("newButton");
-
-newButton.addEventListener("click", () => {
-    editor.innerHTML = "";
-    editor.focus();
-});
-const searchButton = document.getElementById("searchButton");
-const searchOverlay = document.getElementById("searchOverlay");
-const searchInput = document.getElementById("searchInput");
-const searchResult = document.getElementById("searchResult");
-
-searchButton.addEventListener("click", () => {
-    searchOverlay.classList.add("open");
-    searchInput.focus();
-});
-
-searchInput.addEventListener("input", () => {
-
-    const word = searchInput.value.trim();
-
-    if(!word){
-        searchResult.textContent = "";
-        return;
     }
+);
 
-    const text = editor.innerText;
 
-    if(text.includes(word)){
-        searchResult.textContent = "تم العثور على الكلمة ✓";
-    }else{
-        searchResult.textContent = "لم يتم العثور عليها";
+/* =====================================================
+   NEW
+===================================================== */
+
+newButton.addEventListener(
+    "click",
+    () => {
+
+        editor.innerHTML =
+            "";
+
+        selectedNote =
+            null;
+
+        clearSavedSelection();
+
+        state.textContent =
+            "رسالة جديدة";
+
+        editor.focus();
+
     }
+);
 
-});
 
-document.getElementById("searchDone").addEventListener("click", () => {
-    searchOverlay.classList.remove("open");
-    searchInput.value = "";
-    searchResult.textContent = "";
-});
+/* =====================================================
+   NEW LINE BUTTONS
+===================================================== */
 
-const sendButton = document.getElementById("sendButton");
+newLineDownButton.addEventListener(
+    "click",
+    () => {
 
-sendButton.addEventListener("click", () => {
+        editor.focus();
 
-    const savedContent = editor.cloneNode(true);
+        document.execCommand(
+            "insertParagraph"
+        );
 
-    savedContent
-        .querySelectorAll('[contenteditable="true"]')
-        .forEach(element => {
-            element.removeAttribute("contenteditable");
-        });
-
-    const content = savedContent.innerHTML.trim();
-
-    if(!content){
-        return;
     }
+);
 
-if(selectedNote){
 
-    const noteContent =
-        selectedNote.querySelector(".note-content");
+newLineUpButton.addEventListener(
+    "click",
+    () => {
 
-    if(noteContent){
-        noteContent.innerHTML = content;
+        editor.focus();
+
+        document.execCommand(
+            "insertParagraph"
+        );
+
     }
+);
 
-    selectedNote = null;
-    editor.innerHTML = "";
-    editor.focus();
 
-    return;
-}
+/* =====================================================
+   SEARCH
+===================================================== */
 
-    const note = document.createElement("div");
-    note.className = "note";
+searchButton.addEventListener(
+    "click",
+    () => {
 
-    note.innerHTML = `
-        <div class="note-content">
-            ${content}
-        </div>
+        searchOverlay.classList.add(
+            "open"
+        );
 
-        <button
-            class="note-menu"
-            type="button">
-            ⋮
-        </button>
-    `;
+        searchInput.focus();
 
-    messages.appendChild(note);
-
-    editor.innerHTML = "";
-
-    messages.scrollTop = messages.scrollHeight;
-
-    editor.focus();
-});
-
-const messageMenu = document.getElementById("messageMenu");
-const editButton = document.getElementById("editButton");
-const deleteButton = document.getElementById("deleteButton");
-
-let selectedNote = null;
-
-messages.addEventListener("click", (event) => {
-
-    const menu = event.target.closest(".note-menu");
-
-    if(!menu){
-        return;
     }
+);
 
-    selectedNote = menu.closest(".note");
 
-    const rect = menu.getBoundingClientRect();
+searchInput.addEventListener(
+    "input",
+    () => {
 
-    messageMenu.style.top = rect.bottom + 5 + "px";
-    messageMenu.style.left = rect.left + "px";
+        const word =
+            searchInput.value.trim();
 
-    messageMenu.classList.add("open");
-});
+        if(!word){
 
-editButton.addEventListener("click", () => {
+            searchResult.textContent =
+                "";
 
-    if(!selectedNote){
-        return;
+            return;
+        }
+
+
+        const text =
+            editor.innerText;
+
+
+        if(
+            text.includes(word)
+        ){
+
+            searchResult.textContent =
+                "تم العثور على الكلمة ✓";
+
+        }else{
+
+            searchResult.textContent =
+                "لم يتم العثور عليها";
+
+        }
+
     }
+);
 
-    const noteContent =
-        selectedNote.querySelector(".note-content");
 
-    if(!noteContent){
-        return;
+searchDone.addEventListener(
+    "click",
+    () => {
+
+        searchOverlay.classList.remove(
+            "open"
+        );
+
+        searchInput.value =
+            "";
+
+        searchResult.textContent =
+            "";
+
     }
+);
 
-   editor.innerHTML = noteContent.innerHTML.replace(/^(<div><br><\/div>|<br>)+|(<div><br><\/div>|<br>)+$/g, "");
 
-editor
-    .querySelectorAll(
-        ".mind-box-root, .mind-box-branch, .editor-table td, .editor-table th"
-    )
-    .forEach(element => {
-        element.contentEditable = "true";
-    });
+/* =====================================================
+   SAVE NOTE
+===================================================== */
 
-    messageMenu.classList.remove("open");
+sendButton.addEventListener(
+    "click",
+    () => {
 
-    editor.focus();
+        const savedContent =
+            editor.cloneNode(true);
 
-    updateFormatButtons();
-});
 
-deleteButton.addEventListener("click", () => {
+        /*
+         * إزالة contenteditable
+         * من العناصر الداخلية
+         */
+        savedContent
+            .querySelectorAll(
+                '[contenteditable="true"]'
+            )
+            .forEach(element => {
 
-    if(!selectedNote){
-        return;
+                element.removeAttribute(
+                    "contenteditable"
+                );
+
+            });
+
+
+        cleanFormatting(
+            savedContent
+        );
+
+
+        const content =
+            savedContent.innerHTML.trim();
+
+
+        if(!content){
+            return;
+        }
+
+
+        /*
+         * تعديل ملاحظة
+         */
+        if(selectedNote){
+
+            const noteContent =
+                selectedNote.querySelector(
+                    ".note-content"
+                );
+
+
+            if(noteContent){
+
+                noteContent.innerHTML =
+                    content;
+
+            }
+
+
+            selectedNote.classList.remove(
+                "editing"
+            );
+
+            selectedNote =
+                null;
+
+            editor.innerHTML =
+                "";
+
+            state.textContent =
+                "رسالة جديدة";
+
+            clearSavedSelection();
+
+            editor.focus();
+
+            return;
+        }
+
+
+        /*
+         * ملاحظة جديدة
+         */
+        const note =
+            document.createElement(
+                "div"
+            );
+
+        note.className =
+            "note";
+
+
+        note.innerHTML = `
+
+            <div class="note-content">
+                ${content}
+            </div>
+
+            <button
+                class="note-menu"
+                type="button">
+                ⋮
+            </button>
+
+        `;
+
+
+        messages.appendChild(
+            note
+        );
+
+
+        editor.innerHTML =
+            "";
+
+        state.textContent =
+            "رسالة جديدة";
+
+        clearSavedSelection();
+
+
+        messages.scrollTop =
+            messages.scrollHeight;
+
+
+        editor.focus();
+
     }
-
-    selectedNote.remove();
-
-    selectedNote = null;
-
-    messageMenu.classList.remove("open");
-});
+);
 
 
-document.addEventListener("click", (event) => {
+/* =====================================================
+   NOTE MENU
+===================================================== */
 
-    if(
-        !event.target.closest(".note-menu") &&
-        !event.target.closest(".message-menu")
-    ){
-        messageMenu.classList.remove("open");
+messages.addEventListener(
+    "click",
+    event => {
+
+        const menu =
+            event.target.closest(
+                ".note-menu"
+            );
+
+        if(!menu){
+            return;
+        }
+
+
+        selectedNote =
+            menu.closest(
+                ".note"
+            );
+
+
+        const rect =
+            menu.getBoundingClientRect();
+
+
+        messageMenu.style.top =
+            rect.bottom + 5 + "px";
+
+
+        messageMenu.style.left =
+            rect.left + "px";
+
+
+        messageMenu.classList.add(
+            "open"
+        );
+
     }
+);
 
-});
+
+/* =====================================================
+   EDIT NOTE
+===================================================== */
+
+editButton.addEventListener(
+    "click",
+    () => {
+
+        if(!selectedNote){
+            return;
+        }
+
+
+        const noteContent =
+            selectedNote.querySelector(
+                ".note-content"
+            );
+
+
+        if(!noteContent){
+            return;
+        }
+
+
+        editor.innerHTML =
+            noteContent.innerHTML;
+
+
+        /*
+         * إعادة contenteditable
+         * للعناصر التي تحتاج الكتابة
+         */
+        editor
+            .querySelectorAll(
+                ".mind-box-root," +
+                ".mind-box-branch," +
+                ".editor-table td," +
+                ".editor-table th"
+            )
+            .forEach(element => {
+
+                element.contentEditable =
+                    "true";
+
+            });
+
+
+        selectedNote.classList.add(
+            "editing"
+        );
+
+
+        messageMenu.classList.remove(
+            "open"
+        );
+
+
+        state.textContent =
+            "تعديل الملاحظة";
+
+
+        editor.focus();
+
+        updateFormatButtons();
+
+    }
+);
+
+
+/* =====================================================
+   DELETE NOTE
+===================================================== */
+
+deleteButton.addEventListener(
+    "click",
+    () => {
+
+        if(!selectedNote){
+            return;
+        }
+
+
+        selectedNote.remove();
+
+
+        selectedNote =
+            null;
+
+
+        messageMenu.classList.remove(
+            "open"
+        );
+
+    }
+);
+
+
+/* =====================================================
+   CLOSE MESSAGE MENU
+===================================================== */
+
+document.addEventListener(
+    "click",
+    event => {
+
+        if(
+            !event.target.closest(
+                ".note-menu"
+            ) &&
+            !event.target.closest(
+                ".message-menu"
+            )
+        ){
+
+            messageMenu.classList.remove(
+                "open"
+            );
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   EDITOR SELECTION
+===================================================== */
+
+editor.addEventListener(
+    "mouseup",
+    () => {
+
+        saveSelection();
+
+        updateFormatButtons();
+
+    }
+);
+
+
+editor.addEventListener(
+    "keyup",
+    () => {
+
+        saveSelection();
+
+        updateFormatButtons();
+
+    }
+);
+
+
+editor.addEventListener(
+    "click",
+    () => {
+
+        saveSelection();
+
+        updateFormatButtons();
+
+    }
+);
+
+
+/* =====================================================
+   INPUT
+===================================================== */
+
+editor.addEventListener(
+    "input",
+    () => {
+
+        saveSelection();
+
+        updateFormatButtons();
+
+        cleanFormatting();
+
+    }
+);
+
+
+/* =====================================================
+   FOCUS
+===================================================== */
+
+editor.addEventListener(
+    "focus",
+    () => {
+
+        updateFormatButtons();
+
+    }
+);
+
+
+/* =====================================================
+   KEYBOARD
+===================================================== */
+
+editor.addEventListener(
+    "keydown",
+    event => {
+
+        /*
+         * Ctrl/Cmd + B
+         */
+        if(
+            (event.ctrlKey || event.metaKey) &&
+            event.key.toLowerCase() === "b"
+        ){
+
+            event.preventDefault();
+
+            toggleFormat(
+                "bold",
+                "bold"
+            );
+
+            return;
+        }
+
+
+        /*
+         * Ctrl/Cmd + I
+         */
+        if(
+            (event.ctrlKey || event.metaKey) &&
+            event.key.toLowerCase() === "i"
+        ){
+
+            event.preventDefault();
+
+            toggleFormat(
+                "italic",
+                "italic"
+            );
+
+            return;
+        }
+
+
+        /*
+         * Ctrl/Cmd + U
+         */
+        if(
+            (event.ctrlKey || event.metaKey) &&
+            event.key.toLowerCase() === "u"
+        ){
+
+            event.preventDefault();
+
+            toggleFormat(
+                "underline",
+                "underline"
+            );
+
+            return;
+        }
+
+    }
+);
+
+
+/* =====================================================
+   FINAL CLEANUP BEFORE SAVE
+===================================================== */
+
+window.addEventListener(
+    "beforeunload",
+    () => {
+
+        cleanFormatting();
+
+    }
+);
+
+
+/* =====================================================
+   INITIAL STATE
+===================================================== */
+
+updateFormatButtons();
+
+</script>
           
 </script>
 
