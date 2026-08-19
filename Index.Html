@@ -1674,18 +1674,91 @@ document.getElementById("removeHighlight").addEventListener("click", () => {
 });
 
 document.getElementById("whiteText").addEventListener("click", () => {
-    applyColor("#ffffff");
-});
 
-document.getElementById("colorDone").addEventListener("click", () => {
+    restoreSelection();
 
-    colorOverlay.classList.remove("open");
+    const selection = window.getSelection();
 
-    if(selectedColor){
-        colorActive = true;
+    if(
+        !selection.rangeCount ||
+        selection.getRangeAt(0).collapsed
+    ){
+
+        selectedColor = null;
+        colorActive = false;
+
+        return;
     }
 
-    editor.focus();
+    const range = selection.getRangeAt(0);
+
+    const elements = [];
+
+    const walker = document.createTreeWalker(
+        editor,
+        NodeFilter.SHOW_ELEMENT
+    );
+
+    while(walker.nextNode()){
+
+        const element = walker.currentNode;
+
+        if(range.intersectsNode(element)){
+
+            elements.push(element);
+
+        }
+    }
+
+    elements.forEach(element => {
+
+        /* إزالة لون CSS فقط */
+        if(element.style.color){
+
+            element.style.removeProperty("color");
+
+        }
+
+        /* إزالة لون عنصر FONT القديم */
+        if(
+            element.tagName === "FONT" &&
+            element.hasAttribute("color")
+        ){
+
+            element.removeAttribute("color");
+
+        }
+
+    });
+
+    /* تنظيف الـ spans التي لم يعد لها أي وظيفة */
+    Array.from(
+        editor.querySelectorAll("span")
+    ).forEach(span => {
+
+        const hasAttributes =
+            span.attributes.length > 0;
+
+        if(!hasAttributes){
+
+            while(span.firstChild){
+
+                span.parentNode.insertBefore(
+                    span.firstChild,
+                    span
+                );
+
+            }
+
+            span.remove();
+        }
+
+    });
+
+    /* رجوع الكتابة الجديدة للوضع الأصلي */
+    selectedColor = null;
+    colorActive = false;
+
 });
 
 document.getElementById("closeColorOverlay").addEventListener("click", () => {
