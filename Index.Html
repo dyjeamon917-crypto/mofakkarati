@@ -2046,18 +2046,17 @@ fontSizes.forEach(size => {
 
 });
 
+sizeButton.addEventListener("pointerdown", event => {
+    event.preventDefault();
+    event.stopPropagation();
 
-sizeButton.addEventListener(
-    "pointerdown",
-    event => {
+    if (fontSizeBar.style.display === "flex") {
+        fontSizeBar.style.display = "none";
+    } else {
+        fontSizeBar.style.display = "flex";
+    }
+});
 
-        event.preventDefault();
-
-        saveSelection();
-
-        toggleSubToolbar(
-            fontSizeBar
-        );
 
     }
 );
