@@ -2750,40 +2750,101 @@ closeColorOverlay.addEventListener(
 
 function insertAtCursor(element){
 
-    editor.focus();
+    /*
+     * نرجع المؤشر للمكان المحفوظ أولًا
+     */
+    restoreEditorSelection();
 
-    const selection =
+    let selection =
         getSelection();
 
+
+    /*
+     * لو لا يوجد تحديد صالح داخل المحرر
+     * نضيف العنصر في آخر المحرر
+     */
     if(
         !selection ||
         !selection.rangeCount
     ){
 
+        editor.focus();
+
         editor.appendChild(
             element
         );
 
+        const range =
+            document.createRange();
+
+        range.selectNodeContents(
+            editor
+        );
+
+        range.collapse(
+            false
+        );
+
+        selection =
+            window.getSelection();
+
+        selection.removeAllRanges();
+
+        selection.addRange(
+            range
+        );
+
+        saveSelection();
+
         return;
     }
+
 
     const range =
         selection.getRangeAt(0);
 
+
+    /*
+     * لو التحديد ليس داخل المحرر
+     */
     if(
         !editor.contains(
             range.commonAncestorContainer
         )
     ){
 
+        editor.focus();
+
         editor.appendChild(
             element
         );
+
+        const newRange =
+            document.createRange();
+
+        newRange.selectNodeContents(
+            editor
+        );
+
+        newRange.collapse(
+            false
+        );
+
+        selection.removeAllRanges();
+
+        selection.addRange(
+            newRange
+        );
+
+        saveSelection();
 
         return;
     }
 
 
+    /*
+     * الإدراج في مكان المؤشر الحقيقي
+     */
     range.deleteContents();
 
     range.insertNode(
@@ -2791,8 +2852,9 @@ function insertAtCursor(element){
     );
 
 
-    selection.removeAllRanges();
-
+    /*
+     * نقل المؤشر بعد العنصر
+     */
     const newRange =
         document.createRange();
 
@@ -2804,9 +2866,13 @@ function insertAtCursor(element){
         true
     );
 
+    selection.removeAllRanges();
+
     selection.addRange(
         newRange
     );
+
+    editor.focus();
 
     saveSelection();
 
