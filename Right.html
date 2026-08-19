@@ -1251,11 +1251,6 @@ body.keyboard-open #colorOverlay{
 
 const editor = document.getElementById("editor");
 editor.innerHTML = "";
-      
-let savedRange = null;
-
-const editor = document.getElementById("editor");
-editor.innerHTML = "";
 
 let savedRange = null;
 
@@ -1265,15 +1260,6 @@ editor.addEventListener("touchend", saveSelection);
 editor.addEventListener("input", saveSelection);
 
       document.querySelectorAll(".tool").forEach(button => {
-
-    button.addEventListener("pointerdown", () => {
-        saveSelection();
-    });
-
-});
-      document.querySelectorAll(
-    ".sub-toolbar button, #colorOverlay button"
-).forEach(button => {
 
     button.addEventListener("pointerdown", () => {
         saveSelection();
