@@ -1578,12 +1578,6 @@ document.querySelectorAll(
 /*
  * حفظ مكان المؤشر قبل أن تأخذ أزرار الجدول والخريطة التركيز
  */
-[
-    addMindLeftButton,
-    deleteTableColumnButton,
-    addTableRowButton,
-    deleteTableRowButton
-].forEach(button => {
 
     button.addEventListener(
         "pointerdown",
@@ -3073,150 +3067,100 @@ function getCurrentTableCell(){
 ===================================================== */
 
 addMindLeftButton.addEventListener(
-    "click",
-    () => {
+    "pointerdown",
+    event => {
+
+        event.preventDefault();
 
         restoreEditorSelection();
 
-        const tableCell =
-            getCurrentTableCell();
+        const tableCell = getCurrentTableCell();
 
-
-        /*
-         * داخل جدول
-         */
         if(tableCell){
 
             const table =
-                tableCell.closest(
-                    ".editor-table"
-                );
+                tableCell.closest(".editor-table");
 
             if(!table){
                 return;
             }
 
+            Array.from(table.rows).forEach(row => {
 
-            Array.from(
-                table.rows
-            ).forEach(row => {
+                const newCell = row.insertCell(-1);
 
-                const newCell =
-                    row.insertCell(-1);
-
-                newCell.contentEditable =
-                    "true";
-
-                newCell.innerHTML =
-                    "<br>";
+                newCell.contentEditable = "true";
+                newCell.innerHTML = "<br>";
 
             });
 
             return;
         }
 
-
-        /*
-         * داخل فرع خريطة
-         */
-        const element =
-            getSelectionElement();
+        const element = getSelectionElement();
 
         if(!element){
             return;
         }
 
-
         const branch =
-            element.closest(
-                ".mind-box-branch"
-            );
-
+            element.closest(".mind-box-branch");
 
         if(branch){
 
             const newBranch =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
             newBranch.className =
                 "mind-box-branch";
 
-            newBranch.contentEditable =
-                "true";
-
-            newBranch.innerHTML =
-                "";
-
+            newBranch.contentEditable = "true";
+            newBranch.innerHTML = "";
 
             branch.insertAdjacentElement(
                 "afterend",
                 newBranch
             );
 
-
             newBranch.focus();
 
             return;
         }
 
-
-        /*
-         * داخل الفكرة الرئيسية
-         */
         const root =
-            element.closest(
-                ".mind-box-root"
-            );
-
+            element.closest(".mind-box-root");
 
         if(root){
 
             const mindBox =
-                root.closest(
-                    ".mind-box"
-                );
+                root.closest(".mind-box");
 
             if(!mindBox){
                 return;
             }
 
-
             const newMindBox =
-                document.createElement(
-                    "div"
-                );
+                document.createElement("div");
 
-            newMindBox.className =
-                "mind-box";
-
+            newMindBox.className = "mind-box";
 
             newMindBox.innerHTML =
 
-                '<div class="mind-box-root" contenteditable="true">' +
-                    '' +
-                '</div>' +
+                '<div class="mind-box-root" contenteditable="true"></div>' +
 
                 '<div class="mind-box-branches">' +
 
-                    '<div class="mind-box-branch" contenteditable="true">' +
-                        '' +
-                    '</div>' +
+                    '<div class="mind-box-branch" contenteditable="true"></div>' +
 
                 '</div>';
-
 
             mindBox.insertAdjacentElement(
                 "afterend",
                 newMindBox
             );
 
-
             newMindBox
-                .querySelector(
-                    ".mind-box-root"
-                )
+                .querySelector(".mind-box-root")
                 .focus();
 
         }
@@ -3224,14 +3168,15 @@ addMindLeftButton.addEventListener(
     }
 );
 
-
 /* =====================================================
    DELETE COLUMN
 ===================================================== */
 
 deleteTableColumnButton.addEventListener(
-    "click",
-    () => {
+    "pointerdown",
+    event => {
+
+        event.preventDefault();
 
         restoreEditorSelection();
 
@@ -3242,44 +3187,28 @@ deleteTableColumnButton.addEventListener(
             return;
         }
 
-
         const table =
-            tableCell.closest(
-                ".editor-table"
-            );
+            tableCell.closest(".editor-table");
 
         if(!table){
             return;
         }
 
-
         const columnIndex =
             tableCell.cellIndex;
 
-
-        /*
-         * لا نسمح بحذف آخر عمود
-         */
         if(
             table.rows[0] &&
             table.rows[0].cells.length <= 1
         ){
-
             return;
         }
 
+        Array.from(table.rows).forEach(row => {
 
-        Array.from(
-            table.rows
-        ).forEach(row => {
+            if(row.cells[columnIndex]){
 
-            if(
-                row.cells[columnIndex]
-            ){
-
-                row.deleteCell(
-                    columnIndex
-                );
+                row.deleteCell(columnIndex);
 
             }
 
@@ -3294,8 +3223,10 @@ deleteTableColumnButton.addEventListener(
 ===================================================== */
 
 addTableRowButton.addEventListener(
-    "click",
-    () => {
+    "pointerdown",
+    event => {
+
+        event.preventDefault();
 
         restoreEditorSelection();
 
@@ -3306,30 +3237,20 @@ addTableRowButton.addEventListener(
             return;
         }
 
-
         const row =
-            tableCell.closest(
-                "tr"
-            );
+            tableCell.closest("tr");
 
         const table =
-            tableCell.closest(
-                ".editor-table"
-            );
+            tableCell.closest(".editor-table");
 
-        if(
-            !row ||
-            !table
-        ){
+        if(!row || !table){
             return;
         }
-
 
         const newRow =
             table.insertRow(
                 row.rowIndex + 1
             );
-
 
         for(
             let i = 0;
@@ -3340,18 +3261,12 @@ addTableRowButton.addEventListener(
             const newCell =
                 newRow.insertCell(i);
 
-            newCell.contentEditable =
-                "true";
-
-            newCell.innerHTML =
-                "<br>";
+            newCell.contentEditable = "true";
+            newCell.innerHTML = "<br>";
 
         }
 
-
-        if(
-            newRow.cells.length
-        ){
+        if(newRow.cells.length){
 
             newRow.cells[0].focus();
 
@@ -3366,8 +3281,10 @@ addTableRowButton.addEventListener(
 ===================================================== */
 
 deleteTableRowButton.addEventListener(
-    "click",
-    () => {
+    "pointerdown",
+    event => {
+
+        event.preventDefault();
 
         restoreEditorSelection();
 
@@ -3378,40 +3295,43 @@ deleteTableRowButton.addEventListener(
             return;
         }
 
-
         const row =
-            tableCell.closest(
-                "tr"
-            );
+            tableCell.closest("tr");
 
         const table =
-            tableCell.closest(
-                ".editor-table"
-            );
+            tableCell.closest(".editor-table");
 
-        if(
-            !row ||
-            !table
-        ){
+        if(!row || !table){
             return;
         }
 
-
-        /*
-         * لا نحذف آخر صف
-         */
-        if(
-            table.rows.length <= 1
-        ){
+        if(table.rows.length <= 1){
             return;
         }
 
+        const rowIndex = row.rowIndex;
 
         row.remove();
 
+        const targetRow =
+            table.rows[
+                Math.min(
+                    rowIndex,
+                    table.rows.length - 1
+                )
+            ];
+
+        if(
+            targetRow &&
+            targetRow.cells.length
+        ){
+
+            targetRow.cells[0].focus();
+
+        }
+
     }
 );
-
 
 /* =====================================================
    TABLE BACKSPACE
