@@ -1517,6 +1517,33 @@ function clearSavedSelection(){
     savedRange = null;
 }
 
+function restoreEditorSelection(){
+
+    editor.focus();
+
+    if(!restoreSelection()){
+
+        const selection =
+            window.getSelection();
+
+        const range =
+            document.createRange();
+
+        range.selectNodeContents(editor);
+
+        range.collapse(false);
+
+        selection.removeAllRanges();
+
+        selection.addRange(range);
+
+        saveSelection();
+
+    }
+
+}
+
+
 /* =====================================================
    RESTORE SELECTION FOR ALL TOOL BUTTONS
 ===================================================== */
