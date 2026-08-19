@@ -1719,9 +1719,7 @@ const tableButton = document.getElementById("tableButton");
 
 tableButton.addEventListener("click", () => {
 
-    const wrapper = document.createElement("div");
-
-    const before = document.createElement("div");
+    const before = document.createElement("p");
     before.innerHTML = "<br>";
 
     const table = document.createElement("table");
@@ -1744,20 +1742,19 @@ tableButton.addEventListener("click", () => {
         table.appendChild(row);
     }
 
-    const after = document.createElement("div");
+    const after = document.createElement("p");
     after.innerHTML = "<br>";
 
-    wrapper.appendChild(before);
-    wrapper.appendChild(table);
-    wrapper.appendChild(after);
-
-    insertAtCursor(wrapper);
+    insertAtCursor(before);
+    insertAtCursor(table);
+    insertAtCursor(after);
 
     const range = document.createRange();
-    range.selectNodeContents(after);
+    range.setStart(after, 0);
     range.collapse(true);
 
     const selection = window.getSelection();
+
     selection.removeAllRanges();
     selection.addRange(range);
 });
