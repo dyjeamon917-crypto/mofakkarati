@@ -2905,152 +2905,42 @@ function insertAtCursor(element){
 
 }
 
+
 /* =====================================================
    TABLE
 ===================================================== */
 
-function createTableTextLine(){
+tableButton.addEventListener("click", function(event){
 
-    const line =
-        document.createElement("div");
+    event.preventDefault();
 
-    line.className =
-        "table-text-line";
+    const table =
+        document.createElement("table");
 
-    line.innerHTML =
-        "<br>";
+    table.className = "editor-table";
 
-    line.contentEditable = "true";
+    for(let r = 0; r < 2; r++){
 
-    return line;
-}
+        const row =
+            document.createElement("tr");
 
+        for(let c = 0; c < 2; c++){
 
-function ensureTableAfterLine(table){
+            const cell =
+                document.createElement("td");
 
-    const wrapper =
-        table.closest(".table-wrapper");
+            cell.contentEditable = "true";
+            cell.innerHTML = "<br>";
 
-    if(!wrapper){
-        return;
-    }
-
-    let after =
-        wrapper.nextElementSibling;
-
-    if(
-        !after ||
-        !after.classList.contains("table-text-line")
-    ){
-
-        after =
-            createTableTextLine();
-
-        wrapper.insertAdjacentElement(
-            "afterend",
-            after
-        );
-
-    }
-
-}
-
-
-/* =====================================================
-   CREATE TABLE
-===================================================== */
-
-tableButton.addEventListener(
-"click"
-    event => {
-
-        event.preventDefault();
-
-        restoreSelection();
-
-        const wrapper =
-            document.createElement("div");
-
-        wrapper.className =
-            "table-wrapper";
-
-
-        const before =
-            createTableTextLine();
-
-
-        const table =
-            document.createElement("table");
-
-        table.className =
-            "editor-table";
-
-
-        for(let r = 0; r < 2; r++){
-
-            const row =
-                document.createElement("tr");
-
-
-            for(let c = 0; c < 2; c++){
-
-                const cell =
-                    document.createElement("td");
-
-                cell.contentEditable =
-                    "true";
-
-                cell.innerHTML =
-                    "<br>";
-
-                row.appendChild(cell);
-
-            }
-
-            table.appendChild(row);
-
+            row.appendChild(cell);
         }
 
-
-        const after =
-            createTableTextLine();
-
-
-        wrapper.appendChild(before);
-
-        wrapper.appendChild(table);
-
-        wrapper.appendChild(after);
-
-
-        insertAtCursor(wrapper);
-
-
-        /*
-         * وضع المؤشر داخل السطر الموجود
-         * أسفل الجدول
-         */
-        const range =
-            document.createRange();
-
-        range.selectNodeContents(after);
-
-        range.collapse(true);
-
-
-        const selection =
-            window.getSelection();
-
-        selection.removeAllRanges();
-
-        selection.addRange(range);
-
-        editor.focus();
-
-        saveSelection();
-
+        table.appendChild(row);
     }
-);
+
+    editor.appendChild(table);
+
+});
 
 
 /* =====================================================
