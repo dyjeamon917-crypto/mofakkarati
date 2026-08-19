@@ -1684,12 +1684,47 @@ document.getElementById("closeColorOverlay").addEventListener("click", () => {
 
 });
 
+function insertAtCursor(element){
+
+    editor.focus();
+
+    const selection = window.getSelection();
+
+    if(!selection.rangeCount){
+        editor.appendChild(element);
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    if(!editor.contains(range.commonAncestorContainer)){
+        editor.appendChild(element);
+        return;
+    }
+
+    range.deleteContents();
+    range.insertNode(element);
+
+    selection.removeAllRanges();
+
+    const newRange = document.createRange();
+
+    newRange.setStartAfter(element);
+    newRange.collapse(true);
+
+    selection.addRange(newRange);
+}
+
 const tableButton = document.getElementById("tableButton");
 
 tableButton.addEventListener("click", () => {
 
-    const table = document.createElement("table");
+    const wrapper = document.createElement("div");
 
+    const before = document.createElement("div");
+    before.innerHTML = "<br>";
+
+    const table = document.createElement("table");
     table.className = "editor-table";
 
     for(let r = 0; r < 2; r++){
@@ -1709,8 +1744,22 @@ tableButton.addEventListener("click", () => {
         table.appendChild(row);
     }
 
-    editor.appendChild(table);
+    const after = document.createElement("div");
+    after.innerHTML = "<br>";
 
+    wrapper.appendChild(before);
+    wrapper.appendChild(table);
+    wrapper.appendChild(after);
+
+    insertAtCursor(wrapper);
+
+    const range = document.createRange();
+    range.selectNodeContents(after);
+    range.collapse(true);
+
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
 });
 
 
@@ -1983,18 +2032,39 @@ const mindMapButton = document.getElementById("mindMapButton");
 
 mindMapButton.addEventListener("click", () => {
 
-    editor.insertAdjacentHTML(
-        "beforeend",
-        '<div class="mind-box">' +
-            '<div class="mind-box-root" contenteditable="true"></div>' +
-            '<div class="mind-box-branches">' +
-                '<div class="mind-box-branch" contenteditable="true"></div>' +
-                '<div class="mind-box-branch" contenteditable="true"></div>' +
-                '<div class="mind-box-branch" contenteditable="true"></div>' +
-                '<div class="mind-box-branch" contenteditable="true"></div>' +
-            '</div>' +
-        '</div>'
-    );
+    const wrapper = document.createElement("div");
+
+    const before = document.createElement("div");
+    before.innerHTML = "<br>";
+
+    const mindBox = document.createElement("div");
+    mindBox.className = "mind-box";
+
+    mindBox.innerHTML =
+        '<div class="mind-box-root" contenteditable="true"></div>' +
+        '<div class="mind-box-branches">' +
+            '<div class="mind-box-branch" contenteditable="true"></div>' +
+            '<div class="mind-box-branch" contenteditable="true"></div>' +
+            '<div class="mind-box-branch" contenteditable="true"></div>' +
+            '<div class="mind-box-branch" contenteditable="true"></div>' +
+        '</div>';
+
+    const after = document.createElement("div");
+    after.innerHTML = "<br>";
+
+    wrapper.appendChild(before);
+    wrapper.appendChild(mindBox);
+    wrapper.appendChild(after);
+
+    insertAtCursor(wrapper);
+
+    const range = document.createRange();
+    range.selectNodeContents(after);
+    range.collapse(true);
+
+    const selection = window.getSelection();
+    selection.removeAllRanges();
+    selection.addRange(range);
 });
 
 const undoButton = document.getElementById("undoButton");
