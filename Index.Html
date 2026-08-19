@@ -2178,7 +2178,7 @@ listBar
 
 
 listButton.addEventListener(
-    "click",
+    "pointerdown",
     () => {
 
         toggleSubToolbar(
@@ -2198,7 +2198,7 @@ alignmentBar
     .forEach(button => {
 
         button.addEventListener(
-            "click",
+                "pointerdown",
             () => {
 
                 editor.focus();
@@ -2758,7 +2758,7 @@ colorDone.addEventListener(
 
 
 closeColorOverlay.addEventListener(
-    "click",
+    "pointerdown",
     () => {
 
         colorOverlay.classList.remove(
