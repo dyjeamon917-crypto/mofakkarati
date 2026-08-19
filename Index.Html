@@ -2321,7 +2321,9 @@ editButton.addEventListener("click", () => {
    editor.innerHTML = noteContent.innerHTML.replace(/^(<div><br><\/div>|<br>)+|(<div><br><\/div>|<br>)+$/g, "");
 
 editor
-    .querySelectorAll(".mind-box-root, .mind-box-branch")
+    .querySelectorAll(
+        ".mind-box-root, .mind-box-branch, .editor-table td, .editor-table th"
+    )
     .forEach(element => {
         element.contentEditable = "true";
     });
