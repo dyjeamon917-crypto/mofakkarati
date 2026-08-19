@@ -2091,7 +2091,7 @@ deleteTableRowButton.addEventListener("click", () => {
 
 editor.addEventListener("keydown", (event) => {
 
-    if(event.key !== "Enter"){
+    if(event.key !== "Backspace"){
         return;
     }
 
@@ -2106,28 +2106,89 @@ editor.addEventListener("keydown", (event) => {
             ? selection.anchorNode
             : selection.anchorNode.parentElement;
 
-    /* السماح للقوائم المنقطة والمرقمة بالعمل طبيعيًا */
-    const listItem =
-        element.closest("li");
+    const tableCell =
+        element.closest(".editor-table td, .editor-table th");
 
-    if(listItem){
+    /* =========================================
+       داخل الجدول
+    ========================================= */
+
+    if(tableCell){
+
+        const row = tableCell.closest("tr");
+        const table = tableCell.closest(".editor-table");
+
+        if(!row || !table){
+            return;
+        }
+
+        /* هل الصف كله فارغ؟ */
+        const rowIsEmpty = Array.from(row.cells).every(cell => {
+
+            return cell.textContent.trim() === "";
+
+        });
+
+        /* إذا كان الصف فارغًا نحذفه */
+        if(rowIsEmpty){
+
+            event.preventDefault();
+
+            const rowIndex = row.rowIndex;
+
+            /* حذف الصف */
+            row.remove();
+
+            /* لو بقيت صفوف، انقلي المؤشر إليها */
+            if(table.rows.length > 0){
+
+                const targetRow =
+                    table.rows[
+                        Math.min(
+                            rowIndex,
+                            table.rows.length - 1
+                        )
+                    ];
+
+                if(targetRow && targetRow.cells.length){
+
+                    targetRow.cells[0].focus();
+
+                }
+
+            }
+
+            return;
+        }
+
+        /* الصف فيه محتوى → Backspace يعمل طبيعيًا */
         return;
     }
 
-    const mindElement =
-        element.closest(
-            ".mind-box-root, .mind-box-branch"
-        );
+    /* =========================================
+       خارج الجدول
+    ========================================= */
 
-    if(!mindElement){
+    const line = element.closest(".table-text-line");
+
+    if(!line){
         return;
     }
 
-    event.preventDefault();
+    const previous = line.previousElementSibling;
 
-    document.execCommand(
-        "insertLineBreak"
-    );
+    if(
+        previous &&
+        previous.classList.contains("editor-table") &&
+        line.textContent.trim() === ""
+    ){
+
+        event.preventDefault();
+
+        ensureTableAfterLine(previous);
+
+    }
+
 });
 
 const mindMapButton = document.getElementById("mindMapButton");
