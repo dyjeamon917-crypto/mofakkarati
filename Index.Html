@@ -1902,51 +1902,81 @@ function toggleFormat(command, format){
 
 
 /* =====================================================
-   BOLD
+   BOLD / ITALIC / UNDERLINE
 ===================================================== */
+
+function applyFormat(command){
+
+    restoreSelection();
+
+    const selection = getSelection();
+
+    if(
+        !selection ||
+        !selection.rangeCount
+    ){
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    if(
+        !editor.contains(
+            range.commonAncestorContainer
+        )
+    ){
+        return;
+    }
+
+    document.execCommand(
+        command,
+        false,
+        null
+    );
+
+    saveSelection();
+
+    updateFormatButtons();
+}
+
+
+/* BOLD */
 
 boldButton.addEventListener(
-    "click",
-    () => {
+    "mousedown",
+    event => {
 
-        toggleFormat(
-            "bold",
-            "bold"
-        );
+        event.preventDefault();
+
+        applyFormat("bold");
 
     }
 );
 
 
-/* =====================================================
-   ITALIC
-===================================================== */
+/* ITALIC */
 
 italicButton.addEventListener(
-    "click",
-    () => {
+    "mousedown",
+    event => {
 
-        toggleFormat(
-            "italic",
-            "italic"
-        );
+        event.preventDefault();
+
+        applyFormat("italic");
 
     }
 );
 
 
-/* =====================================================
-   UNDERLINE
-===================================================== */
+/* UNDERLINE */
 
 underlineButton.addEventListener(
-    "click",
-    () => {
+    "mousedown",
+    event => {
 
-        toggleFormat(
-            "underline",
-            "underline"
-        );
+        event.preventDefault();
+
+        applyFormat("underline");
 
     }
 );
