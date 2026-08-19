@@ -2298,6 +2298,84 @@ document.getElementById("searchDone").addEventListener("click", () => {
 
       function cleanTextSpans(){
 
+    function normalizeStyle(element){
+
+        const styles = {};
+
+        Array.from(element.style).forEach(property => {
+
+            styles[property] =
+                element.style.getPropertyValue(property);
+
+        });
+
+        element.removeAttribute("style");
+
+        Object.entries(styles).forEach(([property, value]) => {
+
+            element.style.setProperty(
+                property,
+                value
+            );
+
+        });
+
+        if(!element.getAttribute("style")){
+            element.removeAttribute("style");
+        }
+    }
+
+
+    function mergeSpanIntoParent(span){
+
+        const parent = span.parentElement;
+
+        if(!parent || parent.tagName !== "SPAN"){
+            return false;
+        }
+
+        const parentStyles = {};
+
+        Array.from(parent.style).forEach(property => {
+
+            parentStyles[property] =
+                parent.style.getPropertyValue(property);
+
+        });
+
+        Array.from(span.style).forEach(property => {
+
+            parentStyles[property] =
+                span.style.getPropertyValue(property);
+
+        });
+
+        parent.removeAttribute("style");
+
+        Object.entries(parentStyles).forEach(([property, value]) => {
+
+            parent.style.setProperty(
+                property,
+                value
+            );
+
+        });
+
+        while(span.firstChild){
+
+            parent.insertBefore(
+                span.firstChild,
+                span
+            );
+
+        }
+
+        span.remove();
+
+        return true;
+    }
+
+
     let changed = true;
 
     while(changed){
@@ -2306,58 +2384,41 @@ document.getElementById("searchDone").addEventListener("click", () => {
 
         const spans = Array.from(
             editor.querySelectorAll("span")
-        );
+        ).reverse();
 
-        spans.reverse().forEach(span => {
+
+        spans.forEach(span => {
+
+            normalizeStyle(span);
+
+
+            /* حذف الـ span الفارغ */
 
             if(
                 span.textContent === "" &&
                 !span.querySelector("br")
             ){
+
                 span.remove();
+
                 changed = true;
+
                 return;
             }
 
-            const parent = span.parentElement;
 
-            if(
-                parent &&
-                parent.tagName === "SPAN"
-            ){
+            /* دمج الـ span المتداخل */
 
-                const parentStyle =
-                    parent.getAttribute("style") || "";
-
-                const spanStyle =
-                    span.getAttribute("style") || "";
-
-                if(spanStyle){
-
-                    parent.setAttribute(
-                        "style",
-                        parentStyle +
-                        (parentStyle ? ";" : "") +
-                        spanStyle
-                    );
-                }
-
-                while(span.firstChild){
-
-                    parent.insertBefore(
-                        span.firstChild,
-                        span
-                    );
-                }
-
-                span.remove();
+            if(mergeSpanIntoParent(span)){
 
                 changed = true;
+
             }
 
         });
 
     }
+
 
     changed = true;
 
@@ -2369,23 +2430,41 @@ document.getElementById("searchDone").addEventListener("click", () => {
             editor.querySelectorAll("span")
         );
 
+
         spans.forEach(span => {
 
             const next = span.nextSibling;
 
             if(
-                next &&
-                next.nodeType === 1 &&
-                next.tagName === "SPAN" &&
-                (span.getAttribute("style") || "") ===
-                (next.getAttribute("style") || "")
+                !next ||
+                next.nodeType !== 1 ||
+                next.tagName !== "SPAN"
             ){
+                return;
+            }
+
+
+            normalizeStyle(span);
+            normalizeStyle(next);
+
+
+            const spanStyle =
+                span.getAttribute("style") || "";
+
+            const nextStyle =
+                next.getAttribute("style") || "";
+
+
+            /* دمج الـ spans المتجاورة إذا كان تنسيقها متطابقًا */
+
+            if(spanStyle === nextStyle){
 
                 while(next.firstChild){
 
                     span.appendChild(
                         next.firstChild
                     );
+
                 }
 
                 next.remove();
@@ -2396,6 +2475,45 @@ document.getElementById("searchDone").addEventListener("click", () => {
         });
 
     }
+
+
+    /* حذف أي span أصبح بلا محتوى أو بلا تنسيق */
+
+    Array.from(
+        editor.querySelectorAll("span")
+    ).reverse().forEach(span => {
+
+        if(
+            span.textContent === "" &&
+            !span.querySelector("br")
+        ){
+
+            span.remove();
+
+            return;
+        }
+
+
+        if(
+            !span.getAttribute("style") &&
+            !span.attributes.length
+        ){
+
+            const parent = span.parentNode;
+
+            while(span.firstChild){
+
+                parent.insertBefore(
+                    span.firstChild,
+                    span
+                );
+
+            }
+
+            span.remove();
+        }
+
+    });
 
 }
 
