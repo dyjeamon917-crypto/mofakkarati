@@ -1679,85 +1679,84 @@ document.getElementById("whiteText").addEventListener("click", () => {
 
     const selection = window.getSelection();
 
+    /*
+       الحالة الأولى:
+       يوجد نص محدد → إزالة اللون القديم فقط
+       بدون حفظ اللون الأبيض في HTML
+    */
     if(
-        !selection.rangeCount ||
-        selection.getRangeAt(0).collapsed
+        selection.rangeCount &&
+        !selection.getRangeAt(0).collapsed
     ){
 
-        selectedColor = null;
-        colorActive = false;
+        const range = selection.getRangeAt(0);
 
-        return;
-    }
+        const elements = [];
 
-    const range = selection.getRangeAt(0);
+        const walker = document.createTreeWalker(
+            editor,
+            NodeFilter.SHOW_ELEMENT
+        );
 
-    const elements = [];
+        while(walker.nextNode()){
 
-    const walker = document.createTreeWalker(
-        editor,
-        NodeFilter.SHOW_ELEMENT
-    );
+            const element = walker.currentNode;
 
-    while(walker.nextNode()){
-
-        const element = walker.currentNode;
-
-        if(range.intersectsNode(element)){
-
-            elements.push(element);
-
-        }
-    }
-
-    elements.forEach(element => {
-
-        /* إزالة لون CSS فقط */
-        if(element.style.color){
-
-            element.style.removeProperty("color");
-
+            if(range.intersectsNode(element)){
+                elements.push(element);
+            }
         }
 
-        /* إزالة لون عنصر FONT القديم */
-        if(
-            element.tagName === "FONT" &&
-            element.hasAttribute("color")
-        ){
+        elements.forEach(element => {
 
-            element.removeAttribute("color");
-
-        }
-
-    });
-
-    /* تنظيف الـ spans التي لم يعد لها أي وظيفة */
-    Array.from(
-        editor.querySelectorAll("span")
-    ).forEach(span => {
-
-        const hasAttributes =
-            span.attributes.length > 0;
-
-        if(!hasAttributes){
-
-            while(span.firstChild){
-
-                span.parentNode.insertBefore(
-                    span.firstChild,
-                    span
-                );
-
+            /* إزالة لون CSS */
+            if(element.style.color){
+                element.style.removeProperty("color");
             }
 
-            span.remove();
-        }
+            /* إزالة لون FONT القديم */
+            if(
+                element.tagName === "FONT" &&
+                element.hasAttribute("color")
+            ){
+                element.removeAttribute("color");
+            }
 
-    });
+        });
 
-    /* رجوع الكتابة الجديدة للوضع الأصلي */
+        /* حذف الـspan الذي أصبح بلا وظيفة */
+        Array.from(
+            editor.querySelectorAll("span")
+        ).forEach(span => {
+
+            if(span.attributes.length === 0){
+
+                while(span.firstChild){
+
+                    span.parentNode.insertBefore(
+                        span.firstChild,
+                        span
+                    );
+
+                }
+
+                span.remove();
+            }
+
+        });
+
+    }
+
+    /*
+       الحالة الثانية:
+       لا يوجد تحديد → إيقاف اللون الحالي
+       والكتابة الجديدة ترجع للون الأصلي
+    */
+
     selectedColor = null;
     colorActive = false;
+
+    editor.focus();
 
 });
 
