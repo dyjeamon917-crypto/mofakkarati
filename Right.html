@@ -1264,6 +1264,15 @@ editor.addEventListener("input", saveSelection);
     button.addEventListener("pointerdown", () => {
         saveSelection();
     });
+            
+});
+      document.querySelectorAll(
+    ".sub-toolbar button, #colorOverlay button"
+).forEach(button => {
+
+    button.addEventListener("pointerdown", () => {
+        saveSelection();
+    });
 
 });
 
