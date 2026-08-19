@@ -2417,39 +2417,23 @@ sendButton.addEventListener("click", () => {
 
     if(!content){
         return;
-                          }
+    }
 
-      cleanTextSpans();
+    if(selectedNote){
 
-    const savedContent = editor.cloneNode(true);
+        const noteContent =
+            selectedNote.querySelector(".note-content");
 
-    savedContent
-        .querySelectorAll('[contenteditable="true"]')
-        .forEach(element => {
-            element.removeAttribute("contenteditable");
-        });
+        if(noteContent){
+            noteContent.innerHTML = content;
+        }
 
-    const content = savedContent.innerHTML.trim();
+        selectedNote = null;
+        editor.innerHTML = "";
+        editor.focus();
 
-    if(!content){
         return;
     }
-
-if(selectedNote){
-
-    const noteContent =
-        selectedNote.querySelector(".note-content");
-
-    if(noteContent){
-        noteContent.innerHTML = content;
-    }
-
-    selectedNote = null;
-    editor.innerHTML = "";
-    editor.focus();
-
-    return;
-}
 
     const note = document.createElement("div");
     note.className = "note";
