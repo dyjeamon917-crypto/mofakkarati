@@ -1524,7 +1524,17 @@ function clearSavedSelection(){
 
 function updateFormatButtons(){
 
-    editor.focus();
+    const selection = getSelection();
+
+    if(
+        !selection ||
+        !selection.rangeCount ||
+        !editor.contains(
+            selection.getRangeAt(0).commonAncestorContainer
+        )
+    ){
+        return;
+    }
 
     boldButton.classList.toggle(
         "active",
