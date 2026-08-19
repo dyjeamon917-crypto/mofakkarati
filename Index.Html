@@ -1914,7 +1914,7 @@ function removeFormatFromFragment(
 
 function toggleFormat(command, button){
 
-    restoreEditorSelection();
+    restoreSelection();
 
     document.execCommand(
         command,
@@ -2780,7 +2780,7 @@ function insertAtCursor(element){
     /*
      * نرجع المؤشر للمكان المحفوظ أولًا
      */
-    restoreEditorSelection();
+    restoreSelection();
 
     let selection =
         getSelection();
@@ -2972,7 +2972,7 @@ tableButton.addEventListener(
 
         event.preventDefault();
 
-        restoreEditorSelection();
+        restoreSelection();
 
         const wrapper =
             document.createElement(
@@ -3115,7 +3115,7 @@ addMindLeftButton.addEventListener(
 
         event.preventDefault();
 
-        restoreEditorSelection();
+        restoreSelection();
 
         const tableCell = getCurrentTableCell();
 
@@ -3221,7 +3221,7 @@ deleteTableColumnButton.addEventListener(
 
         event.preventDefault();
 
-        restoreEditorSelection();
+        restoreSelection();
 
         const tableCell =
             getCurrentTableCell();
@@ -3271,7 +3271,7 @@ addTableRowButton.addEventListener(
 
         event.preventDefault();
 
-        restoreEditorSelection();
+        restoreSelection();
 
         const tableCell =
             getCurrentTableCell();
@@ -3329,7 +3329,7 @@ deleteTableRowButton.addEventListener(
 
         event.preventDefault();
 
-        restoreEditorSelection();
+        restoreSelection();
 
         const tableCell =
             getCurrentTableCell();
@@ -3546,7 +3546,7 @@ mindMapButton.addEventListener(
 
         event.preventDefault();
 
-        restoreEditorSelection();
+        restoreSelection();
 
         const wrapper =
             document.createElement(
