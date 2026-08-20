@@ -1583,40 +1583,55 @@ fontSizes.forEach(size => {
     button.textContent = size;
 
     button.addEventListener("mousedown", (event) => {
-    event.preventDefault();
-});
 
-button.addEventListener("click", () => {
+        event.preventDefault();
 
-    const selection = window.getSelection();
+        const selection = window.getSelection();
 
-    if(!selection || !selection.rangeCount){
-        return;
-    }
+        if(
+            !selection ||
+            !selection.rangeCount
+        ){
+            return;
+        }
 
-    const range = selection.getRangeAt(0);
+        const range =
+            selection.getRangeAt(0);
 
-    if(range.collapsed){
-        return;
-    }
+        if(
+            !editor.contains(
+                range.commonAncestorContainer
+            )
+        ){
+            return;
+        }
 
-    const span = document.createElement("span");
+        if(range.collapsed){
+            return;
+        }
 
-    span.style.fontSize = size + "px";
+        const span =
+            document.createElement("span");
 
-    span.appendChild(range.extractContents());
+        span.style.fontSize =
+            size + "px";
 
-    range.insertNode(span);
+        span.appendChild(
+            range.extractContents()
+        );
 
-    selection.removeAllRanges();
+        range.insertNode(span);
 
-    const newRange = document.createRange();
+        selection.removeAllRanges();
 
-    newRange.selectNodeContents(span);
+        const newRange =
+            document.createRange();
 
-    selection.addRange(newRange);
+        newRange.selectNodeContents(span);
 
-});
+        selection.addRange(newRange);
+
+    });
 
     fontSizeBar.appendChild(button);
 });
