@@ -1362,41 +1362,41 @@ function updateFormatButtons(){
     );
 }
 
-boldButton.addEventListener("mousedown", (event) => {
-    event.preventDefault();
-});
+function applyTextFormat(command){
+
+    restoreSelection();
+
+    editor.focus();
+
+    document.execCommand(
+        command,
+        false,
+        null
+    );
+
+    saveSelection();
+
+    updateFormatButtons();
+}
+
 
 boldButton.addEventListener("click", () => {
 
-    document.execCommand("bold");
-
-    updateFormatButtons();
+    applyTextFormat("bold");
 
 });
 
-
-italicButton.addEventListener("mousedown", (event) => {
-    event.preventDefault();
-});
 
 italicButton.addEventListener("click", () => {
 
-    document.execCommand("italic");
-
-    updateFormatButtons();
+    applyTextFormat("italic");
 
 });
 
-
-underlineButton.addEventListener("mousedown", (event) => {
-    event.preventDefault();
-});
 
 underlineButton.addEventListener("click", () => {
 
-    document.execCommand("underline");
-
-    updateFormatButtons();
+    applyTextFormat("underline");
 
 });
 
