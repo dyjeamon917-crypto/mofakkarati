@@ -1127,6 +1127,7 @@ const pendingFormats = {
     underline:false
 };
 
+      let selectedFontSize = null;
 
 /* =====================================================
    ألوان الكتابة الجديدة
@@ -1222,6 +1223,7 @@ editor.addEventListener(
             !pendingFormats.bold &&
             !pendingFormats.italic &&
             !pendingFormats.underline &&
+            !selectedFontSize &&
             !colorActive &&
             !highlightActive
         ){
@@ -1279,7 +1281,15 @@ editor.addEventListener(
             span.style.textDecoration = "underline";
         }
 
+/* =========================
+   FONT SIZE
+========================= */
 
+if(selectedFontSize){
+    span.style.fontSize =
+        selectedFontSize + "px";
+}
+          
         /* =========================
            لون الخط
         ========================= */
@@ -1566,7 +1576,6 @@ function toggleSubToolbar(bar){
             : "flex";
 }
 
-
 /* =====================================================
    FONT SIZE
 ===================================================== */
@@ -1580,6 +1589,7 @@ const fontSizeBar =
 const fontSizes =
     [12,14,16,18,20,24,30];
 
+
 fontSizes.forEach(
     (size) => {
 
@@ -1589,11 +1599,19 @@ fontSizes.forEach(
         button.type = "button";
         button.textContent = size;
 
+
         button.addEventListener(
             "mousedown",
             (event) => {
 
                 event.preventDefault();
+            }
+        );
+
+
+        button.addEventListener(
+            "click",
+            () => {
 
                 const selection =
                     window.getSelection();
@@ -1616,43 +1634,62 @@ fontSizes.forEach(
                     return;
                 }
 
-                if(range.collapsed){
+
+                /* =========================
+                   لو فيه نص متحدد
+                ========================= */
+
+                if(!range.collapsed){
+
+                    const span =
+                        document.createElement("span");
+
+                    span.style.fontSize =
+                        size + "px";
+
+                    span.appendChild(
+                        range.extractContents()
+                    );
+
+                    range.insertNode(span);
+
+                    const newRange =
+                        document.createRange();
+
+                    newRange.selectNodeContents(span);
+
+                    selection.removeAllRanges();
+                    selection.addRange(newRange);
+
                     return;
                 }
 
-                const span =
-                    document.createElement("span");
 
-                span.style.fontSize =
-                    size + "px";
+                /* =========================
+                   لو فيه مؤشر فقط
+                   الحجم يبدأ من مكان المؤشر
+                ========================= */
 
-                span.appendChild(
-                    range.extractContents()
-                );
+                selectedFontSize = size;
 
-                range.insertNode(span);
-
-                selection.removeAllRanges();
-
-                const newRange =
-                    document.createRange();
-
-                newRange.selectNodeContents(span);
-
-                selection.addRange(newRange);
+                editor.focus();
             }
         );
+
 
         fontSizeBar.appendChild(button);
     }
 );
 
+
 sizeButton.addEventListener(
     "mousedown",
     (event) => {
+
         event.preventDefault();
     }
 );
+
 
 sizeButton.addEventListener(
     "click",
