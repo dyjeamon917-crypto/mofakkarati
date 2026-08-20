@@ -2774,7 +2774,8 @@ tableButton.addEventListener(
 
 
 /* =====================================================
-   TABLE BACKSPACE / DELETE
+   TABLE BACKSPACE
+   حذف الخلية الفارغة بزر Backspace
 ===================================================== */
 
 editor.addEventListener(
@@ -2782,8 +2783,7 @@ editor.addEventListener(
     (event) => {
 
         if(
-            event.key !== "Backspace" &&
-            event.key !== "Delete"
+            event.key !== "Backspace"
         ){
             return;
         }
@@ -2802,6 +2802,176 @@ editor.addEventListener(
             selection.anchorNode.nodeType === 1
                 ? selection.anchorNode
                 : selection.anchorNode.parentElement;
+
+        if(!element){
+            return;
+        }
+
+
+        /* =========================
+           التحقق من الخلية
+        ========================= */
+
+        const tableCell =
+            element.closest(
+                ".editor-table td, .editor-table th"
+            );
+
+        if(tableCell){
+
+            /*
+               لا نحذف الخلية إلا إذا كانت
+               فارغة تمامًا والمؤشر في داخلها.
+            */
+
+            const isEmpty =
+                tableCell.textContent.trim() === "" &&
+                !tableCell.querySelector(
+                    "img, table, .mind-box"
+                );
+
+            if(!isEmpty){
+                return;
+            }
+
+
+            /*
+               التأكد أن المؤشر في بداية الخلية
+            */
+
+            if(!selection.isCollapsed){
+                return;
+            }
+
+            const range =
+                selection.getRangeAt(0);
+
+            if(
+                range.startContainer !== tableCell &&
+                !tableCell.contains(
+                    range.startContainer
+                )
+            ){
+                return;
+            }
+
+
+            event.preventDefault();
+
+
+            const row =
+                tableCell.closest("tr");
+
+            const table =
+                tableCell.closest(
+                    ".editor-table"
+                );
+
+            if(
+                !row ||
+                !table
+            ){
+                return;
+            }
+
+
+            /* =========================
+               حذف الخلية
+            ========================= */
+
+            tableCell.remove();
+
+
+            /* =========================
+               لو لم يعد هناك خلايا
+               نحذف الصف
+            ========================= */
+
+            if(
+                row.cells.length === 0
+            ){
+
+                row.remove();
+            }
+
+
+            /* =========================
+               لو لم يعد هناك صفوف
+               نحذف الجدول
+            ========================= */
+
+            if(
+                table.rows.length === 0
+            ){
+
+                const wrapper =
+                    table.closest(
+                        ".table-wrapper"
+                    );
+
+                if(wrapper){
+
+                    wrapper.remove();
+
+                }else{
+
+                    table.remove();
+                }
+
+                editor.focus();
+
+                return;
+            }
+
+
+            /* =========================
+               وضع المؤشر في خلية مناسبة
+            ========================= */
+
+            let targetCell =
+                row.cells[
+                    Math.min(
+                        tableCell.cellIndex,
+                        row.cells.length - 1
+                    )
+                ];
+
+            if(!targetCell){
+
+                targetCell =
+                    row.cells[
+                        row.cells.length - 1
+                    ];
+            }
+
+            if(targetCell){
+
+                targetCell.focus();
+
+                const newRange =
+                    document.createRange();
+
+                newRange.selectNodeContents(
+                    targetCell
+                );
+
+                newRange.collapse(true);
+
+                selection.removeAllRanges();
+
+                selection.addRange(
+                    newRange
+                );
+            }
+
+            return;
+        }
+
+
+        /* =========================
+           السلوك القديم للسطر
+           بعد الجدول
+        ========================= */
 
         const line =
             element.closest(
