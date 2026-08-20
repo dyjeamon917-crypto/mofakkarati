@@ -1344,61 +1344,159 @@ const boldButton = document.getElementById("boldButton");
 const italicButton = document.getElementById("italicButton");
 const underlineButton = document.getElementById("underlineButton");
 
+
+/* حفظ التنسيقات المختارة قبل الكتابة */
+const pendingFormats = {
+    bold: false,
+    italic: false,
+    underline: false
+};
+
+
 function updateFormatButtons(){
 
-    boldButton.classList.toggle(
-        "active",
-        document.queryCommandState("bold")
-    );
+    const selection = window.getSelection();
 
-    italicButton.classList.toggle(
-        "active",
-        document.queryCommandState("italic")
-    );
+    if(
+        !selection ||
+        !selection.rangeCount
+    ){
+        return;
+    }
 
-    underlineButton.classList.toggle(
-        "active",
-        document.queryCommandState("underline")
-    );
+    const range = selection.getRangeAt(0);
+
+    if(
+        !editor.contains(range.startContainer)
+    ){
+        return;
+    }
+
+    /* عند وجود تحديد نقرأ التنسيق الحقيقي للنص */
+    if(!range.collapsed){
+
+        boldButton.classList.toggle(
+            "active",
+            document.queryCommandState("bold")
+        );
+
+        italicButton.classList.toggle(
+            "active",
+            document.queryCommandState("italic")
+        );
+
+        underlineButton.classList.toggle(
+            "active",
+            document.queryCommandState("underline")
+        );
+
+    }
+
 }
 
-function applyTextFormat(command){
 
+function togglePendingFormat(command, button){
+
+    /* عكس حالة هذا التنسيق فقط */
+    pendingFormats[command] =
+        !pendingFormats[command];
+
+    /* إضاءة الزر أو إطفاؤه */
+    button.classList.toggle(
+        "active",
+        pendingFormats[command]
+    );
+
+    /* إعادة المؤشر لمكانه */
     restoreSelection();
 
     editor.focus();
 
-    document.execCommand(
-        command,
-        false,
-        null
-    );
-
     saveSelection();
-
-    updateFormatButtons();
 }
 
 
+/* كل زر مستقل */
 boldButton.addEventListener("click", () => {
 
-    applyTextFormat("bold");
+    togglePendingFormat(
+        "bold",
+        boldButton
+    );
 
 });
 
 
 italicButton.addEventListener("click", () => {
 
-    applyTextFormat("italic");
+    togglePendingFormat(
+        "italic",
+        italicButton
+    );
 
 });
 
 
 underlineButton.addEventListener("click", () => {
 
-    applyTextFormat("underline");
+    togglePendingFormat(
+        "underline",
+        underlineButton
+    );
 
 });
+
+
+/* تطبيق كل التنسيقات المختارة معًا قبل أول حرف */
+editor.addEventListener("beforeinput", (event) => {
+
+    if(
+        event.inputType !== "insertText" &&
+        event.inputType !== "insertCompositionText"
+    ){
+        return;
+    }
+
+    if(
+        !pendingFormats.bold &&
+        !pendingFormats.italic &&
+        !pendingFormats.underline
+    ){
+        return;
+    }
+
+    if(pendingFormats.bold){
+
+        document.execCommand(
+            "bold",
+            false,
+            null
+        );
+
+    }
+
+    if(pendingFormats.italic){
+
+        document.execCommand(
+            "italic",
+            false,
+            null
+        );
+
+    }
+
+    if(pendingFormats.underline){
+
+        document.execCommand(
+            "underline",
+            false,
+            null
+        );
+
+    }
+
+});
+
 
 editor.addEventListener("keyup", updateFormatButtons);
 editor.addEventListener("mouseup", updateFormatButtons);
