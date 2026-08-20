@@ -1719,6 +1719,100 @@ alignmentButton.addEventListener("click", () => {
 });
 
 /* =====================================================
+   تطبيق لون الخط من مكان المؤشر
+===================================================== */
+
+function applyTextColor(){
+
+    if(!window._colorRange){
+        return;
+    }
+
+    const selection = window.getSelection();
+
+    selection.removeAllRanges();
+
+    const range =
+        window._colorRange.cloneRange();
+
+    selection.addRange(range);
+
+    document.execCommand(
+        "foreColor",
+        false,
+        selectedColor
+    );
+
+    /* حفظ المكان الجديد */
+    window._colorRange =
+        selection.getRangeAt(0).cloneRange();
+}
+
+
+/* =====================================================
+   تطبيق التمييز من مكان المؤشر
+===================================================== */
+
+function applyTextHighlight(){
+
+    if(!window._highlightRange){
+        return;
+    }
+
+    const selection = window.getSelection();
+
+    selection.removeAllRanges();
+
+    const range =
+        window._highlightRange.cloneRange();
+
+    selection.addRange(range);
+
+    const opacity =
+        Number(opacityRange.value) / 100;
+
+    let color =
+        selectedColor;
+
+    if(color.startsWith("hsl")){
+
+        color =
+            color
+                .replace("hsl(", "hsla(")
+                .replace(")", `, ${opacity})`);
+    }
+
+    else if(color.startsWith("#")){
+
+        const hex =
+            color.replace("#", "");
+
+        const r =
+            parseInt(hex.substring(0, 2), 16);
+
+        const g =
+            parseInt(hex.substring(2, 4), 16);
+
+        const b =
+            parseInt(hex.substring(4, 6), 16);
+
+        color =
+            `rgba(${r}, ${g}, ${b}, ${opacity})`;
+    }
+
+    document.execCommand(
+        "hiliteColor",
+        false,
+        color
+    );
+
+    /* حفظ المكان الجديد */
+    window._highlightRange =
+        selection.getRangeAt(0).cloneRange();
+      }
+
+      
+/* =====================================================
    COLOR / HIGHLIGHT
 ===================================================== */
 
