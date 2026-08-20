@@ -1325,16 +1325,19 @@ editor.addEventListener("focus", saveSelection);
 });
       
       document.querySelectorAll(
-    ".tool, .sub-toolbar button, #colorOverlay button"
+    "#boldButton, #italicButton, #underlineButton, " +
+    "#sizeButton, #listButton, #alignmentButton, " +
+    "#colorButton, #highlightButton, " +
+    "#tableButton, #mindMapButton, " +
+    "#addMindLeftButton, #deleteTableColumnButton, " +
+    "#addTableRowButton, #deleteTableRowButton, " +
+    ".sub-toolbar button"
 ).forEach(button => {
 
     button.addEventListener("pointerdown", (event) => {
 
         saveSelection();
-
         event.preventDefault();
-
-        restoreSelection();
 
     });
 
