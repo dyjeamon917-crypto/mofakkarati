@@ -1325,187 +1325,152 @@ function updateFormatButtons(){
     );
 }
 
+/* =====================================================
+   BOLD
+===================================================== */
 
-function toggleFormat(command, button){
+boldButton.addEventListener("mousedown", (event) => {
+    event.preventDefault();
+});
+
+boldButton.addEventListener("click", () => {
+
+    editor.focus();
 
     const selection = window.getSelection();
 
-    if(
-        !selection ||
-        !selection.rangeCount
-    ){
+    if(!selection || !selection.rangeCount){
         return;
     }
 
     const range = selection.getRangeAt(0);
 
-    /* لو فيه نص محدد: طبقي التنسيق عليه فورًا */
+    if(!editor.contains(range.commonAncestorContainer)){
+        return;
+    }
+
     if(!range.collapsed){
 
         document.execCommand(
-            command,
+            "bold",
             false,
             null
         );
 
         updateFormatButtons();
-
         return;
     }
 
-    /* لو مفيش تحديد: جهزي التنسيق للكتابة القادمة */
-    pendingFormats[command] =
-        !pendingFormats[command];
+    pendingFormats.bold =
+        !pendingFormats.bold;
 
-    button.classList.toggle(
+    boldButton.classList.toggle(
         "active",
-        pendingFormats[command]
-    );
-
-    editor.focus();
-
-}
-
-
-boldButton.addEventListener("click", () => {
-
-    toggleFormat(
-        "bold",
-        boldButton
+        pendingFormats.bold
     );
 
 });
 
+
+/* =====================================================
+   ITALIC
+===================================================== */
+
+italicButton.addEventListener("mousedown", (event) => {
+    event.preventDefault();
+});
 
 italicButton.addEventListener("click", () => {
 
-    toggleFormat(
-        "italic",
-        italicButton
+    editor.focus();
+
+    const selection = window.getSelection();
+
+    if(!selection || !selection.rangeCount){
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    if(!editor.contains(range.commonAncestorContainer)){
+        return;
+    }
+
+    if(!range.collapsed){
+
+        document.execCommand(
+            "italic",
+            false,
+            null
+        );
+
+        updateFormatButtons();
+        return;
+    }
+
+    pendingFormats.italic =
+        !pendingFormats.italic;
+
+    italicButton.classList.toggle(
+        "active",
+        pendingFormats.italic
     );
 
 });
 
+
+/* =====================================================
+   UNDERLINE
+===================================================== */
+
+underlineButton.addEventListener("mousedown", (event) => {
+    event.preventDefault();
+});
 
 underlineButton.addEventListener("click", () => {
 
-    toggleFormat(
-        "underline",
-        underlineButton
+    editor.focus();
+
+    const selection = window.getSelection();
+
+    if(!selection || !selection.rangeCount){
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    if(!editor.contains(range.commonAncestorContainer)){
+        return;
+    }
+
+    if(!range.collapsed){
+
+        document.execCommand(
+            "underline",
+            false,
+            null
+        );
+
+        updateFormatButtons();
+        return;
+    }
+
+    pendingFormats.underline =
+        !pendingFormats.underline;
+
+    underlineButton.classList.toggle(
+        "active",
+        pendingFormats.underline
     );
 
 });
 
-
-/* تطبيق التنسيقات المختارة عند بداية الكتابة */
-editor.addEventListener("beforeinput", (event) => {
-
-    if(
-        event.inputType !== "insertText" &&
-        event.inputType !== "insertCompositionText"
-    ){
-        return;
-    }
-
-    if(
-        !pendingFormats.bold &&
-        !pendingFormats.italic &&
-        !pendingFormats.underline
-    ){
-        return;
-    }
-
-    if(pendingFormats.bold){
-
-        if(!document.queryCommandState("bold")){
-
-            document.execCommand(
-                "bold",
-                false,
-                null
-            );
-
-        }
-
-    }
-
-    if(pendingFormats.italic){
-
-        if(!document.queryCommandState("italic")){
-
-            document.execCommand(
-                "italic",
-                false,
-                null
-            );
-
-        }
-
-    }
-
-    if(pendingFormats.underline){
-
-        if(!document.queryCommandState("underline")){
-
-            document.execCommand(
-                "underline",
-                false,
-                null
-            );
-
-        }
-
-    }
-
-});
-
+    
 
 editor.addEventListener("keyup", updateFormatButtons);
 editor.addEventListener("mouseup", updateFormatButtons);
 editor.addEventListener("input", updateFormatButtons);
 editor.addEventListener("click", updateFormatButtons);
-
-function applyActiveColor(){
-
-    if(!colorActive || !selectedColor){
-        return;
-    }
-
-    if(colorMode === "text"){
-
-        document.execCommand(
-            "foreColor",
-            false,
-            selectedColor
-        );
-
-    }else if(colorMode === "highlight"){
-
-        const opacity =
-            Number(opacityRange.value) / 100;
-
-        let color = selectedColor;
-
-        if(color.startsWith("hsl")){
-
-            color = color.replace(
-                "hsl(",
-                "hsla("
-            ).replace(
-                ")",
-                `, ${opacity})`
-            );
-        }
-
-        document.execCommand(
-            "hiliteColor",
-            false,
-            color
-        );
-    }
-}
-
-/* تطبيق اللون أو التمييز عند مكان مؤشر الكتابة بالضبط */
 
 editor.addEventListener("beforeinput", () => {
 
@@ -1765,45 +1730,27 @@ alignmentButton.addEventListener("click", () => {
 
 });
 
-const colorButton = document.getElementById("colorButton");
-const colorOverlay = document.getElementById("colorOverlay");
-const highlightButton = document.getElementById("highlightButton");
+/* =====================================================
+   COLOR / HIGHLIGHT
+===================================================== */
 
-highlightButton.addEventListener("click", () => {
+const colorButton =
+    document.getElementById("colorButton");
 
-    colorMode = "highlight";
+const highlightButton =
+    document.getElementById("highlightButton");
 
-    colorActive = true;
+const colorOverlay =
+    document.getElementById("colorOverlay");
 
-highlightOpacity.style.display = "flex";
+const textColorWheel =
+    document.getElementById("textColorWheel");
 
-removeHighlight.style.display = "block";
-    
-    saveSelection();
+const textColorMarker =
+    document.getElementById("textColorMarker");
 
-    colorOverlay.classList.add("open");
-});
-
-colorButton.addEventListener("click", () => {
-
-    colorMode = "text";
-
-    colorActive = true;
-
-highlightOpacity.style.display = "none";
-
-removeHighlight.style.display = "none";
-    
-    saveSelection();
-
-    colorOverlay.classList.add("open");
-});
-
-
-const textColorWheel = document.getElementById("textColorWheel");
-const textColorMarker = document.getElementById("textColorMarker");
-
-const opacityRange = document.getElementById("opacityRange");
+const opacityRange =
+    document.getElementById("opacityRange");
 
 const highlightOpacity =
     document.getElementById("highlightOpacity");
@@ -1811,27 +1758,139 @@ const highlightOpacity =
 const removeHighlight =
     document.getElementById("removeHighlight");
 
+const blackText =
+    document.getElementById("blackText");
+
+const whiteText =
+    document.getElementById("whiteText");
+
+const colorDone =
+    document.getElementById("colorDone");
+
+const closeColorOverlay =
+    document.getElementById("closeColorOverlay");
+
+
 let colorMode = "text";
 let selectedColor = null;
 let colorActive = false;
 
+
+/* =====================================================
+   فتح اللون
+===================================================== */
+
+colorButton.addEventListener("mousedown", (event) => {
+    event.preventDefault();
+});
+
+colorButton.addEventListener("click", () => {
+
+    const selection = window.getSelection();
+
+    if(
+        !selection ||
+        !selection.rangeCount
+    ){
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    if(
+        !editor.contains(range.commonAncestorContainer)
+    ){
+        return;
+    }
+
+    /* حفظ مكان المؤشر/التحديد داخل نظام اللون نفسه */
+    window._colorRange = range.cloneRange();
+
+    colorMode = "text";
+    colorActive = true;
+
+    highlightOpacity.style.display = "none";
+    removeHighlight.style.display = "none";
+
+    colorOverlay.classList.add("open");
+});
+
+
+/* =====================================================
+   فتح التمييز
+===================================================== */
+
+highlightButton.addEventListener("mousedown", (event) => {
+    event.preventDefault();
+});
+
+highlightButton.addEventListener("click", () => {
+
+    const selection = window.getSelection();
+
+    if(
+        !selection ||
+        !selection.rangeCount
+    ){
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    if(
+        !editor.contains(range.commonAncestorContainer)
+    ){
+        return;
+    }
+
+    /* حفظ مكان المؤشر/التحديد داخل نظام التمييز نفسه */
+    window._highlightRange = range.cloneRange();
+
+    colorMode = "highlight";
+    colorActive = true;
+
+    highlightOpacity.style.display = "flex";
+    removeHighlight.style.display = "block";
+
+    colorOverlay.classList.add("open");
+});
+
+
+/* =====================================================
+   تطبيق اللون من عجلة الألوان
+===================================================== */
+
 textColorWheel.addEventListener("pointerdown", (event) => {
 
-    const rect = textColorWheel.getBoundingClientRect();
+    const rect =
+        textColorWheel.getBoundingClientRect();
 
-    const x = event.clientX - rect.left;
-    const y = event.clientY - rect.top;
+    const x =
+        event.clientX - rect.left;
 
-    const centerX = rect.width / 2;
-    const centerY = rect.height / 2;
+    const y =
+        event.clientY - rect.top;
 
-    const dx = x - centerX;
-    const dy = y - centerY;
+    const centerX =
+        rect.width / 2;
 
-    const distance = Math.sqrt(dx * dx + dy * dy);
-    const radius = Math.min(centerX, centerY);
+    const centerY =
+        rect.height / 2;
 
-    const angle = Math.atan2(dy, dx);
+    const dx =
+        x - centerX;
+
+    const dy =
+        y - centerY;
+
+    const distance =
+        Math.sqrt(dx * dx + dy * dy);
+
+    const radius =
+        Math.min(centerX, centerY);
+
+    const angle =
+        Math.atan2(dy, dx);
 
     const hue =
         ((angle * 180 / Math.PI) + 360 + 90) % 360;
@@ -1840,74 +1899,195 @@ textColorWheel.addEventListener("pointerdown", (event) => {
         Math.min(distance / radius, 1) * 100;
 
     const lightness =
-        100 - Math.min(distance / radius, 1) * 50;
+        100 -
+        Math.min(distance / radius, 1) * 50;
 
-    const color =
+    selectedColor =
         `hsl(${hue}, ${saturation}%, ${lightness}%)`;
 
-    textColorMarker.style.left = x + "px";
-    textColorMarker.style.top = y + "px";
+    textColorMarker.style.left =
+        x + "px";
 
-function applyColor(color){
+    textColorMarker.style.top =
+        y + "px";
 
-selectedColor = color;
 
-restoreSelection();
+    /* =============================================
+       استرجاع التحديد للون فقط
+    ============================================= */
+
+    const selection =
+        window.getSelection();
+
+    selection.removeAllRanges();
+
+    if(
+        colorMode === "text" &&
+        window._colorRange
+    ){
+
+        selection.addRange(
+            window._colorRange.cloneRange()
+        );
+
+    }
+
+    if(
+        colorMode === "highlight" &&
+        window._highlightRange
+    ){
+
+        selection.addRange(
+            window._highlightRange.cloneRange()
+        );
+
+    }
+
+
+    /* =============================================
+       تطبيق لون الخط
+    ============================================= */
 
     if(colorMode === "text"){
 
-    restoreSelection();
+        document.execCommand(
+            "foreColor",
+            false,
+            selectedColor
+        );
+
+        return;
+    }
+
+
+    /* =============================================
+       تطبيق التمييز
+    ============================================= */
+
+    if(colorMode === "highlight"){
+
+        const opacity =
+            Number(opacityRange.value) / 100;
+
+        let color =
+            selectedColor;
+
+        if(color.startsWith("hsl")){
+
+            color =
+                color
+                    .replace(
+                        "hsl(",
+                        "hsla("
+                    )
+                    .replace(
+                        ")",
+                        `, ${opacity})`
+                    );
+
+        }
+
+        document.execCommand(
+            "hiliteColor",
+            false,
+            color
+        );
+
+    }
+
+});
+
+
+/* =====================================================
+   الأسود
+===================================================== */
+
+blackText.addEventListener("mousedown", (event) => {
+    event.preventDefault();
+});
+
+blackText.addEventListener("click", () => {
+
+    const selection =
+        window.getSelection();
+
+    selection.removeAllRanges();
+
+    if(window._colorRange){
+
+        selection.addRange(
+            window._colorRange.cloneRange()
+        );
+
+    }
+
+    selectedColor = "#000000";
 
     document.execCommand(
         "foreColor",
         false,
-        color
+        "#000000"
     );
 
-    selectedColor = color;
-
-    return;
-}
-
-    const opacity =
-        Number(opacityRange.value) / 100;
-
-    if(color.startsWith("#")){
-
-        const hex = color.replace("#", "");
-
-        const r = parseInt(hex.substring(0, 2), 16);
-        const g = parseInt(hex.substring(2, 4), 16);
-        const b = parseInt(hex.substring(4, 6), 16);
-
-        color =
-            `rgba(${r}, ${g}, ${b}, ${opacity})`;
-
-    }else if(color.startsWith("hsl")){
-
-        color = color.replace(
-            "hsl(",
-            "hsla("
-        ).replace(
-            ")",
-            `, ${opacity})`
-        );
-    }
-
-    document.execCommand(
-        "hiliteColor",
-        false,
-        color
-    );
-}
-
-document.getElementById("blackText").addEventListener("click", () => {
-    applyColor("#000000");
 });
 
-document.getElementById("removeHighlight").addEventListener("click", () => {
 
-    restoreSelection();
+/* =====================================================
+   الأبيض
+===================================================== */
+
+whiteText.addEventListener("mousedown", (event) => {
+    event.preventDefault();
+});
+
+whiteText.addEventListener("click", () => {
+
+    const selection =
+        window.getSelection();
+
+    selection.removeAllRanges();
+
+    if(window._colorRange){
+
+        selection.addRange(
+            window._colorRange.cloneRange()
+        );
+
+    }
+
+    selectedColor = "#ffffff";
+
+    document.execCommand(
+        "foreColor",
+        false,
+        "#ffffff"
+    );
+
+});
+
+
+/* =====================================================
+   إزالة التمييز
+===================================================== */
+
+removeHighlight.addEventListener("mousedown", (event) => {
+    event.preventDefault();
+});
+
+removeHighlight.addEventListener("click", () => {
+
+    const selection =
+        window.getSelection();
+
+    selection.removeAllRanges();
+
+    if(window._highlightRange){
+
+        selection.addRange(
+            window._highlightRange.cloneRange()
+        );
+
+    }
 
     document.execCommand(
         "hiliteColor",
@@ -1916,22 +2096,42 @@ document.getElementById("removeHighlight").addEventListener("click", () => {
     );
 
     selectedColor = null;
+
 });
 
-document.getElementById("whiteText").addEventListener("click", () => {
-    applyColor("#ffffff");
+
+/* =====================================================
+   إنهاء اختيار اللون
+===================================================== */
+
+colorDone.addEventListener("mousedown", (event) => {
+    event.preventDefault();
 });
 
-document.getElementById("colorDone").addEventListener("click", () => {
+colorDone.addEventListener("click", () => {
 
     colorOverlay.classList.remove("open");
 
-    if(selectedColor){
-        colorActive = true;
-    }
+    colorActive =
+        selectedColor !== null;
 
-    restoreSelection();
     editor.focus();
+
+});
+
+
+/* =====================================================
+   إغلاق عجلة الألوان
+===================================================== */
+
+closeColorOverlay.addEventListener("mousedown", (event) => {
+    event.preventDefault();
+});
+
+closeColorOverlay.addEventListener("click", () => {
+
+    colorOverlay.classList.remove("open");
+
 });
 
 document.getElementById("closeColorOverlay").addEventListener("click", () => {
