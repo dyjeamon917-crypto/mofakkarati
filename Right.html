@@ -1331,48 +1331,48 @@ function updateFormatButtons(){
 
 editor.addEventListener("beforeinput", (event) => {
 
-    if(event.inputType !== "insertText"){
+    if (event.inputType !== "insertText") {
         return;
     }
 
-    if(
+    if (
         !pendingFormats.bold &&
         !pendingFormats.italic &&
         !pendingFormats.underline
-    ){
+    ) {
         return;
     }
 
     const selection = window.getSelection();
 
-    if(
+    if (
         !selection ||
         !selection.rangeCount
-    ){
+    ) {
         return;
     }
 
     const range = selection.getRangeAt(0);
 
-    if(
-        !editor.contains(range.startContainer)
-    ){
+    if (!editor.contains(range.startContainer)) {
         return;
     }
 
+    /* نمنع إدخال المتصفح للحرف */
     event.preventDefault();
+    event.stopPropagation();
 
     const span = document.createElement("span");
 
-    if(pendingFormats.bold){
+    if (pendingFormats.bold) {
         span.style.fontWeight = "bold";
     }
 
-    if(pendingFormats.italic){
+    if (pendingFormats.italic) {
         span.style.fontStyle = "italic";
     }
 
-    if(pendingFormats.underline){
+    if (pendingFormats.underline) {
         span.style.textDecoration = "underline";
     }
 
@@ -1381,6 +1381,7 @@ editor.addEventListener("beforeinput", (event) => {
     range.deleteContents();
     range.insertNode(span);
 
+    /* وضع المؤشر بعد الحرف مباشرة */
     const newRange = document.createRange();
 
     newRange.setStartAfter(span);
@@ -1390,7 +1391,6 @@ editor.addEventListener("beforeinput", (event) => {
     selection.addRange(newRange);
 
 });
-
       
 /* =====================================================
    BOLD
