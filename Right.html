@@ -1438,54 +1438,6 @@ boldButton.addEventListener("click", () => {
 
 });
 
-      editor.addEventListener("beforeinput", (event) => {
-
-    if(event.inputType !== "insertText"){
-        return;
-    }
-
-    if(!pendingFormats.bold){
-        return;
-    }
-
-    event.preventDefault();
-
-    const selection = window.getSelection();
-
-    if(!selection || !selection.rangeCount){
-        return;
-    }
-
-    const range = selection.getRangeAt(0);
-
-    if(!editor.contains(range.commonAncestorContainer)){
-        return;
-    }
-
-    const text = event.data;
-
-    if(!text){
-        return;
-    }
-
-    const strong = document.createElement("strong");
-
-    strong.textContent = text;
-
-    range.deleteContents();
-    range.insertNode(strong);
-
-    const newRange = document.createRange();
-
-    newRange.setStartAfter(strong);
-    newRange.collapse(true);
-
-    selection.removeAllRanges();
-    selection.addRange(newRange);
-
-});
-
-
 /* =====================================================
    ITALIC
 ===================================================== */
@@ -1529,53 +1481,6 @@ italicButton.addEventListener("click", () => {
         "active",
         pendingFormats.italic
     );
-
-});
-
-      editor.addEventListener("beforeinput", (event) => {
-
-    if(event.inputType !== "insertText"){
-        return;
-    }
-
-    if(!pendingFormats.italic){
-        return;
-    }
-
-    event.preventDefault();
-
-    const selection = window.getSelection();
-
-    if(!selection || !selection.rangeCount){
-        return;
-    }
-
-    const range = selection.getRangeAt(0);
-
-    if(!editor.contains(range.commonAncestorContainer)){
-        return;
-    }
-
-    const text = event.data;
-
-    if(!text){
-        return;
-    }
-
-    const italic = document.createElement("i");
-
-    italic.textContent = text;
-
-    range.deleteContents();
-    range.insertNode(italic);
-
-    const newRange = document.createRange();
-
-    newRange.setStartAfter(italic);
-    newRange.collapse(true);
-
-    selection.removeAllRanges();
-    selection.addRange(newRange);
 
 });
 
@@ -1624,53 +1529,7 @@ underlineButton.addEventListener("click", () => {
     );
 
 });
-      editor.addEventListener("beforeinput", (event) => {
-
-    if(event.inputType !== "insertText"){
-        return;
-    }
-
-    if(!pendingFormats.underline){
-        return;
-    }
-
-    event.preventDefault();
-
-    const selection = window.getSelection();
-
-    if(!selection || !selection.rangeCount){
-        return;
-    }
-
-    const range = selection.getRangeAt(0);
-
-    if(!editor.contains(range.commonAncestorContainer)){
-        return;
-    }
-
-    const text = event.data;
-
-    if(!text){
-        return;
-    }
-
-    const underline = document.createElement("u");
-
-    underline.textContent = text;
-
-    range.deleteContents();
-    range.insertNode(underline);
-
-    const newRange = document.createRange();
-
-    newRange.setStartAfter(underline);
-    newRange.collapse(true);
-
-    selection.removeAllRanges();
-    selection.addRange(newRange);
-
-});
-
+      
 editor.addEventListener("keyup", updateFormatButtons);
 editor.addEventListener("mouseup", updateFormatButtons);
 editor.addEventListener("input", updateFormatButtons);
