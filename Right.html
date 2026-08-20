@@ -1992,7 +1992,16 @@ textColorWheel.addEventListener("pointerdown", (event) => {
 
     textColorMarker.style.top =
         y + "px";
-      
+
+    /* =============================================
+       استرجاع التحديد للون فقط
+    ============================================= */
+
+    const selection =
+        window.getSelection();
+
+    selection.removeAllRanges();
+
 if(colorMode === "text"){
 
     applyTextColor();
@@ -2004,37 +2013,6 @@ else if(colorMode === "highlight"){
     applyTextHighlight();
 
 }
-
-    /* =============================================
-       استرجاع التحديد للون فقط
-    ============================================= */
-
-    const selection =
-        window.getSelection();
-
-    selection.removeAllRanges();
-
-    if(
-        colorMode === "text" &&
-        window._colorRange
-    ){
-
-        selection.addRange(
-            window._colorRange.cloneRange()
-        );
-
-    }
-
-    if(
-        colorMode === "highlight" &&
-        window._highlightRange
-    ){
-
-        selection.addRange(
-            window._highlightRange.cloneRange()
-        );
-
-    }
 
 
     /* =============================================
