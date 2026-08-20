@@ -774,20 +774,10 @@ white-space:pre-wrap;
 ===================================================== */
 
 .editor u{
-    text-decoration:none;
-    position:relative;
-    display:inline;
-}
-
-.editor u::after{
-    content:"";
-    position:absolute;
-    right:0;
-    left:0;
-    bottom:-2px;
-    height:1px;
-    background:currentColor;
-    pointer-events:none;
+    text-decoration-line:underline;
+    text-decoration-thickness:1px;
+    text-underline-offset:3px;
+    text-decoration-skip-ink:none;
 }
 
 /* =====================================================
@@ -1382,7 +1372,7 @@ function updateFormatButtons(){
         return;
     }
 
-    /* عند وجود تحديد نقرأ التنسيق الحقيقي للنص */
+    /* عند تحديد نص: إظهار التنسيق الحقيقي */
     if(!range.collapsed){
 
         boldButton.classList.toggle(
@@ -1400,36 +1390,77 @@ function updateFormatButtons(){
             document.queryCommandState("underline")
         );
 
+        return;
     }
 
+    /* عند وجود مؤشر فقط: إظهار التنسيقات المختارة */
+    boldButton.classList.toggle(
+        "active",
+        pendingFormats.bold
+    );
+
+    italicButton.classList.toggle(
+        "active",
+        pendingFormats.italic
+    );
+
+    underlineButton.classList.toggle(
+        "active",
+        pendingFormats.underline
+    );
 }
 
 
-function togglePendingFormat(command, button){
+function toggleFormat(command, button){
 
-    /* عكس حالة هذا التنسيق فقط */
+    restoreSelection();
+
+    const selection = window.getSelection();
+
+    if(
+        !selection ||
+        !selection.rangeCount
+    ){
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    /* لو فيه نص محدد: طبقي التنسيق عليه فورًا */
+    if(!range.collapsed){
+
+        document.execCommand(
+            command,
+            false,
+            null
+        );
+
+        saveSelection();
+        updateFormatButtons();
+
+        return;
+    }
+
+    /* لو مفيش تحديد: جهزي التنسيق للكتابة القادمة */
     pendingFormats[command] =
         !pendingFormats[command];
 
-    /* إضاءة الزر أو إطفاؤه */
     button.classList.toggle(
         "active",
         pendingFormats[command]
     );
 
-    /* إعادة المؤشر لمكانه */
-    restoreSelection();
-
     editor.focus();
+
+    restoreSelection();
 
     saveSelection();
 }
 
 
-/* كل زر مستقل */
 boldButton.addEventListener("click", () => {
 
-    togglePendingFormat(
+    toggleFormat(
         "bold",
         boldButton
     );
@@ -1439,7 +1470,7 @@ boldButton.addEventListener("click", () => {
 
 italicButton.addEventListener("click", () => {
 
-    togglePendingFormat(
+    toggleFormat(
         "italic",
         italicButton
     );
@@ -1449,7 +1480,7 @@ italicButton.addEventListener("click", () => {
 
 underlineButton.addEventListener("click", () => {
 
-    togglePendingFormat(
+    toggleFormat(
         "underline",
         underlineButton
     );
@@ -1457,7 +1488,7 @@ underlineButton.addEventListener("click", () => {
 });
 
 
-/* تطبيق كل التنسيقات المختارة معًا قبل أول حرف */
+/* تطبيق التنسيقات المختارة عند بداية الكتابة */
 editor.addEventListener("beforeinput", (event) => {
 
     if(
@@ -1477,31 +1508,43 @@ editor.addEventListener("beforeinput", (event) => {
 
     if(pendingFormats.bold){
 
-        document.execCommand(
-            "bold",
-            false,
-            null
-        );
+        if(!document.queryCommandState("bold")){
+
+            document.execCommand(
+                "bold",
+                false,
+                null
+            );
+
+        }
 
     }
 
     if(pendingFormats.italic){
 
-        document.execCommand(
-            "italic",
-            false,
-            null
-        );
+        if(!document.queryCommandState("italic")){
+
+            document.execCommand(
+                "italic",
+                false,
+                null
+            );
+
+        }
 
     }
 
     if(pendingFormats.underline){
 
-        document.execCommand(
-            "underline",
-            false,
-            null
-        );
+        if(!document.queryCommandState("underline")){
+
+            document.execCommand(
+                "underline",
+                false,
+                null
+            );
+
+        }
 
     }
 
