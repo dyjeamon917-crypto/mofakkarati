@@ -957,27 +957,11 @@ body.keyboard-open #colorOverlay{
         </button>
 
         <button
-            id="deleteTableColumnButton"
-            class="tool"
-            type="button"
-            aria-label="حذف العمود الحالي">
-            ➡️
-        </button>
-
-        <button
             id="addTableRowButton"
             class="tool"
             type="button"
             aria-label="إضافة صف للجدول">
             ⬇️
-        </button>
-
-        <button
-            id="deleteTableRowButton"
-            class="tool"
-            type="button"
-            aria-label="حذف الصف الحالي">
-            ⬆️
         </button>
 
         <button
@@ -3043,78 +3027,6 @@ const addTableRowButton =
         "addTableRowButton"
     );
 
-const deleteTableColumnButton =
-    document.getElementById(
-        "deleteTableColumnButton"
-    );
-
-
-deleteTableColumnButton.addEventListener(
-    "mousedown",
-    (event) => {
-        event.preventDefault();
-    }
-);
-
-deleteTableColumnButton.addEventListener(
-    "click",
-    () => {
-
-        const selection =
-            window.getSelection();
-
-        if(
-            !selection ||
-            !selection.rangeCount
-        ){
-            return;
-        }
-
-        let element =
-            selection.anchorNode.nodeType === 1
-                ? selection.anchorNode
-                : selection.anchorNode.parentElement;
-
-        const tableCell =
-            element.closest(
-                ".editor-table td, .editor-table th"
-            );
-
-        if(!tableCell){
-            return;
-        }
-
-        const table =
-            tableCell.closest(
-                ".editor-table"
-            );
-
-        if(!table){
-            return;
-        }
-
-        const columnIndex =
-            tableCell.cellIndex;
-
-        Array
-            .from(table.rows)
-            .forEach(
-                (row) => {
-
-                    if(
-                        row.cells[columnIndex]
-                    ){
-
-                        row.deleteCell(
-                            columnIndex
-                        );
-                    }
-                }
-            );
-    }
-);
-
-
 /* =====================================================
    إضافة فرع / عمود
 ===================================================== */
@@ -3339,78 +3251,6 @@ addTableRowButton.addEventListener(
         newRow.cells[0].focus();
     }
 );
-
-
-/* =====================================================
-   حذف صف
-===================================================== */
-
-const deleteTableRowButton =
-    document.getElementById(
-        "deleteTableRowButton"
-    );
-
-deleteTableRowButton.addEventListener(
-    "mousedown",
-    (event) => {
-
-        event.preventDefault();
-    }
-);
-
-deleteTableRowButton.addEventListener(
-    "click",
-    () => {
-
-        const selection =
-            window.getSelection();
-
-        if(
-            !selection ||
-            !selection.rangeCount
-        ){
-            return;
-        }
-
-        let element =
-            selection.anchorNode.nodeType === 1
-                ? selection.anchorNode
-                : selection.anchorNode.parentElement;
-
-        const tableCell =
-            element.closest(
-                ".editor-table td, .editor-table th"
-            );
-
-        if(!tableCell){
-            return;
-        }
-
-        const row =
-            tableCell.closest("tr");
-
-        const table =
-            tableCell.closest(
-                ".editor-table"
-            );
-
-        if(
-            !row ||
-            !table
-        ){
-            return;
-        }
-
-        if(
-            table.rows.length <= 1
-        ){
-            return;
-        }
-
-        row.remove();
-    }
-);
-
 
 /* =====================================================
    ENTER داخل الخريطة
