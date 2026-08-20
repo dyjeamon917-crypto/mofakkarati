@@ -1328,8 +1328,6 @@ function updateFormatButtons(){
 
 function toggleFormat(command, button){
 
-    restoreSelection();
-
     const selection = window.getSelection();
 
     if(
@@ -1350,7 +1348,6 @@ function toggleFormat(command, button){
             null
         );
 
-        saveSelection();
         updateFormatButtons();
 
         return;
@@ -1367,9 +1364,6 @@ function toggleFormat(command, button){
 
     editor.focus();
 
-    restoreSelection();
-
-    saveSelection();
 }
 
 
