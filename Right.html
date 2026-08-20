@@ -1256,11 +1256,74 @@ editor.innerHTML = "";
 
 let savedRange = null;
 
+      function saveSelection(){
+
+    const selection = window.getSelection();
+
+    if(
+        !selection ||
+        !selection.rangeCount
+    ){
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    if(
+        editor.contains(range.startContainer) &&
+        editor.contains(range.endContainer)
+    ){
+        savedRange = range.cloneRange();
+    }
+}
+
+
+function restoreSelection(){
+
+    if(!savedRange){
+        return false;
+    }
+
+    const selection = window.getSelection();
+
+    selection.removeAllRanges();
+
+    selection.addRange(
+        savedRange.cloneRange()
+    );
+
+    return true;
+}
+
 editor.addEventListener("keyup", saveSelection);
 editor.addEventListener("mouseup", saveSelection);
 editor.addEventListener("touchend", saveSelection);
 editor.addEventListener("input", saveSelection);
+editor.addEventListener("click", saveSelection);
+editor.addEventListener("focus", saveSelection);
 
+      document.addEventListener("selectionchange", () => {
+
+    const selection = window.getSelection();
+
+    if(
+        !selection ||
+        !selection.rangeCount
+    ){
+        return;
+    }
+
+    const range = selection.getRangeAt(0);
+
+    if(
+        editor.contains(range.startContainer) &&
+        editor.contains(range.endContainer)
+    ){
+        savedRange = range.cloneRange();
+    }
+
+});
+      
       document.querySelectorAll(
     ".tool, .sub-toolbar button, #colorOverlay button"
 ).forEach(button => {
@@ -1271,16 +1334,8 @@ editor.addEventListener("input", saveSelection);
 
         event.preventDefault();
 
-    });
+        restoreSelection();
 
-});
-      
-      document.querySelectorAll(
-    ".sub-toolbar button, #colorOverlay button"
-).forEach(button => {
-
-    button.addEventListener("pointerdown", () => {
-        saveSelection();
     });
 
 });
@@ -1933,6 +1988,7 @@ document.getElementById("colorDone").addEventListener("click", () => {
         colorActive = true;
     }
 
+    restoreSelection();
     editor.focus();
 });
 
