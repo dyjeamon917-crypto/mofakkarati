@@ -1992,7 +1992,18 @@ textColorWheel.addEventListener("pointerdown", (event) => {
 
     textColorMarker.style.top =
         y + "px";
+      
+if(colorMode === "text"){
 
+    applyTextColor();
+
+}
+
+else if(colorMode === "highlight"){
+
+    applyTextHighlight();
+
+}
 
     /* =============================================
        استرجاع التحديد للون فقط
