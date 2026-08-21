@@ -2840,7 +2840,7 @@ collapsibleButton.addEventListener(
 ===================================================== */
 
 document.addEventListener(
-    "click",
+    "pointerdown",
     (event) => {
 
         const arrow =
@@ -2851,6 +2851,10 @@ document.addEventListener(
         if(!arrow){
             return;
         }
+
+        event.preventDefault();
+
+        event.stopPropagation();
 
         const section =
             arrow.closest(
