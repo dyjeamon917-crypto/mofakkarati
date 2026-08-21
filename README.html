@@ -2886,41 +2886,6 @@ collapsibleButton.addEventListener(
     }
 );
 
-/* =====================================================
-   فتح وإغلاق الأقسام داخل المحرر والملاحظات
-===================================================== */
-
-document.addEventListener(
-    "pointerdown",
-    (event) => {
-
-        const arrow =
-            event.target.closest(
-                ".collapsible-arrow"
-            );
-
-        if(!arrow){
-            return;
-        }
-
-        event.preventDefault();
-
-        event.stopPropagation();
-
-        const section =
-            arrow.closest(
-                ".collapsible-section"
-            );
-
-        if(!section){
-            return;
-        }
-
-        section.classList.toggle(
-            "closed"
-        );
-    }
-);
 
 /* =====================================================
    TABLE
