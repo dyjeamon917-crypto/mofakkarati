@@ -2728,6 +2728,51 @@ collapsibleButton.addEventListener(
 );
 
 
+/* =====================================================
+   دالة فتح وإغلاق القسم
+===================================================== */
+
+function setupCollapsibleSection(section){
+
+    const arrow =
+        section.querySelector(
+            ".collapsible-arrow"
+        );
+
+    if(!arrow){
+        return;
+    }
+
+
+    arrow.addEventListener(
+        "pointerdown",
+        (event) => {
+
+            event.preventDefault();
+            event.stopPropagation();
+        }
+    );
+
+
+    arrow.addEventListener(
+        "click",
+        (event) => {
+
+            event.preventDefault();
+            event.stopPropagation();
+
+            section.classList.toggle(
+                "closed"
+            );
+        }
+    );
+}
+
+
+/* =====================================================
+   إنشاء قسم جديد
+===================================================== */
+
 collapsibleButton.addEventListener(
     "click",
     () => {
@@ -2802,14 +2847,20 @@ collapsibleButton.addEventListener(
             content
         );
 
+
+        /* تشغيل دالة القائمة لهذا القسم فقط */
+
+        setupCollapsibleSection(
+            section
+        );
+
+
         insertAtCursor(
             section
         );
 
 
-        /* =========================
-           وضع المؤشر في العنوان
-        ========================= */
+        /* وضع المؤشر داخل العنوان */
 
         titleText.focus();
 
