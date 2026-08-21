@@ -2708,6 +2708,92 @@ function insertAtCursor(element){
         newRange
     );
 }
+
+/* =====================================================
+   تشغيل القسم القابل للفتح والإغلاق
+===================================================== */
+
+function setupCollapsibleSection(section){
+
+    const title =
+        section.querySelector(
+            ".collapsible-title"
+        );
+
+    const titleText =
+        section.querySelector(
+            ".collapsible-title-text"
+        );
+
+    if(!title || !titleText){
+        return;
+    }
+
+
+    /* الضغط على شريط العنوان أو السهم */
+    title.addEventListener(
+        "click",
+        (event) => {
+
+            /*
+               الضغط داخل نص العنوان لا يفتح ولا يغلق القسم
+            */
+            if(
+                event.target.closest(
+                    ".collapsible-title-text"
+                )
+            ){
+                return;
+            }
+
+            section.classList.toggle(
+                "closed"
+            );
+        }
+    );
+
+
+    /*
+       منع الضغط داخل العنوان من الوصول
+       إلى حدث فتح وإغلاق القسم
+    */
+    titleText.addEventListener(
+        "click",
+        (event) => {
+
+            event.stopPropagation();
+        }
+    );
+
+
+    titleText.addEventListener(
+        "pointerdown",
+        (event) => {
+
+            event.stopPropagation();
+        }
+    );
+}
+      
+
+/* =====================================================
+   COLLAPSIBLE SECTION
+===================================================== */
+
+const collapsibleButton =
+    document.getElementById(
+        "collapsibleButton"
+    );
+
+
+collapsibleButton.addEventListener(
+    "mousedown",
+    (event) => {
+
+        event.preventDefault();
+    }
+);
+
 /* =====================================================
    COLLAPSIBLE SECTION
    فتح وإغلاق القسم من السهم فقط
@@ -2741,23 +2827,6 @@ document.addEventListener(
         section.classList.toggle(
             "closed"
         );
-    }
-);
-/* =====================================================
-   COLLAPSIBLE SECTION
-===================================================== */
-
-const collapsibleButton =
-    document.getElementById(
-        "collapsibleButton"
-    );
-
-
-collapsibleButton.addEventListener(
-    "mousedown",
-    (event) => {
-
-        event.preventDefault();
     }
 );
 
