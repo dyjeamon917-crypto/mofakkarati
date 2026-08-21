@@ -2727,48 +2727,6 @@ collapsibleButton.addEventListener(
     }
 );
 
-
-/* =====================================================
-   دالة فتح وإغلاق القسم
-===================================================== */
-
-function setupCollapsibleSection(section){
-
-    const arrow =
-        section.querySelector(
-            ".collapsible-arrow"
-        );
-
-    if(!arrow){
-        return;
-    }
-
-
-    arrow.addEventListener(
-        "pointerdown",
-        (event) => {
-
-            event.preventDefault();
-            event.stopPropagation();
-        }
-    );
-
-
-    arrow.addEventListener(
-        "click",
-        (event) => {
-
-            event.preventDefault();
-            event.stopPropagation();
-
-            section.classList.toggle(
-                "closed"
-            );
-        }
-    );
-}
-
-
 /* =====================================================
    إنشاء قسم جديد
 ===================================================== */
