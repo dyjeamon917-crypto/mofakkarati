@@ -3164,49 +3164,66 @@ addMindLeftButton.addEventListener(
 
             return;
         }
+          
+if(root){
 
-        if(root){
+    const mindBox =
+        root.closest(
+            ".mind-box"
+        );
 
-            const mindBox =
-                root.closest(
-                    ".mind-box"
-                );
-
-            if(!mindBox){
-                return;
-            }
-
-            const newMindBox =
-                document.createElement(
-                    "div"
-                );
-
-            newMindBox.className =
-                "mind-box";
-
-            newMindBox.innerHTML =
-                '<div class="mind-box-root" contenteditable="true">' +
-                    'فكرة رئيسية جديدة' +
-                '</div>' +
-                '<div class="mind-box-branches">' +
-                    '<div class="mind-box-branch" contenteditable="true">' +
-                        'فرع 1' +
-                    '</div>' +
-                '</div>';
-
-            mindBox.insertAdjacentElement(
-                "afterend",
-                newMindBox
-            );
-
-            newMindBox
-                .querySelector(
-                    ".mind-box-root"
-                )
-                .focus();
-        }
+    if(!mindBox){
+        return;
     }
-);
+
+    const newRoot =
+        document.createElement(
+            "div"
+        );
+
+    newRoot.className =
+        "mind-box-root";
+
+    newRoot.contentEditable =
+        "true";
+
+    newRoot.innerHTML =
+        "";
+
+
+    /*
+       إضافة الفكرة الرئيسية الجديدة
+       بعد الفكرة الحالية مباشرة
+       وقبل الفروع
+    */
+
+    root.insertAdjacentElement(
+        "afterend",
+        newRoot
+    );
+
+
+    newRoot.focus();
+
+
+    const newRange =
+        document.createRange();
+
+    newRange.selectNodeContents(
+        newRoot
+    );
+
+    newRange.collapse(true);
+
+    selection.removeAllRanges();
+
+    selection.addRange(
+        newRange
+    );
+
+    return;
+}
+        
 
 
 /* =====================================================
