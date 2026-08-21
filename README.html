@@ -2802,25 +2802,6 @@ collapsibleButton.addEventListener(
             content
         );
 
-
-        /* =========================
-           فتح وإغلاق القسم
-        ========================= */
-
-        arrow.addEventListener(
-            "click",
-            (event) => {
-
-                event.preventDefault();
-                event.stopPropagation();
-
-                section.classList.toggle(
-                    "closed"
-                );
-            }
-        );
-
-
         insertAtCursor(
             section
         );
