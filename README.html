@@ -722,6 +722,75 @@ body.keyboard-open #colorOverlay{
     }
 }
 
+/* =====================================================
+   COLLAPSIBLE SECTION
+===================================================== */
+
+.collapsible-section{
+    width:100%;
+    margin:8px 0;
+    border:1px solid #3a4250;
+    border-radius:12px;
+    overflow:hidden;
+    background:#202631;
+}
+
+.collapsible-title{
+    width:100%;
+    min-height:48px;
+    padding:10px 14px;
+    display:flex;
+    align-items:center;
+    gap:10px;
+    background:#252c38;
+    color:#fff;
+    font-weight:bold;
+    cursor:pointer;
+    user-select:none;
+}
+
+.collapsible-arrow{
+    flex:0 0 auto;
+    font-size:16px;
+    transition:transform .2s;
+}
+
+.collapsible-title-text{
+    flex:1;
+    min-width:0;
+    outline:none;
+}
+
+.collapsible-title-text:empty::before{
+    content:"اكتبي العنوان";
+    color:#737d8e;
+    pointer-events:none;
+}
+
+.collapsible-content{
+    padding:12px 14px;
+    min-height:60px;
+    outline:none;
+    line-height:1.8;
+    white-space:pre-wrap;
+    word-break:break-word;
+    overflow-wrap:anywhere;
+}
+
+.collapsible-content:empty::before{
+    content:"اكتبي هنا...";
+    color:#737d8e;
+    pointer-events:none;
+}
+
+.collapsible-section.closed .collapsible-content{
+    display:none;
+}
+
+.collapsible-section.closed .collapsible-arrow{
+    transform:rotate(-90deg);
+}
+
 </style>
 </head>
 
@@ -963,7 +1032,15 @@ body.keyboard-open #colorOverlay{
             aria-label="إضافة صف للجدول">
             ⬇️
         </button>
-
+          
+<button
+    id="collapsibleButton"
+    class="tool"
+    type="button"
+    aria-label="قسم قابل للفتح والإغلاق">
+    ▾
+</button>
+          
         <button
             id="newLineDownButton"
             class="tool"
@@ -2632,6 +2709,182 @@ function insertAtCursor(element){
     );
 }
 
+/* =====================================================
+   COLLAPSIBLE SECTION
+===================================================== */
+
+const collapsibleButton =
+    document.getElementById(
+        "collapsibleButton"
+    );
+
+
+collapsibleButton.addEventListener(
+    "mousedown",
+    (event) => {
+
+        event.preventDefault();
+    }
+);
+
+
+collapsibleButton.addEventListener(
+    "click",
+    () => {
+
+        const section =
+            document.createElement(
+                "div"
+            );
+
+        section.className =
+            "collapsible-section";
+
+
+        const title =
+            document.createElement(
+                "div"
+            );
+
+        title.className =
+            "collapsible-title";
+
+
+        const arrow =
+            document.createElement(
+                "span"
+            );
+
+        arrow.className =
+            "collapsible-arrow";
+
+        arrow.textContent =
+            "▾";
+
+
+        const titleText =
+            document.createElement(
+                "div"
+            );
+
+        titleText.className =
+            "collapsible-title-text";
+
+        titleText.contentEditable =
+            "true";
+
+
+        const content =
+            document.createElement(
+                "div"
+            );
+
+        content.className =
+            "collapsible-content";
+
+        content.contentEditable =
+            "true";
+
+
+        title.appendChild(
+            arrow
+        );
+
+        title.appendChild(
+            titleText
+        );
+
+        section.appendChild(
+            title
+        );
+
+        section.appendChild(
+            content
+        );
+
+
+        /* =========================
+           فتح وإغلاق القسم
+        ========================= */
+
+        arrow.addEventListener(
+            "click",
+            (event) => {
+
+                event.preventDefault();
+                event.stopPropagation();
+
+                section.classList.toggle(
+                    "closed"
+                );
+            }
+        );
+
+
+        insertAtCursor(
+            section
+        );
+
+
+        /* =========================
+           وضع المؤشر في العنوان
+        ========================= */
+
+        titleText.focus();
+
+        const range =
+            document.createRange();
+
+        range.selectNodeContents(
+            titleText
+        );
+
+        range.collapse(
+            true
+        );
+
+        const selection =
+            window.getSelection();
+
+        selection.removeAllRanges();
+
+        selection.addRange(
+            range
+        );
+    }
+);
+
+/* =====================================================
+   فتح وإغلاق الأقسام داخل المحرر والملاحظات
+===================================================== */
+
+document.addEventListener(
+    "click",
+    (event) => {
+
+        const arrow =
+            event.target.closest(
+                ".collapsible-arrow"
+            );
+
+        if(!arrow){
+            return;
+        }
+
+        const section =
+            arrow.closest(
+                ".collapsible-section"
+            );
+
+        if(!section){
+            return;
+        }
+
+        section.classList.toggle(
+            "closed"
+        );
+    }
+);
 
 /* =====================================================
    TABLE
@@ -4276,7 +4529,7 @@ editButton.addEventListener(
 
         editor
             .querySelectorAll(
-                ".mind-box-root, .mind-box-branch"
+                ".mind-box-root, .mind-box-branch, .collapsible-title-text, .collapsible-content"
             )
             .forEach(
                 (element) => {
