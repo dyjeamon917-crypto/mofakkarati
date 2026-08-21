@@ -2708,7 +2708,41 @@ function insertAtCursor(element){
         newRange
     );
 }
+/* =====================================================
+   COLLAPSIBLE SECTION
+   فتح وإغلاق القسم من السهم فقط
+===================================================== */
 
+document.addEventListener(
+    "click",
+    (event) => {
+
+        const arrow =
+            event.target.closest(
+                ".collapsible-arrow"
+            );
+
+        if(!arrow){
+            return;
+        }
+
+        const section =
+            arrow.closest(
+                ".collapsible-section"
+            );
+
+        if(!section){
+            return;
+        }
+
+        event.preventDefault();
+        event.stopPropagation();
+
+        section.classList.toggle(
+            "closed"
+        );
+    }
+);
 /* =====================================================
    COLLAPSIBLE SECTION
 ===================================================== */
@@ -2803,13 +2837,6 @@ collapsibleButton.addEventListener(
 
         section.appendChild(
             content
-        );
-
-
-        /* تشغيل دالة القائمة لهذا القسم فقط */
-
-        setupCollapsibleSection(
-            section
         );
 
 
